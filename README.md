@@ -14,7 +14,7 @@ wxapp_miniprogram为微信小程序源码。
 1.  建议使用宝塔面板
 2.  PHP7.2+
 3.  Mysql5.5+
-
+4.  后台超级管理员admin,默认密码wmj123456
 #### 小程序的api文档
 
 地址：https://wxapp.wmj.com.cn/doc/
