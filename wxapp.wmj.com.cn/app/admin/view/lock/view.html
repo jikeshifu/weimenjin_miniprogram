@@ -1,0 +1,67 @@
+{extend name='common/_container'} 
+{block name="content"} 
+<div class="ibox float-e-margins"> 
+	<div class="ibox-content"> 
+		<table class="table table-bordered"> 
+			<tbody> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">用户ID：</td> 
+					<td>{$info.user_id}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">锁名称：</td> 
+					<td>{$info.lock_name}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">序列号：</td> 
+					<td>{$info.lock_sn}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">绑定手机：</td> 
+					<td><?php echo getFieldVal($info["mobile_check"],"是|1|primary,否|0|info");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">申请钥匙：</td> 
+					<td><?php echo getFieldVal($info["applyauth"],"开启|1,关闭|0");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">申请钥匙审核：</td> 
+					<td><?php echo getFieldVal($info["applyauth_check"],"开启|1,关闭|0");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">开门距离(米)：</td> 
+					<td>{$info.location_check}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">开关：</td> 
+					<td><?php echo getFieldVal($info["status"],"启用|1|success,禁用|0|danger");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">类型：</td> 
+					<td>{$info.lock_type}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">位置：</td> 
+					<td>{$info.location}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">二维码：</td> 
+					<td><a href="javascript:void(0)"  onclick="openImg('{$info.lock_qrcode}')"><img height="75" src="{$info.lock_qrcode}"></a></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">添加时间：</td> 
+					<td>{if $info.create_time}{$info.create_time|date='Y-m-d H:i:s'}{/if}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">成功提示图片：</td> 
+					<td><a href="javascript:void(0)"  onclick="openImg('{$info.successimg}')"><img height="75" src="{$info.successimg}"></a></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">成功广告：</td> 
+					<td><a href="javascript:void(0)"  onclick="openImg('{$info.successadimg}')"><img height="75" src="{$info.successadimg}"></a></td>   
+				</tr> 
+			</tbody> 
+		</table> 
+	</div> 
+</div> 
+{/block} 

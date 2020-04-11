@@ -1,0 +1,119 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='app_id' id='app_id' value="{$info.app_id}" />
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">应用名：</label>
+						<div class="col-sm-9">
+							<input type="text" id="name" value="{$info.name}" name="name" class="form-control" placeholder="请输入应用名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">应用目录名：</label>
+						<div class="col-sm-9">
+							<input type="text" id="app_dir" value="{$info.app_dir}" name="app_dir" class="form-control" placeholder="请输入生成的应用目录">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">生成状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="启用">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="禁用">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">应用类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['app_type'])){ $info['app_type'] = 1; }; ?>
+							<input name="app_type" value="1" lay-filter="hope" type="radio" {if condition="$info.app_type eq '1'"}checked{/if} title="后台管理">
+							<input name="app_type" value="2" lay-filter="hope" type="radio" {if condition="$info.app_type eq '2'"}checked{/if} title="接口生成">
+							<input name="app_type" value="3" lay-filter="hope" type="radio" {if condition="$info.app_type eq '3'"}checked{/if} title="cms">
+						</div>
+					</div>
+					<div class="form-group" id="loginTable">
+						<label class="col-sm-2 control-label">登录数据表：</label>
+						<div class="col-sm-9">
+							<input type="text" id="login_table" value="{$info.login_table}" name="login_table" class="form-control" placeholder="请输入登录数据表">
+						</div>
+					</div>
+					<div class="form-group" id="loginFields">
+						<label class="col-sm-2 control-label">登录字段：</label>
+						<div class="col-sm-9">
+							<input type="text" id="login_fields" value="{$info.login_fields}" name="login_fields" class="form-control" placeholder="用户名|密码，例如 username|password">
+						</div>
+					</div>
+					<div class="form-group" id="pkId">
+						<label class="col-sm-2 control-label">登录表主键：</label>
+						<div class="col-sm-9">
+							<input type="text" id="pk" value="{$info.pk}" name="pk" class="form-control" placeholder="登录数据表主键ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">访问域名：</label>
+						<div class="col-sm-9">
+							<input type="text" id="domain" value="{$info.domain}" name="domain" class="form-control" placeholder="请输入访问域名">
+							<span class="help-block m-b-none">应用绑定访问域名还需在config/app.php 绑定</span>
+						</div>
+					</div>
+					
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="{if condition="$info.app_id neq ''"}CodeInfoDlg.update(){else/}CodeInfoDlg.add(){/if}" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Application.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+	
+	form.on('radio(hope)',function(data){
+		if(data.value == 1){
+			$("#loginTable").show();
+			$("#loginFields").show();
+			$("#group_status").show();
+			$("#pkId").show();
+		}else{
+			$("#loginTable").hide();
+			$("#loginFields").hide();
+			$("#group_status").hide();
+			$("#pkId").hide();
+		}
+	
+	});	
+	
+});
+
+$(function(){
+	var type = $("input[name='app_type']:checked").val();
+	if(type == 2 || type == 3){
+		$("#loginTable").hide();
+		$("#loginFields").hide();
+		$("#pkId").hide();
+	}
+})
+
+</script>
+
+
+{/block}

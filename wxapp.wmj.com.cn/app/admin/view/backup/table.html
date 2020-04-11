@@ -1,0 +1,124 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>数据表列表</h5>
+				<button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()" id="">
+					<i class="fa fa-refresh"></i>
+				</button>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+							<!-- search start -->
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+							{if condition="in_array('/admin/Backup/add',session('admin.nodes')) || session('admin.role') eq 1"}
+							<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.doBack()">
+								<i class="fa fa-plus"></i>&nbsp;开始备份
+							</button>
+							{/if}
+							
+						</div>
+						
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '数据表名', field: 'Name', visible: true, align: 'center', valign: 'middle'},
+ 			{title: '创建时间', field: 'Create_time', visible: true, align: 'center', valign: 'middle'},
+			{title: '索引长度', field: 'Index_length', visible: true, align: 'center', valign: 'middle'},
+			{title: '数据引擎', field: 'Engine', visible: true, align: 'center', valign: 'middle'},
+ 		];
+ 	};
+	
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.doBack = function() {
+		if (this.check()) {
+			Feng.confirm("是否确定开始备份？", function () {
+				var tablename = '';
+				$.each(CodeGoods.seItem, function() {
+					tablename += ',' + this.Name;
+				});
+
+				tablename = tablename.substr(1);
+				var ajax = new $ax(Feng.ctxPath + "/Backup/backupData", function (data) {
+					if ('00' === data.status) {
+						
+						setTimeout(function(){parent.location.href = Feng.ctxPath + '/Backup/index'},200);
+						Feng.success(data.msg);
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('tablename', tablename);
+				ajax.start();
+			});
+		}
+	}
+
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.add = function (value) {
+		var index = layer.open({type: 2,title: '数据表列表',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Backup/table'});
+		this.layerIndex = index;
+	}
+
+
+	
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	CodeGoods.orderby = function() {
+		var queryData = CodeGoods.formParams();
+		queryData['orderby'] = $("#orderby").val();
+		CodeGoods.table.refresh({query : queryData});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath + "/Backup/tableList"+url,defaultColunms,50);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+</script>
+{/block}

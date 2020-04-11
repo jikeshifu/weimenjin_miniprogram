@@ -1,0 +1,57 @@
+{extend name='common/_container'} 
+{block name="content"} 
+<div class="ibox float-e-margins"> 
+	<div class="ibox-content"> 
+		<table class="table table-bordered"> 
+			<tbody>
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">需要指定配置的操作名</td> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" >值</td> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left">说明</td> 
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">修改状态 设定指定值：</td> 
+					<td>10</td>  
+					<td>将勾选的字段的值 设置为 10</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">账号密码登录：</td> 
+					<td>username|password|member_id</td>  
+					<td>指定登陆的 用户名 以及 密码 并且将返回的用户id写入token</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">手机号登录：</td> 
+					<td>mobile|member_id</td>  
+					<td>指定登陆的手机号字段 并且将返回的用户id写入token</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">发送短信验证码：</td> 
+					<td>Ali</td>  
+					<td>则使用阿里大鱼短信平台，支持 ALi、jisu</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">微信订单支付（同公众号、小程序、扫码）：</td> 
+					<td>order|order_id|total_fee|status:10</td>  
+					<td>指定操作的订单表 订单号 订单金额 订单状态 以及支付成功后订单状态的值</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">微信充值（同公众号、小程序、扫码）：</td> 
+					<td>member|member_id|amount</td>  
+					<td>指定充值成功后需要操作的用户表 用户id 以及需要充值金额的字段</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">小程序登陆接口：</td> 
+					<td>openid</td>  
+					<td>用户表存储小程序openid的字段</td>
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="15%">公众号登陆接口：</td> 
+					<td>openid</td>  
+					<td>用户表存储公众号openid的字段</td>
+				</tr> 
+				
+			</tbody> 
+		</table> 
+	</div> 
+</div> 
+{/block} 

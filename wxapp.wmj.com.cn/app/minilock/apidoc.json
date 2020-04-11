@@ -1,0 +1,15 @@
+{
+  "name": "minilock", 
+  "version": "1.0.0",
+  "description": "minilock",
+  "title": "minilock",
+  "url" : "",
+  "header": {
+    "title": "接口文档",
+    "filename": ""
+  },
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": false
+  }
+} 

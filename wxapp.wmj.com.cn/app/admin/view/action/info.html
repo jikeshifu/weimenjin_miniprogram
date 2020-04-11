@@ -1,0 +1,343 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name="id" id="id" value="{$info.id}">
+{if condition="$info.id eq ''"}
+<input type="hidden" name="menu_id" id="menu_id" value="{$menu_id}">
+{/if}
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row" style="margin-top:-20px;">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<ul class="layui-tab-title">
+						<li class="layui-this">基本信息</li>
+						<li>拓展信息</li>
+						<li>多表操作配置</li>
+					</ul>
+					
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-10">
+							<!-- form start -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">操作名：</label>
+									<div class="col-sm-9">
+										<input type="text" id="name" value="{$info.name}" name="name" class="form-control" placeholder="请输入操作名">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">方法名称：</label>
+									<div class="col-sm-9">
+										<input type="text" id="action_name" value="{$info.action_name}" name="action_name" class="form-control" placeholder="请输入方法名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">方法类型：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="type" class="form-control" id="type">
+											<option value="">请选择</option>
+											{foreach name="actionList" id="vo"}
+											<option value="{$key}" {if condition="$info.type eq $key"}selected{/if}>{$vo}</option>
+											{/foreach}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">操作字段：</label>
+									<div class="col-sm-9">
+										<?php $menu_id = isset($info['menu_id']) ? $info['menu_id'] : request()->param('menu_id');?>
+										{query table="field" sqlstr="menu_id=$menu_id and is_post = 1" order="sortid asc"}
+										<input value="{$query.field}" data-type="{$query.type}" name="fields" lay-filter="hope" class="checkbox" type="checkbox" {if in_array($query['field'],explode(',',$info['fields']))}checked{/if} title="{$query.name}">
+										{/query}
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">按钮是否显示列表：</label>
+									<div class="col-sm-9">
+										<input name="button_status" value="1" type="radio" {if condition="$info.button_status eq 1"}checked{/if} title="是">
+										<input name="button_status" value="0" type="radio" {if condition="$info.button_status eq 0"}checked{/if} title="否">
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">按钮背景色：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="lable_color" class="form-control" id="lable_color">
+											<option value="primary" style="background-color:#1DB394" {if condition="$info.lable_color eq 'primary'"}selected{/if}>primary</option>
+											<option value="success" style="background-color:#1E84C6" {if condition="$info.lable_color eq 'success'"}selected{/if}>success</option>
+											<option value="info" style="background-color:#25C6C8" {if condition="$info.lable_color eq 'info'"}selected{/if}>info</option>
+											<option value="warning" style="background-color:#F8AC5A" {if condition="$info.lable_color eq 'warning'"}selected{/if}>warning</option>
+											<option value="danger" style="background-color:#D7524B" {if condition="$info.lable_color eq 'danger'"}selected{/if}>danger</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">配置信息：</label>
+									<div class="col-sm-9">
+										<input type="text" id="remark" value="{$info.remark}" name="remark" class="form-control" placeholder="请输入默认值">
+										<span class="help-block m-b-none">弹窗大小或者修改值配置</span>
+									</div>
+								</div>
+								
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">控制器方法是否生成：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['is_controller_create'])){ $info['is_controller_create'] = 1; }; ?>
+									<input name="is_controller_create" value="1" type="radio" {if condition="$info.is_controller_create eq 1"}checked{/if} title="是">
+									<input name="is_controller_create" value="0" type="radio" {if condition="$info.is_controller_create eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">服务层方法是否生成：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['is_service_create'])){ $info['is_service_create'] = 1; }; ?>
+									<input name="is_service_create" value="1" type="radio" {if condition="$info.is_service_create eq 1"}checked{/if} title="是">
+									<input name="is_service_create" value="0" type="radio" {if condition="$info.is_service_create eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">视图是否生成：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['is_view_create'])){ $info['is_view_create'] = 1; }; ?>
+									<input name="is_view_create" value="1" type="radio" {if condition="$info.is_view_create eq 1"}checked{/if} title="是">
+									<input name="is_view_create" value="0" type="radio" {if condition="$info.is_view_create eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">方法按钮显示状态：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['is_view'])){ $info['is_view'] = 1; }; ?>
+									<input name="is_view" value="1" type="radio" {if condition="$info.is_view eq 1"}checked{/if} title="是">
+									<input name="is_view" value="0" type="radio" {if condition="$info.is_view eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">每页显示数据：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="pagesize" name="pagesize" value="{$info.pagesize}" class="form-control" placeholder="每页显示多少条数据，默认20">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">默认排序：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="default_orderby" name="default_orderby" value="{$info.default_orderby}"  class="form-control" placeholder="默认排序，如不填则按照主键倒序">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">配置树级列表：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="tree_config" name="tree_config" value="{$info.tree_config}" class="form-control" placeholder="当前父级ID,显示字段 例如 pid,title">
+									<span class="help-block m-b-none">生成树级列表 格式父ID,显示字段名称 例如pid,title</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">操作条件：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="do_condition" name="do_condition" value="{$info.do_condition}" class="form-control" placeholder="方法操作条件">
+									<span class="help-block m-b-none">方法操作条件 如 status=1</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">按钮icon图标：</label>
+								<div class="col-sm-9">
+									<input type="text" id="bs_icon" name="bs_icon" value="{$info.bs_icon}" class="form-control" placeholder="请输入图标名称">
+									<span class="help-block m-b-none"><a  target="_blank" style="color:#ff0000" onclick="CodeInfoDlg.icon('bs_icon')">点击查看图标列表 </a></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">方法描述：</label>
+								<div class="col-sm-9">
+									<textarea id="block_name" name="block_name" class="form-control" placeholder="请输入方法">{$info.block_name}</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">按钮跳转地址：</label>
+								<div class="col-sm-9">
+									<input type="text" id="jump" name="jump" value="{$info.jump}"  class="form-control" placeholder="请输入跳转地址">
+								</div>
+							</div>
+						</div>
+						
+						<div class="layui-tab-item">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">关联表：</label>
+								<div class="col-sm-9">
+									<input type="text" id="relate_table" name="relate_table" class="form-control" value="{$info.relate_table}" placeholder="请输入关联表 如果不是关联查询请勿填写">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">关联字段：</label>
+								<div class="col-sm-9">
+									<input type="text" id="relate_field" value="{$info.relate_field}" name="relate_field" class="form-control" placeholder="请输入关联表 如果不是关联查询请勿填写">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">查询字段字段：</label>
+								<div class="col-sm-9">
+									<input type="text" id="list_field" value="{$info.list_field}" name="list_field" class="form-control" placeholder="请输入关联表需要查询的字段">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">sql数据源：</label>
+								<div class="col-sm-9">
+									<textarea id="sql_query" name="sql_query" class="form-control" placeholder="sql查询语句 前面的关联查询取消">{$info.sql_query}</textarea>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="{if condition="$info.id neq ''"}CodeInfoDlg.update(){else/}CodeInfoDlg.add(){/if}" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Action.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	form = layui.form();
+	
+	form.on('checkbox(hope)',function(data){
+		var type = $("#type").val();
+		var data_type = $(this).attr('data-type');
+		if(type !== '1'){
+			var len=$(".checkbox:checked").length;
+			var width,height,size;
+			
+			if(len<=3){
+				if(data_type == 8 || data_type == 9){
+					width = 800;
+				}else{
+					width = 600;
+				}				
+				height = len*50+300;
+				size = width+'px|'+height+"px";
+			}else if(len>3 && len<=8){
+				width = 800;
+				height = len*50+200;
+				size = width+'px|'+height+"px";
+			}else if(len>8){
+				width = 800;
+				size = width+'px|100%';
+			}
+			
+			
+			$("#remark").val(size);	
+		}
+	});
+});
+
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+
+
+$(function(){
+	$("#type").change(function(){
+		var type = $(this).val().toString();
+		switch(type){
+			case '3':
+				$("#bs_icon").val('fa fa-plus');
+				$("#block_name").val('创建数据');
+			break;
+			
+			case '4':
+				$("#bs_icon").val('fa fa-edit');
+				$("#block_name").val('编辑数据');
+			break;
+			
+			case '14':
+				$("#bs_icon").val('fa fa-edit');
+				$("#block_name").val('批量编辑数据');
+			break;
+			
+			case '5':
+				$("#bs_icon").val('fa fa-trash');
+				$("#block_name").val('删除数据');
+			break;
+			
+			case '6':
+				$("#bs_icon").val('fa fa-pencil');
+				$("#block_name").val('修改状态');
+				$("#remark").val('');
+			break;
+			
+			case '7':
+				$("#bs_icon").val('fa fa-edit');
+				$("#block_name").val('数值加');
+				$("#remark").val('600px|300px');
+			break;
+			
+			case '8':
+				$("#bs_icon").val('fa fa-edit');
+				$("#block_name").val('数值减');
+				$("#remark").val('600px|300px');
+			break;
+			
+			case '9':
+				$("#bs_icon").val('fa fa-lock');
+				$("#block_name").val('修改密码');
+				$("#remark").val('600px|300px');
+			break;
+			
+			case '10':
+				$("#bs_icon").val('fa fa-plus');
+				$("#block_name").val('跳转链接');
+			break;
+			
+			case '11':
+				$("#bs_icon").val('fa fa-plus');
+				$("#block_name").val('弹窗连接');
+				$("#remark").val('90%|90%');
+			break;
+			
+			case '12':
+				$("#bs_icon").val('fa fa-download');
+				$("#block_name").val('数据导出');
+			break;
+			
+			case '13':
+				$("#bs_icon").val('fa fa-upload');
+				$("#block_name").val('数据导入');
+				$("#remark").val('800px|300px');
+			break;
+			
+			case '16':
+				$("input[type=radio][name=is_view][value=0]").attr("checked",'checked');
+				$("#block_name").val('修改排序\开关按钮操作');
+				layui.use(['form'], function () {
+					form = layui.form();
+					form.render();
+				});
+			break;
+		}
+	});
+	
+})
+
+</script>
+
+{/block}

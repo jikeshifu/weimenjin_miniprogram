@@ -1,0 +1,141 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='lock_id' id='lock_id' value="{$info.lock_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">锁名称：</label>
+						<div class="col-sm-9">
+							<input type="text" id="lock_name" value="" name="lock_name" class="form-control" placeholder="请输入锁名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">序列号：</label>
+						<div class="col-sm-9">
+							<input type="text" id="lock_sn" value="" name="lock_sn" class="form-control" placeholder="请输入序列号">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">绑定手机：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['mobile_check'])){ $info['mobile_check'] = 1; }; ?>
+							<input name="mobile_check" value="1" type="radio" {if condition="$info.mobile_check eq '1'"}checked{/if} title="是">
+							<input name="mobile_check" value="0" type="radio" {if condition="$info.mobile_check eq '0'"}checked{/if} title="否">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">申请钥匙：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['applyauth'])){ $info['applyauth'] = 0; }; ?>
+							<input name="applyauth" value="1" type="radio" {if condition="$info.applyauth eq '1'"}checked{/if} title="开启">
+							<input name="applyauth" value="0" type="radio" {if condition="$info.applyauth eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">申请钥匙审核：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['applyauth_check'])){ $info['applyauth_check'] = 0; }; ?>
+							<input name="applyauth_check" value="1" type="radio" {if condition="$info.applyauth_check eq '1'"}checked{/if} title="开启">
+							<input name="applyauth_check" value="0" type="radio" {if condition="$info.applyauth_check eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">开门距离(米)：</label>
+						<div class="col-sm-9">
+							<input type="text" id="location_check" value="0" name="location_check" class="form-control" placeholder="请输入开门距离(米)">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">开关：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="启用">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="禁用">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['lock_type'])){ $info['lock_type'] = ''; }; ?>
+							<select lay-ignore name="lock_type" class="form-control" id="lock_type">
+								<option value="">请选择</option>
+								{sql query="select locktype_id,locktype_name from cd_locktype"}
+									<option value="{$sql.locktype_id}" {if condition="$info.lock_type eq $sql.locktype_id"}selected{/if}>{$sql.locktype_name}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">位置：</label>
+						<div class="col-sm-9">
+							<div class="input-group" id="id_address_input">
+							<textarea id="location" name="location"  class="form-control" placeholder="请输入位置">{$info.location}</textarea>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
+							</div>
+						</div>
+					</div>
+					<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=ed1fafa0307bb4991da41f54d8a88b46"></script>
+					<script src="__PUBLIC__/static/js/plugins/map/bootstrap.AMapPositionPicker.js"></script>
+					<script type="text/javascript">
+					$(function () {
+						var p = $("#id_address_input").AMapPositionPicker();
+					});
+					</script>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">成功提示图片：</label>
+						<div class="col-sm-6">
+							<input type="text" id="successimg" value="/uploads/admin/202003/5e758dd0d7d15.png" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="successimg" class="form-control" placeholder="请输入成功提示图片">
+							<span class="help-block m-b-none successimg_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="successimg_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">成功广告：</label>
+						<div class="col-sm-6">
+							<input type="text" id="successadimg" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="successadimg" class="form-control" placeholder="请输入成功广告">
+							<span class="help-block m-b-none successadimg_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="successadimg_upload"></span>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Lock.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery-migrate-1.1.1.js'></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery.dragsort-0.5.1.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['form'], function () {
+	window.form = layui.form();
+});
+uploader('successimg_upload','successimg','image',false,'','{:url("admin/Upload/uploadImages")}');
+uploader('successadimg_upload','successadimg','image',false,'','{:url("admin/Upload/uploadImages")}');
+laydate.render({elem: '#create_time',type: 'datetime',trigger:'click'});
+</script>
+
+
+{/block}

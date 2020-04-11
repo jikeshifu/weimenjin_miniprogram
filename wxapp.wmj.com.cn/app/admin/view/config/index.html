@@ -1,0 +1,140 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<ul class="layui-tab-title">
+						<li class="layui-this">基本设置</li>
+						<li>上传配置</li>
+						<li>微门禁配置</li>
+					</ul>
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-7">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">站点名称：</label>
+						<div class="col-sm-9">
+							<input type="text" id="site_title" value="{$info.site_title}" name="site_title" class="form-control" placeholder="请输入站点名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">站点LOGO：</label>
+						<div class="col-sm-5">
+							<input type="text" id="site_logo" value="{$info.site_logo}" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="site_logo" class="form-control" placeholder="请输入站点LOGO">
+							<span class="help-block m-b-none site_logo_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="site_logo_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">关键词站点：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" data-role="tagsinput" id="keyword" value="{$info.keyword}" name="keyword"  >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">站点描述：</label>
+						<div class="col-sm-9">
+							<textarea id="description" name="description"  class="form-control" placeholder="请输入站点描述">{$info.description}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">站点版权：</label>
+						<div class="col-sm-9">
+							<input type="text" id="copyright" value="{$info.copyright}" name="copyright" class="form-control" placeholder="请输入站点版权">
+						</div>
+					</div>
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="col-sm-7">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">上传文件大小：</label>
+						<div class="col-sm-9">
+							<input type="text" id="file_size" value="{$info.file_size}" name="file_size" class="form-control" placeholder="请输入上传文件大小">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">文件类型：</label>
+						<div class="col-sm-9">
+							<textarea id="file_type" name="file_type"  class="form-control" placeholder="请输入文件类型">{$info.file_type}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">绑定域名：</label>
+						<div class="col-sm-9">
+							<input type="text" id="domain" value="{$info.domain}" name="domain" class="form-control" placeholder="请输入绑定域名">
+							<span class="help-block m-b-none">上传目录绑定域名访问，请解析域名到 /public/upload目录  前面带上http://  非必填项</span>
+						</div>
+					</div>
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="col-sm-7">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">微门禁appid：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wmjappid" value="{$info.wmjappid}" name="wmjappid" class="form-control" placeholder="请输入微门禁appid">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">微门禁appsecret：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wmjappsecret" value="{$info.wmjappsecret}" name="wmjappsecret" class="form-control" placeholder="请输入微门禁appsecret">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">微门禁aeskey：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wmjaeskey" value="{$info.wmjaeskey}" name="wmjaeskey" class="form-control" placeholder="请输入微门禁aeskey">
+						</div>
+					</div>
+							<!-- form end -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-7">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.index()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Config.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<link rel='stylesheet' href='__PUBLIC__/static/js/plugins/tagsinput/tagsinput.css'>
+<script type='text/javascript' src='__PUBLIC__/static/js/plugins/tagsinput/tagsinput.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+});
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+uploader('site_logo_upload','site_logo','image',false,'','{:url("admin/Upload/uploadImages")}');
+</script>
+
+
+{/block}

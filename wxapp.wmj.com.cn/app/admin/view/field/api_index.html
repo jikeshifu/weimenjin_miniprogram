@@ -1,0 +1,268 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+							<button type="button" class="btn btn-success button-margin" onclick="CodeGoods.add()">
+								<i class="glyphicon glyphicon-plus" aria-hidden="true"></i> 创建
+							</button>
+							<button type="button" class="btn btn-primary button-margin" onclick="CodeGoods.update()">
+								<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> 修改
+							</button>
+							<button type="button" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
+								<i class="glyphicon glyphicon-trash" aria-hidden="true"></i> 删除
+							</button>
+							<button type="button" class="btn btn-info button-margin" onclick="CodeGoods.createCode()">
+								<i class="glyphicon glyphicon-pencil"></i>&nbsp;生成代码
+							</button>
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', radio: true},
+ 			{title: '编号', field: 'id', visible: true, align: 'center', valign: 'middle'},
+			{title: '排序', field: 'id', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.arrowFormatter'},
+			{title: '字段标题', field: 'name', visible: true, align: 'center', valign: 'middle'},
+ 			{title: '字段名称', field: 'field', visible: true, align: 'center', valign: 'middle'},
+ 			{title: '字段类型', field: 'type', visible: true, align: 'center', valign: 'middle'},
+			{title: '是否搜索', field: 'search_show', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.searchFormatter'},
+			{title: '是否录入', field: 'is_post', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.postFormatter'},
+			{title: '是否创建字段', field: 'is_field', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.fieldFormatter'},
+			{title: '字段类型', field: 'datatype', visible: true, align: 'center', valign: 'middle'},
+			{title: '索引', field: 'indexdata', visible: true, align: 'center', valign: 'middle'},
+			{title: '排序', field: 'sortid', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.sortFormatter'},
+			{title: '操作', field: 'id', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+			
+ 		];
+ 	};
+	
+	CodeGoods.buttonFormatter = function(value,row,index) {
+		if(value){
+			var str= '';
+			str += '<button type="button" class="btn btn-primary btn-xs" title="修改"  onclick="CodeGoods.update('+value+')"><i class="fa fa-edit"></i> 修改</button>&nbsp;'
+			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+value+')"><i class="fa fa-trash"></i> 删除</button>&nbsp;'
+			return str;
+		}
+	}
+	
+	CodeGoods.alignFormatter = function(value,row,index) {
+		switch(value){
+			case 'left':
+				return '居左';
+			break;
+			case 'center':
+				return '居中';
+			break;
+			case 'right':
+				return '居右';
+			break;
+		}
+	}
+	
+	CodeGoods.showFormatter = function(value,row,index) {
+		switch(value){
+			case 1:
+				return '<span class="label label-success ">是</div>';
+			break;
+			case 0:
+				return '<span class="label label-warning ">否</div>';
+			break;
+		}
+	}
+	
+	CodeGoods.searchFormatter = function(value,row,index) {
+		if(value == 0){
+			return '<input class="mui-switch mui-switch-animbg search_show'+row.id+'"  type="checkbox" onclick="CodeGoods.updatestatus('+row.id+',1,\'search_show\')">';
+		}else{
+			return '<input class="mui-switch mui-switch-animbg search_show'+row.id+'" type="checkbox" onclick="CodeGoods.updatestatus('+row.id+',0,\'search_show\')" checked>';
+		}
+	}
+	
+	CodeGoods.postFormatter = function(value,row,index) {
+		if(value == 0){
+			return '<input class="mui-switch mui-switch-animbg is_post'+row.id+'"  type="checkbox" onclick="CodeGoods.updatestatus('+row.id+',1,\'is_post\')">';
+		}else{
+			return '<input class="mui-switch mui-switch-animbg is_post'+row.id+'" type="checkbox" onclick="CodeGoods.updatestatus('+row.id+',0,\'is_post\')" checked>';
+		}
+	}
+	
+	CodeGoods.fieldFormatter = function(value,row,index) {
+		switch(value){
+			case 1:
+				return '<span class="label label-success ">是</div>';
+			break;
+			case 0:
+				return '<span class="label label-warning ">否</div>';
+			break;
+		}
+	}
+	
+	CodeGoods.updatestatus = function(pk,value,field) {	
+		var ajax = new $ax(Feng.ctxPath + "/Field/updateExt", function (data) {
+			if ('00' !== data.status) {
+				Feng.error(data.msg);
+				$("."+field+pk).prop("checked",!$("."+field+pk).prop("checked"));
+			}
+		});
+		var val = $("."+field+pk).prop("checked") ? 1 : 0;
+		ajax.set('id', pk);
+		ajax.set(field, val);
+		ajax.start();
+	}
+	
+	CodeGoods.arrowFormatter = function(value,row,index) {
+		return '<i class="fa fa-long-arrow-up" onclick="CodeGoods.arrowsort('+value+',1)" style="cursor:pointer;" title="上移"></i>&nbsp;<i class="fa fa-long-arrow-down" style="cursor:pointer;" onclick="CodeGoods.arrowsort('+value+',2)"  title="下移"></i>';
+	}
+	
+	CodeGoods.sortFormatter = function(value,row,index) {
+		return '<input type="text" value="'+value+'" onblur="CodeGoods.upsort('+row.id+',this.value)" style="width:50px; border:1px solid #ddd; text-align:center">';
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected[0];
+			return true;
+		}
+	};
+
+	CodeGoods.add = function () {
+		var index = layer.open({type: 2,title: '添加字段',area: ['100%', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Field/add?menu_id={$menu_id}'});
+		this.layerIndex = index;
+	}
+
+
+	CodeGoods.update = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '修改字段',area: ['100%', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Field/update?id='+value});
+		}else{
+			if (this.check()) {
+				var idx = this.seItem.id;
+				var index = layer.open({type: 2,title: '修改字段',area: ['100%', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Field/update?id='+idx});
+				this.layerIndex = index;
+			}
+		}
+	}
+	
+	CodeGoods.delete = function(value) {
+	
+		{if condition="config('my.drop_field_status') eq 1"}
+		var tip = '确定操作，数据表字段也会删除';
+		{else/}
+		var tip = '确定操作';
+		{/if}
+
+		if(value){
+			Feng.confirm(tip, function () {
+				var ajax = new $ax(Feng.ctxPath + "/Field/delete", function (data) {
+					if ('00' === data.status) {
+						Feng.success(data.msg);
+						CodeGoods.table.refresh();
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('id', value);
+				ajax.start();
+			});
+		}else{
+			if (this.check()) {
+				var id = this.seItem.id;
+				var operation = function() {
+					var ajax = new $ax(Feng.ctxPath + "/Field/delete",
+							function(data) {
+								if ('00' === data.status) {
+									Feng.success(data.msg);
+									CodeGoods.table.refresh();
+								} else{
+									Feng.error(data.msg + "！", 10000);
+								}
+							});
+					ajax.set("id", id);
+					ajax.start();	
+				};
+				Feng.confirm(tip, operation);
+			}
+		}
+	};
+	
+	CodeGoods.arrowsort = function (value,type) {
+		var ajax = new $ax(Feng.ctxPath + "/Field/arrowsort", function (data) {
+			if ('00' === data.status) {
+					Feng.success(data.msg);
+					CodeGoods.table.refresh();
+			} else {
+				Feng.error(data.msg);
+			}
+		});
+		ajax.set('id', value);
+		ajax.set('type', type);
+		ajax.start();
+	}
+	
+	CodeGoods.upsort = function(id,sortid)
+    {
+		var ajax = new $ax(Feng.ctxPath + "/Field/setSort", function (data) {
+			if ('00' === data.status) {
+			} else {
+				Feng.error(data.msg);
+			}
+		});
+		ajax.set('sortid', sortid);
+		ajax.set('id', id);
+		ajax.start();
+    }
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+	
+	CodeGoods.createCode = function(type) {
+		var tip = '确定操作';
+		var menu_id = '{$Request.get.menu_id}';
+		var operation = function() {
+			var ajax = new $ax(Feng.ctxPath + "/Build/create",
+					function(data) {
+						if ('00' === data.status) {
+							Feng.success(data.msg);
+						} else{
+							Feng.error(data.msg + "！", 10000);
+						}
+					});
+			ajax.set("menu_id", menu_id);
+			ajax.start();
+			
+			
+		};
+		Feng.confirm("是否" + tip, operation);		
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath + "/Field/index?menu_id={$menu_id}",defaultColunms);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+</script>
+{/block}

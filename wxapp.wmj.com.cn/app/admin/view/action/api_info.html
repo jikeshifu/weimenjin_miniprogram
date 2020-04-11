@@ -1,0 +1,308 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name="id" id="id" value="{$info.id}">
+{if condition="$info.id eq ''"}
+<input type="hidden" name="menu_id" id="menu_id" value="{$menu_id}">
+{/if}
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row" style="margin-top:-20px;">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<ul class="layui-tab-title">
+						<li class="layui-this">基本信息</li>
+						<li>拓展信息</li>
+						<li>多表操作配置</li>
+					</ul>
+					
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-10">
+							<!-- form start -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">操作名：</label>
+									<div class="col-sm-9">
+										<input type="text" id="name" value="{$info.name}" name="name" class="form-control" placeholder="请输入操作名">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">方法名称：</label>
+									<div class="col-sm-9">
+										<input type="text" id="action_name" value="{$info.action_name}" name="action_name" class="form-control" placeholder="请输入方法名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">方法类型：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="type" class="form-control" id="type">
+											<option value="">请选择</option>
+											{foreach name="actionList" id="vo"}
+											<option value="{$key}" {if condition="$info.type eq $key"}selected{/if}>{$vo}</option>
+											{/foreach}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">操作字段：</label>
+									<div class="col-sm-9">
+										<?php $menu_id = isset($info['menu_id']) ? $info['menu_id'] : request()->param('menu_id');?>
+										{query table="field" sqlstr="menu_id=$menu_id and is_post =1" order="sortid asc"}
+										<input value="{$query.field}" name="fields" lay-filter="hope" class="checkbox" type="checkbox" {if in_array($query['field'],explode(',',$info['fields']))}checked{/if} title="{$query.name}">
+										{/query}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">请求方式：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="request_type" class="form-control" id="request_type">
+											<option value="">请选择</option>
+											{foreach name="requestList" id="vo"}
+											<option value="{$vo}" {if condition="$info.request_type eq $vo"}selected{/if}>{$vo}</option>
+											{/foreach}
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">配置信息：</label>
+									<div class="col-sm-9">
+										<input type="text" id="remark" value="{$info.remark}" name="remark" class="form-control" placeholder="请输入默认值">
+										<span class="help-block m-b-none"><a  target="_blank" style="color:#ff0000" onclick="CodeInfoDlg.config('bs_icon')">配置说明 </a></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">数据缓存时间：</label>
+									<div class="col-sm-9">
+										<?php if(!isset($info['cache_time']) && empty($info['id'])){ $info['cache_time'] = ''; }; ?>
+										<input type="text" id="cache_time" value="{$info.cache_time}" name="cache_time" class="form-control" placeholder="请输入数据缓存时间">
+										<span class="help-block m-b-none">数据缓存时间,单位s 后缀勿填写</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">方法描述：</label>
+									<div class="col-sm-9">
+										<textarea id="block_name" name="block_name" class="form-control" placeholder="请输入方法">{$info.block_name}</textarea>
+									</div>
+								</div>
+								
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">控制器方法是否生成：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['is_controller_create'])){ $info['is_controller_create'] = 1; }; ?>
+									<input name="is_controller_create" value="1" type="radio" {if condition="$info.is_controller_create eq 1"}checked{/if} title="是">
+									<input name="is_controller_create" value="0" type="radio" {if condition="$info.is_controller_create eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">服务层方法是否生成：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['is_service_create'])){ $info['is_service_create'] = 1; }; ?>
+									<input name="is_service_create" value="1" type="radio" {if condition="$info.is_service_create eq 1"}checked{/if} title="是">
+									<input name="is_service_create" value="0" type="radio" {if condition="$info.is_service_create eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">接口生成日志：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['log_status'])){ $info['log_status'] = 1; }; ?>
+									<input name="log_status" value="1" type="radio" {if condition="$info.log_status eq 1"}checked{/if} title="是">
+									<input name="log_status" value="0" type="radio" {if condition="$info.log_status eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">token认证：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['api_auth'])){ $info['api_auth'] = 0; }; ?>
+									<input name="api_auth" value="1" type="radio" {if condition="$info.api_auth eq 1"}checked{/if} title="是">
+									<input name="api_auth" value="0" type="radio" {if condition="$info.api_auth eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">短信认证：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['sms_auth'])){ $info['sms_auth'] = 0; }; ?>
+									<input name="sms_auth" value="1" type="radio" {if condition="$info.sms_auth eq 1"}checked{/if} title="是">
+									<input name="sms_auth" value="0" type="radio" {if condition="$info.sms_auth eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">图片验证码认证：</label>
+								<div class="col-sm-9">
+									<?php if(!isset($info['captcha_auth'])){ $info['captcha_auth'] = 0; }; ?>
+									<input name="captcha_auth" value="1" type="radio" {if condition="$info.captcha_auth eq 1"}checked{/if} title="是">
+									<input name="captcha_auth" value="0" type="radio" {if condition="$info.captcha_auth eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">每页显示数据：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="pagesize" name="pagesize" value="{$info.pagesize}" class="form-control" placeholder="每页显示多少条数据，默认20">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">默认排序：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="default_orderby" name="default_orderby" value="{$info.default_orderby}"  class="form-control" placeholder="默认排序，如不填则按照主键倒序">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">配置树级列表：</label>
+								<div class="col-sm-9">					
+									<input type="text" id="tree_config" name="tree_config" value="{$info.tree_config}" class="form-control" placeholder="当前父级ID,显示字段 例如 pid,title">
+									<span class="help-block m-b-none">生成树级列表 格式父ID,显示字段名称 例如pid,title</span>
+								</div>
+							</div>
+							
+							
+						</div>
+						
+						<div class="layui-tab-item">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">关联表：</label>
+								<div class="col-sm-9">
+									<input type="text" id="relate_table" name="relate_table" class="form-control" value="{$info.relate_table}" placeholder="请输入关联表 如果不是关联查询请勿填写">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">关联字段：</label>
+								<div class="col-sm-9">
+									<input type="text" id="relate_field" value="{$info.relate_field}" name="relate_field" class="form-control" placeholder="请输入关联表 如果不是关联查询请勿填写">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">查询字段字段：</label>
+								<div class="col-sm-9">
+									<input type="text" id="list_field" value="{$info.list_field}" name="list_field" class="form-control" placeholder="请输入关联表需要查询的字段">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">sql数据源：</label>
+								<div class="col-sm-9">
+									<textarea id="sql_query" name="sql_query" class="form-control" placeholder="sql查询语句 前面的关联查询取消">{$info.sql_query}</textarea>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="{if condition="$info.id neq ''"}CodeInfoDlg.update(){else/}CodeInfoDlg.add(){/if}" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Action.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	form = layui.form();
+});
+
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+
+
+$(function(){
+	$("#type").change(function(){
+		var type = $(this).val().toString();
+		switch(type){
+			case '3':
+				$("#bs_icon").val('plus');
+				$("#block_name").val('创建数据');
+			break;
+			
+			case '4':
+				$("#bs_icon").val('edit');
+				$("#block_name").val('编辑数据');
+			break;
+			
+			case '14':
+				$("#bs_icon").val('edit');
+				$("#block_name").val('批量编辑数据');
+			break;
+			
+			case '5':
+				$("#bs_icon").val('trash');
+				$("#block_name").val('删除数据');
+			break;
+			
+			case '6':
+				$("#bs_icon").val('pencil');
+				$("#block_name").val('修改状态');
+				$("#remark").val('');
+			break;
+			
+			case '7':
+				$("#bs_icon").val('edit');
+				$("#block_name").val('数值加');
+			break;
+			
+			case '8':
+				$("#bs_icon").val('edit');
+				$("#block_name").val('数值减');
+			break;
+			
+			case '9':
+				$("#bs_icon").val('lock');
+				$("#block_name").val('修改密码');
+			break;
+			
+			case '10':
+				$("#bs_icon").val('plus');
+				$("#block_name").val('跳转链接');
+			break;
+			
+			case '11':
+				$("#bs_icon").val('plus');
+				$("#block_name").val('弹窗连接');
+			break;
+			
+			case '12':
+				$("#bs_icon").val('download');
+				$("#block_name").val('数据导出');
+			break;
+			
+			case '13':
+				$("#bs_icon").val('upload');
+				$("#block_name").val('数据导入');
+			break;
+			
+			case '17':
+				$("#block_name").val('账号密码登录');
+			break;
+			
+			case '18':
+				$("#block_name").val('发送短信验证码');
+			break;
+			
+			case '19':
+				$("#block_name").val('手机号登录');
+			break;
+			
+		}
+	});
+	
+})
+
+</script>
+
+{/block}

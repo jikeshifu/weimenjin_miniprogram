@@ -1,0 +1,113 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='lockauth_id' id='lockauth_id' value="{$info.lockauth_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">锁ID：</label>
+						<div class="col-sm-9">
+							<input type="text" id="lock_id" value="{$info.lock_id}" name="lock_id" class="form-control" placeholder="请输入锁ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员ID：</label>
+						<div class="col-sm-9">
+							<input type="text" id="member_id" value="{$info.member_id}" name="member_id" class="form-control" placeholder="请输入会员ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">分享人ID：</label>
+						<div class="col-sm-9">
+							<input type="text" id="auth_member_id" value="{$info.auth_member_id}" name="auth_member_id" class="form-control" placeholder="请输入分享人ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">可分享数：</label>
+						<div class="col-sm-9">
+							<input type="text" id="auth_sharelimit" value="{$info.auth_sharelimit}" name="auth_sharelimit" class="form-control" placeholder="请输入可分享数">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">有效期起始：</label>
+						<div class="col-sm-9">
+							<input type="text" value="{if condition="$info.auth_starttime neq ''"}{$info.auth_starttime|date='Y-m-d H:i:s'}{else/}{:date('Y-m-d H:i:s')}{/if}" name="auth_starttime"  placeholder="请输入有效期起始" class="form-control" id="auth_starttime">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">有效期结束：</label>
+						<div class="col-sm-9">
+							<input type="text" value="{if condition="$info.auth_endtime neq ''"}{$info.auth_endtime|date='Y-m-d H:i:s'}{else/}{:date('Y-m-d H:i:s')}{/if}" name="auth_endtime"  placeholder="请输入有效期结束" class="form-control" id="auth_endtime">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">分享权限：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['auth_shareability'])){ $info['auth_shareability'] = 1; }; ?>
+							<input name="auth_shareability" value="1" type="radio" {if condition="$info.auth_shareability eq '1'"}checked{/if} title="开启">
+							<input name="auth_shareability" value="0" type="radio" {if condition="$info.auth_shareability eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" id="remark" value="{$info.remark}" name="remark" class="form-control" placeholder="请输入备注">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">创建时间：</label>
+						<div class="col-sm-9">
+							<input type="text" value="{if condition="$info.create_time neq ''"}{$info.create_time|date='Y-m-d H:i:s'}{/if}" name="create_time"  placeholder="请输入创建时间" class="form-control" id="create_time">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">开门限制数：</label>
+						<div class="col-sm-9">
+							<input type="text" id="auth_openlimit" value="{$info.auth_openlimit}" name="auth_openlimit" class="form-control" placeholder="请输入开门限制数">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">是否管理员：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['auth_isadmin'])){ $info['auth_isadmin'] = 1; }; ?>
+							<input name="auth_isadmin" value="1" type="radio" {if condition="$info.auth_isadmin eq '1'"}checked{/if} title="是">
+							<input name="auth_isadmin" value="0" type="radio" {if condition="$info.auth_isadmin eq '0'"}checked{/if} title="否">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/LockAuth.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery-migrate-1.1.1.js'></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery.dragsort-0.5.1.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['form'], function () {
+	window.form = layui.form();
+});
+laydate.render({elem: '#auth_starttime',type: 'datetime',trigger:'click'});
+laydate.render({elem: '#auth_endtime',type: 'datetime',trigger:'click'});
+laydate.render({elem: '#create_time',type: 'datetime',trigger:'click'});
+</script>
+
+
+{/block}
