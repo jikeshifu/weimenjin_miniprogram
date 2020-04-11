@@ -16,6 +16,7 @@ wxapp_miniprogram为微信小程序源码。
 3.  Mysql5.5+
 4.  修改数据库连接在根目录下.env文件
 5.  后台超级管理员admin,默认密码wmj123456
+6.  运行目录为public
 
 
 #### 小程序的api文档
