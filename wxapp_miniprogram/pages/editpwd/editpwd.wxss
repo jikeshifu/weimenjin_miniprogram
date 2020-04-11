@@ -1,0 +1,3 @@
+/* .locationbox .cuIcon-locationfil{font-size:32px;} */
+.locationbox{width:80rpx;height:80rpx;line-height:80rpx; text-align: right;font-size:20pt;color: red;}
+.lg{width:100%;}

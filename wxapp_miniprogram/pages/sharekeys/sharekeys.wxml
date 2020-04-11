@@ -1,0 +1,50 @@
+<view class="wrap">
+    <view class="cu-form-group">
+      <view class="title">开始时间</view>
+      <picker mode="date" value="{{starttime}}" start="2020-01-01" end="2050-09-01" bindchange="startDate">
+        <view class="picker">
+          {{starttime}}
+        </view>
+      </picker>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">结束时间</view>
+      <picker mode="date" value="{{endtime}}" start="2020-01-01" end="2050-09-01" bindchange="endDate">
+        <view class="picker">
+          {{endtime}}
+        </view>
+      </picker>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">可分享数</view>
+      <input name="sharelimit" class="tar" placeholder="0不限" value="{{sharelimit}}" bindinput="sharelimitInput"></input>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">可开次数</view>
+      <input name="openlimit" class="tar" placeholder="0不限" value="{{openlimit}}" bindinput="openlimitInput"></input>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">分享权限</view>
+      <switch bindchange="switchChange"></switch>
+    </view>
+    <view class="cu-form-group bb1 mb10">
+      <view class="title">审核状态</view>
+      <switch checked bindchange="statusChange"></switch>
+    </view>
+    <checkbox-group bindchange="checkboxChange">
+      <view class="cu-form-group checkgroup" wx:for="{{opentimesarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+        <view class="title">{{vo.name}}</view>
+        <checkbox value="{{vo.id}}"></checkbox>
+      </view>
+    </checkbox-group>
+    <view class="cu-form-group bt1 mt10">
+      <view class="title">备注</view>
+      <input name="remark"  placeholder="备注内容" value="{{remark}}" bindinput="remarkInput"></input>
+    </view>
+    <view class="padding flex flex-direction {{isshare ? 'hide' :''}}">
+      <button class="cu-btn bg-green lg" bindtap="getkey">生成钥匙</button>
+    </view>
+    <view class="padding flex flex-direction {{isshare ? '' :'hide'}}">
+      <button class="cu-btn bg-green lg" open-type="share">立即分享</button>
+    </view>
+</view>

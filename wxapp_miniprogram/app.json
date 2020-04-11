@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/openlogs/openlogs",
+    "pages/open/open",
+    "pages/health/health",
+    "pages/healthlist/healthlist",
+    "pages/healthdetail/healthdetail",
+    "pages/user/user",
+    "pages/wxlogin/wxlogin",
+    "pages/addregpoint/addregpoint",
+    "pages/regpointlist/regpointlist",
+    "pages/adduser/adduser",
+    "pages/editpwd/editpwd",
+    "pages/bindphone/bindphone",
+    "pages/logs/logs",
+    "pages/sharekeys/sharekeys",
+    "pages/getkeys/getkeys",
+    "pages/lock/lock"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#21cf3e",
+    "navigationBarTitleText": "微门禁",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/homeon.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/useron.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}

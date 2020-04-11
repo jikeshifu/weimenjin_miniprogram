@@ -1,0 +1,26 @@
+<form>
+  <view class="{{apply ? '' :'hide'}}">
+    <view class="cu-form-group margin-top">
+      <view class="title">申请人</view>
+      <input name="realname" placeholder="请输入申请人" value="{{realname}}" bindinput="realnameInput"></input>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">备注</view>
+      <input name="remark" placeholder="请输入备注" value="{{remark}}" bindinput="remarkInput"></input>
+    </view>
+    <view class="padding flex flex-direction">
+      <button class="cu-btn bg-green lg" bindtap="uploadData">立即申请</button>
+    </view>
+  </view>
+  <view class="{{isBindPhone ? '' :'hide'}}">
+    <view class="padding flex flex-direction">
+      <button class="cu-btn bg-green lg" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" >绑定手机号</button>
+    </view>
+  </view>
+  <view class="fullmask2 {{closeAd ? 'hide' :''}}"></view>
+  <view class="adbox {{closeAd ? 'hide' :''}}">
+    <view class="greentip">开门成功</view>
+    <view><image class="img1" mode="aspectFit"  src="{{successimg}}"></image></view>
+    <view><image class="img2" mode="aspectFit" src="{{successadimg}}"></image></view>
+  </view>
+</form>

@@ -1,0 +1,29 @@
+<view class="wrap">
+  <scroll-view class="scrollbox" scroll-y style="height:{{scrollHeight}}px;" upper-threshold="50" lower-threshold="50" bindscrolltoupper="scrolltoupper" bindscrolltolower="scrolltolower" bindscroll="scrollfun">
+    <view class="advicebox">
+      <view class="cu-modal {{alertModal?'show':''}}" bindtap="hideModal">
+        <view class="cu-dialog" catchtap>
+          <image class="qrcodeimg" src="{{qrcode}}" mode="aspectFill" />
+          <view class="padding flex flex-direction">
+            <button class="cu-btn bg-green lg" data-img="{{qrcode}}" bindtap="saveImage">保存图片</button>
+          </view>
+        </view>
+      </view>
+      <view class="cu-list grid col-{{gridCol}} {{gridBorder?'':'no-border'}}">
+        <view class="cu-item" wx:for="{{listarr}}" wx:for-index="index"  wx:key="id" wx:if="{{index<gridCol*2}}">
+          <view bindtap="showModal" data-img="{{item.regpointqrcode}}">
+            <image class="showimg" src="{{item.regpointqrcode}}" mode="aspectFill" />
+          </view>
+          <text>{{item.regpointname}}</text>
+        </view>
+      </view>
+      <view class="looding {{!hidelood ? 'hide': ''}}">
+        <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
+        <text class="lwz">正在加载</text>
+      </view>
+      <view class="looding {{!nodata ? 'hide': ''}}">
+        <text class="lwz">不要再划了，没有啦！</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

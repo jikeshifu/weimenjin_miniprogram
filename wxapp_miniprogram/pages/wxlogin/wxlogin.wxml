@@ -1,0 +1,11 @@
+<view class="card1">
+  <view class="maskbox">
+    <view class="tiptitle">您还未登录</view>
+    <view class="subtitle">登录后可小程序开启门禁</view>
+    <view class=""><image class="logo" src='{{logo}}' mode='aspectFill'></image></view>
+    <view class="btnbox">
+      <view class="shrink3"><view class="btn1" bindtap="closemask">暂不登录</view></view>
+      <view class="shrink3"><button class="lgbtn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button></view>
+    </view>
+  </view>
+</view>

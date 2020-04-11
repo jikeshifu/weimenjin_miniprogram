@@ -1,0 +1,66 @@
+<view>
+  <view class="cu-form-group">
+    <view class="title">姓名</view>
+    <input name="username" disabled value="{{username}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">手机号</view>
+    <input name="phone" disabled value="{{phone}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">当前位置</view>
+    <input name="phone" disabled placeholder="" value="{{curaddress}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">家庭地址</view>
+    <input name="address1" disabled placeholder="" value="{{address1}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">第二居住地址</view>
+    <input name="addres2" disabled value="{{address2}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">工作或学习单位</view>
+    <input name="job" disabled value="{{job}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">14日内是否来自疫区</view>
+    <input name="yiqu" disabled value="{{yiquArr[yiquIndex]}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">登记类型</view>
+    <input disabled value="{{registerArr[registerIndex]}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">健康状况</view>
+    <input disabled value="{{healthArr[healthIndex]}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">登记时间</view>
+    <input disabled value="{{create_time}}"></input>
+  </view>
+  <view class="cu-bar bg-white margin-top">
+    <view class="action">
+      漫游地截图
+    </view>
+    <view class="action"></view>
+  </view>
+  <view class="cu-form-group">
+    <view class="grid col-4 grid-square flex-sub">
+      <view class="bg-img">
+        <image src='{{manyouimg}}' mode='aspectFill'></image>
+      </view>
+    </view>
+  </view>
+  <view class="cu-bar bg-white margin-top">
+    <view class="action">证明截图</view>
+    <view class="action"></view>
+  </view>
+  <view class="cu-form-group">
+    <view class="grid col-4 grid-square flex-sub">
+      <view class="bg-img">
+        <image src='{{txzimg}}' mode='aspectFill'></image>
+      </view>
+    </view>
+  </view>
+</view>

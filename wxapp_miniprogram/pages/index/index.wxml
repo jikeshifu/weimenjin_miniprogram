@@ -1,0 +1,58 @@
+<view class="wrap">
+  <scroll-view class="scrollbox" scroll-y style="height:{{scrollHeight}}px;" upper-threshold="50" lower-threshold="50" bindscrolltoupper="scrolltoupper" bindscrolltolower="scrolltolower" bindscroll="scrollfun">
+    <view class="listbox">
+      <view class="key-list" wx:for="{{listarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+        <view class="listrow">
+          <view class="shrink0"><image class="line" src='{{vo.online ? online : offline}}' mode='aspectFill'></image></view>
+          <view class="shrink1">{{vo.lock_name}}</view>
+          <block wx:if="{{vo.auth_status ==1 && vo.auth_shareability!=0 && vo.guoqi}}">
+          <view class="shrink2" bindtap="goShare" data-lockid="{{vo.lock_id}}">分享</view>
+          </block>
+        </view>
+        <block wx:if="{{vo.auth_status !=1}}">
+          <view class="list-content">{{vo.time}}（审核中）</view>
+        </block>
+        <block wx:if="{{vo.auth_status ==1}}">
+          <view class="list-content">{{vo.time}}</view>
+          <view class="list-footer" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}" data-locationcheck="{{vo.location_check}}" data-longitude="{{vo.longitude}}" data-latitude="{{vo.latitude}}" bindtap="opendoor">
+            <view class="listrow">
+              <view class="shrink0"><view class="cuIcon-lock"></view></view>
+              <view class="shrink1" >开门</view>
+            </view>
+          </view>
+        </block>
+      </view>
+      <block wx:if="{{listlen <1}}">
+        <view class="mscan" bindtap="scan">
+          <view class="cuIcon-warn micon"></view>
+          <text class="wz">没有钥匙</text>
+        </view>
+      </block>
+      <view class="looding {{!hidelood ? 'hide': ''}}">
+        <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
+        <text class="lwz">正在加载</text>
+      </view>
+      <block wx:if="{{listlen > 0}}">
+        <view class="looding {{!nodata ? 'hide': ''}}">
+          <text class="lwz">不要再划了，没有啦！</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+  <view class="fullmask {{close ? 'hide' :''}}"></view>
+  <view class="maskbox {{close ? 'hide' :''}}">
+    <view class="tiptitle">您还没有钥匙</view>
+    <view class="subtitle">登录小程序获取钥匙可开启门禁</view>
+    <view class="cuIcon-warn micon"></view>
+    <view class="btnbox">
+      <view class="shrink3"><view class="btn1" bindtap="closemask">暂不登录</view></view>
+      <view class="shrink3"><button class="lgbtn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button></view>
+    </view>
+  </view>
+  <view class="fullmask2 {{closeAd ? 'hide' :''}}"></view>
+  <view class="adbox {{closeAd ? 'hide' :''}}">
+    <view class="greentip">开门成功</view>
+    <view><image class="img1" mode="aspectFit"  src="{{successimg}}"></image></view>
+    <view><image class="img2" mode="aspectFit" src="{{successadimg}}"></image></view>
+  </view>
+</view>

@@ -1,0 +1,22 @@
+/**user.wxss**/
+page{background-color: #ffffff;}
+.userbox{width:100%;height:370rpx;background:#00A950;}
+.userinfo{display:flex;flex-direction:column;align-items:center;padding-top:50rpx;margin-bottom:10rpx;}
+.userinfo-avatar{width:128rpx;height:128rpx;margin:20rpx auto 30rpx;border-radius:50%;}
+.userinfo-nickname{color:#ffffff;font-size:13pt;}
+.widgetsbox{padding-left:30rpx;}
+.itemimg{width:42rpx;height:42rpx;position:absolute;top:32rpx;left:0;}
+.witem{width:100%;height:100rpx;position:relative;border-bottom:1px solid #f3f3f3;box-sizing:border-box;}
+.witem text{/*padding-left:40rpx;*/position:absolute;left:0rpx;color:#2F332E;top:30rpx;font-size:13pt;}
+.imgarrow{position:absolute;top:33rpx;right:44rpx;width:34rpx;height:34rpx;}
+/* .witem:last-child{} */
+.getbtn{margin-top:130rpx;}
+
+.card1{padding:0 24rpx 24rpx;}
+.flex{display: flex;flex-direction:row;}
+.bgfff{background-color: #ffffff;}
+.loginbox{width: 100%;height: 330rpx;border-radius:10rpx;overflow: hidden;background-color: #ffffff;}
+.lgbtn{margin: 100rpx auto 30rpx;width: 50%;height: 80rpx;text-align: center; color: #ffffff;background-color: #09BB07;border-radius: 40rpx;}
+.dlwz{text-align: center;color: #454545;}
+.hide{display: none;}
+.lg{width:100%;}

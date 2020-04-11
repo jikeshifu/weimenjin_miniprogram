@@ -1,0 +1,5 @@
+<view class="">
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-green lg" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" >绑定手机号</button>
+  </view>
+</view>

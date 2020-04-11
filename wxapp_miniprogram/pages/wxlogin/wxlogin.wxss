@@ -1,0 +1,23 @@
+/**wxlogin.wxss**/
+page{background:#EFEFF4;box-sizing:border-box;}
+.card1{padding:24rpx;}
+.flex{display: flex;flex-direction: row;}
+.bgfff{background-color: #ffffff;}
+.loginbox{width: 100%;height: 360rpx;border-radius:10rpx;overflow: hidden;background-color: #ffffff;text-align: center;padding-top: 40rpx;}
+.dlwz{text-align: center;color: #454545;}
+.hide{display: none;}
+.agreement{position:fixed;bottom:40rpx;text-align:center;font-size:28rpx;}
+.cb2{color:#333;}
+.blue{color:#576B95;}
+.footer{position: fixed;bottom:13px;width:100%;text-align:center;}
+.tips{color:#333;}
+.logo{width:240rpx;height:220rpx;margin:0 auto;}
+
+.maskbox{width:100%;height:600rpx;background-color:#fff;z-index:1001;border-radius: 20rpx;text-align: center;}
+.tiptitle{font-size:12pt;text-align:center;font-weight: bold;padding-top: 60rpx;margin-bottom:20rpx;}
+.subtitle{color: #666;font-size: 11pt;text-align: center;margin-bottom:40rpx;}
+.btnbox{display:flex;flex-direction:row;margin-top: 60rpx;width: 100%; padding:0 30rpx;}
+.btn1{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#000;font-size:11pt;text-align: center;}
+.lgbtn{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#ffffff;background-color: green;font-size: 11pt;margin-left: 8%;}
+.shrink3{flex-shrink:1;width:48%;font-size: 11pt;}
+.tar{text-align: right;}

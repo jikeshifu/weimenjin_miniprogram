@@ -1,0 +1,38 @@
+/**index.wxss**/
+page{background:#f3f3f3;box-sizing:border-box;}
+.wrap{width:100%;padding:20rpx 30rpx;box-sizing:border-box;}
+.mscan{text-align: center;position: fixed;top:40%;left:50%;margin-left:-80rpx;}
+.micon{font-size: 70pt;color:#21cf3e;}
+.wz{font-size:13pt;}
+.searchbox{width:100%;padding:20rpx 30rpx;}
+.search{width:100%;height:56rpx;line-height:56rpx;text-align:center;border-radius:20rpx;background:#ffffff;color:#e3e3e3;}
+.search image{width:32rpx;height:32rpx;position: relative;top:6rpx;left:-6rpx;}
+.search2{width:100%;height:72rpx;line-height:72rpx;border-radius:20rpx;background:#e3e3e3;color:#000;padding-left:20rpx;}
+.line{width:48rpx;height:48rpx;position: relative;top:4px;right:3px;}
+.listrow{display:flex;flex-direction:row;padding-left:14rpx;height:40px;line-height:40px;}
+.shrink0{flex-shrink:0;width:180rpx; color: #333;font-size: 11pt;text-align: center;}
+.shrink1{flex-shrink:1;width:100%;font-size: 11pt;}
+.shrink3{flex-shrink:1;width:48%;font-size: 11pt;}
+.listbox{padding: 0 30rpx;}
+.cuIcon-lock{font-size:20px;color:#000;}
+.cu-list.menu-avatar>.cu-item{border-radius:20rpx;margin-bottom: 20rpx;}
+.cu-list.menu-avatar>.cu-item .action{width:300rpx;text-align:right;padding-right:8rpx;}
+.cu-form-group{min-height:80rpx;}
+.cu-form-group picker{width:100%;height:80rpx;border-bottom: 1px solid #e3e3e3;}
+.cu-form-group picker .picker{width:100%;height:80rpx;line-height:80rpx;}
+.cu-form-group picker:after{line-height:80rpx;}
+.cu-form-group+.cu-form-group{border:0;}
+.right{float: right;}
+.clear{clear: both;}
+.c_09bb07{color: #09bb07;}
+.c_ffbe00{color: #ffbe00;}
+.c_f43530{color: #f43530;}
+.c_f76260{color: #f76260;}
+.text-center {text-align: center; margin: 0px !important; padding: 0px !important;}
+
+.fullmask{width:100%;height:100%;position:fixed;left:0;top:0;background:#000;opacity:.5;filter:alpha(opacity=50);z-index:1000;}
+.maskbox{width:100%;height:480rpx; position:fixed;left:0;top:0; background-color:#fff;z-index:1001;}
+.btnbox{display:flex;flex-direction:row;margin-top: 60rpx;width: 100%; padding:0 30rpx;}
+.btn1{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#000;font-size:11pt;text-align: center;}
+.lgbtn{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#ffffff;background-color: green;font-size: 11pt;margin-left: 8%;}
+.tar{text-align: right;}
