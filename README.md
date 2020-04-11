@@ -17,4 +17,4 @@ wxapp_miniprogram为微信小程序源码。
 
 #### 使用说明
 
-详情见[http://doc.wmj.com.cn/web/#/1?page_id=34](http://http://doc.wmj.com.cn/web/#/1?page_id=34)
+详情见http://doc.wmj.com.cn/web/#/1?page_id=34
