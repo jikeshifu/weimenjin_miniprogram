@@ -1,0 +1,199 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='class_id' id='class_id' value="{$info.class_id}" />
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row" style="margin-top:-20px;">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<ul class="layui-tab-title">
+						<li class="layui-this">基本信息</li>
+						<li>拓展信息</li>
+					</ul>
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-12">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">所属父级：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['pid'])){ $info['pid'] = ''; }; ?>
+							<select lay-ignore name="pid" class="form-control" id="pid">
+								<option value="">请选择</option>
+								{sql query="select class_id,class_name,pid from cd_catagory"}
+									<option value="{$sql.class_id}" {if condition="$info.pid eq $sql.class_id"}selected{/if}>{$sql.class_name}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">栏目名称：</label>
+						<div class="col-sm-9">
+							<input type="text" id="class_name" value="" name="class_name" class="form-control" placeholder="请输入栏目名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">栏目属性：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['type'])){ $info['type'] = 1; }; ?>
+							<input name="type" value="1" type="radio" {if condition="$info.type eq '1'"}checked{/if} title="频道">
+							<input name="type" value="2" type="radio" {if condition="$info.type eq '2'"}checked{/if} title="列表">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">栏目模板：</label>
+						<div class="col-sm-6">
+							<input type="text" id="list_tpl" value="{$info.list_tpl}" name="list_tpl" class="form-control" placeholder="请输入栏目模板">
+						</div>
+						<div class="col-sm-3" style="margin-left:-30px;">
+							<select lay-ignore class="form-control" target="#list_tpl">
+								<option value="">请选择</option>
+								{foreach name="tpList" id="vo"}
+								<option value="{$vo.name}">{$vo.file}</option>
+								{/foreach}			
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">内容模板：</label>
+						<div class="col-sm-6">
+							<input type="text" id="detail_tpl" value="{$info.detail_tpl}" name="detail_tpl" class="form-control" placeholder="请输入内容模板">
+						</div>
+						<div class="col-sm-3" style="margin-left:-30px;">
+							<select lay-ignore class="form-control" target="#detail_tpl">
+								<option value="">请选择</option>
+								{foreach name="tpList" id="vo"}
+								<option value="{$vo.name}">{$vo.file}</option>
+								{/foreach}								
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">栏目图片：</label>
+						<div class="col-sm-6">
+							<input type="text" id="pic" value="" name="pic" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} class="form-control" placeholder="请输入栏目图片">
+							<span class="help-block m-b-none pic_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="pic_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="正常">
+							<input name="status" value="2" type="radio" {if condition="$info.status eq '2'"}checked{/if} title="禁用">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">绑定模型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['module_id'])){ $info['module_id'] = ''; }; ?>
+							<select lay-ignore name="module_id" class="form-control" id="module_id">
+								<option value="">请选择</option>
+								{sql query="select menu_id,title from cd_menu where status =1 and app_id in(select app_id from cd_application where app_type =3)"}
+								<option value="{$sql.menu_id}">{$sql.title}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="col-sm-12">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">副标题：</label>
+						<div class="col-sm-9">
+							<input type="text" id="subtitle" value="" name="subtitle" class="form-control" placeholder="请输入副标题">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">文件路径：</label>
+						<div class="col-sm-9">
+							<input type="text" id="filepath" value="{$info.filepath}" name="filepath" class="form-control" placeholder="请输入文件路径">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">生成文件名：</label>
+						<div class="col-sm-9">
+							<input type="text" id="filename" value="index.html" name="filename" class="form-control" placeholder="请输入生成文件名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">栏目关键词：</label>
+						<div class="col-sm-9">
+							<input type="text" id="keyword" value="" name="keyword" data-role="tagsinput" class="form-control" placeholder="请输入栏目关键词">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">栏目表述：</label>
+						<div class="col-sm-9">
+							<textarea id="description" name="description"  class="form-control" placeholder="请输入栏目表述"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">跳转地址：</label>
+						<div class="col-sm-9">
+							<input type="text" id="jumpurl" value="" name="jumpurl" class="form-control" placeholder="请输入跳转地址">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">排序：</label>
+						<div class="col-sm-9">
+							<input type="text" id="sortid" value="100" name="sortid" class="form-control" placeholder="请输入排序">
+						</div>
+					</div>
+							<!-- form end -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/cms/Catagory.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<link rel='stylesheet' href='__PUBLIC__/static/js/plugins/tagsinput/tagsinput.css'>
+<script type='text/javascript' src='__PUBLIC__/static/js/plugins/tagsinput/tagsinput.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+});
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+
+uploader('pic_upload','pic','image',false,'','{:url("admin/Upload/uploadImages")}');
+$(function(){
+	$("select").change(function(){
+		pick = $(this).attr('target');
+		var val = $(this).find('option:selected').val();
+		$(pick).val(val);
+	});
+})
+
+</script>
+
+
+{/block}

@@ -1,0 +1,51 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='frament_id' id='frament_id' value="{$info.frament_id}" />
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">标题：</label>
+						<div class="col-sm-9">
+							<input type="text" id="title" value="{$info.title}" name="title" class="form-control" placeholder="请输入标题">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">内容：</label>
+						<div class="col-sm-9">
+								<textarea id="content" name="content" style="width: 100%; height:300px;">{$info.content}</textarea>
+								<script type="text/javascript">$('#content').xheditor({html5Upload:false,upLinkUrl:"{:url('admin/Upload/editorUpload',['immediate'=>1])}",upLinkExt:"zip,rar,txt,doc,docx,pdf,xls,xlsx",tools:'simple',upImgUrl:"{:url('admin/Upload/editorUpload',['immediate'=>1])}",upImgExt:"jpg,jpeg,gif,png"});</script>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/cms/Frament.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+});
+</script>
+
+
+{/block}
