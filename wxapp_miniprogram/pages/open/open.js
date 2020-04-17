@@ -4,14 +4,15 @@ Page({
     successimg: '../../images/success.png',
     successadimg: '../../images/success.png',
     closeAd: true, // 广告弹层是否关闭 false不关闭
+    qrshowminiad:true,
     index: null,
     phone: '',
     user_id: 0,   // 管理员id，不是小程序用户的id
     lock_id: 0, // 用app.js里的lock_id
     realname: '', // 申请人名
     remark: '', // 备注
-    auth_status: 0, // 审核状态 已审核|1,未审核|0   204代表1，,203代表0
-    apply: false, // 是否显示申请信息
+    auth_status: 0, // 审核状态 已审核|1,未审核|0   204代表1不需要审核直接开门，203代表0需要审核
+    apply: false, // 是否显示申请信息 false不显示申请信息
     isBindPhone: false, // 是否显示绑定手机
     latitude: '',
     longitude: ''
@@ -296,7 +297,8 @@ Page({
           that.setData({
             closeAd: false,
             successimg: app.globalData.domain+res.data.successimg,
-            successadimg: app.globalData.domain+res.data.successadimg
+            successadimg: app.globalData.domain+res.data.successadimg,
+            qrshowminiad:res.data.qrshowminiad
           })
           setTimeout(function(){
             that.setData({
@@ -305,7 +307,7 @@ Page({
             wx.switchTab({
               url: '../index/index'
             })
-          },4000);
+          },3000);
         }else if (res.data.opendoor_status=='202') {
           that.setData({
             isBindPhone:true
@@ -366,6 +368,19 @@ Page({
 
         //   }
         // })
+      },
+      fail: function (res) {
+        wx.showToast({
+          title: '获取不到定位，开门失败',
+          icon: 'none',
+          mask: true, // 防止触摸穿透
+          duration: 2000
+        });
+        setTimeout(function(){
+          wx.switchTab({
+            url: '../index/index'
+          })
+        },2000);
       }
     })
   },
@@ -447,38 +462,7 @@ Page({
                   });
                   var adminid = that.data.user_id; // 管理员user_id的值
                   var lock_id = app.globalData.lock_id; //
-                  wx.request({
-                    url: app.globalData.domain+'/api/Lock/opendoor',
-                    method: 'POST',
-                    header:{
-                      "Authorization": app.globalData.token
-                    },
-                    data: {
-                      user_id: adminid,
-                      lock_id: lock_id,
-                      member_id: app.globalData.userid,
-                      type: 1
-                    },
-                    success: function (res) {
-                      console.log('opendoor-res');
-                      console.log(res);
-                      if (res.data.opendoor_status=='200') {
-                        that.setData({
-                          closeAd: false,
-                          successimg: app.globalData.domain+res.data.successimg,
-                          successadimg: app.globalData.domain+res.data.successadimg
-                        })
-                        setTimeout(function(){
-                          that.setData({
-                            closeAd: true
-                          })
-                          wx.switchTab({
-                            url: '../index/index'
-                          })
-                        },4000);
-                      }
-                    }
-                  })
+                  that.doOpen(adminid,lock_id);
                 }
               })
             }
@@ -497,7 +481,7 @@ Page({
     var remark = that.data.remark;
     var adminid = that.data.user_id; // 管理员user_id的值
     var lock_id = app.globalData.lock_id; //
-    var auth_status = that.data.auth_status; // 审核状态 已审核|1,未审核|0
+    var auth_status = that.data.auth_status; // 审核状态 已审核|1,未审核|0 204代表1不需要审核直接开门，203代表0需要审核
     if (!realname) {
       wx.hideLoading();
       wx.showToast({
@@ -545,6 +529,18 @@ Page({
           // that.setData({
           //   apply:false
           // })
+          if (auth_status>0) {
+            // 直接开门
+            that.getLock();
+          }else{
+            setTimeout(function(){
+              wx.switchTab({
+                url: '../index/index'
+              })
+            },2000);
+          }
+        }else{
+          // 申请失败跳到首页
           setTimeout(function(){
             wx.switchTab({
               url: '../index/index'

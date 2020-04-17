@@ -32,7 +32,7 @@
         <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
         <text class="lwz">正在加载</text>
       </view>
-      <block wx:if="{{listlen > 0}}">
+      <block wx:if="{{listlen > 12}}">
         <view class="looding {{!nodata ? 'hide': ''}}">
           <text class="lwz">不要再划了，没有啦！</text>
         </view>
@@ -54,5 +54,6 @@
     <view class="greentip">开门成功</view>
     <view><image class="img1" mode="aspectFit"  src="{{successimg}}"></image></view>
     <view><image class="img2" mode="aspectFit" src="{{successadimg}}"></image></view>
+    <view class="miniad {{hitshowminiad ? 'hide' :''}}" ><ad  unit-id="adunit-7f4379a208fd83c6"></ad></view>
   </view>
 </view>

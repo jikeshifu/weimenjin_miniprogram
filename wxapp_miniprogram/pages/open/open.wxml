@@ -14,7 +14,7 @@
   </view>
   <view class="{{isBindPhone ? '' :'hide'}}">
     <view class="padding flex flex-direction">
-      <button class="cu-btn bg-green lg" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" >绑定手机号</button>
+      <button class="cu-btn bg-green lg mt150" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" >绑定手机号</button>
     </view>
   </view>
   <view class="fullmask2 {{closeAd ? 'hide' :''}}"></view>
@@ -22,5 +22,6 @@
     <view class="greentip">开门成功</view>
     <view><image class="img1" mode="aspectFit"  src="{{successimg}}"></image></view>
     <view><image class="img2" mode="aspectFit" src="{{successadimg}}"></image></view>
+    <view class="miniad {{qrshowminiad ? 'hide' :''}}" ><ad  unit-id="adunit-7f4379a208fd83c6"></ad></view>
   </view>
 </form>

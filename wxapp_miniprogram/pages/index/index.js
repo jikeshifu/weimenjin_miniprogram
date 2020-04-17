@@ -20,13 +20,15 @@ Page({
     scrollHeight: 0,
     close: true,  // 登录弹层是否关闭 false不关闭
     closeAd: true, // 广告弹层是否关闭 false不关闭
+    hitshowminiad: false,
     location_check: false, // 是否需要定位，false不需要
     latitude: '',
     longitude: ''
   },
   onPullDownRefresh: function () {
     this.setData({
-      listarr: []
+      listarr: [],
+      listlen: 1  //
     })
     if (app.globalData.userid) {
       this.getmore(1, this.data.num,0);
@@ -372,13 +374,14 @@ Page({
           that.setData({
             closeAd: false,
             successimg: app.globalData.domain+res.data.successimg,
-            successadimg: app.globalData.domain+res.data.successadimg
+            successadimg: app.globalData.domain+res.data.successadimg,
+            hitshowminiad:res.data.hitshowminiad
           })
           setTimeout(function(){
             that.setData({
               closeAd: true
             })
-          },2000);
+          },3000);
         }else{
           wx.showToast({
             title: res.data.msg,
