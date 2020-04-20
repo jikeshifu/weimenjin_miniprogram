@@ -1,0 +1,6 @@
+<!--pages/memberps/privacypolicy.wxml-->
+<view class="container">
+  <view class="pageH5">
+    <web-view src="https://www.wmj.com.cn/PrivacyPolicy"></web-view>
+  </view>
+</view>
