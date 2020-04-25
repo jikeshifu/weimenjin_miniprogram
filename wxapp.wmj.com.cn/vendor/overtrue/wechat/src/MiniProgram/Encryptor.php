@@ -76,10 +76,10 @@ class Encryptor extends BaseEncryptor
 		{
 			return "ErrCode::IllegalBuffer";
 		}
-		if( $dataObj->watermark->appid != "wx7fdcb0b7df1b5439")
+		/*if( $dataObj->watermark->appid != "wx7fdcb0b7df1b5439")
 		{
 			return "ErrCode::IllegalBuffer";
-		}
+		}*/
 		$data = $result;
 		return $data;
 	}
