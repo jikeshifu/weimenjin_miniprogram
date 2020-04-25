@@ -20,7 +20,7 @@
 						</div>
 					</div>
 					<div class="form-group layui-form">
-						<label class="col-sm-2 control-label">绑定手机：</label>
+						<label class="col-sm-2 control-label">需绑手机：</label>
 						<div class="col-sm-9">
 							<?php if(!isset($info['mobile_check'])){ $info['mobile_check'] = 1; }; ?>
 							<input name="mobile_check" value="1" type="radio" {if condition="$info.mobile_check eq '1'"}checked{/if} title="是">
@@ -36,21 +36,30 @@
 						</div>
 					</div>
 					<div class="form-group layui-form">
-						<label class="col-sm-2 control-label">申请钥匙审核：</label>
+						<label class="col-sm-2 control-label">审核钥匙：</label>
 						<div class="col-sm-9">
 							<?php if(!isset($info['applyauth_check'])){ $info['applyauth_check'] = 0; }; ?>
 							<input name="applyauth_check" value="1" type="radio" {if condition="$info.applyauth_check eq '1'"}checked{/if} title="开启">
 							<input name="applyauth_check" value="0" type="radio" {if condition="$info.applyauth_check eq '0'"}checked{/if} title="关闭">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group layui-form">
 						<label class="col-sm-2 control-label">开门距离(米)：</label>
 						<div class="col-sm-9">
-							<input type="text" id="location_check" value="0" name="location_check" class="form-control" placeholder="请输入开门距离(米)">
+							<?php if(!isset($info['location_check'])){ $info['location_check'] = 0; }; ?>
+							<input name="location_check" value="0" type="radio" {if condition="$info.location_check eq '0'"}checked{/if} title="不限制">
+							<input name="location_check" value="20" type="radio" {if condition="$info.location_check eq '20'"}checked{/if} title="20米内">
+							<input name="location_check" value="50" type="radio" {if condition="$info.location_check eq '50'"}checked{/if} title="50米内">
+							<input name="location_check" value="100" type="radio" {if condition="$info.location_check eq '100'"}checked{/if} title="100米内">
+							<input name="location_check" value="200" type="radio" {if condition="$info.location_check eq '200'"}checked{/if} title="200米内">
+							<input name="location_check" value="300" type="radio" {if condition="$info.location_check eq '300'"}checked{/if} title="300米内">
+							<input name="location_check" value="500" type="radio" {if condition="$info.location_check eq '500'"}checked{/if} title="500米内">
+							<input name="location_check" value="1000" type="radio" {if condition="$info.location_check eq '1000'"}checked{/if} title="1000米内">
+							<input name="location_check" value="10000" type="radio" {if condition="$info.location_check eq '10000'"}checked{/if} title="10K米内">
 						</div>
 					</div>
 					<div class="form-group layui-form">
-						<label class="col-sm-2 control-label">开关：</label>
+						<label class="col-sm-2 control-label">启用/禁用：</label>
 						<div class="col-sm-9">
 							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
 							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="启用">
@@ -103,6 +112,22 @@
 						</div>
 						<div class="col-sm-2" style="position:relative; right:30px;">
 							<span id="successadimg_upload"></span>
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">点击开门广告：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['hitshowminiad'])){ $info['hitshowminiad'] = 1; }; ?>
+							<input name="hitshowminiad" value="0" type="radio" {if condition="$info.hitshowminiad eq '0'"}checked{/if} title="开启">
+							<input name="hitshowminiad" value="1" type="radio" {if condition="$info.hitshowminiad eq '1'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">扫码开门广告：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['qrshowminiad'])){ $info['qrshowminiad'] = 1; }; ?>
+							<input name="qrshowminiad" value="0" type="radio" {if condition="$info.qrshowminiad eq '0'"}checked{/if} title="开启">
+							<input name="qrshowminiad" value="1" type="radio" {if condition="$info.qrshowminiad eq '1'"}checked{/if} title="关闭">
 						</div>
 					</div>
 				<!-- form end -->

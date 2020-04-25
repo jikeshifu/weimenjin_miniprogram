@@ -17,7 +17,7 @@
 					<td>{$info.lock_sn}</td>   
 				</tr> 
 				<tr> 
-					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">绑定手机：</td> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">需绑手机：</td> 
 					<td><?php echo getFieldVal($info["mobile_check"],"是|1|primary,否|0|info");?></td>   
 				</tr> 
 				<tr> 
@@ -25,15 +25,15 @@
 					<td><?php echo getFieldVal($info["applyauth"],"开启|1,关闭|0");?></td>   
 				</tr> 
 				<tr> 
-					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">申请钥匙审核：</td> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">审核钥匙：</td> 
 					<td><?php echo getFieldVal($info["applyauth_check"],"开启|1,关闭|0");?></td>   
 				</tr> 
 				<tr> 
 					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">开门距离(米)：</td> 
-					<td>{$info.location_check}</td>   
+					<td><?php echo getFieldVal($info["location_check"],"不限制|0,20米内|20,50米内|50,100米内|100,200米内|200,300米内|300,500米内|500,1000米内|1000,10K米内|10000");?></td>   
 				</tr> 
 				<tr> 
-					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">开关：</td> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">启用/禁用：</td> 
 					<td><?php echo getFieldVal($info["status"],"启用|1|success,禁用|0|danger");?></td>   
 				</tr> 
 				<tr> 

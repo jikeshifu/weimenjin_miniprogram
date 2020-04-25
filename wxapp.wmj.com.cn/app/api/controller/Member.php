@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		会员管理
- create_time:	2020-04-06 17:22:54
+ create_time:	2020-04-16 02:23:22
  author:		
  contact:		
 */
@@ -32,6 +32,7 @@ class Member extends Common {
 	* @apiParam (输入参数：) {string}			openid openid 
 	* @apiParam (输入参数：) {string}			mobile 手机号 
 	* @apiParam (输入参数：) {int}				sex 性别 
+	* @apiParam (输入参数：) {int}				member_ps 同意政策和协议 
 
 	* @apiParam (失败返回参数：) {object}     	array 返回结果集
 	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码  201
@@ -45,8 +46,9 @@ class Member extends Common {
 	* {"status":" 201","msg":"操作失败"}
 	*/
 	function update(){
-		$postField = 'member_id,nickname,headimgurl,openid,mobile,sex';
+		$postField = 'member_id,nickname,headimgurl,openid,mobile,sex,member_ps';
 		$data = $this->request->only(explode(',',$postField),'post',null);
+		mlog("Member_update_postdata".json_encode($data));
 		if(empty($data['member_id'])) return json(['status'=>$this->errorCode,'msg'=>'参数错误']);
 		try {
 			$where['member_id'] = $data['member_id'];
@@ -83,7 +85,7 @@ class Member extends Common {
 	function view(){
 		$data['member_id'] = $this->request->post('member_id','','intval');
 		try{
-			$field='member_id,nickname,headimgurl,openid,mobile,username,password,sex,status,create_time';
+			$field='member_id,nickname,headimgurl,openid,mobile,username,password,sex,status,create_time,member_ps';
 			$res  = checkData(MemberDb::getWhereInfo($data,$field));
 		}catch (\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
@@ -152,10 +154,10 @@ class Member extends Common {
 
 		$userInfo = \utils\alipay\UserService::getUserInfo($this->request->param(false));	//获取小程序用户信息
 		if(!$userInfo) return json(['status'=>$this->errorCode,'msg'=>'小程序信息获取失败']);
-		$res = MemberDb::getWhereInfo(['ali_user_id'=>$userInfo['user_id']],'member_id,ali_user_id,status,create_time');	//查询用户表的当前openid是否存在
+		$res = MemberDb::getWhereInfo(['ali_user_id'=>$userInfo['user_id']],'member_id,nickname,headimgurl,mobile,sex,ali_user_id,status,create_time');	//查询用户表的当前openid是否存在
 		//如果用户信息已经存在 则返回用户信息 并且生成token 将用户ID写入token
 		if($res){ 
-			$ret = ['status'=>$this->successCode,'data'=>$res,'token'=>$this->setToken($res['member_id'])];
+			$ret = ['status'=>$this->successCode,'data'=>$res,'token'=>$this->setToken($res[''])];
 			return json($ret);
 		}else{
 			//$data['username']		= $userInfo['user_name'];		//用户名;
@@ -163,12 +165,15 @@ class Member extends Common {
 			//$data['sex']			= $userInfo['gender'];		//用户性别;
 			$data['ali_user_id']	= $userInfo['user_id'];		//用户openid
 			$data['status']			= 1;
+			$data['member_type']	= 2;
 			$data['create_time']	= time();
-
 			$ret = MemberDb::createData($data);	//创建用户 并且返回用户id
-			//unset($data['ali_user_id']);
-			$data['member_id']	= checkData($ret);
-			$res = ['status'=>$this->successCode,'data'=>$data,'token'=>$this->setToken($ret)];
+			if($ret)
+			{
+			    $data['member_id']	= $ret;
+			    $res = ['status'=>$this->successCode,'data'=>$data,'token'=>$this->setToken($res[''])];
+			    return json($res);
+			}
 			return json($res);
 		}
 	}
@@ -218,11 +223,13 @@ class Member extends Common {
 			$data['username']			= $wxuser['openId'];		//用户名
 			$data['password']			= md5($wxuser['openId'].config('my.password_secrect'));	//密码
 			$data['status']			= 1;
+			$data['member_type']	= 1;
 			$data['user_id'] = $this->_data['user_id'];
 			$data['create_time']	= time();
 
 			$ret = MemberDb::createData($data);	//创建用户 并且返回用户id
-		    if($ret){ 
+		    if($ret)
+		    { 
     		$returnField = 'member_id,nickname,headimgurl,openid,mobile,username,password,sex,status,create_time';
 			$reu = MemberDb::getWhereInfo(['openid'=>$wxuser['openId']],$returnField);	//查询用户表的当前openid是否存在
 
@@ -236,7 +243,7 @@ class Member extends Common {
 
  /*start*/
     /**
-	* @api {post} /Member/getphonenumber 08、获取绑定手机号
+	* @api {post} /Member/getphonenumber 08、获取微信绑定手机号
 	* @apiGroup Member
 	* @apiVersion 1.0.0
 	* @apiDescription  获取绑定手机号
@@ -261,6 +268,67 @@ class Member extends Common {
 
 		$phonenumberdata = \utils\wechart\UserService::getXcxUserPhone($this->_data);	//获取小程序用户信息
 		if(!$phonenumberdata) return json(['status'=>$this->errorCode,'msg'=>'用户信息获取失败']);
+		//mlog("getweixinphonenumber_data:".json_encode($phonenumberdata));
+		return $phonenumberdata;
+	}
+	/*end*/
+
+
+/*start*/
+    /**
+	* @api {post} /Member/getalipayphonenumber 09、获取支付宝绑定手机号
+	* @apiGroup Member
+	* @apiVersion 1.0.0
+	* @apiDescription  获取绑定手机号
+	
+	* @apiParam (输入参数：) {string}     		encryptedData 小程序传入
+
+	* @apiParam (失败返回参数：) {object}     	array 返回结果集
+	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码 201
+	* @apiParam (失败返回参数：) {string}     	array.msg 返回错误消息
+	* @apiParam (成功返回参数：) {string}     	array 返回结果集
+	* @apiParam (成功返回参数：) {string}     	array.status 返回错误码 200
+	* @apiParam (成功返回参数：) {string}     	array.msg 返回成功消息
+	* @apiSuccessExample {json} 01 成功示例
+	* 支付宝小程序端代码示例
+	* onGetAuthorize(){
+    my.getPhoneNumber({
+      success: (res) => {
+        let encryptedData = res.response;
+        console.log('getPhoneNumber-res')
+        console.log(encryptedData)
+        my.request({
+          url: 'https://wxapp.wmj.com.cn/api/Member/getalipayphonenumber',
+          method:'POST',
+          data:encryptedData,
+          success: (resa) => {
+            console.log('request-resa')
+            console.log(resa)
+          },
+          fail: (error) => {
+            console.log('error')
+            console.log(error)
+          }
+        });
+      },
+      fail: (res) => {
+        console.log(res);
+        console.log('getPhoneNumber_fail');
+      },
+    });
+  }
+	* {"code":"10000","msg":"Success","mobile":"13885111171"}
+	* @apiErrorExample {json} 02 失败示例
+	* {"status":"201","msg":"操作失败"}
+	*/
+	
+	function getalipayphonenumber(){
+        $param = $this->request->param(false);
+        
+        if(!$param) return json(['status'=>$this->errorCode,'msg'=>'加密串不能为空']);
+		$phonenumberdata = \utils\alipay\UserService::getAlipayUserPhone($param);	//获取小程序用户信息
+		if(!$phonenumberdata) return json(['status'=>$this->errorCode,'msg'=>'用户信息获取失败']);
+		//mlog("getalipayphonenumber_data:".json_encode($phonenumberdata));
 		return $phonenumberdata;
 	}
 	/*end*/

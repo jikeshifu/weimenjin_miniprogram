@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁列表
- create_time:	2020-04-04 08:30:08
+ create_time:	2020-04-15 01:54:17
  author:		
  contact:		
 */
@@ -66,12 +66,16 @@ class Lock extends Common {
 	}
 
 	/**
-	* @api {post} /Lock/view 04、查看数据
+	* @api {post} /Lock/view 04、查询锁信息
 	* @apiGroup Lock
 	* @apiVersion 1.0.0
-	* @apiDescription  查看数据
+	* @apiDescription  根据lock_id查询锁信息
 	
 	* @apiParam (输入参数：) {string}     		lock_id 主键ID
+
+	* @apiHeader {String} Authorization 用户授权token
+	* @apiHeaderExample {json} Header-示例:
+	* "Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjM2NzgsImF1ZGllbmNlIjoid2ViIiwib3BlbkFJZCI6MTM2NywiY3JlYXRlZCI6MTUzMzg3OTM2ODA0Nywicm9sZXMiOiJVU0VSIiwiZXhwIjoxNTM0NDg0MTY4fQ.Gl5L-NpuwhjuPXFuhPax8ak5c64skjDTCBC64N_QdKQ2VT-zZeceuzXB9TqaYJuhkwNYEhrV3pUx1zhMWG7Org"
 
 	* @apiParam (失败返回参数：) {object}     	array 返回结果集
 	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码 201
@@ -87,7 +91,7 @@ class Lock extends Common {
 	function view(){
 		$data['lock_id'] = $this->request->post('lock_id','','intval');
 		try{
-			$field='lock_id,user_id,lock_name,lock_sn,mobile_check,location_check,status,lock_type,location,create_time,lock_qrcode,online';
+			$field='lock_id,user_id,lock_name,lock_sn,mobile_check,location_check,status,lock_type,location,create_time,lock_qrcode,online,successimg,successadimg';
 			$res  = checkData(LockDb::getWhereInfo($data,$field));
 		}catch (\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
@@ -165,7 +169,7 @@ class Lock extends Common {
 	* {"status":" 201","msg":"操作失败"}
 	*/
 	function add(){
-		$postField = 'member_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,create_time';
+		$postField = 'member_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,create_time';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		try {
 			$res = LockService::add($data);
@@ -245,9 +249,9 @@ class Lock extends Common {
 		$authdata['member_id']=$member_id;
 		$authdata['lock_id']=$lock_id;
 		$resauthdata=\xhadmin\db\LockAuth::getWhereInfo($authdata);
-		//mlog("opendoor_reslookdata:".json_encode($reslookdata));
-		//mlog("opendoor_resmemdata:".json_encode($resmemdata));
-		//mlog("opendoor_resauthdata:".json_encode($resauthdata));
+		//mlog("opendoor_reslookdatauserid:".json_encode($user_id));
+		//mlog("opendoor_resmemdatalock_id:".json_encode($lock_id));
+		//mlog("opendoor_resauthdatamember_id:".json_encode($member_id));
 		//判断设备是否停用
 		
 		if (!$reslookdata['status']) 
@@ -271,11 +275,27 @@ class Lock extends Common {
 			return json(['opendoor_status'=>'201','msg'=>'钥匙已被禁用']);
 		}
 		//判断钥匙是否过期
-		mlog("resauthdata:".$resauthdata['auth_endtime']);
-		mlog("now:".time());
+		//mlog("resauthdata:".$resauthdata['auth_endtime']);
+		//mlog("now:".time());
 		if ($resauthdata&&$resauthdata['auth_starttime']&&$resauthdata['auth_endtime']&&$resauthdata['auth_endtime']<time()) 
 		{
 			return json(['opendoor_status'=>'201','msg'=>'钥匙已过期']);
+		}
+		//判断开门次数是否用尽
+		if ($resauthdata&&$resauthdata['auth_openlimit']>0) 
+		{
+		    //mlog("auths_openlimit:".json_encode($resauthdata));
+		    if($resauthdata['auth_openlimit']<=$resauthdata['auth_openused'])
+		    {
+		        return json(['opendoor_status'=>'201','msg'=>'可开门次数用尽']);
+		    }
+		    else
+		    {
+		        $where['lockauth_id'] = $resauthdata['lockauth_id'];
+		        $openuseddata['auth_openused'] = $resauthdata['auth_openused']+1;
+		        $ret = \xhadmin\service\api\LockAuthService::verifyauth($where,$openuseddata);
+		    }
+			
 		}
 		//判断用户申请钥匙自动获得
 		if ($reslookdata['applyauth']&&!$resauthdata['auth_status']) 
@@ -298,7 +318,7 @@ class Lock extends Common {
 					{
 						$data['status']=1;
 						\xhadmin\service\api\LockLogService::add($data);
-						return json(['opendoor_status'=>'200','msg'=>'开门成功','successimg'=>$resdata['successimg'],'successadimg'=>$resdata['successadimg']]);
+						return json(['opendoor_status'=>'200','msg'=>'开门成功','successimg'=>$resdata['successimg'],'successadimg'=>$resdata['successadimg'],'hitshowminiad'=>$resdata['hitshowminiad'],'qrshowminiad'=>$resdata['qrshowminiad']]);
 					}
 					else {
 						$data['status']=0;

@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁列表
- create_time:	2020-04-10 00:37:50
+ create_time:	2020-04-18 01:06:11
  author:		
  contact:		
 */
@@ -32,7 +32,7 @@ class Lock extends Admin {
 	}
 	/*修改排序、开关按钮操作 如果没有此类操作 可以删除该方法*/
 	function updateExt(){
-		$postField = 'lock_id,mobile_check,applyauth,applyauth_check,status';
+		$postField = 'lock_id,mobile_check,applyauth,applyauth_check,status,hitshowminiad,qrshowminiad';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		if(!$data['lock_id']) $this->error('参数错误');
 		try{
@@ -63,6 +63,7 @@ class Lock extends Admin {
 		}
 		$where['lock_name'] = $this->request->param('lock_name', '', 'serach_in');
 		$where['lock_sn'] = $this->request->param('lock_sn', '', 'serach_in');
+		$where['location_check'] = $this->request->param('location_check', '', 'serach_in');
 		$where['status'] = $this->request->param('status', '', 'serach_in');
 		$where['online'] = $this->request->param('online', '', 'serach_in');
 		$where['lock_id'] = ['in',$this->request->param('lock_id', '', 'serach_in')];
@@ -94,7 +95,7 @@ class Lock extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,lock_qrcode,create_time,successimg,successadimg';
+			$postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,qrshowminiad,hitshowminiad,lock_qrcode,create_time,successimg,successadimg';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("updatelock_data:".json_encode($data));
@@ -112,7 +113,7 @@ class Lock extends Admin {
 				mlog("updatelock_lock_qrcode_basename:".json_encode($urlarr['basename']));
 				
 				$lockdata=LockDb::getInfo($data['lock_id']);
-				$qrcodeurl="https://wxapp.wmj.com.cn/minilock?"."user_id=".$lockdata['user_id']."&lock_id=".$data['lock_id'];
+				$qrcodeurl="https://".$_SERVER['HTTP_HOST']."/minilock?"."user_id=".$lockdata['user_id']."&lock_id=".$data['lock_id'];
 				//mlog("updatelock_data_user_id:".json_encode($lockdata['user_id']));
 				$data['lock_qrcode'] = $this->createmarkqrcode($qrcodeurl,$data['lock_name']);
 				LockService::update($data);
@@ -225,7 +226,7 @@ class Lock extends Admin {
 		if (!$this->request->isPost()){
 			return $this->display('add');
 		}else{
-			$postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,create_time';
+			$postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,lock_qrcode,location_check,hitshowminiad,qrshowminiad,successimg,successadimg,create_time';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("WMJSN:".$data['lock_sn']);
@@ -237,7 +238,7 @@ class Lock extends Admin {
 						{
 							$lock_id=$res;
 							$lockdata=LockDb::getInfo($lock_id);
-							$qrcodeurl="https://wxapp.wmj.com.cn/minilock?"."user_id=".$lockdata['user_id']."&lock_id=".$lock_id;
+							$qrcodeurl="https://".$_SERVER['HTTP_HOST']."/minilock?"."user_id=".$lockdata['user_id']."&lock_id=".$lock_id;
 							$data['lock_qrcode'] = $this->createmarkqrcode($qrcodeurl,$lockdata['lock_name']);
 							$where['lock_id'] = $lock_id;
 							$ret = LockService::updatewhere($where,$data);
@@ -253,6 +254,7 @@ class Lock extends Admin {
 							$authdata['auth_shareability']=1;
 							$authdata['auth_sharelimit']=0;
 							$authdata['auth_openlimit']=0;
+							$authdata['auth_status']=1;
 							$authdata['auth_starttime']= date("Y-m-d H:i:s",time());
 							$authdata['auth_endtime']= date("Y-m-d H:i:s",time() + 315360000);
 							//mlog("auth_starttime:".$authdata['auth_starttime']);
@@ -312,7 +314,7 @@ class Lock extends Admin {
  /*start*/
    function creatqrcode()
 	{
-		$url='https://wxapp.wmj.com.cn/adduser';
+		$url='https://'.$_SERVER['HTTP_HOST'].'/adduser';
 		$qrcodename='请使用微信扫码注册';
 		return $this->createmarkqrcode($url,$qrcodename);
 	}
@@ -351,7 +353,7 @@ class Lock extends Admin {
             // header('Content-Type: image/png');//发送头信息 浏览器显示
             imagepng($img,$qrcode_file);//输出图片，输出png使用imagepng方法，输出gif使用imagegif方法
         }
-		return 'https://wxapp.wmj.com.cn/qrdata/qrcode/'.$file;	
+		return 'https://'.$_SERVER['HTTP_HOST'].'/qrdata/qrcode/'.$file;	
 	}
 	/*end*/
 

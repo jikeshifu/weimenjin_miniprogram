@@ -8,27 +8,9 @@
 				<div class="col-sm-12">
 				<!-- form start -->
 					<div class="form-group">
-						<label class="col-sm-2 control-label">锁ID：</label>
+						<label class="col-sm-2 control-label">姓名：</label>
 						<div class="col-sm-9">
-							<input type="text" id="lock_id" value="{$info.lock_id}" name="lock_id" class="form-control" placeholder="请输入锁ID">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">会员ID：</label>
-						<div class="col-sm-9">
-							<input type="text" id="member_id" value="{$info.member_id}" name="member_id" class="form-control" placeholder="请输入会员ID">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">分享人ID：</label>
-						<div class="col-sm-9">
-							<input type="text" id="auth_member_id" value="{$info.auth_member_id}" name="auth_member_id" class="form-control" placeholder="请输入分享人ID">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">可分享数：</label>
-						<div class="col-sm-9">
-							<input type="text" id="auth_sharelimit" value="{$info.auth_sharelimit}" name="auth_sharelimit" class="form-control" placeholder="请输入可分享数">
+							<input type="text" id="realname" value="{$info.realname}" name="realname" class="form-control" placeholder="请输入姓名">
 						</div>
 					</div>
 					<div class="form-group">
@@ -43,14 +25,6 @@
 							<input type="text" value="{if condition="$info.auth_endtime neq ''"}{$info.auth_endtime|date='Y-m-d H:i:s'}{else/}{:date('Y-m-d H:i:s')}{/if}" name="auth_endtime"  placeholder="请输入有效期结束" class="form-control" id="auth_endtime">
 						</div>
 					</div>
-					<div class="form-group layui-form">
-						<label class="col-sm-2 control-label">分享权限：</label>
-						<div class="col-sm-9">
-							<?php if(!isset($info['auth_shareability'])){ $info['auth_shareability'] = 1; }; ?>
-							<input name="auth_shareability" value="1" type="radio" {if condition="$info.auth_shareability eq '1'"}checked{/if} title="开启">
-							<input name="auth_shareability" value="0" type="radio" {if condition="$info.auth_shareability eq '0'"}checked{/if} title="关闭">
-						</div>
-					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">备注：</label>
 						<div class="col-sm-9">
@@ -58,23 +32,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">创建时间：</label>
-						<div class="col-sm-9">
-							<input type="text" value="{if condition="$info.create_time neq ''"}{$info.create_time|date='Y-m-d H:i:s'}{/if}" name="create_time"  placeholder="请输入创建时间" class="form-control" id="create_time">
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-2 control-label">开门限制数：</label>
 						<div class="col-sm-9">
 							<input type="text" id="auth_openlimit" value="{$info.auth_openlimit}" name="auth_openlimit" class="form-control" placeholder="请输入开门限制数">
-						</div>
-					</div>
-					<div class="form-group layui-form">
-						<label class="col-sm-2 control-label">是否管理员：</label>
-						<div class="col-sm-9">
-							<?php if(!isset($info['auth_isadmin'])){ $info['auth_isadmin'] = 1; }; ?>
-							<input name="auth_isadmin" value="1" type="radio" {if condition="$info.auth_isadmin eq '1'"}checked{/if} title="是">
-							<input name="auth_isadmin" value="0" type="radio" {if condition="$info.auth_isadmin eq '0'"}checked{/if} title="否">
 						</div>
 					</div>
 				<!-- form end -->

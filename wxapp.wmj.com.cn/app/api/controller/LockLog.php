@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		日志管理
- create_time:	2020-03-21 23:31:15
+ create_time:	2020-04-25 00:45:53
  author:		
  contact:		
 */
@@ -42,21 +42,23 @@ class LockLog extends Common {
 	function getopenlog(){
 		$limit  = $this->request->post('limit', 20, 'intval');
 		$page   = $this->request->post('page', 1, 'intval');
-		$memberid = $this->request->post('member_id', '', 'serach_in');
+        $memberid = $this->request->post('member_id', '', 'serach_in');
         if(!$memberid) return json(['status'=>$this->errorCode,'msg'=>'member_id不能为空']);
 		$where = [];
 		$where['a.member_id'] = $memberid;
-        $create_time_start = $this->request->post('create_time', '', 'serach_in');
-		$create_time_end = $this->request->post('end_time', '', 'serach_in');
+
+		$create_time_start = $this->request->post('create_time_start', '', 'serach_in');
+		$create_time_end = $this->request->post('create_time_end', '', 'serach_in');
 
 		$where['a.create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
+
 		$limit = ($page-1) * $limit.','.$limit;
-		$field = 'a.*,b.nickname,b.headimgurl,b.mobile';
+		$field = 'member_id';
 		$orderby = 'locklog_id desc';
 
 		try{
-			$res['list'] = LockLogDb::relateQuery($field,'member_id',$relate_table='member',$relate_field='member_id',formatWhere($where),$limit,$orderby);
-			$res['count'] = LockLogDb::relateQueryCount($field,'member_id',$relate_table='member',$relate_field='member_id',formatWhere($where));
+			$sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name from cd_locklog as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+			$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
 		}catch(\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}

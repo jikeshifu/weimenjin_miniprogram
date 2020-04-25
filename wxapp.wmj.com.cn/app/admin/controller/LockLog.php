@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门记录
- create_time:	2020-04-04 10:37:27
+ create_time:	2020-04-19 18:58:33
  author:		
  contact:		
 */
@@ -14,6 +14,22 @@ use xhadmin\db\LockLog as LockLogDb;
 class LockLog extends Admin {
 
 
+	function initialize(){
+		if(in_array($this->request->action(),['updateExt','delete','view'])){
+			$id = $this->request->param('locklog_id','','intval');
+			$ids = $this->request->param('locklog_ids','','intval');
+			if($id){
+				$info = LockLogDb::getInfo($id);
+				if(session('admin.role') <> 1 && $info['user_id'] <> session('admin.user_id')) $this->error('你没有操作权限');
+			}
+			if($ids){
+				foreach(explode(',',$ids) as $v){
+					$info = LockLogDb::getInfo($v);
+					if(session('admin.role') <> 1 && $info['user_id'] <> session('admin.user_id')) $this->error('你没有操作权限');
+				}
+			}
+		}
+	}
 	/*日志管理*/
 	function index(){
 		if (!$this->request->isAjax()){
@@ -48,45 +64,6 @@ class LockLog extends Admin {
 			$data['rows']  = $list;
 			$data['total'] = $res['count'];
 			return json(htmlOutList($data));
-		}
-	}
-
-	/*添加*/
-	function add(){
-		if (!$this->request->isPost()){
-			return $this->display('add');
-		}else{
-			$postField = 'member_id,lock_id,status,type,create_time';
-			$data = $this->request->only(explode(',',$postField),'post',null);
-			try {
-				LockLogService::add($data);
-			} catch (\Exception $e) {
-				$this->error($e->getMessage());
-			}
-			return json(['status'=>'00','msg'=>'添加成功']);
-		}
-	}
-
-	/*修改*/
-	function update(){
-		if (!$this->request->isPost()){
-			$locklog_id = $this->request->get('locklog_id','','intval');
-			if(!$locklog_id) $this->error('参数错误');
-			try{
-				$this->view->assign('info',checkData(LockLogDb::getInfo($locklog_id)));
-				return $this->display('update');
-			}catch(\Exception $e){
-				$this->error($e->getMessage());
-			}
-		}else{
-			$postField = 'locklog_id,member_id,lock_id,status,type,create_time';
-			$data = $this->request->only(explode(',',$postField),'post',null);
-			try {
-				LockLogService::update($data);
-			} catch (\Exception $e) {
-				$this->error($e->getMessage());
-			}
-			return json(['status'=>'00','msg'=>'修改成功']);
 		}
 	}
 

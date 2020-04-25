@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		钥匙管理
- create_time:	2020-04-02 00:39:58
+ create_time:	2020-04-23 15:35:45
  author:		
  contact:		
 */
@@ -13,45 +13,6 @@ use xhadmin\db\LockAuth as LockAuthDb;
 
 class LockAuth extends Admin {
 
-
-	/*钥匙管理*/
-	function index(){
-		if (!$this->request->isAjax()){
-			return $this->display('index');
-		}else{
-			$limit  = $this->request->post('limit', 0, 'intval');
-			$offset = $this->request->post('offset', 0, 'intval');
-			$page   = floor($offset / $limit) +1 ;
-
-			$where = [];
-			$where['realname'] = $this->request->param('realname', '', 'serach_in');
-			$where['auth_shareability'] = $this->request->param('auth_shareability', '', 'serach_in');
-			$where['auth_status'] = $this->request->param('auth_status', '', 'serach_in');
-			$where['auth_isadmin'] = $this->request->param('auth_isadmin', '', 'serach_in');
-			if(session('admin.role') <> 1){
-				$where['user_id'] = session('admin.user_id');
-			}
-			$where['auth_tmp'] = $this->request->param('auth_tmp', '', 'serach_in');
-
-			$order  = $this->request->post('order', '', 'serach_in');	//排序字段 bootstrap-table 传入
-			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
-
-			$limit = ($page-1) * $limit.','.$limit;
-			$field = 'lockauth_id,lock_id,member_id,realname,auth_member_id,auth_sharelimit,auth_starttime,auth_endtime,auth_shareability,auth_status,remark,create_time,auth_openlimit,auth_isadmin,user_id';
-			$orderby = ($sort && $order) ? $sort.' '.$order : 'lockauth_id desc';
-
-			try{
-				$res = LockAuthService::pageList(formatWhere($where),$limit,$field,$orderby);
-				$list = $res['list'];
-			}catch(\Exception $e){
-				exit($e->getMessage());
-			}
-
-			$data['rows']  = $list;
-			$data['total'] = $res['count'];
-			return json(htmlOutList($data));
-		}
-	}
 
 	/*修改排序、开关按钮操作 如果没有此类操作 可以删除该方法*/
 	function updateExt(){
@@ -78,7 +39,7 @@ class LockAuth extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'lockauth_id,lock_id,member_id,auth_member_id,auth_sharelimit,auth_starttime,auth_endtime,auth_shareability,remark,create_time,auth_openlimit,auth_isadmin';
+			$postField = 'lockauth_id,realname,auth_starttime,auth_endtime,remark,auth_openlimit';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				LockAuthService::update($data);
@@ -112,6 +73,50 @@ class LockAuth extends Admin {
 			$this->error($e->getMessage());
 		}
 	}
+
+
+/*start*/
+	/*钥匙管理*/
+	function index(){
+		if (!$this->request->isAjax()){
+			return $this->display('index');
+		}else{
+			$limit  = $this->request->post('limit', 0, 'intval');
+			$offset = $this->request->post('offset', 0, 'intval');
+			$page   = floor($offset / $limit) +1 ;
+
+			$where = [];
+			$where['c.lock_name'] = $this->request->param('lock_name', '', 'serach_in');
+			$where['a.realname'] = $this->request->param('realname', '', 'serach_in');
+			$where['b.mobile'] = $this->request->param('mobile', '', 'serach_in');
+			$where['b.nickname'] = $this->request->param('nickname', '', 'serach_in');
+			$where['a.auth_shareability'] = $this->request->param('auth_shareability', '', 'serach_in');
+			$where['a.auth_status'] = $this->request->param('auth_status', '', 'serach_in');
+			if(session('admin.role') <> 1){
+				$where['a.user_id'] = session('admin.user_id');
+			}
+
+			$order  = $this->request->post('order', '', 'serach_in');	//排序字段 bootstrap-table 传入
+			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
+
+			$limit = ($page-1) * $limit.','.$limit;
+			$field = '';
+			$orderby = ($sort && $order) ? $sort.' '.$order : 'lockauth_id desc';
+
+			try{
+				$sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name from cd_lockauth as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
+				$list = $res['list'];
+			}catch(\Exception $e){
+				exit($e->getMessage());
+			}
+
+			$data['rows']  = $list;
+			$data['total'] = $res['count'];
+			return json(htmlOutList($data));
+		}
+	}
+/*end*/
 
 
 

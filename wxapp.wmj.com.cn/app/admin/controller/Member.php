@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		会员管理
- create_time:	2020-04-06 17:03:55
+ create_time:	2020-04-14 17:55:49
  author:		
  contact:		
 */
@@ -29,22 +29,18 @@ class Member extends Admin {
 			$where['ali_user_id'] = $this->request->param('ali_user_id', '', 'serach_in');
 			$where['mobile'] = $this->request->param('mobile', '', 'serach_in');
 			$where['username'] = $this->request->param('username', '', 'serach_in');
-
-			$create_time_start = $this->request->param('create_time_start', '', 'serach_in');
-			$create_time_end = $this->request->param('create_time_end', '', 'serach_in');
-
-			$where['create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
 			$where['sex'] = $this->request->param('sex', '', 'serach_in');
 			$where['status'] = $this->request->param('status', '', 'serach_in');
 			if(session('admin.role') <> 1){
 				$where['user_id'] = session('admin.user_id');
 			}
+			$where['member_type'] = $this->request->param('member_type', '', 'serach_in');
 
 			$order  = $this->request->post('order', '', 'serach_in');	//排序字段 bootstrap-table 传入
 			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
 
 			$limit = ($page-1) * $limit.','.$limit;
-			$field = 'member_id,nickname,headimgurl,openid,ali_user_id,mobile,username,create_time,sex,status,user_id';
+			$field = 'member_id,nickname,headimgurl,openid,ali_user_id,mobile,sex,status,user_id,member_type';
 			$orderby = ($sort && $order) ? $sort.' '.$order : 'member_id desc';
 
 			try{

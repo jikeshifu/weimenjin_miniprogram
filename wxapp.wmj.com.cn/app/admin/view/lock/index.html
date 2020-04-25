@@ -33,13 +33,24 @@
 									<div class="input-group-btn">
 										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开门距离(米)</button>
 									</div>
-									<input type="text" class="form-control" id="location_check" placeholder="开门距离(米)" />
+									<select class="form-control" id="location_check">
+										<option value="">请选择</option>
+										<option value="0">不限制</option>
+										<option value="20">20米内</option>
+										<option value="50">50米内</option>
+										<option value="100">100米内</option>
+										<option value="200">200米内</option>
+										<option value="300">300米内</option>
+										<option value="500">500米内</option>
+										<option value="1000">1000米内</option>
+										<option value="10000">10K米内</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开关</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">启用/禁用</button>
 									</div>
 									<select class="form-control" id="status">
 										<option value="">请选择</option>
@@ -123,11 +134,11 @@
  			{title: '用户ID', field: 'user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '序列号', field: 'lock_sn', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '绑定手机', field: 'mobile_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.mobile_checkFormatter},
+ 			{title: '需绑手机', field: 'mobile_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.mobile_checkFormatter},
  			{title: '申请钥匙', field: 'applyauth', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.applyauthFormatter},
- 			{title: '申请钥匙审核', field: 'applyauth_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.applyauth_checkFormatter},
+ 			{title: '审核钥匙', field: 'applyauth_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.applyauth_checkFormatter},
  			{title: '开门距离(米)', field: 'location_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.location_checkFormatter},
- 			{title: '开关', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
+ 			{title: '启用/禁用', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
  			{title: '类型', field: 'lock_type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.lock_typeFormatter},
  			{title: '在线状态', field: 'online', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.onlineFormatter},
  			{title: '二维码', field: 'lock_qrcode', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.lock_qrcodeFormatter},
@@ -221,6 +232,41 @@
 		ajax.set('lock_id', pk);
 		ajax.set('applyauth_check', val);
 		ajax.start();
+	}
+
+	CodeGoods.location_checkFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '0':
+					return '不限制';
+				break;
+				case '20':
+					return '20米内';
+				break;
+				case '50':
+					return '50米内';
+				break;
+				case '100':
+					return '100米内';
+				break;
+				case '200':
+					return '200米内';
+				break;
+				case '300':
+					return '300米内';
+				break;
+				case '500':
+					return '500米内';
+				break;
+				case '1000':
+					return '1000米内';
+				break;
+				case '10000':
+					return '10K米内';
+				break;
+			}
+		}
 	}
 
 	CodeGoods.statusFormatter = function(value,row,index) {

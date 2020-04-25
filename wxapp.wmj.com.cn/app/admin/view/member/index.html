@@ -31,9 +31,9 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">支付宝用户id</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">支付宝id</button>
 									</div>
-									<input type="text" class="form-control" id="ali_user_id" placeholder="支付宝用户id" />
+									<input type="text" class="form-control" id="ali_user_id" placeholder="支付宝id" />
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -50,22 +50,6 @@
 										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">用户名</button>
 									</div>
 									<input type="text" class="form-control" id="username" placeholder="用户名" />
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="input-group">
-									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">注册时间开始</button>
-									</div>
-									<input type="text" autocomplete="off" placeholder="开始时间" class="form-control" id="create_time_start">
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="input-group">
-									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">注册时间结束</button>
-									</div>
-									<input type="text" autocomplete="off" placeholder="结束时间" class="form-control" id="create_time_end">
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -89,6 +73,18 @@
 										<option value="">请选择</option>
 										<option value="1">开启</option>
 										<option value="0">关闭</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">会员类型</button>
+									</div>
+									<select class="form-control" id="member_type">
+										<option value="">请选择</option>
+										<option value="1">微信用户</option>
+										<option value="2">支付宝用户</option>
 									</select>
 								</div>
 							</div>
@@ -145,13 +141,12 @@
  			{title: '呢称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
  			{title: 'openid', field: 'openid', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '支付宝用户id', field: 'ali_user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '支付宝id', field: 'ali_user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '用户名', field: 'username', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '注册时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
  			{title: '性别', field: 'sex', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.sexFormatter},
  			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
  			{title: '所属用户', field: 'user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '会员类型', field: 'member_type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.member_typeFormatter},
  			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
  		];
  	};
@@ -172,12 +167,6 @@
 	CodeGoods.headimgurlFormatter = function(value,row,index) {
 		if(value){
 			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
-		}
-	}
-
-	CodeGoods.create_timeFormatter = function(value,row,index) {
-		if(value){
-			return formatDateTime(value,'Y-m-d H:i:s');	
 		}
 	}
 
@@ -219,6 +208,20 @@
 		ajax.start();
 	}
 
+	CodeGoods.member_typeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-primary">微信用户</span>';
+				break;
+				case '2':
+					return '<span class="label label-success">支付宝用户</span>';
+				break;
+			}
+		}
+	}
+
 	CodeGoods.formParams = function() {
 		var queryData = {};
 		queryData['nickname'] = $("#nickname").val();
@@ -227,11 +230,10 @@
 		queryData['ali_user_id'] = $("#ali_user_id").val();
 		queryData['mobile'] = $("#mobile").val();
 		queryData['username'] = $("#username").val();
-		queryData['create_time_start'] = $("#create_time_start").val();
-		queryData['create_time_end'] = $("#create_time_end").val();
 		queryData['sex'] = $("#sex").val();
 		queryData['status'] = $("#status").val();
 		queryData['user_id'] = $("#user_id").val();
+		queryData['member_type'] = $("#member_type").val();
 		return queryData;
 	}
 
@@ -370,7 +372,5 @@
 		table.setQueryParams(CodeGoods.formParams());
 		CodeGoods.table = table.init();
 	});
-	laydate.render({elem: '#create_time_start',type: 'datetime'});
-	laydate.render({elem: '#create_time_end',type: 'datetime'});
 </script>
 {/block}

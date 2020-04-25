@@ -15,6 +15,22 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">锁名称</button>
+									</div>
+									<input type="text" class="form-control" id="lock_name" placeholder="锁名称" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">昵称</button>
+									</div>
+									<input type="text" class="form-control" id="nickname" placeholder="昵称" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
 										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">姓名</button>
 									</div>
 									<input type="text" class="form-control" id="realname" placeholder="姓名" />
@@ -23,13 +39,9 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">分享权限</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
 									</div>
-									<select class="form-control" id="auth_shareability">
-										<option value="">请选择</option>
-										<option value="1">开启</option>
-										<option value="0">关闭</option>
-									</select>
+									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -41,30 +53,6 @@
 										<option value="">请选择</option>
 										<option value="1">启用</option>
 										<option value="0">禁用</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="input-group">
-									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">是否管理员</button>
-									</div>
-									<select class="form-control" id="auth_isadmin">
-										<option value="">请选择</option>
-										<option value="1">是</option>
-										<option value="0">否</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="input-group">
-									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">领取标志</button>
-									</div>
-									<select class="form-control" id="auth_tmp">
-										<option value="">请选择</option>
-										<option value="1">已领取</option>
-										<option value="0">未领取</option>
 									</select>
 								</div>
 							</div>
@@ -108,20 +96,17 @@
  		return [
  			{field: 'selectItem', checkbox: true},
  			{title: '编号', field: 'lockauth_id', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '锁ID', field: 'lock_id', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '会员ID', field: 'member_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
+ 			{title: '昵称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '分享人ID', field: 'auth_member_id', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '可分享数', field: 'auth_sharelimit', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '有效期起始', field: 'auth_starttime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_starttimeFormatter},
  			{title: '有效期结束', field: 'auth_endtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_endtimeFormatter},
  			{title: '分享权限', field: 'auth_shareability', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_shareabilityFormatter},
  			{title: '钥匙状态', field: 'auth_status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_statusFormatter},
  			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '创建时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
- 			{title: '开门限制数', field: 'auth_openlimit', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '是否管理员', field: 'auth_isadmin', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_isadminFormatter},
- 			{title: '管理员ID', field: 'user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
  		];
  	};
@@ -136,6 +121,12 @@
 			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.lockauth_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
 			{/if}
 			return str;
+		}
+	}
+
+	CodeGoods.headimgurlFormatter = function(value,row,index) {
+		if(value){
+			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
 		}
 	}
 
@@ -205,28 +196,14 @@
 		}
 	}
 
-	CodeGoods.auth_isadminFormatter = function(value,row,index) {
-		if(value !== null){
-			var value = value.toString();
-			switch(value){
-				case '1':
-					return '<span class="label label-success">是</span>';
-				break;
-				case '0':
-					return '<span class="label label-info">否</span>';
-				break;
-			}
-		}
-	}
-
 	CodeGoods.formParams = function() {
 		var queryData = {};
+		queryData['lock_name'] = $("#lock_name").val();
+		queryData['nickname'] = $("#nickname").val();
 		queryData['realname'] = $("#realname").val();
-		queryData['auth_shareability'] = $("#auth_shareability").val();
+		queryData['mobile'] = $("#mobile").val();
 		queryData['auth_status'] = $("#auth_status").val();
-		queryData['auth_isadmin'] = $("#auth_isadmin").val();
 		queryData['user_id'] = $("#user_id").val();
-		queryData['auth_tmp'] = $("#auth_tmp").val();
 		return queryData;
 	}
 
@@ -251,7 +228,7 @@
 
 	CodeGoods.update = function (value) {
 		if(value){
-			var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockAuth/update?lockauth_id='+value});
+			var index = layer.open({type: 2,title: '修改',area: ['800px', '450px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockAuth/update?lockauth_id='+value});
 			if(!IsPC()){layer.full(index)}
 		}else{
 			if (this.check()) {
@@ -264,7 +241,7 @@
 					Feng.info("请选择单条数据！");
 					return false;
 				}
-				var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockAuth/update?lockauth_id='+idx});
+				var index = layer.open({type: 2,title: '修改',area: ['800px', '450px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockAuth/update?lockauth_id='+idx});
 				this.layerIndex = index;
 				if(!IsPC()){layer.full(index)}
 			}

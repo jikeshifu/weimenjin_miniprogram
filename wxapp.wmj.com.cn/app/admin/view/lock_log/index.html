@@ -45,21 +45,6 @@
 							</div>
 						</div>
 						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
-						{if condition="in_array('/admin/LockLog/add',session('admin.nodes')) || session('admin.role') eq 1"}
-						<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
-						<i class="fa fa-plus"></i>&nbsp;添加
-						</button>
-						{/if}
-						{if condition="in_array('/admin/LockLog/update',session('admin.nodes')) || session('admin.role') eq 1"}
-						<button type="button" id="update" class="btn btn-success button-margin" onclick="CodeGoods.update()">
-						<i class="fa fa-pencil"></i>&nbsp;修改
-						</button>
-						{/if}
-						{if condition="in_array('/admin/LockLog/delete',session('admin.nodes')) || session('admin.role') eq 1"}
-						<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
-						<i class="fa fa-trash"></i>&nbsp;删除
-						</button>
-						{/if}
 						{if condition="in_array('/admin/LockLog/view',session('admin.nodes')) || session('admin.role') eq 1"}
 						<button type="button" id="view" class="btn btn-info button-margin" onclick="CodeGoods.view()">
 						<i class="fa fa-plus"></i>&nbsp;查看数据
@@ -102,9 +87,6 @@
 	CodeGoods.buttonFormatter = function(value,row,index) {
 		if(row.locklog_id){
 			var str= '';
-			{if condition="in_array('/admin/LockLog/update',session('admin.nodes')) || session('admin.role') eq 1"}
-			str += '<button type="button" class="btn btn-success btn-xs" title="修改"  onclick="CodeGoods.update('+row.locklog_id+')"><i class="fa fa-pencil"></i>&nbsp;修改</button>&nbsp;';
-			{/if}
 			{if condition="in_array('/admin/LockLog/delete',session('admin.nodes')) || session('admin.role') eq 1"}
 			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.locklog_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
 			{/if}
@@ -173,37 +155,6 @@
 			return true;
 		}
 	};
-
-	CodeGoods.add = function (value) {
-		var url = location.search;
-		var index = layer.open({type: 2,title: '添加',area: ['800px', '450px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockLog/add'+url});
-		this.layerIndex = index;
-		if(!IsPC()){layer.full(index)}
-	}
-
-
-	CodeGoods.update = function (value) {
-		if(value){
-			var index = layer.open({type: 2,title: '修改',area: ['800px', '450px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockLog/update?locklog_id='+value});
-			if(!IsPC()){layer.full(index)}
-		}else{
-			if (this.check()) {
-				var idx = '';
-				$.each(CodeGoods.seItem, function() {
-					idx += ',' + this.locklog_id;
-				});
-				idx = idx.substr(1);
-				if(idx.indexOf(",") !== -1){
-					Feng.info("请选择单条数据！");
-					return false;
-				}
-				var index = layer.open({type: 2,title: '修改',area: ['800px', '450px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockLog/update?locklog_id='+idx});
-				this.layerIndex = index;
-				if(!IsPC()){layer.full(index)}
-			}
-		}
-	}
-
 
 	CodeGoods.delete = function (value) {
 		if(value){
@@ -286,6 +237,14 @@
 				layer.close(index)
 			}, 1000);
 		});
+	}
+
+
+	CodeGoods.add = function (value) {
+		var url = location.search;
+		var index = layer.open({type: 2,title: '添加',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockLog/add'+url});
+		this.layerIndex = index;
+		if(!IsPC()){layer.full(index)}
 	}
 
 

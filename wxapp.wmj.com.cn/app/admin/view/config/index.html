@@ -8,7 +8,9 @@
 					<ul class="layui-tab-title">
 						<li class="layui-this">基本设置</li>
 						<li>上传配置</li>
-						<li>微门禁配置</li>
+						<li>门禁配置</li>
+						<li>隐私政策</li>
+						<li>服务协议</li>
 					</ul>
 					<div class="layui-tab-content" style="margin-top:10px;">
 						<div class="layui-tab-item layui-show">
@@ -95,6 +97,38 @@
 						<label class="col-sm-2 control-label">微门禁aeskey：</label>
 						<div class="col-sm-9">
 							<input type="text" id="wmjaeskey" value="{$info.wmjaeskey}" name="wmjaeskey" class="form-control" placeholder="请输入微门禁aeskey">
+						</div>
+					</div>
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="col-sm-7">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">隐私政策：</label>
+						<div class="col-sm-9">
+							<script id="privacypolicy" type="text/plain" name="privacypolicy" style="width:100%;height:300px;">{$info.privacypolicy}</script>
+							<script type="text/javascript">
+								var ue = UE.getEditor('privacypolicy',{serverUrl : '{:url("admin/Upload/uploadUeditor")}'});
+								scaleEnabled:true
+							</script>
+						</div>
+					</div>
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="col-sm-7">
+							<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">服务协议：</label>
+						<div class="col-sm-9">
+							<script id="serviceagreement" type="text/plain" name="serviceagreement" style="width:100%;height:300px;">{$info.serviceagreement}</script>
+							<script type="text/javascript">
+								var ue = UE.getEditor('serviceagreement',{serverUrl : '{:url("admin/Upload/uploadUeditor")}'});
+								scaleEnabled:true
+							</script>
 						</div>
 					</div>
 							<!-- form end -->
