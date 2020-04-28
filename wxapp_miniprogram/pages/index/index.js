@@ -23,12 +23,14 @@ Page({
     hitshowminiad: false,
     location_check: false, // 是否需要定位，false不需要
     latitude: '',
-    longitude: ''
+    longitude: '',
+    dropArr:[]
   },
   onPullDownRefresh: function () {
     this.setData({
       listarr: [],
-      listlen: 1  //
+      listlen: 1,  //
+      dropArr:[]
     })
     if (app.globalData.userid) {
       this.getmore(1, this.data.num,0);
@@ -130,7 +132,9 @@ Page({
             var arrdata = resa.data.data.list
             if(arrdata.length > 0){
               var timestamp = Date.parse(new Date())/1000;
+              var tmpdroparr = [];
               for (var i = 0; i < arrdata.length; i++) {
+                tmpdroparr.push(false);
                 var tmpobj = {};
                 tmpobj['guoqi'] = true; // 默认不过期,过期不显示分享按钮，true显示分享按钮，false不显示
                 if (arrdata[i]['auth_endtime']>0) {
@@ -153,6 +157,7 @@ Page({
                 tmpobj['lock_id'] = arrdata[i]['lock_id'];
                 tmpobj['user_id'] = arrdata[i]['user_id']; // 锁的管理员id
                 tmpobj['auth_status'] = arrdata[i]['auth_status']; // 已审核|1,未审核|0
+                tmpobj['auth_isadmin'] = arrdata[i]['auth_isadmin'];
                 tmpobj['location_check'] = arrdata[i]['location_check']; //
                 tmpobj['auth_shareability'] = arrdata[i]['auth_shareability']; //auth_shareability为0时或已过期时，不能分享，审核中不能分享
                 tmpobj['longitude'] = 0;
@@ -166,28 +171,34 @@ Page({
               }
               if (addto>0) {
                 var newdata = that.data.listarr.concat(arr);
+                var newdroparr = that.data.dropArr.concat(tmpdroparr);
               }else{
                 var newdata = arr;
+                var newdroparr = tmpdroparr;
               }
               var tmplistlen = newdata.length;
               that.setData({
                 listarr: newdata,
                 hidelood: false,
-                listlen: tmplistlen
+                listlen: tmplistlen,
+                dropArr: newdroparr
               });
             }else{
               if (addto<1) { // 不追加,覆盖
                 var newdata = arr;
                 var tmplistlen = arr.length;
+                var newdroparr = tmpdroparr;
               }else{
                 var newdata = that.data.listarr; // 追加，但是没有查到数据，赋值原来的数据
                 var tmplistlen = that.data.listarr.length;
+                var newdroparr = that.data.dropArr;
               }
               that.setData({
                 listarr: newdata,
                 hidelood: false,
                 nodata: true,
-                listlen: tmplistlen
+                listlen: tmplistlen,
+                dropArr: newdroparr
               });
             }
           }
@@ -512,6 +523,36 @@ Page({
     var lock_id = e.currentTarget.dataset['lockid']; //
     wx.navigateTo({
       url: '../sharekeys/sharekeys?lock_id='+lock_id
+    })
+  },
+  switchBox: function(e) {
+    var index = e.currentTarget.dataset['index'];
+    var tmpdrop = this.data.dropArr;
+    if (tmpdrop[index]) {
+      tmpdrop[index] = false;
+    }else{
+      tmpdrop[index] = true;
+    }
+    this.setData({
+      dropArr: tmpdrop
+    });
+  },
+  manageKey: function (e) {
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../managekey/managekey?lock_id='+lock_id
+    })
+  },
+  allopenlogs: function (e) {
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../allopenlogs/allopenlogs?lock_id='+lock_id
+    })
+  },
+  lockdetail: function (e) {
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../lock/lock?lock_id='+lock_id
     })
   },
   timestampToTime: function (timestamp) {

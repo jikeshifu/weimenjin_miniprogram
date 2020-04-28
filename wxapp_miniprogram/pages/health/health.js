@@ -21,8 +21,30 @@ Page({
     uploadmanyou: '',     // 服务器端返回的漫游截图路径
     uploadtxz: '',        // 服务器端返回的通行证路径  cuIcon-locationfill
     user_id:0  ,   // 管理员id，不是小程序用户的id
-    regpoint_id:0  //登记点id
+    regpoint_id:0,  //登记点id
+    userAgree:false
   },
+  goToUserLicence1: function(){
+    wx.navigateTo({
+      url: '/pages/memberps/privacypolicy',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  },
+  goToUserLicence2: function(){
+    wx.navigateTo({
+      url: '/pages/memberps/serviceagreement',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  },
+  tipAgree:function(){
+    this.setData({
+      userAgree:true
+    })
+ },
   onShow:function () {
     console.log('health-onShow')
     var that = this;
@@ -111,6 +133,10 @@ Page({
     console.log(app.globalData.token)
     var that = this;
     console.log(app.globalData)
+    var userAgree = wx.getStorageSync('userAgree') || false
+    that.setData({
+        userAgree
+    })
     if (app.globalData.phone =='' || app.globalData.phone == null) {
     }else{
       that.setData({
@@ -516,6 +542,7 @@ Page({
       }
     })
   },
+
   getPhoneNumber: function (e) {
     if (app.globalData.userid < 1) {
       wx.navigateTo({

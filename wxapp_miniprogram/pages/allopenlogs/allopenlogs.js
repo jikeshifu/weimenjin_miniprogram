@@ -10,6 +10,7 @@ Page({
     page: 1,
     num: 20,
     scrollHeight: 0,
+    lock_id: 0, // 锁id
     close: true, //弹层是否关闭 false不关闭
     keyword: '', // 搜索关键词
     create_time: '', // 开始时间
@@ -86,7 +87,7 @@ Page({
       }
     }
   },
-  onLoad: function () {
+  onLoad: function (options) {
     var that = this;
     wx.getSystemInfo({
       success: function (res){
@@ -95,6 +96,11 @@ Page({
         });
       }
     });
+    if (options.lock_id != undefined && options.lock_id >0) {
+      that.setData({
+        lock_id: options.lock_id
+      });
+    }
   },
   getmore: function(page,num,addto){ // addto为0覆盖原有数据，为1在原有数据基础上追加数据
     var that = this;
@@ -113,18 +119,18 @@ Page({
     });
     if (app.globalData.userid) {
       wx.request({
-        url: app.globalData.domain+'/api/LockLog/getopenlog',
+        url: app.globalData.domain+'/api/LockLog/getopenlogbylockid',
         method: "POST",
         header:{
           "Authorization": app.globalData.token
         },
         data: {
-          member_id: app.globalData.userid,
           limit: num,
           page: page,
           keyword: that.data.keyword,
-          create_time: that.data.create_time,
-          end_time: that.data.end_time,
+          lock_id: that.data.lock_id,
+          create_time_start: that.data.create_time,
+          create_time_end: that.data.end_time,
         },
         success: function (resa) {
           console.log('getmore-success-resa');
@@ -289,34 +295,26 @@ Page({
       }
     })
   },
-  // ListTouch触摸开始
-  ListTouchStart(e) {
-    this.setData({
-      ListTouchStart: e.touches[0].pageX
-    })
-  },
-
-  // ListTouch计算方向
-  ListTouchMove(e) {
-    this.setData({
-      ListTouchDirection: e.touches[0].pageX - this.data.ListTouchStart > 0 ? 'right' : 'left'
-    })
-  },
-
-  // ListTouch计算滚动
-  ListTouchEnd(e) {
-    if (this.data.ListTouchDirection =='left'){
-      this.setData({
-        modalName: e.currentTarget.dataset.target
-      })
-    } else {
-      this.setData({
-        modalName: null
-      })
-    }
-    this.setData({
-      ListTouchDirection: null
-    })
+  callPhone: function (e) {
+    var phone = e.currentTarget.dataset['phone'];
+    wx.showActionSheet({
+      itemList: [phone],
+      success: function (res) {
+        console.log(res) // 点击手机号执行拨打电话
+        wx.makePhoneCall({
+          phoneNumber: phone, //此号码并非真实电话号码，仅用于测试
+          success: function () {
+            console.log("拨打电话成功！")
+          },
+          fail: function () {
+            console.log("拨打电话失败！")
+          }
+        })
+        if (!res.cancel) {
+          console.log(res.tapIndex)//console出了下标
+        }
+      }
+    });
   },
   timestampToTime: function (timestamp) {
     if (timestamp == undefined || timestamp==0){

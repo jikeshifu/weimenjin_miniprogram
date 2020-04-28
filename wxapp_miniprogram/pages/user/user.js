@@ -59,7 +59,7 @@ Page({
   },
   addLock: function() {
     wx.navigateTo({
-      url: '../open/open?user_id=1&lock_id=2'
+      url: '../open/open?user_id=1&lock_id=11'
     });
   },
   openlogs: function() {

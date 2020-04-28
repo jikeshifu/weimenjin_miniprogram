@@ -82,4 +82,17 @@
   <view class="padding flex flex-direction">
     <button class="cu-btn bg-green lg" bindtap="uploadData">立即提交</button>
   </view>
+  <view wx:if='{{userAgree==false}}'>
+  <view  class="tips">
+    <view class="tips_box">
+      <view class="hint_view">
+        <view class="text">
+          <view class="hint1" bindtap='goToUserLicence1'>点击查看《隐私政策》</view>
+          <view class="hint1" bindtap='goToUserLicence2'>点击查看《用户服务协议》</view>
+        </view>
+      </view>
+      <button bindtap='tipAgree' class="agreeBtn" type='primary'>我已阅读并同意</button>
+    </view>
+  </view>
+</view>
 </form>

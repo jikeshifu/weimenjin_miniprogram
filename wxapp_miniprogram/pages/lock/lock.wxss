@@ -1,5 +1,9 @@
 /* pages/lock/lock.wxss */
-/* .locationbox .cuIcon-locationfil{font-size:32px;} */
-.locationbox{width:80rpx;height:80rpx;line-height:80rpx; text-align: right;font-size:20pt;color: red;}
 .lg{width:100%;}
 .hide{display: none;}
+.lockbox{background-color:#fff;margin:30rpx;border-radius: 20rpx;padding-bottom: 40rpx;}
+.title{position:relative;padding:30rpx 30rpx 16rpx 80rpx;font-size: 12pt;font-weight: bold;line-height: 1.5;border-bottom: 1rpx solid #e3e3e3;}
+.title .micon{position: absolute;left:30rpx;top:30rpx;}
+.qrcodebox{padding:30rpx 20rpx 0;}
+.qrcodebox .qrcode{width:100%;height:700rpx;}
+.sn{text-align: center;font-size:13pt;line-height:1.5;}

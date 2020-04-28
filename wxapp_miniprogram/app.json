@@ -2,16 +2,26 @@
   "pages": [
     "pages/index/index",
     "pages/openlogs/openlogs",
+    "pages/allopenlogs/allopenlogs",
     "pages/open/open",
+    "pages/health/health",
+    "pages/healthlist/healthlist",
+    "pages/healthdetail/healthdetail",
     "pages/user/user",
     "pages/wxlogin/wxlogin",
+    "pages/addregpoint/addregpoint",
+    "pages/regpointlist/regpointlist",
     "pages/adduser/adduser",
     "pages/editpwd/editpwd",
     "pages/bindphone/bindphone",
     "pages/logs/logs",
     "pages/sharekeys/sharekeys",
     "pages/getkeys/getkeys",
-    "pages/lock/lock"
+    "pages/lock/lock",
+    "pages/managekey/managekey",
+    "pages/auditkey/auditkey",
+    "pages/memberps/serviceagreement",
+    "pages/memberps/privacypolicy"
   ],
   "window": {
     "backgroundTextStyle": "dark",

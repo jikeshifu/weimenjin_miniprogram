@@ -1,29 +1,49 @@
 <view class="">
-	<view class="userbox">
-		<view class="userinfo">
-			<image class="userinfo-avatar" src="{{tmpuserInfo.avatarUrl}}" mode="cover"></image>
-			<text class="userinfo-nickname">{{tmpuserInfo.nickName}}</text>
-			<text class="userinfo-nickname">{{phone==null ? '' : phone}}</text>
-		</view>
-	</view>
-	<view class="listrow {{dropArr[1] ? 'dropdown' : ''}}" data-on="{{dropArr[1]}}" data-index="1" bindtap="drop">
-		<view class="shrink1">门禁服务</view>
-		<view class="shrink0">
-			<image class="dropup" src='{{imgarrow}}' mode='aspectFill'></image>
-		</view>
-	</view>
-	<view class="widgetsbox {{dropArr[1] ? 'dropdown' : ''}}">
-		<view class="witem" bindtap="addLock">
-			<text>开门演示</text>
-			<image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
-		</view>
-		<view class="witem" bindtap="openlogs">
-			<text>开门记录</text>
-			<image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
-		</view>
-		<view class="witem {{phone==null ? '' : 'hide'}}" bindtap="bindPhone">
-			<text>绑定手机号</text>
-			<image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
-		</view>
-	</view>
+  <view class="userbox">
+    <view class="userinfo">
+      <image class="userinfo-avatar" src="{{tmpuserInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{tmpuserInfo.nickName}}</text>
+      <text class="userinfo-nickname">{{phone==null ? '' : phone}}</text>
+    </view>
+  </view>
+  <view class="listrow {{dropArr[0] ? 'dropdown' : ''}}" data-on="{{dropArr[0]}}" data-index="0" bindtap="drop">
+    <view class="shrink1">健康登记</view>
+    <view class="shrink0"><image class="dropup" src='{{imgarrow}}' mode='aspectFill'></image></view>
+  </view>
+  <view class="widgetsbox {{dropArr[0] ? 'dropdown' : ''}}">
+    <view class="witem" bindtap="health">
+      <text>健康登记</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+    <view class="witem" bindtap="healthList">
+      <text>健康登记记录</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+    <view class="witem" bindtap="addRegpoint">
+      <text>添加登记点</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+    <view class="witem" bindtap="regpointList">
+      <text>登记点列表</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+  </view>
+  <view class="listrow {{dropArr[1] ? 'dropdown' : ''}}" data-on="{{dropArr[1]}}" data-index="1" bindtap="drop">
+    <view class="shrink1">门禁服务</view>
+    <view class="shrink0"><image class="dropup" src='{{imgarrow}}' mode='aspectFill'></image></view>
+  </view>
+  <view class="widgetsbox {{dropArr[1] ? 'dropdown' : ''}}">
+    <view class="witem" bindtap="addLock">
+      <text>开门演示</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+    <view class="witem" bindtap="openlogs">
+      <text>我的开门记录</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+    <view class="witem {{phone==null ? '' : 'hide'}}" bindtap="bindPhone">
+      <text>绑定手机号</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+  </view>
 </view>

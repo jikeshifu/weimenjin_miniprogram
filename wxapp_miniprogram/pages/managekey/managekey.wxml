@@ -1,0 +1,35 @@
+<view class="wrap">
+  <view class="fixed">
+    <view class="tabul">
+      <view class="tabli {{tabarr[0] ? 'on' :''}}" data-id="0" bindtap="swichtab">待审核</view>
+      <view class="tabli {{tabarr[1] ? 'on' :''}}" data-id="1" bindtap="swichtab">已通过</view>
+    </view>
+  </view>
+  <scroll-view class="scrollbox" scroll-y style="height:{{scrollHeight}}px;" upper-threshold="50" lower-threshold="50" bindscrolltoupper="scrolltoupper" bindscrolltolower="scrolltolower" bindscroll="scrollfun">
+    <view class="listbox">
+      <view class="listrow" wx:for="{{listarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+        <view class='shrink2'><image class="avatar" src="{{vo.headimgurl}}" mode="cover"></image></view>
+        <view class='shrink1'>
+          <view class="name">{{vo.nickname}}</view>
+          <view class="phone">{{vo.mobile}}</view>
+        </view>
+        <view class='shrink0 auditkey' bindtap="auditKey" data-lockauthid="{{vo.lockauth_id}}">审核</view>
+      </view>
+      <block wx:if="{{listlen <1}}">
+        <view class="mscan" bindtap="scan">
+          <view class="cuIcon-warn micon"></view>
+          <text class="wz">没有记录</text>
+        </view>
+      </block>
+      <view class="looding {{!hidelood ? 'hide': ''}}">
+        <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
+        <text class="lwz">正在加载</text>
+      </view>
+      <block wx:if="{{listlen > 12}}">
+        <view class="looding {{!nodata ? 'hide': ''}}">
+          <text class="lwz">不要再划了，没有啦！</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>

@@ -36,8 +36,8 @@ Page({
     var date = new Date();
     var timestamp = Date.parse(new Date());
     timestamp = timestamp/1000;
-    var nowdate = that.timestampToTime(timestamp,'Y-m-d');
-    var enddate = that.timestampToTime(timestamp+31536000, 'Y-m-d');
+    var nowdate = that.timestampToTime(timestamp,'Y-m-d H:i:s');
+    var enddate = that.timestampToTime(timestamp+31536000, 'Y-m-d H:i:s');
     that.setData({
       nowdate: nowdate,
       starttime: nowdate,
