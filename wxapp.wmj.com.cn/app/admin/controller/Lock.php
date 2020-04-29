@@ -255,8 +255,8 @@ class Lock extends Admin {
 							$authdata['auth_sharelimit']=0;
 							$authdata['auth_openlimit']=0;
 							$authdata['auth_status']=1;
-							$authdata['auth_starttime']= date("Y-m-d H:i:s",time());
-							$authdata['auth_endtime']= date("Y-m-d H:i:s",time() + 315360000);
+							$authdata['auth_starttime']= 0;
+							$authdata['auth_endtime']= 0;
 							//mlog("auth_starttime:".$authdata['auth_starttime']);
 							//mlog("auth_endtime".$authdata['auth_endtime']);
 							$authdata['auth_isadmin']=1;

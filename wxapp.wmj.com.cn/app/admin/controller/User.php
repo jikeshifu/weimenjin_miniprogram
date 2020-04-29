@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		用户管理
- create_time:	2020-03-19 00:05:52
+ create_time:	2020-04-29 13:12:58
  author:		
  contact:		
 */
@@ -78,7 +78,7 @@ class User extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'user_id,name,user,group_id,type,note,status,create_time';
+			$postField = 'user_id,name,user,group_id,type,note,status,member_id,create_time';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				UserService::update($data);

@@ -53,6 +53,12 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-sm-2 control-label">会员ID：</label>
+						<div class="col-sm-9">
+							<input type="text" id="member_id" value="{$info.member_id}" name="member_id" class="form-control" placeholder="请输入会员ID">
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-sm-2 control-label">创建时间：</label>
 						<div class="col-sm-9">
 							<input type="text" value="{if condition="$info.create_time neq ''"}{$info.create_time|date='Y-m-d H:i:s'}{/if}" name="create_time"  placeholder="请输入创建时间" class="form-control" id="create_time">

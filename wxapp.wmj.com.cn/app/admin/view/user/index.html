@@ -218,7 +218,7 @@
 
 	CodeGoods.update = function (value) {
 		if(value){
-			var index = layer.open({type: 2,title: '修改账户',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/User/update?user_id='+value});
+			var index = layer.open({type: 2,title: '修改账户',area: ['800px', '600px'],fix: false, maxmin: true,content: Feng.ctxPath + '/User/update?user_id='+value});
 			if(!IsPC()){layer.full(index)}
 		}else{
 			if (this.check()) {
@@ -231,7 +231,7 @@
 					Feng.info("请选择单条数据！");
 					return false;
 				}
-				var index = layer.open({type: 2,title: '修改账户',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/User/update?user_id='+idx});
+				var index = layer.open({type: 2,title: '修改账户',area: ['800px', '600px'],fix: false, maxmin: true,content: Feng.ctxPath + '/User/update?user_id='+idx});
 				this.layerIndex = index;
 				if(!IsPC()){layer.full(index)}
 			}

@@ -173,7 +173,7 @@ class Lock extends Common {
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		try {
 			$res = LockService::add($data);
-				if ($res) 
+			if ($res) 
 			{   $authdata['lock_id']=$res;
 				$authdata['member_id']=$data['member_id'];
 				$authdata['auth_member_id']=0;
