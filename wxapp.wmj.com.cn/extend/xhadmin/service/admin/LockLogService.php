@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门记录
- create_time:	2020-04-04 10:37:27
+ create_time:	2020-04-19 18:58:33
  author:		
  contact:		
 */
@@ -14,40 +14,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class LockLogService extends CommonService {
-
-
-	/*
- 	* @Description  添加
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
-	public static function add($data){
-		try{
-			$data['create_time'] = time();
-
-			$res = LockLog::createData($data);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return $res;
-	}
-
-
-	/*
- 	* @Description  修改
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
-	public static function update($data){
-		try{
-			$data['create_time'] = strtotime($data['create_time']);
-
-			$res = LockLog::edit($data);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return $res;
-	}
 
 
 	/*
@@ -118,6 +84,24 @@ class LockLogService extends CommonService {
 			throw new \Exception($e->getMessage());
 		}
 	}
+	/*
+ 	* @Description  添加
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function add($data){
+		try{
+			$data['user_id'] = session('admin.user_id');
+			$data['create_time'] = time();
+
+			$res = LockLog::createData($data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		return $res;
+	}
+
+
 
 
 }

@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁列表
- create_time:	2020-04-10 00:37:50
+ create_time:	2020-04-18 01:06:11
  author:		
  contact:		
 */
@@ -75,18 +75,14 @@ class LockService extends CommonService {
  	*/
 	public static function update($data){
 		try{
-			$data['create_time'] = strtotime($data['create_time']);
 
 			//数据验证
 			$rule = [
 				'lock_name'=>['require'],
-				'lock_sn'=>['require','unique:lock'],
 				'location'=>['require'],
 			];
 			$msg = [
 				'lock_name.require'=>'锁名称不能为空',
-				'lock_sn.require'=>'序列号不能为空',
-				'lock_sn.unique'=>'序列号已经存在',
 				'location.require'=>'位置不能为空',
 			];
 			self::validate($rule,$data,$msg);

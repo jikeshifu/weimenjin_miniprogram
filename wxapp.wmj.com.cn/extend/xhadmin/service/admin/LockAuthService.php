@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		钥匙管理
- create_time:	2020-04-02 00:39:58
+ create_time:	2020-04-23 15:35:45
  author:		
  contact:		
 */
@@ -12,25 +12,6 @@ use xhadmin\CommonService;
 use xhadmin\db\LockAuth;
 
 class LockAuthService extends CommonService {
-
-
-	/*
- 	* @Description  钥匙管理列表数据
- 	* @param (输入参数：)  {array}        where 查询条件
- 	* @param (输入参数：)  {int}          limit 分页参数
- 	* @param (输入参数：)  {String}       field 查询字段
- 	* @param (输入参数：)  {String}       orderby 排序字段
- 	* @return (返回参数：) {array}        分页数据集
- 	*/
-	public static function pageList($where=[],$limit,$field='*',$orderby=''){
-		try{
-			$list = LockAuth::loadList($where,$limit,$field,$orderby);
-			$count = LockAuth::countList($where);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return ['list'=>$list,'count'=>$count];
-	}
 
 
 	/*
@@ -61,7 +42,6 @@ class LockAuthService extends CommonService {
 		try{
 			$data['auth_starttime'] = strtotime($data['auth_starttime']);
 			$data['auth_endtime'] = strtotime($data['auth_endtime']);
-			$data['create_time'] = strtotime($data['create_time']);
 
 			$res = LockAuth::edit($data);
 		}catch(\Exception $e){

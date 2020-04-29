@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		会员管理
- create_time:	2020-04-06 17:03:55
+ create_time:	2020-04-14 17:55:49
  author:		
  contact:		
 */
@@ -44,7 +44,7 @@ class MemberService extends CommonService {
 
 			//数据验证
 			$rule = [
-				'mobile'=>['regex'=>'/^1[345678]\d{9}$/'],
+				'mobile'=>['regex'=>'/^1[3456789]\d{9}$/'],
 			];
 			//数据错误提示
 			$msg = [
@@ -72,7 +72,7 @@ class MemberService extends CommonService {
 
 			//数据验证
 			$rule = [
-				'mobile'=>['regex'=>'/^1[345678]\d{9}$/'],
+				'mobile'=>['regex'=>'/^1[3456789]\d{9}$/'],
 			];
 			$msg = [
 				'mobile.regex'=>'手机号格式错误',
