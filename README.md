@@ -66,3 +66,9 @@ wxapp_miniprogram为微信小程序源码。
 2.  修改小程序appid，位于project.config.json文件
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0420/152636_e7be0be4_1840059.png "屏幕截图.png")
 3.  修改图片logo这些，这些不用多说了图片里面找。
+#将微信号绑定为超级管理员
+###小程序能正常登录和绑定手机号后，会员管理里面找到要绑定为超级管理员的会员编号，到系统管理--用户管理--修改信息，填进会员编号
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142020_254dbc1c_1840059.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142144_37b10ccb_1840059.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142245_39927691_1840059.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142309_6dad72e4_1840059.png "屏幕截图.png")
