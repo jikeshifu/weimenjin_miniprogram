@@ -13,7 +13,7 @@ wxapp_miniprogram为微信小程序源码。
 #### 管理后台安装教程
 
 1.  基于ThinkPHP6.0开发，建议使用宝塔面板
-2.  PHP7.2+
+2.  PHP7.2+,默认用Nginx，如果用Apache需要在伪静态配置文件增加配置：SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
 3.  Mysql5.5+
 4.  修改数据库连接在根目录下.env文件,数据库脚本为weimenjin_miniprogram_db.sql
 5.  后台超级管理员admin,默认密码wmj123456
