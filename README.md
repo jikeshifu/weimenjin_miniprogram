@@ -43,9 +43,6 @@ wxapp_miniprogram为微信小程序源码。
 
 #### 使用说明
 
-获取微信绑定手机号需修改
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0417/184403_b297f30b_1840059.png "屏幕截图.png")
-
 详情见：http://doc.wmj.com.cn/web/#/1?page_id=34
 
 ### 关键配置
