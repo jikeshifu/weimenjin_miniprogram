@@ -21,9 +21,11 @@
         <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
         <text class="lwz">正在加载</text>
       </view>
-      <view class="looding {{!nodata ? 'hide': ''}}">
-        <text class="lwz">不要再划了，没有啦！</text>
-      </view>
+      <block wx:if="{{listlen > 12}}">
+        <view class="looding {{!nodata ? 'hide': ''}}">
+          <text class="lwz">不要再划了，没有啦！</text>
+        </view>
+      </block>
     </view>
   </scroll-view>
 </view>

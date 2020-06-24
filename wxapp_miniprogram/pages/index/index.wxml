@@ -7,19 +7,23 @@
 						<image class="line" src='{{vo.online ? online : offline}}' mode='aspectFill'></image>
 					</view>
 					<view class="shrink1">{{vo.lock_name}}</view>
-					<block >
+					<block>
 						<!-- <view class="shrink2">操作/管理</view> -->
 						<view class="shrink2" data-index="{{index}}" bindtap="switchBox"><view class="cuIcon-settings iconli"></view>管理</view>
 					</block>
 					<view wx:if="{{vo.auth_isadmin ==1}}" class="absolute {{dropArr[index] ? '' :'hide'}}">
-					  <view class="li" bindtap="lockdetail" data-lockid="{{vo.lock_id}}"><view class="cuIcon-info iconli"></view>门锁详情</view>
-						<view class="li" bindtap="allopenlogs" data-lockid="{{vo.lock_id}}"><view class="cuIcon-list iconli"></view>开门记录</view>
-						<view class="li" bindtap="manageKey" data-lockid="{{vo.lock_id}}"><view class="cuIcon-command iconli"></view>钥匙管理</view>
-						<!--<view class="li" bindtap="editlock" data-lockid="{{vo.lock_id}}"><view class="cuIcon-tag iconli"></view>参数设置</view>-->
+					  <view class="li" bindtap="lockdetail" data-lockid="{{vo.lock_id}}"><view class="cuIcon-qr_code iconli"></view>设备管理</view>
+						<view class="li" bindtap="allopenlogs" data-lockid="{{vo.lock_id}}"><view class="cuIcon-text iconli"></view>开门记录</view>
+						<view class="li" bindtap="manageKey" data-lockid="{{vo.lock_id}}" data-showcard="{{vo.showcard}}" data-adminid="{{vo.user_id}}"><view class="cuIcon-command iconli"></view>钥匙管理</view>
+						<view class="li" bindtap="editlock" data-lockid="{{vo.lock_id}}"><view class="cuIcon-settings iconli"></view>参数设置</view>
+						<view class="li {{vo.showcard>0 ? '' : 'hide'}}" bindtap="cardlist" data-lockid="{{vo.lock_id}}"><view class="cuIcon-sort iconli"></view>门卡列表</view>
+						<view class="li {{vo.showcard>0 ? '' : 'hide'}}" bindtap="addcard" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}"><view class="cuIcon-vipcard iconli"></view>添加门卡</view>
+						<view class="li {{vo.audio>0 ? '' : 'hide'}}" bindtap="configaudio" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}"><view class="cuIcon-sound iconli"></view>语音配置</view>
+						<view class="li" bindtap="townership" data-lockauthid="{{vo.lockauth_id}}" data-lockid="{{vo.lock_id}}"><view class="cuIcon-order iconli"></view>转移权限</view>
 					</view>
-					<!--<view wx:if="{{vo.auth_isadmin !=1}}" class="absolute {{dropArr[index] ? '' :'hide'}}">
-					  <view class="li" bindtap="goShare" data-lockid="{{vo.lockauth_id}}">丢弃钥匙</view>
-					</view>-->
+					<view wx:if="{{vo.auth_isadmin !=1}}" class="absolute {{dropArr[index] ? '' :'hide'}}">
+					  <view class="li" bindtap="deleteKey" data-lockauthid="{{vo.lockauth_id}}"><view class="cuIcon-delete iconli"></view>丢弃钥匙</view>
+					</view>
 				</view>
 				<block wx:if="{{vo.auth_status !=1}}">
 					<view class="list-content">{{vo.time}}（审核中）</view>
@@ -33,20 +37,20 @@
 							</view>
               				<view class="shrink1"></view>
 							<block wx:if="{{vo.auth_status ==1 && vo.auth_shareability!=0 && vo.guoqi}}">
-								<view class="shrink2" bindtap="goShare" data-lockid="{{vo.lock_id}}">分享钥匙</view>
+								<view class="shrink2" bindtap="goShare" data-adminid="{{vo.user_id}}"  data-lockid="{{vo.lock_id}}">分享钥匙</view>
 							</block>
 						</view>
 					</view>
 				</block>
 			</view>
 			<block wx:if="{{listlen <1}}">
-				<view class="mscan" bindtap="scan">
+				<view class="nodatabox">
 					<view class="cuIcon-warn micon"></view>
-					<text class="wz">没有钥匙</text>
+					<view class="wz">没有钥匙，请联系管理员获取</view>
 				</view>
 			</block>
 			<view class="looding {{!hidelood ? 'hide': ''}}">
-				<image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
+				<image mode="aspectFit" class="" src="{{looding}}"></image>
 				<text class="lwz">正在加载</text>
 			</view>
 			<block wx:if="{{listlen > 12}}">
@@ -69,7 +73,7 @@
 		</view>
 	</view>
 	<view class="fullmask2 {{closeAd ? 'hide' :''}}"></view>
-	<view class="adbox {{closeAd ? 'hide' :''}}">
+	<view class="adbox" style="width:{{adw}}rpx;margin-left:-{{adw/2}}rpx;" wx:if="{{!closeAd && adnum==1}}">
 		<view class="greentip">开门成功</view>
 		<view>
 			<image class="img1" mode="aspectFit" src="{{successimg}}"></image>
@@ -79,6 +83,11 @@
 		</view>
 		<view class="miniad {{hitshowminiad ? 'hide' :''}}">
 			<ad unit-id="adunit-7f4379a208fd83c6"></ad>
+		</view>
+	</view>
+	<view class="adbox2" style="width:{{adw}}rpx;margin-left:-{{adw/2}}rpx;"  wx:if="{{!closeAd && adnum==2}}">
+		<view class="onlyone" bindtap="openweb">
+			<image class="onlyimg" mode="aspectFit" src="{{successimg}}"></image>
 		</view>
 	</view>
 </view>

@@ -1,1 +1,12 @@
 page{background:#fff;box-sizing:border-box;}
+.wrap {
+  width: 100%;
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+}
+.maskbox {width: 480rpx; height: 600rpx; position: fixed; left: 50%; top: 50%; margin-left: -240rpx; margin-top: -300rpx; background-color: #fff; z-index: 1001; border-radius: 20rpx; text-align: center;}
+.btnbox {display: flex;flex-direction: row;margin-top: 60rpx;}
+.shrink3 {flex-shrink: 0; width: 240rpx;}
+.btn1 {width: 180rpx;  margin-left: 30rpx; font-size: 11pt;}
+.lgbtn {width: 180rpx;margin-left: 0;}
+

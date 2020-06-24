@@ -20,9 +20,10 @@ Page({
     txzimg: '../../images/upload.png',     // 通行证截图
     uploadmanyou: '',     // 服务器端返回的漫游截图路径
     uploadtxz: '',        // 服务器端返回的通行证路径  cuIcon-locationfill
-    user_id:0  ,   // 管理员id，不是小程序用户的id
-    regpoint_id:0,  //登记点id
-    userAgree:false
+    user_id: 0,   // 管理员id，不是小程序用户的id
+    regpoint_id: 0,  //登记点id
+    userAgree: false,
+    lock_id: 0 // 此值大于0跳到open页执行开门流程
   },
   goToUserLicence1: function(){
     wx.navigateTo({
@@ -44,7 +45,7 @@ Page({
     this.setData({
       userAgree:true
     })
- },
+  },
   onShow:function () {
     console.log('health-onShow')
     var that = this;
@@ -145,6 +146,7 @@ Page({
     }
     var user_id = this.data.user_id;
     var regpoint_id = this.data.regpoint_id;
+    var lock_id = this.data.lock_id;
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
@@ -177,6 +179,12 @@ Page({
             regpoint_id: paramobj['regpoint_id']
           });
         }
+        if (paramobj['lock_id'] != undefined && paramobj['lock_id'] > 0) {
+          lock_id = paramobj['lock_id'];
+          that.setData({
+            lock_id: paramobj['lock_id']
+          });
+        }
       }
     }
     if (options.user_id != undefined && options.user_id >0) {
@@ -189,6 +197,12 @@ Page({
       regpoint_id = options.regpoint_id
       that.setData({
         regpoint_id: regpoint_id
+      });
+    }
+    if (options.lock_id != undefined && options.lock_id > 0) {
+      lock_id = options.lock_id
+      that.setData({
+        lock_id: lock_id
       });
     }
     // var healthkey = "health"+app.globalData.userid;
@@ -397,8 +411,8 @@ Page({
     var timestamp = Date.parse(new Date());
     timestamp = timestamp /1000;
     var that = this;
-    console.log('thatdata');
-    console.log(that.data);
+    // console.log('thatdata');
+    // console.log(that.data);
     var phone = that.data.phone;
     var username = that.data.username;
     var address1 = that.data.address1;
@@ -407,6 +421,7 @@ Page({
     var userid = app.globalData.userid;
     var user_id = that.data.user_id;
     var regpoint_id = that.data.regpoint_id;
+    var lock_id = that.data.lock_id;
     var healthlog = {phone:phone,username:username,address1:address1,address2:address2,job:job};
     if (!that.data.username) {
       wx.showToast({
@@ -535,9 +550,15 @@ Page({
           //   key:"health"+userid,
           //   data:JSON.stringify(healthlog)
           // })
-          wx.navigateTo({
-            url: '../healthlist/healthlist'
-          });
+          if (lock_id > 0) {
+            wx.navigateTo({
+              url: '../open/open?user_id='+user_id+'&lock_id='+lock_id
+            });
+          }else{
+            wx.navigateTo({
+              url: '../healthlist/healthlist'
+            });
+          }
         }
       }
     })

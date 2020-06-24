@@ -6,7 +6,7 @@
         <view class="cu-item" wx:for="{{listarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
           <view class="cu-avatar round lg" style="background-image:url({{vo.headimgurl}});"></view>
           <view class="content">
-            <view class="text-grey">{{vo.nickname}}（{{vo.mobile}}）</view>
+            <view class="text-grey">{{vo.nickname}}（{{vo.phone}}）</view>
             <view class="text-gray text-sm">{{vo.create_time}}</view>
           </view>
           <view class="action">
@@ -19,16 +19,16 @@
         </view>
       </view>
       <block wx:if="{{listlen <1}}">
-        <view class="mscan" bindtap="scan">
+        <view class="nodatabox">
           <view class="cuIcon-warn micon"></view>
-          <text class="wz">没有记录</text>
+          <view class="wz">没有数据</view>
         </view>
       </block>
       <view class="looding {{!hidelood ? 'hide': ''}}">
         <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
         <text class="lwz">正在加载</text>
       </view>
-      <block wx:if="{{listlen > 0}}">
+      <block wx:if="{{listlen > 12}}">
         <view class="looding {{!nodata ? 'hide': ''}}">
           <text class="lwz">不要再划了，没有啦！</text>
         </view>
@@ -40,7 +40,7 @@
     <view class="searchbox"><view><input class="search2" name="keyword" placeholder="请输入用户名" value="{{keyword}}" bindinput="keywordInput"></input></view></view>
     <view class="cu-form-group">
       <view class="title">选择开始时间</view>
-      <picker mode="date" value="{{create_time}}" start="2019-01-01" end="2020-09-01" bindchange="startDate">
+      <picker mode="multiSelector" start="2020-01-01" end="2050-09-01" bindchange="startDate" range="{{dateTimeArray}}" value="{{dateIndex}}">
         <view class="picker">
           {{create_time}}
         </view>
@@ -48,7 +48,7 @@
     </view>
     <view class="cu-form-group">
       <view class="title">选择结束时间</view>
-      <picker mode="date" value="{{end_time}}" start="2019-01-01" end="2020-09-01" bindchange="endDate">
+      <picker mode="multiSelector" start="2020-01-01" end="2050-09-01" bindchange="endDate" range="{{dateTimeArray1}}" value="{{dateIndex1}}">
         <view class="picker">
           {{end_time}}
         </view>

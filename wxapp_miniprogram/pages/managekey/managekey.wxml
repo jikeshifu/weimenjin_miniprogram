@@ -11,14 +11,15 @@
         <view class='shrink2'><image class="avatar" src="{{vo.headimgurl}}" mode="cover"></image></view>
         <view class='shrink1'>
           <view class="name">{{vo.nickname}}</view>
-          <view class="phone">{{vo.mobile}}</view>
+          <view class="phone">{{vo.phone}}</view>
         </view>
-        <view class='shrink0 auditkey' bindtap="auditKey" data-lockauthid="{{vo.lockauth_id}}">审核</view>
+        <view class="shrink2 addcard {{showcard>0 ? '' : 'hide'}}" bindtap="addCard" data-lockauthid="{{vo.lockauth_id}}">添加卡</view>
+        <view class="shrink0 auditkey" bindtap="auditKey" data-lockauthid="{{vo.lockauth_id}}">审核</view>
       </view>
       <block wx:if="{{listlen <1}}">
-        <view class="mscan" bindtap="scan">
+        <view class="nodatabox">
           <view class="cuIcon-warn micon"></view>
-          <text class="wz">没有记录</text>
+          <view class="wz">没有数据</view>
         </view>
       </block>
       <view class="looding {{!hidelood ? 'hide': ''}}">

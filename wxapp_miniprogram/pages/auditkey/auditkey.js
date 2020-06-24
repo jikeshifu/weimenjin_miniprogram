@@ -10,8 +10,10 @@ Page({
     time: '12:00',
     dateTimeArray: null,
     dateTime: null,
+    dateIndex: [1,1,0,0,0,0],
     dateTimeArray1: null,
     dateTime1: null,
+    dateIndex1: [0,0,0,0,0,0],
     startYear: 2020,
     endYear: 2050,
     nickname: '张三',
@@ -31,7 +33,7 @@ Page({
     opentimesarr: []
   },
   onShow:function () {
-    console.log('getkeys-onShow');
+    // console.log('getkeys-onShow');
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -49,14 +51,20 @@ Page({
           lockauth_id: that.data.lockauth_id
         },
         success: function (res) {
-          console.log(res);
+          // console.log(res);
           if (res.data.status == 200) {
             var result = res.data.data[0];
+            var auth_starttime = that.timestampToTime(result.auth_starttime,'Y-m-d H:i:s');
+            var auth_endtime = that.timestampToTime(result.auth_endtime,'Y-m-d H:i:s');
+            var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,auth_starttime);
+            var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,auth_endtime);
             that.setData({
+              dateIndex: obj.dateTime,
+              dateIndex1: obj1.dateTime,
               nickname: result.nickname,
               mobile: result.mobile,
-              starttime: that.timestampToTime(result.auth_starttime,'Y-m-d H:i:s'),
-              endtime: that.timestampToTime(result.auth_endtime,'Y-m-d H:i:s'),
+              starttime: auth_starttime,
+              endtime: auth_endtime,
               shareability: result.auth_shareability, //1是可以分享,0不可分享
               isadmin: result.auth_isadmin, // 0不是管理员,1是管理员
               sharelimit: result.auth_sharelimit, //
@@ -148,12 +156,13 @@ Page({
     });
   },
   startDate: function(e) {
-    console.log('starttime')
-    console.log(e);
+    // console.log('starttime')
+    // console.log(e);
     var dateTimeArray = this.data.dateTimeArray;
     var dateTime = e.detail.value;
     var starttime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
     this.setData({
+      dateIndex: dateTime,
       starttime: starttime
     });
   },
@@ -162,6 +171,7 @@ Page({
     var dateTime = e.detail.value;
     var endtime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
     this.setData({
+      dateIndex1: dateTime,
       endtime: endtime
     });
   },
@@ -278,7 +288,6 @@ Page({
       },
       data: {
         lockauth_id: that.data.lockauth_id, // 钥匙id
-        lock_id: that.data.lock_id,
         auth_sharelimit: that.data.sharelimit,
         auth_openlimit: that.data.openlimit,
         auth_isadmin: that.data.isadmin,
@@ -287,7 +296,8 @@ Page({
         auth_shareability: that.data.shareability,
         auth_opentimes: that.data.opentimes,
         remark: that.data.remark,
-        auth_status: that.data.auth_status
+        auth_status: that.data.auth_status,
+        auth_member_id:app.globalData.userid
       },
       success: function (res) {
         console.log('getkey-res');

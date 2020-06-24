@@ -9,7 +9,7 @@
   </view>
   <view class="cu-form-group">
     <view class="title">开始时间</view>
-    <picker mode="multiSelector" value="{{starttime}}" start="2020-01-01" end="2050-09-01" bindchange="startDate" range="{{dateTimeArray}}">
+    <picker mode="multiSelector" start="2020-01-01" end="2050-09-01" bindchange="startDate" range="{{dateTimeArray}}" value="{{dateIndex}}">
       <view class="picker">
         {{starttime}}
       </view>
@@ -17,7 +17,7 @@
   </view>
   <view class="cu-form-group">
     <view class="title">过期时间</view>
-    <picker mode="multiSelector" value="{{endtime}}" start="2020-01-01" end="2050-09-01" bindchange="endDate" range="{{dateTimeArray1}}">
+    <picker mode="multiSelector"  start="2020-01-01" end="2050-09-01" bindchange="endDate" range="{{dateTimeArray1}}" value="{{dateIndex1}}">
       <view class="picker">
         {{endtime}}
       </view>

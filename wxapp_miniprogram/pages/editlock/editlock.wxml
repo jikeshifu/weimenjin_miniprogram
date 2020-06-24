@@ -1,0 +1,49 @@
+<view class="wrap">
+  <view class="cu-form-group">
+    <view class="title">锁名称</view>
+    <input name="lock_name" class="tar" placeholder="" value="{{lock_name}}" bindinput="locknameInput"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">绑定手机</view>
+    <block wx:if="{{mobile_check ==1}}">
+    <switch checked bindchange="mobilecheckChange"></switch>
+    </block>
+    <block wx:if="{{mobile_check !=1}}">
+    <switch bindchange="mobilecheckChange"></switch>
+    </block>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">申请钥匙</view>
+    <block wx:if="{{applyauth ==1}}">
+    <switch checked bindchange="applyauthChange"></switch>
+    </block>
+    <block wx:if="{{applyauth !=1}}">
+    <switch bindchange="applyauthChange"></switch>
+    </block>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">审核钥匙</view>
+    <block wx:if="{{applyauth_check ==1}}">
+    <switch checked bindchange="applyauthcheckChange"></switch>
+    </block>
+    <block wx:if="{{applyauth_check !=1}}">
+    <switch bindchange="applyauthcheckChange"></switch>
+    </block>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">开门距离</view>
+    <input name="location_check" class="tar" placeholder="0不限" value="{{location_check}}" bindinput="locationcheckInput"></input>
+  </view>
+  <view class="cu-form-group bb1 mb10">
+    <view class="title">是否启用</view>
+    <block wx:if="{{status ==1}}">
+    <switch checked bindchange="statusChange"></switch>
+    </block>
+    <block wx:if="{{status !=1}}">
+    <switch bindchange="statusChange"></switch>
+    </block>
+  </view>
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-green lg" bindtap="doSubmit">提交</button>
+  </view>
+</view>

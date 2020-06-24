@@ -1,7 +1,7 @@
 <view class="wrap">
     <view class="cu-form-group">
       <view class="title">开始时间</view>
-      <picker mode="date" value="{{starttime}}" start="2020-01-01" end="2050-09-01" bindchange="startDate">
+      <picker mode="multiSelector" start="2020-01-01" end="2050-09-01" bindchange="startDate" range="{{dateTimeArray}}" value="{{dateIndex}}">
         <view class="picker">
           {{starttime}}
         </view>
@@ -9,7 +9,7 @@
     </view>
     <view class="cu-form-group">
       <view class="title">结束时间</view>
-      <picker mode="date" value="{{endtime}}" start="2020-01-01" end="2050-09-01" bindchange="endDate">
+      <picker mode="multiSelector" start="2020-01-01" end="2050-09-01" bindchange="endDate" range="{{dateTimeArray1}}" value="{{dateIndex1}}">
         <view class="picker">
           {{endtime}}
         </view>
@@ -25,7 +25,7 @@
     </view>
     <view class="cu-form-group">
       <view class="title">分享权限</view>
-      <switch bindchange="switchChange"></switch>
+      <switch bindchange="shareabilityChange"></switch>
     </view>
     <view class="cu-form-group bb1 mb10">
       <view class="title">审核状态</view>

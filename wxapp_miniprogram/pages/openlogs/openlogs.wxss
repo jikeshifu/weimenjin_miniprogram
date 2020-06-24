@@ -2,7 +2,6 @@
 page{background:#f3f3f3;box-sizing:border-box;}
 .wrap{width:100%;padding:20rpx 30rpx;box-sizing:border-box;}
 .mscan{text-align: center;position: fixed;top:40%;left:50%;margin-left:-80rpx;}
-.micon{font-size: 70pt;color:#21cf3e;}
 .wz{font-size:13pt;}
 .searchbox{width:100%;padding:20rpx 30rpx;}
 .search{width:100%;height:56rpx;line-height:56rpx;text-align:center;border-radius:20rpx;background:#ffffff;color:#e3e3e3;}
@@ -29,10 +28,3 @@ page{background:#f3f3f3;box-sizing:border-box;}
 .c_f43530{color: #f43530;}
 .c_f76260{color: #f76260;}
 .text-center {text-align: center; margin: 0px !important; padding: 0px !important;}
-
-.fullmask{width:100%;height:100%;position:fixed;left:0;top:0;background:#000;opacity:.5;filter:alpha(opacity=50);z-index:1000;}
-.maskbox{width:100%;height:480rpx; position:fixed;left:0;top:0; background-color:#fff;z-index:1001;}
-.btnbox{display:flex;flex-direction:row;margin-top: 60rpx;width: 100%; padding:0 30rpx;}
-.btn1{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#000;font-size:11pt;text-align: center;}
-.lgbtn{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#ffffff;background-color: green;font-size: 11pt;margin-left: 8%;}
-.tar{text-align: right;}

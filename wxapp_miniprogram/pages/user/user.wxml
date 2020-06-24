@@ -3,7 +3,7 @@
     <view class="userinfo">
       <image class="userinfo-avatar" src="{{tmpuserInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname">{{tmpuserInfo.nickName}}</text>
-      <text class="userinfo-nickname">{{phone==null ? '' : phone}}</text>
+      <text class="userinfo-nickname">{{phone==null ? '' : jiamiphone}}</text>
     </view>
   </view>
   <view class="listrow {{dropArr[0] ? 'dropdown' : ''}}" data-on="{{dropArr[0]}}" data-index="0" bindtap="drop">
@@ -33,12 +33,16 @@
     <view class="shrink0"><image class="dropup" src='{{imgarrow}}' mode='aspectFill'></image></view>
   </view>
   <view class="widgetsbox {{dropArr[1] ? 'dropdown' : ''}}">
-    <view class="witem" bindtap="addLock">
+    <view class="witem" bindtap="openLock">
       <text>开门演示</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>
     <view class="witem" bindtap="openlogs">
       <text>我的开门记录</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
+    <view class="witem {{user_id>0 ? '' : 'hide'}}" bindtap="addLock">
+      <text>添加设备</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>
     <view class="witem {{phone==null ? '' : 'hide'}}" bindtap="bindPhone">

@@ -19,7 +19,11 @@ Page({
     aaa:'aa',
     scrollHeight: 0,
     close: true,  // 登录弹层是否关闭 false不关闭
-    closeAd: true, // 广告弹层是否关闭 false不关闭
+    closeAd: true, // 广告弹层是否关闭 false 不关闭
+    onlyimg: '../../images/ad.jpg',
+    adnum: 2, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
+    openadurl: '', // 点击图片打开的链接
+    adw:600, // 广告弹层的宽单位rpx
     hitshowminiad: false,
     location_check: false, // 是否需要定位，false不需要
     latitude: '',
@@ -69,19 +73,19 @@ Page({
             close:false
           })
         }else{
-          if (that.data.listarr.length <1) {
+          // if (that.data.listarr.length <1) {
             that.getmore(1,that.data.num,0);
-          } else {
-            wx.hideLoading();
-          }
+          // } else {
+          //   wx.hideLoading();
+          // }
         }
       },2000);
     }else{
-      if (that.data.listarr.length <1) {
+      // if (that.data.listarr.length <1) {
         that.getmore(1,that.data.num,0);
-      } else {
-        wx.hideLoading();
-      }
+      // } else {
+      //   wx.hideLoading();
+      // }
     }
   },
   onLoad: function () {
@@ -89,8 +93,10 @@ Page({
     var that = this;
     wx.getSystemInfo({
       success: function (res){
+        // console.log(res)
         that.setData({
-          scrollHeight: res.windowHeight
+          scrollHeight: res.windowHeight,
+          adw: res.windowWidth * 2-60,
         });
       }
     });
@@ -155,6 +161,7 @@ Page({
                 tmpobj['lock_name'] = arrdata[i]['lock_name'];
                 tmpobj['online'] = arrdata[i]['online'] == 1 ? true : false;
                 tmpobj['lock_id'] = arrdata[i]['lock_id'];
+                tmpobj['lockauth_id'] = arrdata[i]['lockauth_id']; // 钥匙id
                 tmpobj['user_id'] = arrdata[i]['user_id']; // 锁的管理员id
                 tmpobj['auth_status'] = arrdata[i]['auth_status']; // 已审核|1,未审核|0
                 tmpobj['auth_isadmin'] = arrdata[i]['auth_isadmin'];
@@ -166,6 +173,15 @@ Page({
                   var tmplocation = JSON.parse(arrdata[i]['location']); // "{"longitude":106.710689,"latitude":26.574774,"address":"贵州省贵阳市南明区市府社区服务中心都司路9号"}"
                   tmpobj['longitude'] = tmplocation['longitude'];
                   tmpobj['latitude'] = tmplocation['latitude'];
+                }
+                tmpobj['showcard'] = 0; // 是否显示卡片菜单，0不显示，1显示
+                var tmplock_sn = arrdata[i]['lock_sn'];
+                if (tmplock_sn.indexOf("WMJ62") >=0 || tmplock_sn.indexOf("WMJ42") >=0) {
+                  tmpobj['showcard'] = 1;
+                }
+                tmpobj['audio'] = 0; // 语音配置,0不支持，1支持
+                if (tmplock_sn.indexOf("WMJ62") >=0) { // 只有WMJ62的支持
+                  tmpobj['audio'] = 1;
                 }
                 arr.push(tmpobj);
               }
@@ -386,6 +402,7 @@ Page({
             closeAd: false,
             successimg: app.globalData.domain+res.data.successimg,
             successadimg: app.globalData.domain+res.data.successadimg,
+            openadurl: res.data.openadurl,
             hitshowminiad:res.data.hitshowminiad
           })
           setTimeout(function(){
@@ -406,7 +423,8 @@ Page({
   },
   closemask:function(){
     this.setData({
-      close:true
+      close:true,
+      listlen:0
     })
   },
   getUserInfo: function(e) {
@@ -426,7 +444,6 @@ Page({
   updateUserInfo: function(data) {
     console.log('updateUserInfo');
     var that = this;
-    var route = that.data.route;
     // 登录
     wx.login({
       success: res => {
@@ -520,9 +537,10 @@ Page({
     })
   },
   goShare: function (e) {
+    var adminid = e.currentTarget.dataset['adminid']; // 锁管理员user_id
     var lock_id = e.currentTarget.dataset['lockid']; //
     wx.navigateTo({
-      url: '../sharekeys/sharekeys?lock_id='+lock_id
+      url: '../sharekeys/sharekeys?lock_id='+lock_id+'&user_id='+adminid
     })
   },
   switchBox: function(e) {
@@ -538,9 +556,11 @@ Page({
     });
   },
   manageKey: function (e) {
+    var adminid = e.currentTarget.dataset['adminid']; // 锁管理员user_id
     var lock_id = e.currentTarget.dataset['lockid']; //
+    var showcard = e.currentTarget.dataset['showcard']; // 0不显示添加卡,1显示
     wx.navigateTo({
-      url: '../managekey/managekey?lock_id='+lock_id
+      url: '../managekey/managekey?lock_id='+lock_id+'&user_id='+adminid+'&showcard='+showcard
     })
   },
   allopenlogs: function (e) {
@@ -553,6 +573,100 @@ Page({
     var lock_id = e.currentTarget.dataset['lockid']; //
     wx.navigateTo({
       url: '../lock/lock?lock_id='+lock_id
+    })
+  },
+  //修改
+  editlock: function (e) {
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../editlock/editlock?lock_id='+lock_id
+    })
+  },
+  cardlist: function (e) {
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../cardlist/cardlist?lock_id='+lock_id
+    })
+  },
+  addcard: function (e) {
+    var adminid = e.currentTarget.dataset['adminid']; // 管理员user_id的值
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../addcard/addcard?lock_id='+lock_id+'&user_id='+adminid
+    })
+  },
+  configaudio: function (e) {
+    var adminid = e.currentTarget.dataset['adminid']; // 管理员user_id的值
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../configaudio/configaudio?lock_id='+lock_id+'&user_id='+adminid
+    })
+  },
+  townership: function (e) {
+    var lockauth_id = e.currentTarget.dataset['lockauthid']; // 钥匙id
+    var lock_id = e.currentTarget.dataset['lockid']; //
+    wx.navigateTo({
+      url: '../townership/townership?lock_id='+lock_id+'&lockauth_id='+lockauth_id
+    })
+  },
+  openweb: function (e) {
+    var tmpopenadurl = this.data.openadurl;
+    if (tmpopenadurl) {
+      wx.navigateTo({
+        url: '../web/web?url='+tmpopenadurl
+      })
+    }
+  },
+  deleteKey: function (e) {
+    var that = this;
+    var id = e.currentTarget.dataset['lockauthid']; //
+    wx.showModal({
+      title: '删除',
+      content: '您确定要丢弃此钥匙吗？',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+          console.log(id)
+          wx.showLoading({
+            title: '执行中',
+            mask: true
+          });
+          wx.request({
+            url: app.globalData.domain+'/api/LockAuth/delete',
+            method: "POST",
+            header:{
+              "Authorization": app.globalData.token
+            },
+            data: {
+              lockauth_ids: id,
+            },
+            success: function (resa)
+            {
+              console.log('删除反馈')
+              console.log(resa)
+              wx.hideLoading();
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
+              that.getmore(1,that.data.num,0);
+            },
+            fail: function (res) {
+              wx.hideLoading();
+              wx.showToast({
+                title: '网络故障，请稍后重试',
+                icon: 'none',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
+            }
+          });
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
     })
   },
   timestampToTime: function (timestamp) {

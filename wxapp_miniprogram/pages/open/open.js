@@ -4,6 +4,11 @@ Page({
     successimg: '../../images/success.png',
     successadimg: '../../images/success.png',
     closeAd: true, // 广告弹层是否关闭 false不关闭
+    onlyimg: '../../images/ad.jpg',
+    adnum: 2, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
+    openadurl: '', // 点击图片打开的链接
+    cleartime: '', // 定时器
+    adw:600, // 广告弹层的宽单位rpx
     qrshowminiad:true,
     index: null,
     phone: '',
@@ -46,7 +51,13 @@ Page({
     console.log(app.globalData.token)
     var that = this;
     console.log(app.globalData)
-
+    wx.getSystemInfo({
+      success: function (res){
+        that.setData({
+          adw: res.windowWidth * 2-60,
+        });
+      }
+    });
     var user_id = this.data.user_id;
     var lock_id = app.globalData.lock_id;
     if(options.q){
@@ -298,9 +309,10 @@ Page({
             closeAd: false,
             successimg: app.globalData.domain+res.data.successimg,
             successadimg: app.globalData.domain+res.data.successadimg,
+            openadurl: res.data.openadurl,
             qrshowminiad:res.data.qrshowminiad
           })
-          setTimeout(function(){
+          var cleartime = setTimeout(function(){
             that.setData({
               closeAd: true
             })
@@ -308,6 +320,9 @@ Page({
               url: '../index/index'
             })
           },3000);
+          that.setData({
+            cleartime: cleartime
+          })
         }else if (res.data.opendoor_status=='202') {
           that.setData({
             isBindPhone:true
@@ -499,6 +514,12 @@ Page({
       user_id: adminid,
       realname: realname
     };
+    wx.requestSubscribeMessage({
+      tmplIds: ['ZefHClTYrAuPe9MAxoX2nbRPtpeu_cdgxKpDLv7azGw'], // 此处可填写多个模板 ID，但低版本微信不兼容只能授权一个
+      success (res) {
+       console.log('已授权接收订阅消息')
+      }
+     });
     console.log('applyauth-uploadData-tmpdata2')
     console.log(tmpdata2)
     wx.request({
@@ -549,5 +570,14 @@ Page({
         }
       }
     })
+  },
+  openweb: function (e) {
+    var tmpopenadurl = this.data.openadurl;
+    if (tmpopenadurl) {
+      clearTimeout(this.data.cleartime);
+      wx.navigateTo({
+        url: '../web/web?url='+tmpopenadurl
+      })
+    }
   }
 })

@@ -3,6 +3,14 @@
     <view class="title">登记点名称</view>
     <input name="regpointname" placeholder="请输入登记点名称" value="" bindinput="nameInput"></input>
   </view>
+  <view class="cu-form-group margin-top">
+    <view class="title">门锁</view>
+    <picker bindchange="lockChange" value="" range="{{locknameArr}}">
+      <view class="picker">
+        {{locknameArr[lockIndex]}}
+      </view>
+    </picker>
+  </view>
   <view class="padding flex flex-direction">
     <button class="cu-btn bg-green lg" bindtap="uploadData">立即提交</button>
   </view>

@@ -15,6 +15,7 @@ Page({
     closeAd: true, // 广告弹层是否关闭 false不关闭
     lock_id: 0,
     user_id: 0, //锁管理员id
+    showcard: 0, // 是否显示添加卡，0不显示,1显示
     auth_status: '0', // 0待审核，1已通过
     tabarr: [true,false] // 切换tab
   },
@@ -46,7 +47,7 @@ Page({
     }
   },
   onShow:function () {
-    console.log('index-onShow');
+    console.log('managekey-onShow');
     var that = this
     wx.showLoading({
       title: '正在加载',
@@ -60,19 +61,11 @@ Page({
             close:false
           })
         }else{
-          if (that.data.listarr.length <1) {
-            that.getmore(1,that.data.num,0);
-          } else {
-            wx.hideLoading();
-          }
+          that.getmore(1,that.data.num,0);
         }
       },2000);
     }else{
-      if (that.data.listarr.length <1) {
-        that.getmore(1,that.data.num,0);
-      } else {
-        wx.hideLoading();
-      }
+      that.getmore(1,that.data.num,0);
     }
   },
   onLoad: function (options) {
@@ -91,11 +84,16 @@ Page({
         lock_id: options.lock_id
       });
     }
-    // if (options.user_id != undefined && options.user_id >0) {
-    //   that.setData({
-    //     user_id: options.user_id //锁管理员id
-    //   });
-    // }
+    if (options.user_id != undefined && options.user_id >0) {
+      that.setData({
+        user_id: options.user_id //锁管理员id
+      });
+    }
+    if (options.showcard != undefined && options.showcard >0) {
+      that.setData({
+        showcard: options.showcard
+      });
+    }
   },
   swichtab: function (e) {
     var that = this;
@@ -160,48 +158,43 @@ Page({
           var arr = [];
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
-            if(arrdata.length > 0){
+            if(arrdata && arrdata.length > 0){
               var timestamp = Date.parse(new Date())/1000;
-              var tmpdroparr = [];
               for (var i = 0; i < arrdata.length; i++) {
-                tmpdroparr.push(false);
                 var tmpobj = {};
                 tmpobj['headimgurl'] = arrdata[i]['headimgurl'];
                 tmpobj['nickname'] = arrdata[i]['nickname'];
-                tmpobj['mobile'] = arrdata[i]['mobile'];
+                // tmpobj['mobile'] = arrdata[i]['mobile'];
+                var phone = arrdata[i]['mobile'];
+                tmpobj['mobile'] = phone;
+                tmpobj['phone'] = phone.substr(0,3)+"****"+ phone.substr(7);
                 tmpobj['lockauth_id'] = arrdata[i]['lockauth_id'];
                 arr.push(tmpobj);
               }
               if (addto>0) {
                 var newdata = that.data.listarr.concat(arr);
-                var newdroparr = that.data.dropArr.concat(tmpdroparr);
               }else{
                 var newdata = arr;
-                var newdroparr = tmpdroparr;
               }
               var tmplistlen = newdata.length;
               that.setData({
                 listarr: newdata,
                 hidelood: false,
-                listlen: tmplistlen,
-                dropArr: newdroparr
+                listlen: tmplistlen
               });
             }else{
               if (addto<1) { // 不追加,覆盖
                 var newdata = arr;
                 var tmplistlen = arr.length;
-                var newdroparr = tmpdroparr;
               }else{
                 var newdata = that.data.listarr; // 追加，但是没有查到数据，赋值原来的数据
                 var tmplistlen = that.data.listarr.length;
-                var newdroparr = that.data.dropArr;
               }
               that.setData({
                 listarr: newdata,
                 hidelood: false,
                 nodata: true,
-                listlen: tmplistlen,
-                dropArr: newdroparr
+                listlen: tmplistlen
               });
             }
           }
@@ -224,6 +217,14 @@ Page({
     var lockauth_id = e.currentTarget.dataset['lockauthid']; //
     wx.navigateTo({
       url: '../auditkey/auditkey?lockauth_id='+lockauth_id
+    })
+  },
+  addCard: function (e) {
+    var lockauth_id = e.currentTarget.dataset['lockauthid']; //
+    var user_id = this.data.user_id;
+    var lock_id = this.data.lock_id;
+    wx.navigateTo({
+      url: '../addcard/addcard?lockauth_id='+lockauth_id+'&lock_id='+lock_id+'&user_id='+user_id
     })
   },
   deleteKey: function (e) {

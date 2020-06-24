@@ -97,7 +97,7 @@ Page({
           var arr = [];
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
-            if(arrdata.length > 0){
+            if(arrdata && arrdata.length > 0){
               for (var i = 0; i < arrdata.length; i++) {
                 arrdata[i]['create_time'] = that.timestampToTime(arrdata[i]['create_time']);
                 arrdata[i]['register_type'] = that.data.registerArr[arrdata[i]['register_type']];

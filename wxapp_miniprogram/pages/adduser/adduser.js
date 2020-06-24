@@ -4,7 +4,8 @@ Page({
     realname: '', // 真实姓名
     username: '', // 用户名
     pwd: '',
-    btn: '立即提交'
+    btn: '立即提交',
+    manageurl:''
   },
   onShow:function () {
     if (app.globalData.userid < 1) {
@@ -20,7 +21,8 @@ Page({
       this.setData({
         realname: app.globalData.adminInfo.name,
         username: app.globalData.adminInfo.user,
-        btn: '修改密码'
+        btn: '修改密码',
+        manageurl:app.globalData.domain
       });
     }
   },

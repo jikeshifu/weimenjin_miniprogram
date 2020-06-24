@@ -1,3 +1,4 @@
+var dateTimePicker = require('../../utils/dateTimePicker.js');
 const app = getApp()
 Page({
   data: {
@@ -5,10 +6,18 @@ Page({
     hidelood: false,
     lock_id: 0,
     user_id: 0, //锁管理员id
+    dateTimeArray: null,
+    dateTime: null,
+    dateIndex: [0,0,0,0,0,0],
+    dateTimeArray1: null,
+    dateTime1: null,
+    dateIndex1: [0,0,0,0,0,0],
+    startYear: 2020,
+    endYear: 2050,
     sharelimit: 0,
     openlimit: 0,
     nowdate: '',
-    starttime: '2090-01-01',
+    starttime: '2020-01-01',
     endtime: '2090-01-01',
     shareability: 0,
     opentimes: '', // 多个逗号分隔  可开时段
@@ -38,7 +47,17 @@ Page({
     timestamp = timestamp/1000;
     var nowdate = that.timestampToTime(timestamp,'Y-m-d H:i:s');
     var enddate = that.timestampToTime(timestamp+31536000, 'Y-m-d H:i:s');
+    // 获取完整的年月日 时分秒，以及默认显示的数组
+    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
+    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,enddate);
+    // 精确到分的处理，将数组的秒去掉
+    // var lastArray = obj1.dateTimeArray.pop();
+    // var lastTime = obj1.dateTime.pop();
     that.setData({
+      dateIndex: obj.dateTime,
+      dateTimeArray: obj.dateTimeArray,
+      dateTimeArray1: obj1.dateTimeArray,
+      dateIndex1: obj1.dateTime,
       nowdate: nowdate,
       starttime: nowdate,
       endtime: enddate
@@ -88,21 +107,27 @@ Page({
       }
     })
   },
-  startDate: function(e) {
-    console.log('startDate-e')
-    console.log(e)
+  startDate(e) {
+    var dateTimeArray = this.data.dateTimeArray;
+    var dateTime = e.detail.value;
+    var endtime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
     this.setData({
-      starttime: e.detail.value
+      dateIndex: dateTime,
+      starttime: endtime
     });
   },
-  endDate: function(e) {
+  endDate(e) {
+    var dateTimeArray = this.data.dateTimeArray1;
+    var dateTime = e.detail.value;
+    var endtime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
     this.setData({
-      endtime: e.detail.value
+      dateIndex1: dateTime,
+      endtime: endtime
     });
   },
-  sharelimitInput: function(e) {
+  sharelimitChange: function(e) {
     this.setData({
-      sharelimit: e.detail.value
+      sharelimit: e.detail.value ? 1 : 0
     });
   },
   openlimitInput: function(e) {

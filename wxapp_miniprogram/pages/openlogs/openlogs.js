@@ -1,3 +1,4 @@
+var dateTimePicker = require('../../utils/dateTimePicker.js');
 const app = getApp()
 Page({
   data: {
@@ -9,6 +10,14 @@ Page({
     listlen: 1,
     page: 1,
     num: 20,
+    dateTimeArray: null,
+    dateTime: null,
+    dateIndex: [0,0,0,0,0,0],
+    dateTimeArray1: null,
+    dateTime1: null,
+    dateIndex1: [0,0,0,0,0,0],
+    startYear: 2020,
+    endYear: 2050,
     scrollHeight: 0,
     close: true, //弹层是否关闭 false不关闭
     keyword: '', // 搜索关键词
@@ -26,14 +35,22 @@ Page({
     })
   },
   startDate(e) {
+    var dateTimeArray = this.data.dateTimeArray;
+    var dateTime = e.detail.value;
+    var endtime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
     this.setData({
-      create_time: e.detail.value
-    })
+      dateIndex: dateTime,
+      create_time: endtime
+    });
   },
   endDate(e) {
+    var dateTimeArray = this.data.dateTimeArray1;
+    var dateTime = e.detail.value;
+    var endtime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
     this.setData({
-      end_time: e.detail.value
-    })
+      dateIndex1: dateTime,
+      end_time: endtime
+    });
   },
   onPullDownRefresh: function () {
     this.setData({
@@ -95,6 +112,18 @@ Page({
         });
       }
     });
+    // 获取完整的年月日 时分秒，以及默认显示的数组
+    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
+    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
+    // 精确到分的处理，将数组的秒去掉
+    // var lastArray = obj1.dateTimeArray.pop();
+    // var lastTime = obj1.dateTime.pop();
+    that.setData({
+      dateTime: obj.dateTime,
+      dateTimeArray: obj.dateTimeArray,
+      dateTimeArray1: obj1.dateTimeArray,
+      dateTime1: obj1.dateTime
+    });
   },
   getmore: function(page,num,addto){ // addto为0覆盖原有数据，为1在原有数据基础上追加数据
     var that = this;
@@ -133,7 +162,7 @@ Page({
           var arr = [];
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
-            if(arrdata.length > 0){
+            if(arrdata && arrdata.length > 0){
               var timestamp = Date.parse(new Date())/1000;
               for (var i = 0; i < arrdata.length; i++) {
                 var tmpobj = {};
@@ -141,7 +170,9 @@ Page({
                 tmpobj['lock_name'] = arrdata[i]['lock_name'];
                 tmpobj['headimgurl'] = arrdata[i]['headimgurl'];
                 tmpobj['nickname'] = arrdata[i]['nickname'];
-                tmpobj['mobile'] = arrdata[i]['mobile'];
+                var phone = arrdata[i]['mobile'];
+                tmpobj['mobile'] = phone;
+                tmpobj['phone'] = phone.substr(0,3)+"****"+ phone.substr(7);
                 tmpobj['type'] = arrdata[i]['type'];
                 // tmpobj['lock_id'] = arrdata[i]['lock_id'];
                 // tmpobj['user_id'] = arrdata[i]['user_id']; // 锁的管理员id

@@ -7,12 +7,14 @@ Page({
     },
     imgarrow:"../../images/arrowr.png",
     phone: null,
+    jiamiphone: null,
     phoneArr: [],
     hasPhone: false,
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    dropArr: [true, false] // 控制下拉显示隐藏 true折叠起来
+    dropArr: [true, false], // 控制下拉显示隐藏 true折叠起来
+    user_id: 0     // 管理员id 大于0显示添加设备
   },
   onShow:function () {
     console.log('user-onShow')
@@ -23,8 +25,11 @@ Page({
         url: '../wxlogin/wxlogin'
       });
     }else{
+      var tmpphone = app.globalData.phone;
       that.setData({
+        user_id: app.globalData.user_id,
         phone: app.globalData.phone,
+        jiamiphone: tmpphone.substr(0,3)+"****"+ tmpphone.substr(7),
         userInfo: app.globalData.userInfo,
         tmpuserInfo: app.globalData.userInfo,
         hasUserInfo: true
@@ -34,8 +39,10 @@ Page({
   onLoad: function () {
     var that = this;
     if (app.globalData.userInfo) {
+      var tmpphone = app.globalData.phone;
       that.setData({
         phone: app.globalData.phone,
+        jiamiphone: tmpphone.substr(0,3)+"****"+ tmpphone.substr(7),
         userInfo: app.globalData.userInfo,
         tmpuserInfo: app.globalData.userInfo,
         hasUserInfo: true
@@ -59,6 +66,11 @@ Page({
   },
   addLock: function() {
     wx.navigateTo({
+      url: '../addlock/addlock'
+    });
+  },
+  openLock: function() {
+    wx.navigateTo({
       url: '../open/open?user_id=1&lock_id=11'
     });
   },
@@ -69,7 +81,7 @@ Page({
   },
   health: function() {
     wx.navigateTo({
-      url: '../health/health'
+      url: '../health/health?user_id=1&regpoint_id=47&lock_id=82'
     });
   },
   healthList: function() {
@@ -123,8 +135,10 @@ Page({
               console.log('getphonenumber-resa');
               console.log(resa);
               app.globalData.phone = resa.data.phoneNumber;
+              var tmpphone = resa.data.phoneNumber;
               that.setData({
-                phone: resa.data.phoneNumber
+                phone: resa.data.phoneNumber,
+                jiamiphone: tmpphone.substr(0,3)+"****"+ tmpphone.substr(7)
               })
             }
           })

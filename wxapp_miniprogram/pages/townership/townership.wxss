@@ -1,0 +1,5 @@
+.flexright{flex:1}
+.userbox{width:100%;height:370rpx;box-sizing: border-box;padding:0 100rpx;}
+.userinfo{display:flex;flex-direction:column;align-items:center;padding-top:50rpx;padding-bottom:30rpx; margin-bottom:10rpx;background:#ffffff;border-radius:20rpx;}
+.userinfo-avatar{width:128rpx;height:128rpx;margin:20rpx auto 30rpx;border-radius:50%;}
+.userinfo-nickname{font-size:13pt;line-height:1.5;}

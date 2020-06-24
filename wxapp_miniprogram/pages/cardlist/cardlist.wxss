@@ -1,0 +1,46 @@
+/**index.wxss**/
+page{background:#fff;box-sizing:border-box;}
+.wrap{width:100%;padding:20rpx 30rpx;box-sizing:border-box;}
+.mscan{text-align: center;position: fixed;top:40%;left:50%;margin-left:-80rpx;}
+.micon{font-size: 70pt;color:#21cf3e;}
+.wz{font-size:13pt;}
+.searchbox{width:100%;padding:20rpx 30rpx;}
+.search{width:100%;height:56rpx;line-height:56rpx;text-align:center;border-radius:20rpx;background:#f3f3f3;color:#666;}
+.search image{width:32rpx;height:32rpx;position: relative;top:6rpx;left:-6rpx;}
+.search2{width:100%;height:72rpx;line-height:72rpx;border-radius:20rpx;background:#e3e3e3;color:#000;padding-left:20rpx;}
+.line{width:48rpx;height:48rpx;position: relative;top:4px;right:3px;}
+.listrow{display:flex;flex-direction:row;padding-left:14rpx;height:40px;line-height:40px;}
+.shrink0{flex-shrink:0;width:180rpx; color: #333;font-size: 11pt;text-align: center;}
+.shrink1{flex-shrink:1;width:100%;font-size: 11pt;}
+.shrink3{flex-shrink:1;width:48%;font-size: 11pt;}
+.listbox{padding-left: 30rpx;}
+
+.listrow1{display:flex;flex-direction:row;padding:0;border-bottom:1px solid #e3e3e3;height:160rpx;}
+.shrink01{flex-shrink:0;width:100rpx;color: #333;font-size: 11pt;}
+.shrink21{flex-shrink:0;width:120rpx;}
+.shrink11{flex-shrink:1;width:100%;font-size: 11pt;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+.avatar{width:99rpx;height:99rpx;margin:30rpx 20rpx 0 0;border-radius:50%;}
+.listrow1 .name{line-height:46rpx;margin-top: 16rpx;font-size: 11pt;}
+.listrow1 .phone{line-height:46rpx;font-size: 10pt;}
+.update{background-color: rgb(60, 206, 16);line-height:160rpx;text-align: center;color:#fff;}
+.delete{background-color: red;line-height:160rpx;text-align: center;color:#fff;}
+.del{background-color: red;line-height:120rpx;text-align: center;color: #fff;}
+.mscan{text-align: center;position: fixed;top:40%;left:50%;margin-left:-80rpx;}
+.micon{font-size: 70pt;color:#21cf3e;}
+.cuIcon-lock{font-size:20px;color:#000;}
+.cu-list.menu-avatar>.cu-item{border-radius:20rpx;margin-bottom: 20rpx;}
+.cu-list.menu-avatar>.cu-item .action{width:300rpx;text-align:right;padding-right:8rpx;}
+.cu-form-group{min-height:80rpx;}
+.cu-form-group picker{width:100%;height:80rpx;border-bottom: 1px solid #e3e3e3;}
+.cu-form-group picker .picker{width:100%;height:80rpx;line-height:80rpx;}
+.cu-form-group picker:after{line-height:80rpx;}
+.cu-form-group+.cu-form-group{border:0;}
+.right{float: right;}
+.clear{clear: both;}
+.right{float: right;}
+.clear{clear: both;}
+.c_09bb07{color: #09bb07;}
+.c_ffbe00{color: #ffbe00;}
+.c_f43530{color: #f43530;}
+.c_f76260{color: #f76260;}
+.text-center {text-align: center; margin: 0px !important; padding: 0px !important;}

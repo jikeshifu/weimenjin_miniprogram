@@ -10,4 +10,24 @@
   padding: 200rpx 0;
   box-sizing: border-box;
 }
+
+
+
+.btnbox{display:flex;flex-direction:row;margin-top: 60rpx;width: 100%; padding:0 30rpx;}
+.btn1{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#000;font-size:11pt;text-align: center;}
+.lgbtn{width:100%;height:72rpx;line-height:72rpx;border:1px solid green;border-radius: 20rpx;color:#ffffff;background-color: green;font-size: 11pt;margin-left: 8%;}
+
+.tiptitle {font-size: 12pt; text-align: center; font-weight: bold; padding-top: 60rpx; margin-bottom: 20rpx;}
+.subtitle{color: #666;font-size: 11pt;text-align: center;margin-bottom:40rpx;}
 .hide{display:none;}
+.fullmask{width:100%;height:100%;position:fixed;left:0;top:0;background:#000;opacity:.5;filter:alpha(opacity=50);z-index:1000;}
+.maskbox{width:100%;height:480rpx; position:fixed;left:0;top:0; background-color:#fff;z-index:1001;}
+.micon {font-size: 80pt;color: #21cf3e;}
+.btnbox{display:flex;flex-direction:row;margin-top: 60rpx;width: 100%; padding:0 30rpx;}
+.btn1{width:100%;height:72rpx;line-height:72rpx;border:1px solid #21cf3e;border-radius:20rpx;color:#000;font-size:11pt;text-align: center;}
+.lgbtn{width:100%;height:72rpx;line-height:72rpx;border:1px solid #21cf3e;border-radius: 20rpx;color:#ffffff;background-color: #21cf3e;font-size: 11pt;margin-left: 8%;box-shadow:none;}
+.tar{text-align:right;}
+.looding{width:90%;margin:0 auto; height:70rpx;text-align:center;padding-top:10rpx;}
+.looding image{width:40rpx;height:40rpx;position:relative;top:8rpx;margin-right:20rpx;}
+.looding .lwz{font-size:10pt;color:#555555;}
+.nodatabox{text-align:center;}
