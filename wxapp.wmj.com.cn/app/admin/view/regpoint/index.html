@@ -44,6 +44,14 @@
 									<input type="text" autocomplete="off" placeholder="结束时间" class="form-control" id="create_time_end">
 								</div>
 							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">门ID</button>
+									</div>
+									<input type="text" class="form-control" id="lock_id" placeholder="门ID" />
+								</div>
+							</div>
 							<!-- search end -->
 							<div class="col-sm-2">
 									<button type="button" class="btn btn-primary " onclick="CodeGoods.search()" id="">
@@ -84,6 +92,7 @@
  			{title: '名称', field: 'regpointname', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '登记点二维码', field: 'regpointqrcode', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.regpointqrcodeFormatter},
  			{title: '创建时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
+ 			{title: '门ID', field: 'lock_id', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
  		];
  	};
@@ -118,6 +127,7 @@
 		queryData['regpointqrcode'] = $("#regpointqrcode").val();
 		queryData['create_time_start'] = $("#create_time_start").val();
 		queryData['create_time_end'] = $("#create_time_end").val();
+		queryData['lock_id'] = $("#lock_id").val();
 		return queryData;
 	}
 

@@ -370,6 +370,7 @@ function formatWhere($data){
 			}
 		}
 	}
+	//mlog("where:".where);
 	return $where;
 }
 

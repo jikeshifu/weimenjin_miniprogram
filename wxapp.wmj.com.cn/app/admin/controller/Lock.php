@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁列表
- create_time:	2020-04-18 01:06:11
+ create_time:	2020-06-23 22:51:03
  author:		
  contact:		
 */
@@ -61,7 +61,7 @@ class Lock extends Admin {
 		if(session('admin.role') <> 1){
 			$where['user_id'] = session('admin.user_id');
 		}
-		$where['lock_name'] = $this->request->param('lock_name', '', 'serach_in');
+		$where['lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
 		$where['lock_sn'] = $this->request->param('lock_sn', '', 'serach_in');
 		$where['location_check'] = $this->request->param('location_check', '', 'serach_in');
 		$where['status'] = $this->request->param('status', '', 'serach_in');
@@ -95,7 +95,7 @@ class Lock extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,qrshowminiad,hitshowminiad,lock_qrcode,create_time,successimg,successadimg';
+			$postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,qrshowminiad,hitshowminiad,lock_qrcode,create_time,successimg,successadimg,openadurl';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("updatelock_data:".json_encode($data));
@@ -226,7 +226,7 @@ class Lock extends Admin {
 		if (!$this->request->isPost()){
 			return $this->display('add');
 		}else{
-			$postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,lock_qrcode,location_check,hitshowminiad,qrshowminiad,successimg,successadimg,create_time';
+			$postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,lock_qrcode,location_check,hitshowminiad,qrshowminiad,successimg,successadimg,openadurl,create_time';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("WMJSN:".$data['lock_sn']);
@@ -255,14 +255,14 @@ class Lock extends Admin {
 							$authdata['auth_sharelimit']=0;
 							$authdata['auth_openlimit']=0;
 							$authdata['auth_status']=1;
-							$authdata['auth_starttime']= 0;
-							$authdata['auth_endtime']= 0;
+							//$authdata['auth_starttime']= null;
+							//$authdata['auth_endtime']= null;
 							//mlog("auth_starttime:".$authdata['auth_starttime']);
 							//mlog("auth_endtime".$authdata['auth_endtime']);
 							$authdata['auth_isadmin']=1;
 							$authdata['user_id']=session('admin.user_id');
 							//mlog("auth_endtime".json_encode($authdata));
-							$ret = \xhadmin\service\admin\LockAuthService::add($authdata);
+							$ret = \xhadmin\service\admin\LockAuthService::lockadd($authdata);
 						}
 				}
 				else {

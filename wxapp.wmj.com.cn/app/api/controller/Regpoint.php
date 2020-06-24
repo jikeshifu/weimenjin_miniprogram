@@ -153,7 +153,7 @@ class Regpoint extends Common {
 	* {"status":" 201","msg":"操作失败"}
 	*/
 	function add(){
-		$postField = 'member_id,user_id,regpointname,regpointurl,create_time';
+		$postField = 'member_id,user_id,regpointname,lock_id,regpointurl,create_time';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		$url = $this->request->param('regpointurl').$this->request->param('user_id');
 		//$url = 'https://wxapp.wmj.com.cn/qrdata/qrcode/大地.png';
@@ -163,7 +163,7 @@ class Regpoint extends Common {
 			$res = RegpointService::add($data);
 			if ($res) {
 				$regpoint_id=$res;
-				$url = $this->request->param('regpointurl').$this->request->param('user_id')."&regpoint_id=".$regpoint_id;
+				$url = $this->request->param('regpointurl').$this->request->param('user_id')."&regpoint_id=".$regpoint_id."&lock_id=".$data['lock_id'];
 				$data['regpointqrcode'] = $this->createmarkqrcode($url,$qrcodename);
 				$where['regpoint_id'] = $regpoint_id;
 				$ret = RegpointService::update($where,$data);

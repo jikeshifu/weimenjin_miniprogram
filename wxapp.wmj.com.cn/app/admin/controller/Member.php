@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		会员管理
- create_time:	2020-04-14 17:55:49
+ create_time:	2020-05-13 10:28:05
  author:		
  contact:		
 */
@@ -24,7 +24,7 @@ class Member extends Admin {
 			$page   = floor($offset / $limit) +1 ;
 
 			$where = [];
-			$where['nickname'] = $this->request->param('nickname', '', 'serach_in');
+			$where['nickname'] = ['like',$this->request->param('nickname', '', 'serach_in')];
 			$where['openid'] = $this->request->param('openid', '', 'serach_in');
 			$where['ali_user_id'] = $this->request->param('ali_user_id', '', 'serach_in');
 			$where['mobile'] = $this->request->param('mobile', '', 'serach_in');

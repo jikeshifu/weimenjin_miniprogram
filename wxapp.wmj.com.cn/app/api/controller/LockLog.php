@@ -47,7 +47,8 @@ class LockLog extends Common {
 	* @apiErrorExample {json} 02 失败示例
 	* {"status":" 201","msg":"查询失败"}
 	*/
-	function getopenlogbylockid(){
+	function getopenlogbylockid()
+	{
 		$limit  = $this->request->post('limit', 20, 'intval');
 		$page   = $this->request->post('page', 1, 'intval');
         $lock_id = $this->request->post('lock_id', '', 'serach_in');

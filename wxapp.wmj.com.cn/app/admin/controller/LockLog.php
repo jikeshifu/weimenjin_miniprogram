@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门记录
- create_time:	2020-04-19 18:58:33
+ create_time:	2020-06-17 11:13:16
  author:		
  contact:		
 */
@@ -43,6 +43,8 @@ class LockLog extends Admin {
 			if(session('admin.role') <> 1){
 				$where['a.user_id'] = session('admin.user_id');
 			}
+			$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
+			$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
 			$where['a.status'] = $this->request->param('status', '', 'serach_in');
 			$where['a.type'] = $this->request->param('type', '', 'serach_in');
 
@@ -97,6 +99,8 @@ class LockLog extends Admin {
 		if(session('admin.role') <> 1){
 			$where['a.user_id'] = session('admin.user_id');
 		}
+		$where['a.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
+		$where['a.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
 		$where['a.status'] = $this->request->param('status', '', 'serach_in');
 		$where['a.type'] = $this->request->param('type', '', 'serach_in');
 		$where['a.locklog_id'] = ['in',$this->request->param('locklog_id', '', 'serach_in')];

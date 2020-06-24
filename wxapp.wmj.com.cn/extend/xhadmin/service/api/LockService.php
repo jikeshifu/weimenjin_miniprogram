@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁列表
- create_time:	2020-04-15 01:54:17
+ create_time:	2020-06-23 22:40:49
  author:		
  contact:		
 */
@@ -45,17 +45,13 @@ class LockService extends CommonService {
 			//数据验证
 			$rule = [
 				'lock_name'=>['require'],
-				'lock_sn'=>['require','unique:lock'],
 			];
 			//错误提示消息
 			$msg = [
 				'lock_name.require'=>'锁名称不能为空',
-				'lock_sn.require'=>'序列号不能为空',
-				'lock_sn.unique'=>'序列号已经存在',
 			];
 			self::validate($rule,$data,$msg);	//错误提示
 
-			!is_null($data['create_time']) && $data['create_time'] = strtotime($data['create_time']);
 
 			$res = Lock::editWhere($where,$data);
 		}catch(\Exception $e){
@@ -93,6 +89,86 @@ class LockService extends CommonService {
  	* @return (返回参数：) {bool}        
  	*/
 	public static function opendoor($where,$data){
+		try{
+
+			$res = Lock::editWhere($where,$data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		if(!$res){
+			throw new \Exception('操作失败');
+		}
+		return $res;
+	}
+
+
+	/*
+ 	* @Description  修改语音设置
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @param (输入参数：)  {array}        where 修改条件
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function configaudio($where,$data){
+		try{
+
+			$res = Lock::editWhere($where,$data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		if(!$res){
+			throw new \Exception('操作失败');
+		}
+		return $res;
+	}
+
+
+	/*
+ 	* @Description  配置显示屏二维码
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @param (输入参数：)  {array}        where 修改条件
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function configlcd($where,$data){
+		try{
+
+			$res = Lock::editWhere($where,$data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		if(!$res){
+			throw new \Exception('操作失败');
+		}
+		return $res;
+	}
+
+
+	/*
+ 	* @Description  转移所有权
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @param (输入参数：)  {array}        where 修改条件
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function townership($where,$data){
+		try{
+
+			$res = Lock::editWhere($where,$data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		if(!$res){
+			throw new \Exception('操作失败');
+		}
+		return $res;
+	}
+
+
+	/*
+ 	* @Description  控制设备进出发卡模式
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @param (输入参数：)  {array}        where 修改条件
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function devaddcard($where,$data){
 		try{
 
 			$res = Lock::editWhere($where,$data);

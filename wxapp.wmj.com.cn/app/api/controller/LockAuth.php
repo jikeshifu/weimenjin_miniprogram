@@ -140,7 +140,7 @@ class LockAuth extends Common {
 	function applyauth(){
 		$postField = 'lock_id,member_id,realname,remark,create_time,auth_status,user_id';
 		$data = $this->request->only(explode(',',$postField),'post',null);
-		mlog("isapplylock_postdata".json_encode($data));
+		//mlog("isapplylock_postdata".json_encode($data));
 		//查询是否已经申请过
 		$field='lockauth_id,lock_id,member_id';
 		$isapplywhere['member_id']=$data['member_id'];
@@ -152,6 +152,9 @@ class LockAuth extends Common {
 		}
 		try {
 			$res = LockAuthService::applyauth($data);
+			if ($data['auth_status']==1) {
+			    // code...
+			}
 		} catch (\Exception $e) {
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}
@@ -191,12 +194,55 @@ class LockAuth extends Common {
 	* {"status":" 201","msg":"操作失败"}
 	*/
 	function verifyauth(){
-		$postField = 'lockauth_id,auth_sharelimit,auth_openlimit,auth_starttime,auth_endtime,auth_isadmin,auth_shareability,remark,auth_status';
+		$postField = 'lockauth_id,auth_member_id,auth_sharelimit,auth_openlimit,auth_starttime,auth_endtime,auth_isadmin,auth_shareability,remark,auth_status';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		if(empty($data['lockauth_id'])) return json(['status'=>$this->errorCode,'msg'=>'参数错误']);
+		
+		//if($data['auth_isadmin']>0 and $data['auth_member_id']) return json(['status'=>$this->errorCode,'msg'=>'参数错误']);
 		try {
 			$where['lockauth_id'] = $data['lockauth_id'];
-			$res = LockAuthService::verifyauth($where,$data);
+			//查询这把钥匙的申请人信息,发送订阅消息
+		    $lockauthinfo = LockAuthDb::query('select a.*,b.headimgurl,b.nickname,b.mobile,b.openid,c.lock_name from cd_lockauth as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id and a.lockauth_id = '.$data['lockauth_id']);
+		    //判断不是超级管理员无法设置管理员
+		    //获取锁超级管理员id比对
+		    $field='lockauth_id,member_id,auth_member_id';
+		    $authwhere['lock_id']=$lockauthinfo[0]['lock_id'];
+		    $authwhere['auth_member_id']=0;
+		    $adminmember=LockAuthDb::getWhereInfo($authwhere,$field);
+		    mlog("adminmember".json_encode($adminmember['member_id']));
+		    mlog("auth_member_id".json_encode($data['auth_member_id']));
+		    if($data['auth_member_id']==$adminmember['member_id'] and $lockauthinfo[0]['member_id']==$data['auth_member_id']) return json(['status'=>$this->errorCode,'msg'=>'您已是超级管理员，不需要再审核']);
+		    if($data['auth_isadmin']>0 and $data['auth_member_id']!=$adminmember['member_id']) return json(['status'=>$this->errorCode,'msg'=>'您不是该锁超级管理员，无法设置管理员']);
+		    //mlog("lockauth_id".json_encode($data['lockauth_id']));
+		    //mlog("lockauthinfo".json_encode($lockauthinfo));
+		    //mlog("lockauthinfo_openid".json_encode($lockauthinfo[0]['openid']));
+		    $res = LockAuthService::verifyauth($where,$data);
+			$senddata = [
+                'template_id' => 'ZefHClTYrAuPe9MAxoX2nbRPtpeu_cdgxKpDLv7azGw', // 所需下发的订阅模板id
+                'touser' => $lockauthinfo[0]['openid'],     // 接收者（用户）的 openid
+                'page' => '/pages/index/index',       // 点击模板卡片后的跳转页面，仅限本小程序内的页面。支持带参数,（示例index?foo=bar）。该字段不填则模板无跳转。
+                'data' => [         // 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
+                'thing1' => [
+                'value' => $lockauthinfo[0]['nickname'],
+                    ],
+                'thing2' => [
+                'value' => $lockauthinfo[0]['lock_name'],
+                    ],
+                'phrase3' => [
+                'value' => '审核通过',
+                    ],
+                'thing4' => [
+                'value' => $data['remark']?$data['remark']:"无",
+                    ],
+                 ],
+             ];
+            if ($lockauthinfo) 
+            {
+                $ret = \utils\wechart\UserService::sendsSubmessage($senddata);
+			    //mlog("verifyauth_sendsSubmessage:".json_encode($senddata));
+			    //mlog("verifyauth_sendsSubmessage_ret:".json_encode($ret));
+            }
+			
 		} catch (\Exception $e) {
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}
@@ -236,11 +282,11 @@ class LockAuth extends Common {
 		$field='lockauth_id,lock_id,member_id,auth_isadmin';
 		$isadminwhere['lockauth_id']=$idx;
 		$isadminlock=LockAuthDb::getWhereInfo($isadminwhere,$field);
-		mlog("delete_auth_isadminlock:".json_encode($isadminlock));
+		//mlog("delete_auth_isadminlock:".json_encode($isadminlock));
 		try{
 		    if($isadminlock['auth_isadmin'])
 	       	{
-		     mlog("delete_auth_isadminlock_notdeleteself");
+		     //mlog("delete_auth_isadminlock_notdeleteself");
 		     return json(['status'=>$this->errorCode,'msg'=>'管理员不能在移动端删除']);
 	    	}
 	    	else
@@ -291,6 +337,13 @@ class LockAuth extends Common {
 	function shareauth(){
 		$postField = 'lock_id,auth_member_id,auth_sharelimit,auth_openlimit,auth_starttime,auth_endtime,auth_shareability,auth_opentimes,remark,create_time,auth_status,user_id';
 		$data = $this->request->only(explode(',',$postField),'post',null);
+		//mlog("shareauth-data:".json_encode($data));
+		if (intval($data['user_id'])<1) 
+		{
+		    $field='lock_id,user_id,lock_name,lock_sn';
+		    $lockdata = \xhadmin\db\Lock::getWhereInfo($data['lock_id'],$field);
+		    $data['user_id'] = $lockdata['user_id'];
+		}
 		try {
 			$res = LockAuthService::shareauth($data);
 		} catch (\Exception $e) {
@@ -327,8 +380,8 @@ class LockAuth extends Common {
 		$postField = 'lockauth_id,member_id';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		if(empty($data['lockauth_id'])) return json(['status'=>$this->errorCode,'msg'=>'参数错误']);
-		mlog("getkey_lockauth_id:".$data['lockauth_id']);
-		mlog("getkey_member_id:".$data['member_id']);
+		//mlog("getkey_lockauth_id:".$data['lockauth_id']);
+		//mlog("getkey:".json_encode($data));
 		//查询lockauth_id对应的锁authlock_id
 		$authwhere['lockauth_id']=$data['lockauth_id'];
 		$field='lockauth_id,lock_id,member_id';
@@ -342,7 +395,10 @@ class LockAuth extends Common {
 		{
 			return json(['status'=>$this->errorCode,'msg'=>'你已经有该钥匙了']);
 		}
-		
+		if (intval($data['member_id'])<1) 
+		{
+			return json(['status'=>$this->errorCode,'msg'=>'没有登录']);
+		}
 		if ($resauthdata['member_id']>0) 
 		{
 			return json(['status'=>$this->errorCode,'msg'=>'钥匙已被其他人领取']);
@@ -407,6 +463,52 @@ class LockAuth extends Common {
 			      $res['list'][$key]['online']       = $result['online'];
 			       
              }
+		}catch(\Exception $e){
+			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
+		}
+
+		return json(['status'=>$this->successCode,'data'=>htmlOutList($res)]);
+	}
+	/**
+	* @api {post} /LockAuth/getauthlistisadmin 09、会员id查询是管理员的钥匙列表
+	* @apiGroup LockAuth
+	* @apiVersion 1.0.0
+	* @apiDescription  会员id查询钥匙
+	* @apiParam (输入参数：) {int}		member_id 会员ID 
+	
+    * @apiHeader {String} Authorization 用户授权token
+	* @apiHeaderExample {json} Header-示例:
+	* "Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjM2NzgsImF1ZGllbmNlIjoid2ViIiwib3BlbkFJZCI6MTM2NywiY3JlYXRlZCI6MTUzMzg3OTM2ODA0Nywicm9sZXMiOiJVU0VSIiwiZXhwIjoxNTM0NDg0MTY4fQ.Gl5L-NpuwhjuPXFuhPax8ak5c64skjDTCBC64N_QdKQ2VT-zZeceuzXB9TqaYJuhkwNYEhrV3pUx1zhMWG7Org"
+	* @apiParam (失败返回参数：) {object}     	array 返回结果集
+	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码 201
+	* @apiParam (失败返回参数：) {string}     	array.msg 返回错误消息
+	* @apiParam (成功返回参数：) {string}     	array 返回结果集
+	* @apiParam (成功返回参数：) {string}     	array.status 返回错误码 200
+	* @apiParam (成功返回参数：) {string}     	array.data 返回数据
+	* @apiParam (成功返回参数：) {string}     	array.data.list 返回数据列表
+	* @apiParam (成功返回参数：) {string}     	array.data.count 返回数据总数
+	* @apiSuccessExample {json} 01 成功示例
+	* {"status":"200","data":""}
+	* @apiErrorExample {json} 02 失败示例
+	* {"status":" 201","msg":"查询失败"}
+	*/
+	function getauthlistisadmin(){
+		$limit  = $this->request->post('limit', 20, 'intval');
+		$page   = $this->request->post('page', 1, 'intval');
+		$memberid=$this->request->post('member_id', '', 'serach_in');
+        if(!$memberid) return json(['status'=>$this->errorCode,'msg'=>'member_id不能为空']);
+		$where = [];
+		$where['a.member_id'] = $memberid;
+        $where['a.auth_isadmin'] = 1;
+		$limit = ($page-1) * $limit.','.$limit;
+		$field = 'a.*,b.*';
+		$orderby = 'lockauth_id desc';
+
+		try{
+			$res['list'] = LockAuthDb::relateQuery($field,'lock_id',$relate_table='lock',$relate_field='lock_id',formatWhere($where),$limit,$orderby);
+			//mlog("LockAuth_getauthlistbymemid_res:".json_encode($res['list'] ));
+			$res['count'] = LockAuthDb::relateQueryCount($field,'lock_id',$relate_table='lock',$relate_field='lock_id',formatWhere($where));
+			
 		}catch(\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}

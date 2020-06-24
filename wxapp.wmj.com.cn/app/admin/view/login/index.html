@@ -76,7 +76,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     
                  <li class="">
-                        <a href="javascript:void(0)" onclick="openImg('https://wxapp.wmj.com.cn/qrdata/qrcode/1585586342.png')">
+                        <a href="javascript:void(0)" onclick="openImg('https://{$_SERVER['HTTP_HOST']}/qrdata/qrcode/adduser.png')">
                             <i class="material-icons">person_add</i>  注册
                         </a>
                  </li>
@@ -170,7 +170,7 @@
                             document.write(new Date().getFullYear())
                         </script>
                         <a href="javascript:volid(0);"> {:config('xhadmin.site_title')} </a>
-                        <a href="http://www.beian.miit.gov.cn/">黔ICP备12003086号-3</a>
+                        <a href="http://www.beian.miit.gov.cn/">{:config('xhadmin.copyright')}</a>
                     </p>
                 </div>
             </footer>

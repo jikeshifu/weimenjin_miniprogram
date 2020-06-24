@@ -1,7 +1,7 @@
 <?php 
 /*
- module:		会员管理
- create_time:	2020-05-13 10:28:05
+ module:		卡管理
+ create_time:	2020-05-05 02:19:54
  author:		
  contact:		
 */
@@ -9,13 +9,13 @@
 namespace xhadmin\service\admin;
 
 use xhadmin\CommonService;
-use xhadmin\db\Member;
+use xhadmin\db\LockCard;
 
-class MemberService extends CommonService {
+class LockCardService extends CommonService {
 
 
 	/*
- 	* @Description  会员管理列表数据
+ 	* @Description  卡管理列表数据
  	* @param (输入参数：)  {array}        where 查询条件
  	* @param (输入参数：)  {int}          limit 分页参数
  	* @param (输入参数：)  {String}       field 查询字段
@@ -24,8 +24,8 @@ class MemberService extends CommonService {
  	*/
 	public static function pageList($where=[],$limit,$field='*',$orderby=''){
 		try{
-			$list = Member::loadList($where,$limit,$field,$orderby);
-			$count = Member::countList($where);
+			$list = LockCard::loadList($where,$limit,$field,$orderby);
+			$count = LockCard::countList($where);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
@@ -40,20 +40,11 @@ class MemberService extends CommonService {
  	*/
 	public static function add($data){
 		try{
-			$data['create_time'] = strtotime($data['create_time']);
+			$data['user_id'] = session('admin.user_id');
+			$data['lockcard_endtime'] = strtotime($data['lockcard_endtime']);
+			$data['lockcard_createtime'] = time();
 
-			//数据验证
-			$rule = [
-				'mobile'=>['regex'=>'/^1[3456789]\d{9}$/'],
-			];
-			//数据错误提示
-			$msg = [
-				'mobile.regex'=>'手机号格式错误',
-			];
-			self::validate($rule,$data,$msg);
-
-			$data['password'] = md5($data['password'].config('my.password_secrect'));
-			$res = Member::createData($data);
+			$res = LockCard::createData($data);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
@@ -68,18 +59,9 @@ class MemberService extends CommonService {
  	*/
 	public static function update($data){
 		try{
-			$data['create_time'] = strtotime($data['create_time']);
+			$data['lockcard_endtime'] = strtotime($data['lockcard_endtime']);
 
-			//数据验证
-			$rule = [
-				'mobile'=>['regex'=>'/^1[3456789]\d{9}$/'],
-			];
-			$msg = [
-				'mobile.regex'=>'手机号格式错误',
-			];
-			self::validate($rule,$data,$msg);
-
-			$res = Member::edit($data);
+			$res = LockCard::edit($data);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
@@ -94,7 +76,7 @@ class MemberService extends CommonService {
  	*/
 	public static function delete($where){
 		try{
-			$res = Member::delete($where);
+			$res = LockCard::delete($where);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}

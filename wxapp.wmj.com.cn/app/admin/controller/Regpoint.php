@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		登记点管理
- create_time:	2020-02-28 10:01:07
+ create_time:	2020-05-06 18:57:24
  author:		
  contact:		
 */
@@ -34,12 +34,13 @@ class Regpoint extends Admin {
 			$create_time_end = $this->request->param('create_time_end', '', 'serach_in');
 
 			$where['create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
+			$where['lock_id'] = $this->request->param('lock_id', '', 'serach_in');
 
 			$order  = $this->request->post('order', '', 'serach_in');	//排序字段 bootstrap-table 传入
 			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
 
 			$limit = ($page-1) * $limit.','.$limit;
-			$field = 'regpoint_id,member_id,user_id,regpointname,regpointqrcode,create_time';
+			$field = 'regpoint_id,member_id,user_id,regpointname,regpointqrcode,create_time,lock_id';
 			$orderby = ($sort && $order) ? $sort.' '.$order : 'regpoint_id desc';
 
 			try{

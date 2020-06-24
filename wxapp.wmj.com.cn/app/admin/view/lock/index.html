@@ -114,6 +114,11 @@
 						<i class="fa fa-plus"></i>&nbsp;可开门时段设置
 						</button>
 						{/if}
+						{if condition="in_array('/admin/LockCard/index',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="lockcardmanage" class="btn btn-primary button-margin" onclick="CodeGoods.lockcardmanage()">
+						<i class="fa fa-plus"></i>&nbsp;卡管理
+						</button>
+						{/if}
 						</div>
 						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
 							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
@@ -139,12 +144,9 @@
  			{title: '审核钥匙', field: 'applyauth_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.applyauth_checkFormatter},
  			{title: '开门距离(米)', field: 'location_check', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.location_checkFormatter},
  			{title: '启用/禁用', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
- 			{title: '类型', field: 'lock_type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.lock_typeFormatter},
  			{title: '在线状态', field: 'online', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.onlineFormatter},
  			{title: '二维码', field: 'lock_qrcode', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.lock_qrcodeFormatter},
- 			{title: '添加时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
  			{title: '成功提示图片', field: 'successimg', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.successimgFormatter},
- 			{title: '成功广告', field: 'successadimg', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.successadimgFormatter},
  			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
  		];
  	};
@@ -293,26 +295,6 @@
 		ajax.start();
 	}
 
-	CodeGoods.lock_typeFormatter = function(value,row,index) {
-		if(value !== null){
-			var value = value.toString();
-			switch(value){
-				case '1':
-					return '<span class="label label-success">WiFi版</span>';
-				break;
-				case '2':
-					return '<span class="label label-primary">插卡版(2G)</span>';
-				break;
-				case '3':
-					return '<span class="label label-primary">插卡版(4G)</span>';
-				break;
-				case '4':
-					return '<span class="label label-info">网线版</span>';
-				break;
-			}
-		}
-	}
-
 	CodeGoods.onlineFormatter = function(value,row,index) {
 		if(value !== null){
 			var value = value.toString();
@@ -333,19 +315,7 @@
 		}
 	}
 
-	CodeGoods.create_timeFormatter = function(value,row,index) {
-		if(value){
-			return formatDateTime(value,'Y-m-d H:i:s');	
-		}
-	}
-
 	CodeGoods.successimgFormatter = function(value,row,index) {
-		if(value){
-			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
-		}
-	}
-
-	CodeGoods.successadimgFormatter = function(value,row,index) {
 		if(value){
 			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
 		}
@@ -515,7 +485,7 @@
 		if(value){
 			var queryData = {};
 			queryData['lock_id'] = value;
-			var index = layer.open({type: 2,title: '弹窗连接',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Locktimes/index?'+Feng.parseParam(queryData)});
+			var index = layer.open({type: 2,title: '可开门时段管理',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Locktimes/index?'+Feng.parseParam(queryData)});
 			this.layerIndex = index;
 			if(!IsPC()){layer.full(index)}
 		}else{
@@ -531,7 +501,35 @@
 				}
 				var queryData = {};
 				queryData['lock_id'] = idx;
-				var index = layer.open({type: 2,title: '弹窗连接',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Locktimes/index?'+Feng.parseParam(queryData)});
+				var index = layer.open({type: 2,title: '可开门时段管理',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Locktimes/index?'+Feng.parseParam(queryData)});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.lockcardmanage = function (value) {
+		if(value){
+			var queryData = {};
+			queryData['lock_id'] = value;
+			var index = layer.open({type: 2,title: '卡管理',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/index?'+Feng.parseParam(queryData)});
+			this.layerIndex = index;
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.lock_id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var queryData = {};
+				queryData['lock_id'] = idx;
+				var index = layer.open({type: 2,title: '卡管理',area: ['90%', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/index?'+Feng.parseParam(queryData)});
 				this.layerIndex = index;
 				if(!IsPC()){layer.full(index)}
 			}

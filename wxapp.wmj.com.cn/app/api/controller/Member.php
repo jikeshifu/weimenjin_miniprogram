@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		会员管理
- create_time:	2020-04-16 02:23:22
+ create_time:	2020-06-13 23:53:36
  author:		
  contact:		
 */
@@ -48,7 +48,6 @@ class Member extends Common {
 	function update(){
 		$postField = 'member_id,nickname,headimgurl,openid,mobile,sex,member_ps';
 		$data = $this->request->only(explode(',',$postField),'post',null);
-		mlog("Member_update_postdata".json_encode($data));
 		if(empty($data['member_id'])) return json(['status'=>$this->errorCode,'msg'=>'参数错误']);
 		try {
 			$where['member_id'] = $data['member_id'];
@@ -128,7 +127,44 @@ class Member extends Common {
 		Log::info('接口输出：'.print_r($res,true));
 		return json(['status'=>$this->successCode,'data'=>$res]);
 	}
-
+/*start*/
+	/**
+	* @api {post} /Member/getuserbymobile 06、根据手机号查询用户信息
+	* @apiGroup Member
+	* @apiVersion 1.0.0
+	* @apiDescription  根据手机号查询用户
+	
+	* @apiParam (输入参数：) {string}     		mobile 手机号
+    * @apiHeader {String} Authorization 用户授权token
+	* @apiHeaderExample {json} Header-示例:
+	* "Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjM2NzgsImF1ZGllbmNlIjoid2ViIiwib3BlbkFJZCI6MTM2NywiY3JlYXRlZCI6MTUzMzg3OTM2ODA0Nywicm9sZXMiOiJVU0VSIiwiZXhwIjoxNTM0NDg0MTY4fQ.Gl5L-NpuwhjuPXFuhPax8ak5c64skjDTCBC64N_QdKQ2VT-zZeceuzXB9TqaYJuhkwNYEhrV3pUx1zhMWG7Org"
+	* @apiParam (失败返回参数：) {object}     	array 返回结果集
+	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码 201
+	* @apiParam (失败返回参数：) {string}     	array.msg 返回错误消息
+	* @apiParam (成功返回参数：) {string}     	array 返回结果集
+	* @apiParam (成功返回参数：) {string}     	array.status 返回错误码 200
+	* @apiParam (成功返回参数：) {string}     	array.data 返回数据详情
+	* @apiSuccessExample {json} 01 成功示例
+	* {"status":"200","data":""}
+	* @apiErrorExample {json} 02 失败示例
+	* {"status":"201","msg":"没有数据"}
+	*/
+	function getuserbymobile(){
+		$data['mobile'] = $this->request->post('mobile','','');
+		if(empty($data['mobile'])) return json(['status'=>$this->errorCode,'msg'=>'mobile参数不能为空']);
+		$data['member_type'] = 1;
+		try{
+			$res  = checkData(MemberDb::getWhereInfo($data));//查询会员信息
+			$userres=db()->table('cd_user')->where('member_id', $res['id'])->find();//用会员id查询绑定的管理员ID
+			//mlog('getuserbymobile:'.json_encode($userres));
+			$res['user_id']= $userres['user_id'];//将管理员ID赋值给输出
+		}catch (\Exception $e){
+			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
+		}
+		Log::info('接口输出：'.print_r($res,true));
+		return json(['status'=>$this->successCode,'data'=>$res]);
+	}
+/*end*/
 
 /*start*/
 	/**

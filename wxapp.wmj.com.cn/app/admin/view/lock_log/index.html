@@ -15,6 +15,22 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">锁名称</button>
+									</div>
+									<input type="text" class="form-control" id="lock_name" placeholder="锁名称" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
+									</div>
+									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
 										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">状态</button>
 									</div>
 									<select class="form-control" id="status">
@@ -140,6 +156,8 @@
 	CodeGoods.formParams = function() {
 		var queryData = {};
 		queryData['user_id'] = $("#user_id").val();
+		queryData['lock_name'] = $("#lock_name").val();
+		queryData['mobile'] = $("#mobile").val();
 		queryData['status'] = $("#status").val();
 		queryData['type'] = $("#type").val();
 		return queryData;

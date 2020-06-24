@@ -161,6 +161,42 @@ function wmjHandle($wmjsn, $type)
     $result = wmjHttpPost($url, $value_s);
     return $result;
 }
+//卡管理
+function wmjCardHandle($wmjsn, $type, $str)
+{
+	//mlog("wmjHandle:".$wmjsn);
+    //$value_s = config('xhadmin.wmjaeskey') ? aesEncrypt($wmjsn, C('wmjaeskey')) : $wmjsn;
+    $data=$str;
+    //$appid = 'appid='.config('xhadmin.wmjappid');
+    //$appsecret = 'appsecret='.config('xhadmin.wmjappsecret');
+    //mlog("wmjHandle_appid:".$appid);
+    //mlog("wmjHandle_appsecret:".$appsecret);
+    $data['appid']=config('xhadmin.wmjappid');
+    $data['appsecret']=config('xhadmin.wmjappsecret');
+    $url = 'https://www.wmj.com.cn/api/'.$type.'.html';
+    //mlog("wmjHandle_url:".$url);
+    $result = wmjCardHttpPost($url, http_build_query($data));
+    return $result;
+}
+function wmjCardHttpPost($url, $str) {
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,FALSE);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/x-www-form-urlencoded',
+        'Content-Length: ' . strlen($str))
+    );
+    $res = curl_exec ($curl);
+    curl_close($curl);
+    $res = trim($res, "\xEF\xBB\xBF");
+    $res = json_decode($res, true);
+    return $res;
+}
 function wmjHttpGet($url) {
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
