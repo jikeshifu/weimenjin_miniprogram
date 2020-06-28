@@ -155,7 +155,7 @@ class Member extends Common {
 		$data['member_type'] = 1;
 		try{
 			$res  = checkData(MemberDb::getWhereInfo($data));//查询会员信息
-			$userres=db()->table('cd_user')->where('member_id', $res['id'])->find();//用会员id查询绑定的管理员ID
+			$userres=db()->table('cd_user')->where(['member_id'=>$res['member_id']])->find();//用会员id查询绑定的管理员ID
 			//mlog('getuserbymobile:'.json_encode($userres));
 			$res['user_id']= $userres['user_id'];//将管理员ID赋值给输出
 		}catch (\Exception $e){
