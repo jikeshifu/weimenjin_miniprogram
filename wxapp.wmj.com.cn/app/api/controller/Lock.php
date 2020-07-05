@@ -542,6 +542,45 @@ class Lock extends Common {
 		{
 			return json(['opendoor_status'=>'201','msg'=>'钥匙已过期']);
 		}
+		//判断是否在锁的可开时段
+		//读可开时段
+		$locktimewhere['lock_id']=$lock_id;
+		$reslocktimedata=\xhadmin\db\Locktimes::loadList($locktimewhere);
+		//mlog("reslocktimedata".json_encode($reslocktimedata));
+		if($reslocktimedata&&!$resauthdata['auth_isadmin'])
+		{
+		    //mlog("reslocktimedata_have");
+		    $isopen=0;
+		    foreach ($reslocktimedata as $value)
+		    {
+		        if(date('N')>=$value['startweek']&&date("N")<=$value['endweek'])
+		        {
+		            $nowtime = intval (date("Hi"));
+		            mlog("nowtime".$nowtime);
+		            $startth=str_pad($value['starthour'], 2, '0', STR_PAD_LEFT).str_pad($value['startminute'], 2, '0', STR_PAD_LEFT);
+		            $endth=str_pad($value['endhour'], 2, '0', STR_PAD_LEFT).str_pad($value['endminute'], 2, '0', STR_PAD_LEFT);
+		            mlog("nowtime".$startth);
+		            mlog("nowtime".$endth);
+		            if ($nowtime >= $startth && $nowtime <= $endth) 
+		            {
+		                $isopen=1;
+		                break;
+		            }
+		            else
+		            {
+		                $isopen=0;
+		            }
+		        }
+		        else
+		        {
+		           $isopen=0;
+		        }
+		    }
+		    if(!$isopen)
+		    {
+		        return json(['opendoor_status'=>'201','msg'=>'不在可开门时段']);
+		    }
+		}
 		//判断开门次数是否用尽
 		if ($resauthdata&&$resauthdata['auth_openlimit']>0) 
 		{
