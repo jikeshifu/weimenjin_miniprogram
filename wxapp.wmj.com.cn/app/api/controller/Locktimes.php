@@ -40,14 +40,15 @@ class Locktimes extends Common {
 	* @apiErrorExample {json} 02 失败示例
 	* {"status":" 201","msg":"查询失败"}
 	*/
-	function getopentimes(){
+	function getopentimes()
+	{
 		$limit  = $this->request->post('limit', 20, 'intval');
 		$page   = $this->request->post('page', 1, 'intval');
 		$lock_id=$this->request->post('lock_id', '', 'serach_in');
         if(empty($lock_id)) return json(['status'=>$this->errorCode,'msg'=>'lock_id不能为空']);
 		$where = [];
 		$where['lock_id'] = $this->request->post('lock_id', '', 'serach_in');
-
+        $where['type'] =2;
 		$limit = ($page-1) * $limit.','.$limit;
 		$field = '*';
 		$orderby = 'locktimes_id desc';

@@ -68,6 +68,7 @@
  			{title: '时段名称', field: 'locktimesname', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '管理员ID', field: 'user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '锁ID', field: 'lock_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.typeFormatter},
  			{title: '周开始', field: 'startweek', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.startweekFormatter},
  			{title: '小时开始', field: 'starthour', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.starthourFormatter},
  			{title: '分钟开始', field: 'startminute', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.startminuteFormatter},
@@ -89,6 +90,20 @@
 			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.locktimes_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
 			{/if}
 			return str;
+		}
+	}
+
+	CodeGoods.typeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '锁可用时段';
+				break;
+				case '2':
+					return '钥匙可用时段';
+				break;
+			}
 		}
 	}
 
@@ -115,7 +130,7 @@
 					return '周六';
 				break;
 				case '7':
-					return '周七';
+					return '周日';
 				break;
 			}
 		}
@@ -271,7 +286,7 @@
 					return '周六';
 				break;
 				case '7':
-					return '周七';
+					return '周日';
 				break;
 			}
 		}

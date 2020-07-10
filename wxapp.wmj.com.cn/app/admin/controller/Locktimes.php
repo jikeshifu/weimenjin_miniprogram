@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门时段
- create_time:	2020-03-30 02:55:58
+ create_time:	2020-07-09 20:13:50
  author:		
  contact:		
 */
@@ -31,7 +31,7 @@ class Locktimes extends Admin {
 			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
 
 			$limit = ($page-1) * $limit.','.$limit;
-			$field = 'locktimes_id,locktimesname,user_id,lock_id,startweek,starthour,startminute,endweek,endhour,endminute,create_time';
+			$field = 'locktimes_id,locktimesname,user_id,lock_id,type,startweek,starthour,startminute,endweek,endhour,endminute,create_time';
 			$orderby = ($sort && $order) ? $sort.' '.$order : 'locktimes_id desc';
 
 			try{
@@ -52,7 +52,7 @@ class Locktimes extends Admin {
 		if (!$this->request->isPost()){
 			return $this->display('add');
 		}else{
-			$postField = 'locktimesname,user_id,lock_id,startweek,starthour,startminute,endweek,endhour,endminute,create_time';
+			$postField = 'locktimesname,user_id,lock_id,type,startweek,starthour,startminute,endweek,endhour,endminute,create_time';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				LocktimesService::add($data);
@@ -75,7 +75,7 @@ class Locktimes extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'locktimes_id,locktimesname,user_id,lock_id,startweek,starthour,startminute,endweek,endhour,endminute';
+			$postField = 'locktimes_id,locktimesname,user_id,type,startweek,starthour,startminute,endweek,endhour,endminute';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				LocktimesService::update($data);

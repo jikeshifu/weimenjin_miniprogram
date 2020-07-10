@@ -543,11 +543,12 @@ class Lock extends Common {
 			return json(['opendoor_status'=>'201','msg'=>'钥匙已过期']);
 		}
 		//判断是否在锁的可开时段
-		//读可开时段
+		//读锁可开时段
 		$locktimewhere['lock_id']=$lock_id;
+		$locktimewhere['type']=1;
 		$reslocktimedata=\xhadmin\db\Locktimes::loadList($locktimewhere);
-		//mlog("reslocktimedata".json_encode($reslocktimedata));
-		if($reslocktimedata&&!$resauthdata['auth_isadmin'])
+		$locktd=count($reslocktimedata);//判断是否有锁可开时段限制
+		if($locktd>0&&!$resauthdata['auth_isadmin'])
 		{
 		    //mlog("reslocktimedata_have");
 		    $isopen=0;
@@ -556,11 +557,11 @@ class Lock extends Common {
 		        if(date('N')>=$value['startweek']&&date("N")<=$value['endweek'])
 		        {
 		            $nowtime = intval (date("Hi"));
-		            mlog("nowtime".$nowtime);
+		            //mlog("lock_nowtime:".$nowtime);
 		            $startth=str_pad($value['starthour'], 2, '0', STR_PAD_LEFT).str_pad($value['startminute'], 2, '0', STR_PAD_LEFT);
 		            $endth=str_pad($value['endhour'], 2, '0', STR_PAD_LEFT).str_pad($value['endminute'], 2, '0', STR_PAD_LEFT);
-		            mlog("nowtime".$startth);
-		            mlog("nowtime".$endth);
+		            //mlog("lock_startth:".$startth);
+		            //mlog("lock_endth:".$endth);
 		            if ($nowtime >= $startth && $nowtime <= $endth) 
 		            {
 		                $isopen=1;
@@ -579,6 +580,45 @@ class Lock extends Common {
 		    if(!$isopen)
 		    {
 		        return json(['opendoor_status'=>'201','msg'=>'不在可开门时段']);
+		    }
+		}
+		//判断是否在钥匙的可开时段
+		//读钥匙可开时段
+		$ids = explode(",",$resauthdata['auth_opentimes']);
+		$locktimewhere=[['lock_id','=',$lock_id],['type','=',2],['locktimes_id','in',$ids]];
+		$lockauthtimes=db()->name('locktimes')->where($locktimewhere)->select();
+		$lockatcount=count($lockauthtimes);
+		if($lockatcount>0&&!$resauthdata['auth_isadmin'])
+		{
+		    $isauthopen=0;
+		    foreach ($lockauthtimes as $value)
+		    {
+		        if(date('N')>=$value['startweek']&&date("N")<=$value['endweek'])
+		        {
+		            $nowtime = intval (date("Hi"));
+		            //mlog("auth_nowtime:".$nowtime);
+		            $startth=str_pad($value['starthour'], 2, '0', STR_PAD_LEFT).str_pad($value['startminute'], 2, '0', STR_PAD_LEFT);
+		            $endth=str_pad($value['endhour'], 2, '0', STR_PAD_LEFT).str_pad($value['endminute'], 2, '0', STR_PAD_LEFT);
+		            //mlog("auth_startth:".$startth);
+		            //mlog("auth_endth:".$endth);
+		            if ($nowtime >= $startth && $nowtime <= $endth) 
+		            {
+		                $isauthopen=1;
+		                break;
+		            }
+		            else
+		            {
+		                $isauthopen=0;
+		            }
+		        }
+		        else
+		        {
+		           $isauthopen=0;
+		        }
+		    }
+		    if(!$isauthopen)
+		    {
+		        return json(['opendoor_status'=>'201','msg'=>'钥匙不在可开门时段']);
 		    }
 		}
 		//判断开门次数是否用尽

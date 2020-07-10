@@ -140,11 +140,16 @@ class LockAuth extends Common {
 	function applyauth(){
 		$postField = 'lock_id,member_id,realname,remark,create_time,auth_status,user_id';
 		$data = $this->request->only(explode(',',$postField),'post',null);
-		//mlog("isapplylock_postdata".json_encode($data));
+		mlog("isapplylock_postdata".json_encode($data));
 		//查询是否已经申请过
 		$field='lockauth_id,lock_id,member_id';
 		$isapplywhere['member_id']=$data['member_id'];
 		$isapplywhere['lock_id']=$data['lock_id'];
+		$lockfield='lock_id,user_id,lock_name,lock_sn';
+		$lockwhere['lock_id']=$data['lock_id'];
+		$lockdata = \xhadmin\db\Lock::getWhereInfo($lockwhere,$lockfield);
+		mlog("lockdata:".json_encode($lockdata));
+		$data['user_id'] = $lockdata['user_id'];
 		$isapplylock=LockAuthDb::getWhereInfo($isapplywhere,$field);
 		if ($isapplylock) {
 			//mlog("isapplylock".json_encode($isapplylock));

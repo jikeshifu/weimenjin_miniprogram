@@ -17,8 +17,12 @@
 					<td>{$info.lock_id}</td>   
 				</tr> 
 				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">类型：</td> 
+					<td><?php echo getFieldVal($info["type"],"锁可用时段|1,钥匙可用时段|2");?></td>   
+				</tr> 
+				<tr> 
 					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">周开始：</td> 
-					<td><?php echo getFieldVal($info["startweek"],"周一|1,周二|2,周三|3,周四|4,周五|5,周六|6,周七|7");?></td>   
+					<td><?php echo getFieldVal($info["startweek"],"周一|1,周二|2,周三|3,周四|4,周五|5,周六|6,周日|7");?></td>   
 				</tr> 
 				<tr> 
 					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">小时开始：</td> 
@@ -30,7 +34,7 @@
 				</tr> 
 				<tr> 
 					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">周结束：</td> 
-					<td><?php echo getFieldVal($info["endweek"],"周一|1,周二|2,周三|3,周四|4,周五|5,周六|6,周七|7");?></td>   
+					<td><?php echo getFieldVal($info["endweek"],"周一|1,周二|2,周三|3,周四|4,周五|5,周六|6,周日|7");?></td>   
 				</tr> 
 				<tr> 
 					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">小时结束：</td> 

@@ -13,10 +13,12 @@
 							<input type="text" id="locktimesname" value="{$info.locktimesname}" name="locktimesname" class="form-control" placeholder="请输入时段名称">
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">锁ID：</label>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">类型：</label>
 						<div class="col-sm-9">
-							<input type="text" id="lock_id" value="{$info.lock_id}" name="lock_id" class="form-control" placeholder="请输入锁ID">
+							<?php if(!isset($info['type'])){ $info['type'] = 1; }; ?>
+							<input name="type" value="1" type="radio" {if condition="$info.type eq '1'"}checked{/if} title="锁可用时段">
+							<input name="type" value="2" type="radio" {if condition="$info.type eq '2'"}checked{/if} title="钥匙可用时段">
 						</div>
 					</div>
 					<div class="form-group">
@@ -30,7 +32,7 @@
 								<option value="4" {if condition="$info.startweek eq '4'"}selected{/if}>周四</option>
 								<option value="5" {if condition="$info.startweek eq '5'"}selected{/if}>周五</option>
 								<option value="6" {if condition="$info.startweek eq '6'"}selected{/if}>周六</option>
-								<option value="7" {if condition="$info.startweek eq '7'"}selected{/if}>周七</option>
+								<option value="7" {if condition="$info.startweek eq '7'"}selected{/if}>周日</option>
 							</select>
 						</div>
 					</div>
@@ -98,7 +100,7 @@
 								<option value="4" {if condition="$info.endweek eq '4'"}selected{/if}>周四</option>
 								<option value="5" {if condition="$info.endweek eq '5'"}selected{/if}>周五</option>
 								<option value="6" {if condition="$info.endweek eq '6'"}selected{/if}>周六</option>
-								<option value="7" {if condition="$info.endweek eq '7'"}selected{/if}>周七</option>
+								<option value="7" {if condition="$info.endweek eq '7'"}selected{/if}>周日</option>
 							</select>
 						</div>
 					</div>
