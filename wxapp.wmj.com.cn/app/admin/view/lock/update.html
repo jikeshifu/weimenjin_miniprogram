@@ -97,6 +97,14 @@
 							<span id="lock_qrcode_upload"></span>
 						</div>
 					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">成功弹层方式：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['adnum'])){ $info['adnum'] = 2; }; ?>
+							<input name="adnum" value="1" type="radio" {if condition="$info.adnum eq '1'"}checked{/if} title="两图弹层">
+							<input name="adnum" value="2" type="radio" {if condition="$info.adnum eq '2'"}checked{/if} title="一张图带链接">
+						</div>
+					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">成功提示图片：</label>
 						<div class="col-sm-6">

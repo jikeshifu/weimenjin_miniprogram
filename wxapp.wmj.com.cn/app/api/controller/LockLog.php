@@ -52,8 +52,44 @@ class LockLog extends Common {
 		$limit  = $this->request->post('limit', 20, 'intval');
 		$page   = $this->request->post('page', 1, 'intval');
         $lock_id = $this->request->post('lock_id', '', 'serach_in');
+        $keyword = $this->request->param('keyword', '', 'serach_in');
         if(!$lock_id) return json(['status'=>$this->errorCode,'msg'=>'lock_id不能为空']);
-        
+        //读远程卡入库
+        //查询锁序列号
+		$lockdata=\xhadmin\db\Lock::getInfo($lock_id);
+		if($lockdata)
+		{   $postdata['sn']=$lockdata['lock_sn'];
+            $result=wmjManageHandle($lockdata['lock_sn'],'getcardopenlog',$postdata);
+            //mlog("getopenlogbylockid-readcard:".json_encode($result));
+            
+            foreach ($result['data'] as $value) 
+            {
+                //判断当前记录是否已经存在
+                $cardlogwhere = [];
+		        $cardlogwhere['lock_id'] = $lock_id;
+                $cardlogwhere['create_time'] = $value['dateline'];
+                $havelockcard=\xhadmin\db\LockLog::getWhereInfo($cardlogwhere);
+                if(!$havelockcard)
+                {
+                    //mlog("getopenlogbylockid-readcard-detaile:".json_encode($value));
+                    $cardlogdata['lock_id']=$lock_id;
+                    $cardlogdata['member_id']=2;
+                    $cardlogdata['status']=1;
+                    $cardlogdata['type']=4;
+                    $cardlogdata['cardsn']=$value['cardsn'];
+                    $cardlogdata['remark']='刷卡:'.$value['cardsn'];
+                    $cardlogdata['user_id']=$lockdata['user_id'];
+                    $cardlogdata['create_time']=$value['dateline'];
+                    db()->name('locklog')->insert($cardlogdata);
+                    //$res=LockLogService::add($cardlogdata);
+                }
+                else
+                {
+                    //mlog("getopenlogbylockid-readcard-have:".json_encode($value));
+                }
+                
+            }
+		}
 		$where = [];
 		$where['a.lock_id'] = $lock_id;
 
@@ -64,10 +100,11 @@ class LockLog extends Common {
 
 		$limit = ($page-1) * $limit.','.$limit;
 		$field = '*';
-		$orderby = 'locklog_id desc';
-
+		$orderby = 'a.create_time desc ';
+        $groupby = 'a.locklog_id';
 		try{
-			$sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name from cd_locklog as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+			//$sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name from cd_locklog as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+			$sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name,d.lockcard_username,d.lockcard_remark from cd_locklog as a inner join cd_lock as c on a.lock_id=c.lock_id left join cd_member as b on a.member_id=b.member_id left join cd_lockcard as d on a.cardsn=d.lockcard_sn and a.lock_id=d.lock_id';
 			$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
 		}catch(\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);

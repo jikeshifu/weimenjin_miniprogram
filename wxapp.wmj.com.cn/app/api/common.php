@@ -19,8 +19,6 @@ function wmjHandle($wmjsn, $type)
     $value_s = $resconfig['wmjaeskey'] ? aesEncrypt($wmjsn, $resconfig['wmjaeskey']) : $wmjsn;
     $appid = 'appid='.$resconfig['wmjappid'];
     $appsecret = 'appsecret='.$resconfig['wmjappsecret'];
-    //mlog("wmjHandle_appid:".$appid);
-    //mlog("wmjHandle_appsecret:".$appsecret);
     $url = 'https://www.wmj.com.cn/api/'.$type.'.html?'.$appid.'&'.$appsecret;
     //mlog("wmjHandle_url:".$url);
     $result = wmjHttpPost($url, $value_s);
@@ -29,18 +27,25 @@ function wmjHandle($wmjsn, $type)
 //卡管理
 function wmjManageHandle($wmjsn, $type, $str)
 {
-	//mlog("wmjHandle:".$wmjsn);
 	$resconfig=\app\admin\db\Config::loadList();
-    //$value_s = config('xhadmin.wmjaeskey') ? aesEncrypt($wmjsn, C('wmjaeskey')) : $wmjsn;
     $data=$str;
-    //$appid = 'appid='.config('xhadmin.wmjappid');
-    //$appsecret = 'appsecret='.config('xhadmin.wmjappsecret');
-    //mlog("wmjHandle_appid:".$appid);
-    //mlog("wmjHandle_appsecret:".$appsecret);
     $data['appid']=$resconfig['wmjappid'];
     $data['appsecret']=$resconfig['wmjappsecret'];
     $url = 'https://www.wmj.com.cn/api/'.$type.'.html';
-    //mlog("wmjHandle_url:".$url);
+    $result = wmjCardHttpPost($url, http_build_query($data));
+    return $result;
+}
+//网关锁
+function wmjgwHandle($gwcidsn,$cmd)
+{
+    $resconfig=\app\admin\db\Config::loadList();
+    $data['sncid']=$gwcidsn;
+    $data['gwsn']=substr($gwcidsn,0,11);
+    $data['cid']=substr($gwcidsn,11,12);
+    $data['appid']=$resconfig['wmjappid'];
+    $data['appsecret']=$resconfig['wmjappsecret'];
+    mlog("wmjgwHandle:".json_encode($data));
+    $url = 'https://www.wmj.com.cn/api/'.$cmd.'.html';
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
 }

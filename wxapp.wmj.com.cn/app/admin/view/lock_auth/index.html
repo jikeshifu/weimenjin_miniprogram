@@ -56,6 +56,14 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">备注</button>
+									</div>
+									<input type="text" class="form-control" id="remark" placeholder="备注" />
+								</div>
+							</div>
 							<!-- search end -->
 							<div class="col-sm-2">
 									<button type="button" class="btn btn-primary " onclick="CodeGoods.search()" id="">
@@ -203,6 +211,7 @@
 		queryData['realname'] = $("#realname").val();
 		queryData['mobile'] = $("#mobile").val();
 		queryData['auth_status'] = $("#auth_status").val();
+		queryData['remark'] = $("#remark").val();
 		queryData['user_id'] = $("#user_id").val();
 		return queryData;
 	}

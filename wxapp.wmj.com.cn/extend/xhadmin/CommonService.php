@@ -104,7 +104,90 @@ class CommonService
 		
 		return ['list'=>$result,'count'=>$count[0]['count']];
 	}
-	
+	/*start*/
+			/**
+	 * 生成sql查询语句
+	 * @access protected
+	 * @param  sql     原始sql语句
+	 * @param  $where  查询条件
+	 * @param  $limit  分页
+	 * @param  $orderby  排序
+	 * @return array
+	 */
+	function loadgroupbyList($sql,$where=[],$limit,$orderby,$groupby){
+		$sql = strtolower($sql);
+		$map = '';
+		foreach($where as $key=>$val){
+			if(is_array($val)){
+				switch($val[1]){
+					case 'between':
+						if(empty($val[2][0]) && !empty($val[2][1])){
+							$map .= $val[0].' < '.$val[2][1].' and ';
+						}
+						if(!empty($val[2][0]) && empty($val[2][1])){
+							$map .= $val[0].' > '.$val[2][1].' and ';
+						}
+						if(!empty($val[2][0]) && !empty($val[2][1])){
+							$map .= $val[0].' between '.$val[2][0].' and '.$val[2][1].' and ';
+						}
+					break;
+					
+					case 'exp':
+						$map .= $val[0].' '.$val[2].' and ';
+					break;
+					
+					case 'in':
+						$map .= $val[0].' in ('.$val[2].') and ';
+					break;
+					
+					case 'find in set':
+						$map .= ' find_in_set(\''.$val[2].'\','.$val[0].') and ';
+					break;
+					
+					default:
+						$map .= $val[0].' '.$val[1]." '".$val[2]."'".' and ';
+					break;
+				}	
+			}
+		}
+		$map .= '1=1';
+
+		$is_where = strripos($sql,"where");
+		if($is_where === false){
+			$where = !empty($where) ?  ' where '.$map : '';
+			$sql = $sql.$where;
+		}else{
+			$l_sql = substr($sql, 0, $is_where);
+			$r_sql = substr($sql, $is_where+5, strlen($sql)- $is_where - 5);
+			$where = !empty($where) ?  ' where '.$map.' and ' : ' where ';
+			$sql = $l_sql . $where . $r_sql;
+		}
+		
+		$limit = ' limit '.$limit;
+		
+		$countWhere = 'select count(*) as count from ('.$sql.') as tp';
+		if (strripos($sql,"group by")=== false && $groupby) {
+			$sql .= ' group by '.$groupby;
+		}
+		if (strripos($sql,"order by")=== false && $orderby) {
+			$sql .= ' order by '.$orderby;
+		}
+		
+		if (strripos($sql,"limit")=== false) {
+			$sql .= $limit;
+		}
+		
+		try{
+			$result = db()->query($sql);
+			$count = db()->query($countWhere);
+		}catch(\Exception $e){
+			log::error('sql错误：'.print_r($e->getMessage(),true));
+			log::error('错误语句：'.print_r($sql,true));
+		}
+		
+		return ['list'=>$result,'count'=>$count[0]['count']];
+	}
+	/*end*/
 	//导入excel数据
 	public static function importData($key){
 		$file = explode('.', $_FILES['file_name']['name']);

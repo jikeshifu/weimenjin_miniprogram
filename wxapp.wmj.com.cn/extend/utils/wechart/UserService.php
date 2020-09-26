@@ -94,6 +94,24 @@ class UserService
 	 * 获取小程序用户信息
 	 * @description 小程序传入 code、iv、encryptedData  先通过code获取 session_key  然后在解码出用户信息
 	 */
+	public static function getXcxUserOpenid($data){
+		
+		if(empty($data['code'])) throw new \Exception('code不能为空');
+		$app = Factory::miniProgram(config('my.mini_program'));
+		try{
+			$session = self::getOpenId($data['code']);	//通过code获取 session信息
+			//解码用户信息
+			
+		}catch(\Exception $e){
+			log::error('小程序获取信息失败:'.print_r($e->getMessage(),true));
+		}
+		
+		return $session;
+	}
+	/**
+	 * 获取小程序用户信息
+	 * @description 小程序传入 code、iv、encryptedData  先通过code获取 session_key  然后在解码出用户信息
+	 */
 	public static function getXcxUserPhone($data){
 		
 		if(empty($data['code'])) throw new \Exception('code不能为空');
@@ -114,6 +132,26 @@ class UserService
 		
 		return $decryptedData;
 	}
-	
+	/*start*/
+	/**
+	 * 获取小程序用户信息
+	 * @description 小程序传入 code、iv、encryptedData  先通过code获取 session_key  然后在解码出用户信息
+	 */
+	public static function sendsSubmessage($data){
+		
+		//if(empty($data['code'])) throw new \Exception('code不能为空');
+		//if(empty($data['iv'])) throw new \Exception('iv不能为空');
+		//if(empty($data['encryptedData'])) throw new \Exception('encryptedData不能为空');
+
+		$app = Factory::miniProgram(config('my.mini_program'));
+		try{
+			
+			$res = $app->subscribe_message->send($data);
+		}catch(\Exception $e){
+			log::error('发送信息失败:'.print_r($e->getMessage(),true));
+		}
+		return $res;
+	}
+	/*end*/
     
 }

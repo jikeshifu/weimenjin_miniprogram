@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门记录
- create_time:	2020-06-17 11:13:16
+ create_time:	2020-07-10 13:07:48
  author:		
  contact:		
 */
@@ -45,8 +45,11 @@ class LockLog extends Admin {
 			}
 			$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
 			$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
-			$where['a.status'] = $this->request->param('status', '', 'serach_in');
-			$where['a.type'] = $this->request->param('type', '', 'serach_in');
+
+			$create_time_start = $this->request->param('create_time_start', '', 'serach_in');
+			$create_time_end = $this->request->param('create_time_end', '', 'serach_in');
+
+			$where['a.create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
 
 			$order  = $this->request->post('order', '', 'serach_in');	//排序字段 bootstrap-table 传入
 			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
@@ -99,10 +102,13 @@ class LockLog extends Admin {
 		if(session('admin.role') <> 1){
 			$where['a.user_id'] = session('admin.user_id');
 		}
-		$where['a.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
-		$where['a.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
-		$where['a.status'] = $this->request->param('status', '', 'serach_in');
-		$where['a.type'] = $this->request->param('type', '', 'serach_in');
+		$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
+		$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
+
+		$create_time_start = $this->request->param('create_time_start', '', 'serach_in');
+		$create_time_end = $this->request->param('create_time_end', '', 'serach_in');
+
+		$where['a.create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
 		$where['a.locklog_id'] = ['in',$this->request->param('locklog_id', '', 'serach_in')];
 
 		$orderby = '';

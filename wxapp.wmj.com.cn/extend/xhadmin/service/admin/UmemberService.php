@@ -1,7 +1,7 @@
 <?php 
 /*
- module:		门锁列表
- create_time:	2020-09-26 15:40:00
+ module:		用户管理
+ create_time:	2020-08-23 22:15:59
  author:		
  contact:		
 */
@@ -9,30 +9,11 @@
 namespace xhadmin\service\admin;
 
 use xhadmin\CommonService;
-use xhadmin\db\Lock;
+use xhadmin\db\Umember;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class LockService extends CommonService {
-
-
-	/*
- 	* @Description  门锁管理列表数据
- 	* @param (输入参数：)  {array}        where 查询条件
- 	* @param (输入参数：)  {int}          limit 分页参数
- 	* @param (输入参数：)  {String}       field 查询字段
- 	* @param (输入参数：)  {String}       orderby 排序字段
- 	* @return (返回参数：) {array}        分页数据集
- 	*/
-	public static function pageList($where=[],$limit,$field='*',$orderby=''){
-		try{
-			$list = Lock::loadList($where,$limit,$field,$orderby);
-			$count = Lock::countList($where);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return ['list'=>$list,'count'=>$count];
-	}
+class UmemberService extends CommonService {
 
 
 	/*
@@ -43,24 +24,9 @@ class LockService extends CommonService {
 	public static function add($data){
 		try{
 			$data['user_id'] = session('admin.user_id');
-			$data['create_time'] = time();
+			$data['ucreate_time'] = time();
 
-			//数据验证
-			$rule = [
-				'lock_name'=>['require'],
-				'lock_sn'=>['require','unique:lock'],
-				'location'=>['require'],
-			];
-			//数据错误提示
-			$msg = [
-				'lock_name.require'=>'锁名称不能为空',
-				'lock_sn.require'=>'序列号不能为空',
-				'lock_sn.unique'=>'序列号已经存在',
-				'location.require'=>'位置不能为空',
-			];
-			self::validate($rule,$data,$msg);
-
-			$res = Lock::createData($data);
+			$res = Umember::createData($data);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
@@ -75,19 +41,9 @@ class LockService extends CommonService {
  	*/
 	public static function update($data){
 		try{
+			$data['ucreate_time'] = strtotime($data['ucreate_time']);
 
-			//数据验证
-			$rule = [
-				'lock_name'=>['require'],
-				'location'=>['require'],
-			];
-			$msg = [
-				'lock_name.require'=>'锁名称不能为空',
-				'location.require'=>'位置不能为空',
-			];
-			self::validate($rule,$data,$msg);
-
-			$res = Lock::edit($data);
+			$res = Umember::edit($data);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
@@ -102,7 +58,7 @@ class LockService extends CommonService {
  	*/
 	public static function delete($where){
 		try{
-			$res = Lock::delete($where);
+			$res = Umember::delete($where);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
@@ -117,11 +73,11 @@ class LockService extends CommonService {
  	*/
 	public static function dumpData($where,$orderby,$field){
 		try{
-			$list = Lock::loadList($where,$limit=50000,'*',$orderby);
+			$list = Umember::loadList($where,$limit=50000,'*',$orderby);
 			$list = htmlOutList($list);
 			if(!$list) throw new \Exception('没有数据');
 
-			$map['menu_id'] = 803;
+			$map['menu_id'] = 826;
 			$map['field'] = $field;
 			$fieldList = db("field")->where($map)->order('id asc')->select()->toArray();
 
@@ -161,39 +117,6 @@ class LockService extends CommonService {
 			throw new \Exception($e->getMessage());
 		}
 	}
-	/*
- 	* @Description  编辑数据
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
-	public static function opendoor($data){
-		try{
-
-			$res = Lock::edit($data);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return $res;
-	}
-
-
- /*start*/
-    /*
- 	* @Description  修改
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
-	public static function updatewhere($where,$data){
-		try{
-			//$data['create_time'] = strtotime($data['create_time']);
-			$res = Lock::editWhere($where,$data);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return $res;
-	}
-    /*end*/
-
 
 
 }

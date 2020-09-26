@@ -509,7 +509,21 @@ class Lock extends Common {
 		$resmemdata=\xhadmin\db\Member::getInfo($member_id);
 		$authdata['member_id']=$member_id;
 		$authdata['lock_id']=$lock_id;
+		$umemdata['member_id']=$member_id;
+		$umemdata['user_id']=$user_id;
 		$resauthdata=\xhadmin\db\LockAuth::getWhereInfo($authdata);
+		$resumemdata=\xhadmin\db\Umember::getWhereInfo($umemdata);
+		if (!$resumemdata) 
+		{
+		    $umemdata['status']=1;
+		    $umemdata['ucreate_time']=time();
+		    $umemcreate=\xhadmin\db\Umember::createData($umemdata);
+		}
+		if ($resumemdata&&$resumemdata['status']==0) 
+		{
+		    //mlog("opendoor_status no auth!");
+		    return json(['opendoor_status'=>'201','msg'=>'无权限']);
+		}
 		//mlog("opendoor_reslookdatauserid:".json_encode($user_id));
 		//mlog("opendoor_resmemdatalock_id:".json_encode($lock_id));
 		//mlog("opendoor_resauthdatamember_id:".json_encode($member_id));
@@ -648,7 +662,14 @@ class Lock extends Common {
 				//mlog("Lock_opendoor_data:".json_encode($resdata));
 				if ($resdata) 
 				{
-					$result = wmjHandle($resdata['lock_sn'], 'openlock');
+				    if ($resdata['lock_type']==7) 
+				    {
+				        $result = wmjgwHandle($resdata['lock_sn'], 'ctrlgwl');
+				    }
+				    else
+				    {
+				        $result = wmjHandle($resdata['lock_sn'], 'openlock');
+				    }
 					$data['member_id']=$member_id;
 					$data['lock_id']=$lock_id;
 					$data['user_id']=$user_id;
@@ -658,7 +679,7 @@ class Lock extends Common {
 					{
 						$data['status']=1;
 						\xhadmin\service\api\LockLogService::add($data);
-						return json(['opendoor_status'=>'200','msg'=>'开门成功','successimg'=>$resdata['successimg'],'successadimg'=>$resdata['successadimg'],'hitshowminiad'=>$resdata['hitshowminiad'],'qrshowminiad'=>$resdata['qrshowminiad'],'openadurl'=>$resdata['openadurl']]);
+						return json(['opendoor_status'=>'200','msg'=>'开门成功','successimg'=>$resdata['successimg'],'successadimg'=>$resdata['successadimg'],'hitshowminiad'=>$resdata['hitshowminiad'],'qrshowminiad'=>$resdata['qrshowminiad'],'openadurl'=>$resdata['openadurl'],'adnum'=>$resdata['adnum']]);
 					}
 					else {
 						$data['status']=0;

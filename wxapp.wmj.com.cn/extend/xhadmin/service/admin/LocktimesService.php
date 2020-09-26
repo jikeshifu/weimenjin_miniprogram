@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门时段
- create_time:	2020-03-30 02:55:58
+ create_time:	2020-07-09 20:13:50
  author:		
  contact:		
 */
@@ -43,6 +43,16 @@ class LocktimesService extends CommonService {
 			$data['user_id'] = session('admin.user_id');
 			$data['create_time'] = time();
 
+			//数据验证
+			$rule = [
+				'locktimesname'=>['require'],
+			];
+			//数据错误提示
+			$msg = [
+				'locktimesname.require'=>'时段名称不能为空',
+			];
+			self::validate($rule,$data,$msg);
+
 			$res = Locktimes::createData($data);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
@@ -58,6 +68,15 @@ class LocktimesService extends CommonService {
  	*/
 	public static function update($data){
 		try{
+
+			//数据验证
+			$rule = [
+				'locktimesname'=>['require'],
+			];
+			$msg = [
+				'locktimesname.require'=>'时段名称不能为空',
+			];
+			self::validate($rule,$data,$msg);
 
 			$res = Locktimes::edit($data);
 		}catch(\Exception $e){

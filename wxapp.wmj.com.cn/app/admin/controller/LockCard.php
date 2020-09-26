@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		卡管理
- create_time:	2020-05-05 02:19:54
+ create_time:	2020-08-20 22:46:18
  author:		
  contact:		
 */
@@ -16,6 +16,37 @@ class LockCard extends Admin {
 
 
 /*start*/
+	/*导出*/
+	function dumpData(){
+		$where = [];
+		$where['lock_id'] = $this->request->param('lock_id', '', 'serach_in');
+		mlog("card_dumpData:".$where['lock_id']);
+		$where['lockcard_sn'] = ['like',$this->request->param('lockcard_sn', '', 'serach_in')];
+		$where['lockcard_username'] = ['like',$this->request->param('lockcard_username', '', 'serach_in')];
+		$where['lockcard_remark'] = ['like',$this->request->param('lockcard_remark', '', 'serach_in')];
+		$where['lockcard_id'] = ['in',$this->request->param('lockcard_id', '', 'serach_in')];
+        mlog("card_lockcard_id:".json_encode($where['lockcard_id']));
+        if (empty($where['lockcard_id'][1])) 
+			{
+			  $this->error('请选择需要导出的卡');
+			  exit();
+			}
+		$orderby = '';
+
+		try {
+			//此处读取前端传过来的 表格勾选的显示字段
+			$fieldInfo = [];
+			for($j=0; $j<100;$j++){
+				$fieldInfo[] = $this->request->param($j);
+			}
+			$res = LockCardService::dumpData(formatWhere($where),$orderby,filterEmptyArray(array_unique($fieldInfo)));
+		} catch (\Exception $e) {
+			$this->error($e->getMessage());
+		}
+	}
+
+
+
 	/*卡管理*/
 	function index(){
 		if (!$this->request->isAjax())

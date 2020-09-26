@@ -91,6 +91,9 @@ class LockCard extends Common {
         //$where['t.lockauth_id'] = $lockauth_id;
         //$where['t.lockcard_username'] = ['like',$this->request->param('keyword', '', 'serach_in')];
         //$where['t.lockcard_username'] = ['exp',"like"."'%".$keyword."%'"."or t.lockcard_sn like"."'%".$keyword."%'"."or t.lockcard_remark like"."'%".$keyword."%'"];
+        //$create_time_start = $this->request->post('create_time_start', '', 'serach_in');
+		//$create_time_end = $this->request->post('create_time_end', '', 'serach_in');
+		//$where['a.create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
 		$limit = ($page-1) * $limit.','.$limit;
 		$field = '*';
 		$orderby = 'lockcard_id desc';
@@ -139,8 +142,8 @@ class LockCard extends Common {
 		$data = $this->request->only(explode(',',$postField),'post',null);
         if(!$data['lock_id']) return json(['status'=>$this->errorCode,'msg'=>'lock_id不能为空']);
         if(!$data['user_id']) return json(['status'=>$this->errorCode,'msg'=>'user_id不能为空']);
-        if(!$data['lockcard_sn']) return json(['status'=>$this->errorCode,'msg'=>'lockcard_sn不能为空']);
-        if(strlen($data['lockcard_sn'])!=8) return json(['status'=>$this->errorCode,'msg'=>'lockcard_sn长度应为8位']);
+        if(!$data['lockcard_sn']) return json(['status'=>$this->errorCode,'msg'=>'卡号不能为空']);
+        if(strlen($data['lockcard_sn'])<8) return json(['status'=>$this->errorCode,'msg'=>'卡号长度不对']);
         //判断当前锁是否已经有此卡
         $where = [];
 		$where['lock_id'] = $data['lock_id'];

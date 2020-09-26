@@ -53,6 +53,10 @@
 					<td>{if $info.create_time}{$info.create_time|date='Y-m-d H:i:s'}{/if}</td>   
 				</tr> 
 				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">成功弹层方式：</td> 
+					<td><?php echo getFieldVal($info["adnum"],"两图弹层|1,一张图带链接|2");?></td>   
+				</tr> 
+				<tr> 
 					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">成功提示图片：</td> 
 					<td><a href="javascript:void(0)"  onclick="openImg('{$info.successimg}')"><img height="75" src="{$info.successimg}"></a></td>   
 				</tr> 

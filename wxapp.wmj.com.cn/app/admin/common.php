@@ -161,6 +161,21 @@ function wmjHandle($wmjsn, $type)
     $result = wmjHttpPost($url, $value_s);
     return $result;
 }
+//网关锁
+function wmjgwHandle($gwcidsn,$cmd)
+{
+    $data['sncid']=$gwcidsn;
+    $data['gwsn']=substr($gwcidsn,0,11);
+    $data['cid']=substr($gwcidsn,11,12);
+    mlog("wmjgwHandle:".$data['gwsn']);
+    mlog("wmjgwHandle:".$data['cid']);
+    $data['appid']=config('xhadmin.wmjappid');
+    $data['appsecret']=config('xhadmin.wmjappsecret');
+    $url = 'https://www.wmj.com.cn/api/'.$cmd.'.html';
+    //
+    $result = wmjCardHttpPost($url, http_build_query($data));
+    return $result;
+}
 //卡管理
 function wmjCardHandle($wmjsn, $type, $str)
 {

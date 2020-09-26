@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		钥匙管理
- create_time:	2020-04-23 15:35:45
+ create_time:	2020-07-10 10:31:09
  author:		
  contact:		
 */
@@ -86,10 +86,11 @@ class LockAuth extends Admin {
 			$page   = floor($offset / $limit) +1 ;
 
 			$where = [];
-			$where['c.lock_name'] = $this->request->param('lock_name', '', 'serach_in');
-			$where['a.realname'] = $this->request->param('realname', '', 'serach_in');
-			$where['b.mobile'] = $this->request->param('mobile', '', 'serach_in');
-			$where['b.nickname'] = $this->request->param('nickname', '', 'serach_in');
+			$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
+			$where['a.realname'] = ['like',$this->request->param('realname', '', 'serach_in')];
+			$where['a.remark'] = ['like',$this->request->param('remark', '', 'serach_in')];
+			$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
+			$where['b.nickname'] = ['like',$this->request->param('nickname', '', 'serach_in')];
 			$where['a.auth_shareability'] = $this->request->param('auth_shareability', '', 'serach_in');
 			$where['a.auth_status'] = $this->request->param('auth_status', '', 'serach_in');
 			if(session('admin.role') <> 1){

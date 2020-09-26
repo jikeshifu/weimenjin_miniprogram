@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁类型
- create_time:	2020-03-20 01:09:13
+ create_time:	2020-07-10 10:32:01
  author:		
  contact:		
 */
@@ -24,7 +24,7 @@ class LockType extends Admin {
 			$page   = floor($offset / $limit) +1 ;
 
 			$where = [];
-			$where['locktype_name'] = $this->request->param('locktype_name', '', 'serach_in');
+			$where['locktype_name'] = ['like',$this->request->param('locktype_name', '', 'serach_in')];
 
 			$order  = $this->request->post('order', '', 'serach_in');	//排序字段 bootstrap-table 传入
 			$sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc

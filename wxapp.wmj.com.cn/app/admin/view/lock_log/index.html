@@ -28,29 +28,20 @@
 									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
 								</div>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-3">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">状态</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开门时间开始</button>
 									</div>
-									<select class="form-control" id="status">
-										<option value="">请选择</option>
-										<option value="1">成功</option>
-										<option value="0">失败</option>
-									</select>
+									<input type="text" autocomplete="off" placeholder="开始时间" class="form-control" id="create_time_start">
 								</div>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-3">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">类型</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开门时间结束</button>
 									</div>
-									<select class="form-control" id="type">
-										<option value="">请选择</option>
-										<option value="1">扫码开门</option>
-										<option value="2">点击开门</option>
-										<option value="3">后台开门</option>
-									</select>
+									<input type="text" autocomplete="off" placeholder="结束时间" class="form-control" id="create_time_end">
 								</div>
 							</div>
 							<!-- search end -->
@@ -158,8 +149,8 @@
 		queryData['user_id'] = $("#user_id").val();
 		queryData['lock_name'] = $("#lock_name").val();
 		queryData['mobile'] = $("#mobile").val();
-		queryData['status'] = $("#status").val();
-		queryData['type'] = $("#type").val();
+		queryData['create_time_start'] = $("#create_time_start").val();
+		queryData['create_time_end'] = $("#create_time_end").val();
 		return queryData;
 	}
 
@@ -278,5 +269,7 @@
 		table.setQueryParams(CodeGoods.formParams());
 		CodeGoods.table = table.init();
 	});
+	laydate.render({elem: '#create_time_start',type: 'datetime'});
+	laydate.render({elem: '#create_time_end',type: 'datetime'});
 </script>
 {/block}

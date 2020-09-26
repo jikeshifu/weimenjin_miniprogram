@@ -463,10 +463,16 @@ class LockAuth extends Common {
 			$res['count'] = LockAuthDb::relateQueryCount($field,'lock_id',$relate_table='lock',$relate_field='lock_id',formatWhere($where));
 			foreach($res['list'] as $key => $value) 
 			{
-				  //mlog("LockAuth_getauthlistbymemid_res_value:".$value['lock_sn']);
-			      $result = wmjHandle($value['lock_sn'], 'lockstate');
-			      $res['list'][$key]['online']       = $result['online'];
-			       
+    			 if ($res['list'][$key]['lock_type']==7) 
+    			{
+    				    $result = wmjgwHandle($value['lock_sn'], 'getlplockstate');
+    			        $res['list'][$key]['online']       = $result['online'];
+    			}
+    			 else
+    			 {
+    			    $result = wmjHandle($value['lock_sn'], 'lockstate');
+    			    $res['list'][$key]['online']       = $result['online'];
+    			 }
              }
 		}catch(\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);

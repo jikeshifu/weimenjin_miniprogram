@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		钥匙管理
- create_time:	2020-04-23 15:35:45
+ create_time:	2020-07-10 10:31:09
  author:		
  contact:		
 */
@@ -31,24 +31,8 @@ class LockAuthService extends CommonService {
 		}
 		return $res;
 	}
-/*start*/
-   /*
- 	* @Description  添加
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
-	public static function lockadd($data){
-		try{
-			//$data['auth_starttime'] = strtotime($data['auth_starttime']);
-			//$data['auth_endtime'] = strtotime($data['auth_endtime']);
-			$data['create_time'] = time();
-			$res = LockAuth::createData($data);
-		}catch(\Exception $e){
-			throw new \Exception($e->getMessage());
-		}
-		return $res;
-	}
-/*end*/
+
+
 	/*
  	* @Description  修改
  	* @param (输入参数：)  {array}        data 原始数据
@@ -81,6 +65,26 @@ class LockAuthService extends CommonService {
 		return $res;
 	}
 
+
+
+/*start*/
+   /*
+ 	* @Description  添加
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function lockadd($data){
+		try{
+			//$data['auth_starttime'] = strtotime($data['auth_starttime']);
+			//$data['auth_endtime'] = strtotime($data['auth_endtime']);
+			$data['create_time'] = time();
+			$res = LockAuth::createData($data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		return $res;
+	}
+/*end*/
 
 
 

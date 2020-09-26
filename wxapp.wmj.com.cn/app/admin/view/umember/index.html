@@ -3,7 +3,7 @@
 	<div class="col-sm-12">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-				<h5>卡管理</h5>
+				<h5>用户管理</h5>
 				<button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()" id="">
 					<i class="fa fa-refresh"></i>
 				</button>
@@ -15,25 +15,17 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">卡序列号</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">呢称</button>
 									</div>
-									<input type="text" class="form-control" id="lockcard_sn" placeholder="卡序列号" />
+									<input type="text" class="form-control" id="nickname" placeholder="呢称" />
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">持有人</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
 									</div>
-									<input type="text" class="form-control" id="lockcard_username" placeholder="持有人" />
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="input-group">
-									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">备注</button>
-									</div>
-									<input type="text" class="form-control" id="lockcard_remark" placeholder="备注" />
+									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
 								</div>
 							</div>
 							<!-- search end -->
@@ -44,27 +36,27 @@
 							</div>
 						</div>
 						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
-						{if condition="in_array('/admin/LockCard/add',session('admin.nodes')) || session('admin.role') eq 1"}
+						{if condition="in_array('/admin/Umember/add',session('admin.nodes')) || session('admin.role') eq 1"}
 						<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
 						<i class="fa fa-plus"></i>&nbsp;添加
 						</button>
 						{/if}
-						{if condition="in_array('/admin/LockCard/update',session('admin.nodes')) || session('admin.role') eq 1"}
+						{if condition="in_array('/admin/Umember/update',session('admin.nodes')) || session('admin.role') eq 1"}
 						<button type="button" id="update" class="btn btn-success button-margin" onclick="CodeGoods.update()">
 						<i class="fa fa-pencil"></i>&nbsp;修改
 						</button>
 						{/if}
-						{if condition="in_array('/admin/LockCard/delete',session('admin.nodes')) || session('admin.role') eq 1"}
+						{if condition="in_array('/admin/Umember/delete',session('admin.nodes')) || session('admin.role') eq 1"}
 						<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
 						<i class="fa fa-trash"></i>&nbsp;删除
 						</button>
 						{/if}
-						{if condition="in_array('/admin/LockCard/view',session('admin.nodes')) || session('admin.role') eq 1"}
+						{if condition="in_array('/admin/Umember/view',session('admin.nodes')) || session('admin.role') eq 1"}
 						<button type="button" id="view" class="btn btn-info button-margin" onclick="CodeGoods.view()">
 						<i class="fa fa-plus"></i>&nbsp;查看数据
 						</button>
 						{/if}
-						{if condition="in_array('/admin/LockCard/dumpData',session('admin.nodes')) || session('admin.role') eq 1"}
+						{if condition="in_array('/admin/Umember/dumpData',session('admin.nodes')) || session('admin.role') eq 1"}
 						<button type="button" id="dumpData" class="btn btn-warning button-margin" onclick="CodeGoods.dumpData()">
 						<i class="fa fa-download"></i>&nbsp;导出
 						</button>
@@ -85,36 +77,51 @@
 	CodeGoods.initColumn = function () {
  		return [
  			{field: 'selectItem', checkbox: true},
- 			{title: '编号', field: 'lockcard_id', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '卡序列号', field: 'lockcard_sn', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '过期时间', field: 'lockcard_endtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.lockcard_endtimeFormatter},
- 			{title: '持有人', field: 'lockcard_username', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '备注', field: 'lockcard_remark', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '发卡时间', field: 'lockcard_createtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.lockcard_createtimeFormatter},
+ 			{title: '编号', field: 'umember_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
+ 			{title: '呢称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
+ 			{title: '用户ID', field: 'member_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '注册时间', field: 'ucreate_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.ucreate_timeFormatter},
  			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
  		];
  	};
 
 	CodeGoods.buttonFormatter = function(value,row,index) {
-		if(row.lockcard_id){
+		if(row.umember_id){
 			var str= '';
-			{if condition="in_array('/admin/LockCard/update',session('admin.nodes')) || session('admin.role') eq 1"}
-			str += '<button type="button" class="btn btn-success btn-xs" title="修改"  onclick="CodeGoods.update('+row.lockcard_id+')"><i class="fa fa-pencil"></i>&nbsp;修改</button>&nbsp;';
+			{if condition="in_array('/admin/Umember/update',session('admin.nodes')) || session('admin.role') eq 1"}
+			str += '<button type="button" class="btn btn-success btn-xs" title="修改"  onclick="CodeGoods.update('+row.umember_id+')"><i class="fa fa-pencil"></i>&nbsp;修改</button>&nbsp;';
 			{/if}
-			{if condition="in_array('/admin/LockCard/delete',session('admin.nodes')) || session('admin.role') eq 1"}
-			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.lockcard_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
+			{if condition="in_array('/admin/Umember/delete',session('admin.nodes')) || session('admin.role') eq 1"}
+			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.umember_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
 			{/if}
 			return str;
 		}
 	}
 
-	CodeGoods.lockcard_endtimeFormatter = function(value,row,index) {
+	CodeGoods.headimgurlFormatter = function(value,row,index) {
 		if(value){
-			return formatDateTime(value,'Y-m-d H:i:s');	
+			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
 		}
 	}
 
-	CodeGoods.lockcard_createtimeFormatter = function(value,row,index) {
+	CodeGoods.statusFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">正常</span>';
+				break;
+				case '0':
+					return '<span class="label label-danger">禁用</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.ucreate_timeFormatter = function(value,row,index) {
 		if(value){
 			return formatDateTime(value,'Y-m-d H:i:s');	
 		}
@@ -122,9 +129,9 @@
 
 	CodeGoods.formParams = function() {
 		var queryData = {};
-		queryData['lockcard_sn'] = $("#lockcard_sn").val();
-		queryData['lockcard_username'] = $("#lockcard_username").val();
-		queryData['lockcard_remark'] = $("#lockcard_remark").val();
+		queryData['nickname'] = $("#nickname").val();
+		queryData['mobile'] = $("#mobile").val();
+		queryData['user_id'] = $("#user_id").val();
 		return queryData;
 	}
 
@@ -141,7 +148,7 @@
 
 	CodeGoods.add = function (value) {
 		var url = location.search;
-		var index = layer.open({type: 2,title: '添加',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/add'+url});
+		var index = layer.open({type: 2,title: '添加',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Umember/add'+url});
 		this.layerIndex = index;
 		if(!IsPC()){layer.full(index)}
 	}
@@ -149,20 +156,20 @@
 
 	CodeGoods.update = function (value) {
 		if(value){
-			var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/update?lockcard_id='+value});
+			var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Umember/update?umember_id='+value});
 			if(!IsPC()){layer.full(index)}
 		}else{
 			if (this.check()) {
 				var idx = '';
 				$.each(CodeGoods.seItem, function() {
-					idx += ',' + this.lockcard_id;
+					idx += ',' + this.umember_id;
 				});
 				idx = idx.substr(1);
 				if(idx.indexOf(",") !== -1){
 					Feng.info("请选择单条数据！");
 					return false;
 				}
-				var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/update?lockcard_id='+idx});
+				var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Umember/update?umember_id='+idx});
 				this.layerIndex = index;
 				if(!IsPC()){layer.full(index)}
 			}
@@ -173,7 +180,7 @@
 	CodeGoods.delete = function (value) {
 		if(value){
 			Feng.confirm("是否删除选中项？", function () {
-				var ajax = new $ax(Feng.ctxPath + "/LockCard/delete", function (data) {
+				var ajax = new $ax(Feng.ctxPath + "/Umember/delete", function (data) {
 					if ('00' === data.status) {
 						Feng.success(data.msg);
 						CodeGoods.table.refresh();
@@ -181,18 +188,18 @@
 						Feng.error(data.msg);
 					}
 				});
-				ajax.set('lockcard_ids', value);
+				ajax.set('umember_ids', value);
 				ajax.start();
 			});
 		}else{
 			if (this.check()) {
 				var idx = '';
 				$.each(CodeGoods.seItem, function() {
-					idx += ',' + this.lockcard_id;
+					idx += ',' + this.umember_id;
 				});
 				idx = idx.substr(1);
 				Feng.confirm("是否删除选中项？", function () {
-					var ajax = new $ax(Feng.ctxPath + "/LockCard/delete", function (data) {
+					var ajax = new $ax(Feng.ctxPath + "/Umember/delete", function (data) {
 						if ('00' === data.status) {
 							Feng.success(data.msg);
 							CodeGoods.table.refresh();
@@ -200,7 +207,7 @@
 							Feng.error(data.msg);
 						}
 					});
-					ajax.set('lockcard_ids', idx);
+					ajax.set('umember_ids', idx);
 					ajax.start();
 				});
 			}
@@ -210,16 +217,16 @@
 
 	CodeGoods.view = function (value) {
 		if(value){
-			var index = layer.open({type: 2,title: '查看数据',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/view?lockcard_id='+value});
+			var index = layer.open({type: 2,title: '查看数据',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Umember/view?umember_id='+value});
 			if(!IsPC()){layer.full(index)}
 		}else{
 			if (this.check()) {
 				var idx = '';
 				$.each(CodeGoods.seItem, function() {
-					idx += ',' + this.lockcard_id;
+					idx += ',' + this.umember_id;
 				});
 				idx = idx.substr(1);
-				var index = layer.open({type: 2,title: '查看数据',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockCard/view?lockcard_id='+idx});
+				var index = layer.open({type: 2,title: '查看数据',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Umember/view?umember_id='+idx});
 				this.layerIndex = index;
 				if(!IsPC()){layer.full(index)}
 			}
@@ -231,7 +238,7 @@
 		var select_id = '';
 		if (this.check()){
 			$.each(CodeGoods.seItem, function() {
-				select_id += ',' + this.lockcard_id;
+				select_id += ',' + this.umember_id;
 			});
 		}
 		select_id = select_id.substr(1);
@@ -246,7 +253,7 @@
 				idx.push($(this).attr('data-field'));
 			});
 			var queryData = CodeGoods.formParams();
-			window.location.href = Feng.ctxPath + '/LockCard/dumpData?action_id=824&' + Feng.parseParam(queryData) + '&' +Feng.parseParam(idx) + '&lockcard_id=' + select_id;
+			window.location.href = Feng.ctxPath + '/Umember/dumpData?action_id=826&' + Feng.parseParam(queryData) + '&' +Feng.parseParam(idx) + '&umember_id=' + select_id;
 			setTimeout(function() {
 				layer.close(index)
 			}, 1000);
@@ -261,7 +268,7 @@
 	$(function() {
 		var defaultColunms = CodeGoods.initColumn();
 		var url = location.search;
-		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/LockCard/index"+url,defaultColunms,20);
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/Umember/index"+url,defaultColunms,20);
 		table.setPaginationType("server");
 		table.setQueryParams(CodeGoods.formParams());
 		CodeGoods.table = table.init();
