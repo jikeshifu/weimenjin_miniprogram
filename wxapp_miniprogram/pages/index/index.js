@@ -21,7 +21,7 @@ Page({
     close: true,  // 登录弹层是否关闭 false不关闭
     closeAd: true, // 广告弹层是否关闭 false 不关闭
     onlyimg: '../../images/ad.jpg',
-    adnum: 2, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
+    adnum: 1, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
     openadurl: '', // 点击图片打开的链接
     adw:600, // 广告弹层的宽单位rpx
     hitshowminiad: false,
@@ -66,20 +66,21 @@ Page({
       mask: true
     })
     if (app.globalData.userid < 1) {
-      setTimeout(function(){
-        if (app.globalData.userid < 1) {
-          wx.hideLoading();
-          that.setData({
-            close:false
-          })
-        }else{
-          // if (that.data.listarr.length <1) {
-            that.getmore(1,that.data.num,0);
-          // } else {
-          //   wx.hideLoading();
-          // }
-        }
-      },2000);
+      that.login();
+      // setTimeout(function(){
+      //   if (app.globalData.userid < 1) {
+      //     wx.hideLoading();
+      //     that.setData({
+      //       close:false
+      //     })
+      //   }else{
+      //     // if (that.data.listarr.length <1) {
+      //       that.getmore(1,that.data.num,0);
+      //     // } else {
+      //     //   wx.hideLoading();
+      //     // }
+      //   }
+      // },2000);
     }else{
       // if (that.data.listarr.length <1) {
         that.getmore(1,that.data.num,0);
@@ -403,13 +404,26 @@ Page({
             successimg: app.globalData.domain+res.data.successimg,
             successadimg: app.globalData.domain+res.data.successadimg,
             openadurl: res.data.openadurl,
+            adnum: res.data.adnum,
             hitshowminiad:res.data.hitshowminiad
           })
           setTimeout(function(){
             that.setData({
               closeAd: true
             })
-          },3000);
+          },5000);
+        }else if (res.data.opendoor_status=='202') {
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none',
+            mask: true, // 防止触摸穿透
+            duration: 2000
+          });
+          setTimeout(function(){
+            wx.navigateTo({
+              url: '../bindphone/bindphone'
+            })
+          },2000);
         }else{
           wx.showToast({
             title: res.data.msg,
@@ -428,18 +442,54 @@ Page({
     })
   },
   getUserInfo: function(e) {
+    var that = this;
     wx.showLoading({
       title: '登录中',
       mask: true
     })
     console.log('getUserInfo-e');
     console.log(e);
+    var userInfo = e.detail.userInfo
     app.globalData.userInfo = e.detail.userInfo
-    this.setData({
+    that.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-    this.updateUserInfo(e.detail);
+    // this.updateUserInfo(e.detail);
+    wx.request({
+      url: app.globalData.domain+'/api/Member/update',
+      method: 'POST',
+      header:{
+        "Authorization": app.globalData.token
+      },
+      data: {
+        member_id: app.globalData.userid,
+        nickname: userInfo.nickName,
+        headimgurl: userInfo.avatarUrl,
+        openid: app.globalData.openid,
+        mobile: '',
+        sex: userInfo.gender,
+        member_ps: 1,
+      },
+      success: function (resa) {
+        console.log('index-resa');
+        console.log(resa);
+        wx.hideLoading();
+        if (resa.data.status == 200) {
+          that.setData({
+            close: true
+          });
+          that.getmore(1,that.data.num,0);
+        }else{
+          wx.showToast({
+            title: resa.data.msg,
+            icon: 'none',
+            mask: true, // 防止触摸穿透
+            duration: 2000
+          });
+        }
+      }
+    })
   },
   updateUserInfo: function(data) {
     console.log('updateUserInfo');
@@ -506,6 +556,50 @@ Page({
                   })
                 }
               })
+            }
+          })
+        }
+      }
+    })
+  },
+  login: function () {
+    var that = this;
+    // 登录
+    wx.login({
+      success: res => {
+        if (res.code) {
+          // 可以将 res 发送给后台解码出 unionId
+          //发起网络请求
+          wx.request({
+            url: app.globalData.domain+'/api/Member/login',
+            data: {
+              code: res.code,
+            },
+            method: 'POST',
+            success: function (resa) {
+              console.log('login-resa');
+              console.log(resa);
+              wx.hideLoading();
+              if (resa.data.status == 200) {
+                app.globalData.token = resa.data.token;
+                app.globalData.userid = resa.data.data.member_id;
+                app.globalData.openid = resa.data.data.openid;
+                app.globalData.phone = resa.data.data.mobile == null ? '' :resa.data.data.mobile;
+                if (resa.data.data.useradmininfo.length > 0) {
+                  app.globalData.user_id = resa.data.data.useradmininfo.user_id;
+                  console.log('useradmininfo');
+                }else{
+                  console.log('else-useradmininfo');
+                }
+                if (resa.data.data.headimgurl == null || resa.data.data.headimgurl == '') {
+                  that.setData({
+                    close:false
+                  })
+                }else{
+                  that.getmore(1,that.data.num,0);
+                }
+              }
+              // that.getmore(1,that.data.num,0);
             }
           })
         }
@@ -665,6 +759,28 @@ Page({
           });
         } else if (res.cancel) {
           console.log('用户点击取消')
+        }
+      }
+    })
+  },
+  getAdmin: function () {
+    wx.request({
+      url: app.globalData.domain+'/api/Member/viewuserid',
+      method: 'POST',
+      header:{
+        "Authorization": resa.data.token
+      },
+      data: {
+        member_id: app.globalData.userid
+      },
+      success: function (resb) {
+        console.log('index-updateUserInfo-resb');
+        console.log(resb);
+        if (resb.data.status == 200) {
+          var tmpuser_id = resb.data.data.user_id;
+          if (tmpuser_id != '') {
+            app.globalData.user_id = resb.data.data.user_id;
+          }
         }
       }
     })

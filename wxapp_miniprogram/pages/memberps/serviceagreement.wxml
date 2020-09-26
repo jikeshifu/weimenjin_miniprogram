@@ -1,6 +1,6 @@
 <!--pages/memberps/serviceagreement.wxml-->
 <view class="container">
   <view class="pageH5">
-    <web-view src="https://www.wmj.com.cn/ServiceAgreement"></web-view>
+    <web-view src="{{serviceagreement}}"></web-view>
   </view>
 </view>

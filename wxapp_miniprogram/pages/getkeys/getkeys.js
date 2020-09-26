@@ -107,7 +107,7 @@ Page({
               app.globalData.userInfo = resuser.userInfo
               //发起网络请求
               wx.request({
-                url: app.globalData.domain+'/api/Member/xcxlogin',
+                url: app.globalData.domain+'/api/Member/login',
                 data: {
                   code: res.code,
                   encryptedData: resuser.encryptedData,

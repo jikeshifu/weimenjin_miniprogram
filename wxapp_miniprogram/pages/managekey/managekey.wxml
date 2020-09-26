@@ -5,9 +5,17 @@
       <view class="tabli {{tabarr[1] ? 'on' :''}}" data-id="1" bindtap="swichtab">已通过</view>
     </view>
   </view>
+  <view class="h88"></view>
   <scroll-view class="scrollbox" scroll-y style="height:{{scrollHeight}}px;" upper-threshold="50" lower-threshold="50" bindscrolltoupper="scrolltoupper" bindscrolltolower="scrolltolower" bindscroll="scrollfun">
+    <!--<view class="searchbox"><view class="search" bindtap="startSearch"><image mode="aspectFit" class="" src="{{search}}"></image>搜索</view></view>-->
+    <view class="searchwrap" wx:if="{{listarr.length > 0}}">
+      <view class="flex mt30 mb20">
+        <view class="shrink1"><image mode="aspectFit" class="searchicon" src="{{search}}"></image><input class="search2" name="keyword" placeholder="输入关键词" bindinput="keywordInput"></input></view>
+        <view class="shrink0 wzbtn" bindtap="doSearch">搜索</view>
+      </view>
+    </view>
     <view class="listbox">
-      <view class="listrow" wx:for="{{listarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+      <view class="listrow {{index<1?'bt1':''}}" wx:for="{{listarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
         <view class='shrink2'><image class="avatar" src="{{vo.headimgurl}}" mode="cover"></image></view>
         <view class='shrink1'>
           <view class="name">{{vo.nickname}}</view>

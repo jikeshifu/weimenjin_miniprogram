@@ -16,7 +16,7 @@ page{background:#f3f3f3;box-sizing:border-box;}
 .listbox{padding: 0 30rpx;}
 .cuIcon-lock{font-size:20px;color:#000;}
 .cu-list.menu-avatar>.cu-item{border-radius:20rpx;margin-bottom: 20rpx;}
-.cu-list.menu-avatar>.cu-item .action{width:300rpx;text-align:right;padding-right:8rpx;}
+.cu-list.menu-avatar>.cu-item .action{width:300rpx;text-align:right;padding-right:8rpx;margin-top:-4px;}
 .cu-form-group{min-height:80rpx;}
 .cu-form-group picker{width:100%;height:80rpx;border-bottom: 1px solid #e3e3e3;}
 .cu-form-group picker .picker{width:100%;height:80rpx;line-height:80rpx;}
@@ -29,5 +29,5 @@ page{background:#f3f3f3;box-sizing:border-box;}
 .c_f43530{color: #f43530;}
 .c_f76260{color: #f76260;}
 .text-center {text-align: center; margin: 0px !important; padding: 0px !important;}
-
+.cu-list.menu-avatar>.cu-item .action view.typestr{margin-top:0;}
 

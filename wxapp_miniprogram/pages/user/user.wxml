@@ -45,6 +45,10 @@
       <text>添加设备</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>
+    <view class="witem {{user_id>0 ? '' : 'hide'}}" bindtap="adduser">
+      <text>管理员信息</text>
+      <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
+    </view>
     <view class="witem {{phone==null ? '' : 'hide'}}" bindtap="bindPhone">
       <text>绑定手机号</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />

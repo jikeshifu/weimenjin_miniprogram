@@ -1,6 +1,7 @@
 const app = getApp()
 Page({
   data: {
+    search: '../../images/search.png',
     looding: '../../images/looding.gif',
     successimg: '../../images/success.png',
     avatarUrl: '../../images/avatar.png',
@@ -17,7 +18,8 @@ Page({
     user_id: 0, //锁管理员id
     showcard: 0, // 是否显示添加卡，0不显示,1显示
     auth_status: '0', // 0待审核，1已通过
-    tabarr: [true,false] // 切换tab
+    tabarr: [true,false], // 切换tab
+    keyword: '',
   },
   onPullDownRefresh: function () {
     this.setData({
@@ -95,6 +97,15 @@ Page({
       });
     }
   },
+  doSearch: function () {
+    var that = this;
+    that.getmore(1, that.data.num,0);
+  },
+  keywordInput(e) {
+    this.setData({
+      keyword: e.detail.value
+    })
+  },
   swichtab: function (e) {
     var that = this;
     var id = e.currentTarget.dataset['id'];
@@ -133,6 +144,7 @@ Page({
       var aaa = {
           lock_id: that.data.lock_id,
           auth_status: that.data.auth_status,
+          keyword: that.data.keyword,
           limit: num,
           page: page
         };
@@ -147,6 +159,7 @@ Page({
         data: {
           lock_id: that.data.lock_id,
           auth_status: that.data.auth_status,
+          keyword: that.data.keyword,
           limit: num,
           page: page
         },

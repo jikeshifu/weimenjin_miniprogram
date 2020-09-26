@@ -12,19 +12,20 @@ Page({
       wx.navigateTo({
         url: '../wxlogin/wxlogin'
       })
+    }else{
+      if (app.globalData.adminInfo) {
+        this.setData({
+          realname: app.globalData.adminInfo.name,
+          username: app.globalData.adminInfo.user,
+          btn: '修改密码',
+          manageurl:app.globalData.domain
+        });
+      }
     }
   },
   onLoad: function (options) {
     console.log('adduser-onLoad-app.globalData');
     console.log(app.globalData);
-    if (app.globalData.adminInfo) {
-      this.setData({
-        realname: app.globalData.adminInfo.name,
-        username: app.globalData.adminInfo.user,
-        btn: '修改密码',
-        manageurl:app.globalData.domain
-      });
-    }
   },
   realnameInput:function(e){
     this.setData({

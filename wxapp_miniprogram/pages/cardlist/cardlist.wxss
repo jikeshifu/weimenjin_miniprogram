@@ -16,14 +16,16 @@ page{background:#fff;box-sizing:border-box;}
 .listbox{padding-left: 30rpx;}
 
 .listrow1{display:flex;flex-direction:row;padding:0;border-bottom:1px solid #e3e3e3;height:160rpx;}
-.shrink01{flex-shrink:0;width:100rpx;color: #333;font-size: 11pt;}
-.shrink21{flex-shrink:0;width:120rpx;}
-.shrink11{flex-shrink:1;width:100%;font-size: 11pt;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+.shrink01{flex-shrink:0;width:86rpx;color: #333;font-size: 11pt;}
+.shrink21{flex-shrink:0;width:110rpx;}
+.shrink11{flex-shrink:1;width:100%;font-size: 11pt;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;padding-top:6rpx;}
 .avatar{width:99rpx;height:99rpx;margin:30rpx 20rpx 0 0;border-radius:50%;}
-.listrow1 .name{line-height:46rpx;margin-top: 16rpx;font-size: 11pt;}
-.listrow1 .phone{line-height:46rpx;font-size: 10pt;}
-.update{background-color: rgb(60, 206, 16);line-height:160rpx;text-align: center;color:#fff;}
-.delete{background-color: red;line-height:160rpx;text-align: center;color:#fff;}
+.listrow1 .name{min-height:24rpx;line-height:46rpx;margin-top: 16rpx;font-size: 11pt;}
+.listrow1 .phone{line-height:40rpx;font-size: 10pt;}
+.listrow1 .gqtime{line-height:40rpx;font-size:9pt;}
+.facard{background-color: #21cf3e;height:60rpx;line-height:60rpx;text-align: center;color:#fff;border-radius: 10rpx;margin-top:50rpx;margin-right:4rpx;}
+.update{background-color: #FFB800;height:60rpx;line-height:60rpx;text-align: center;color:#fff;border-radius: 10rpx;margin-top:50rpx;margin-right:4rpx;}
+.delete{background-color: red;height:60rpx;line-height:60rpx;text-align: center;color:#fff;border-radius: 10rpx;margin-top:50rpx;}
 .del{background-color: red;line-height:120rpx;text-align: center;color: #fff;}
 .mscan{text-align: center;position: fixed;top:40%;left:50%;margin-left:-80rpx;}
 .micon{font-size: 70pt;color:#21cf3e;}

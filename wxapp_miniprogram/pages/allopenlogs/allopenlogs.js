@@ -3,6 +3,7 @@ const app = getApp()
 Page({
   data: {
     search: '../../images/search.png',
+    avatar: '../../images/avatar.png',
     looding: '../../images/looding.gif',
     hidelood: false,
     nodata: false,
@@ -120,17 +121,20 @@ Page({
     }
     var date = new Date();
     var Y = date.getFullYear();
+    var timestamp = Date.parse(new Date());
+    timestamp = timestamp/1000;
+    var nowdate = that.timestampToTime(timestamp,'Y-m-d H:i:s');
     // 获取完整的年月日 时分秒，以及默认显示的数组
-    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
-    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
+    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
+    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
     // 精确到分的处理，将数组的秒去掉
     // var lastArray = obj1.dateTimeArray.pop();
     // var lastTime = obj1.dateTime.pop();
     that.setData({
-      dateTime: obj.dateTime,
+      dateIndex: obj.dateTime,
       dateTimeArray: obj.dateTimeArray,
       dateTimeArray1: obj1.dateTimeArray,
-      dateTime1: obj1.dateTime
+      dateIndex1: obj1.dateTime
     });
   },
   getmore: function(page,num,addto){ // addto为0覆盖原有数据，为1在原有数据基础上追加数据
@@ -171,18 +175,24 @@ Page({
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
             if(arrdata && arrdata.length > 0){
+              var typearr = ['','扫码开门','点击开门','后台开门','刷卡开门'];// type为1时为扫码开门，type为2时点击开门，type为3时后台开门，type为4时是刷卡开门
               var timestamp = Date.parse(new Date())/1000;
               for (var i = 0; i < arrdata.length; i++) {
                 var tmpobj = {};
                 tmpobj['create_time'] = that.timestampToTime(arrdata[i]['create_time'])
                 tmpobj['lock_name'] = arrdata[i]['lock_name'];
-                tmpobj['headimgurl'] = arrdata[i]['headimgurl'];
+                tmpobj['headimgurl'] = arrdata[i]['headimgurl'] != '' ? arrdata[i]['headimgurl'] : that.data.avatar;
                 tmpobj['nickname'] = arrdata[i]['nickname'];
                 tmpobj['mobile'] = arrdata[i]['mobile'];
                 var phone = arrdata[i]['mobile'];
                 tmpobj['mobile'] = phone;
                 tmpobj['phone'] = phone.substr(0,3)+"****"+ phone.substr(7);
                 tmpobj['type'] = arrdata[i]['type'];
+                tmpobj['typestr'] = typearr[arrdata[i]['type']];
+                if (arrdata[i]['type']== 4) {
+                  tmpobj['nickname'] = arrdata[i]['lockcard_username'];
+                  tmpobj['phone'] = '卡号:'+arrdata[i]['cardsn'];
+                }
                 // tmpobj['lock_id'] = arrdata[i]['lock_id'];
                 // tmpobj['user_id'] = arrdata[i]['user_id']; // 锁的管理员id
                 arr.push(tmpobj);
@@ -271,7 +281,7 @@ Page({
               app.globalData.userInfo = resuser.userInfo
               //发起网络请求
               wx.request({
-                url: app.globalData.domain+'/api/Member/xcxlogin',
+                url: app.globalData.domain+'/api/Member/login',
                 data: {
                   code: res.code,
                   encryptedData: resuser.encryptedData,
@@ -331,24 +341,26 @@ Page({
   },
   callPhone: function (e) {
     var phone = e.currentTarget.dataset['phone'];
-    wx.showActionSheet({
-      itemList: [phone],
-      success: function (res) {
-        console.log(res) // 点击手机号执行拨打电话
-        wx.makePhoneCall({
-          phoneNumber: phone, //此号码并非真实电话号码，仅用于测试
-          success: function () {
-            console.log("拨打电话成功！")
-          },
-          fail: function () {
-            console.log("拨打电话失败！")
+    if (phone != undefined && phone != '' && phone != null) {
+      wx.showActionSheet({
+        itemList: [phone],
+        success: function (res) {
+          console.log(res) // 点击手机号执行拨打电话
+          wx.makePhoneCall({
+            phoneNumber: phone, //此号码并非真实电话号码，仅用于测试
+            success: function () {
+              console.log("拨打电话成功！")
+            },
+            fail: function () {
+              console.log("拨打电话失败！")
+            }
+          })
+          if (!res.cancel) {
+            console.log(res.tapIndex)//console出了下标
           }
-        })
-        if (!res.cancel) {
-          console.log(res.tapIndex)//console出了下标
         }
-      }
-    });
+      });
+    }
   },
   timestampToTime: function (timestamp) {
     if (timestamp == undefined || timestamp==0){

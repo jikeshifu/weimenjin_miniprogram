@@ -1,6 +1,6 @@
 <view class="wrap">
-    <view class="fullmask {{close ? 'hide1' :''}}"></view>
-    <view class="maskbox {{close ? 'hide1' :''}}">
+    <view class="fullmask {{close ? 'hide' :''}}"></view>
+    <view class="maskbox {{close ? 'hide' :''}}">
         <view class="tiptitle">您还没有钥匙</view>
         <view class="subtitle">登录小程序获取钥匙可开启门禁</view>
         <view class="cuIcon-warn micon"></view>

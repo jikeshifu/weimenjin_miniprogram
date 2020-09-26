@@ -11,6 +11,7 @@
           </view>
           <view class="action">
             <view class="text-grey">{{vo.lock_name}}</view>
+            <view class="text-grey typestr">({{vo.typestr}})</view>
           </view>
           <view class="move">
             <view class="bg-grey">置顶</view>

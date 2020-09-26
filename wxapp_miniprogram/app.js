@@ -24,7 +24,7 @@ App({
               this.globalData.userInfo = resuser.userInfo
               //发起网络请求
               wx.request({
-                url: this.globalData.domain+'/api/Member/xcxlogin',
+                url: this.globalData.domain+'/api/Member/login',
                 data: {
                   code: res.code,
                   encryptedData: resuser.encryptedData,

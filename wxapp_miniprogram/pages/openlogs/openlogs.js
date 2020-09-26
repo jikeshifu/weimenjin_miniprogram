@@ -112,17 +112,20 @@ Page({
         });
       }
     });
+    var timestamp = Date.parse(new Date());
+    timestamp = timestamp/1000;
+    var nowdate = that.timestampToTime(timestamp,'Y-m-d H:i:s');
     // 获取完整的年月日 时分秒，以及默认显示的数组
-    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
-    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
+    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
+    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
     // 精确到分的处理，将数组的秒去掉
     // var lastArray = obj1.dateTimeArray.pop();
     // var lastTime = obj1.dateTime.pop();
     that.setData({
-      dateTime: obj.dateTime,
+      dateIndex: obj.dateTime,
       dateTimeArray: obj.dateTimeArray,
       dateTimeArray1: obj1.dateTimeArray,
-      dateTime1: obj1.dateTime
+      dateIndex1: obj1.dateTime
     });
   },
   getmore: function(page,num,addto){ // addto为0覆盖原有数据，为1在原有数据基础上追加数据
@@ -262,7 +265,7 @@ Page({
               app.globalData.userInfo = resuser.userInfo
               //发起网络请求
               wx.request({
-                url: app.globalData.domain+'/api/Member/xcxlogin',
+                url: app.globalData.domain+'/api/Member/login',
                 data: {
                   code: res.code,
                   encryptedData: resuser.encryptedData,

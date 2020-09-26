@@ -5,7 +5,7 @@ Page({
     successadimg: '../../images/success.png',
     closeAd: true, // 广告弹层是否关闭 false不关闭
     onlyimg: '../../images/ad.jpg',
-    adnum: 2, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
+    adnum: 1, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
     openadurl: '', // 点击图片打开的链接
     cleartime: '', // 定时器
     adw:600, // 广告弹层的宽单位rpx
@@ -25,23 +25,42 @@ Page({
   onShow:function () {
     console.log('open-onShow')
     var that = this;
-    wx.showLoading({
-      title: '命令执行中',
-      mask: true
-    });
-    if (app.globalData.userid < 1) {
-      setTimeout(function(){
-        if (app.globalData.userid < 1) {
-          wx.hideLoading();
-          wx.navigateTo({
-            url: '../wxlogin/wxlogin'
-          })
-        }else{
-          that.getLock();
+    var pages = getCurrentPages();
+    console.log('pages')
+    console.log(pages)
+    var len = pages.length;
+    var isweb = false;
+    if (len>=2) {
+      var prevpage = pages[pages.length - 2];
+      if (prevpage.route=="pages/web/web") {
+        if (url.length > 0) {
+          isweb = true;
         }
-      },2000);
+      }
+    }
+    if (isweb) {
+      wx.switchTab({
+        url: '../index/index'
+      })
     }else{
-      that.getLock();
+      wx.showLoading({
+        title: '命令执行中',
+        mask: true
+      });
+      if (app.globalData.userid < 1) {
+        setTimeout(function(){
+          if (app.globalData.userid < 1) {
+            wx.hideLoading();
+            wx.navigateTo({
+              url: '../wxlogin/wxlogin'
+            })
+          }else{
+            that.getLock();
+          }
+        },2000);
+      }else{
+        that.getLock();
+      }
     }
   },
   onLoad: function (options) {
@@ -310,6 +329,7 @@ Page({
             successimg: app.globalData.domain+res.data.successimg,
             successadimg: app.globalData.domain+res.data.successadimg,
             openadurl: res.data.openadurl,
+            adnum: res.data.adnum,
             qrshowminiad:res.data.qrshowminiad
           })
           var cleartime = setTimeout(function(){
@@ -319,7 +339,7 @@ Page({
             wx.switchTab({
               url: '../index/index'
             })
-          },3000);
+          },5000);
           that.setData({
             cleartime: cleartime
           })
@@ -447,13 +467,17 @@ Page({
                 });
               }
               app.globalData.phone = phone;
+              var userInfo = app.globalData.userInfo;
+              userInfo['nickName'] = userInfo['nickName']? userInfo['nickName'] :'';
+              userInfo['avatarUrl'] = userInfo['avatarUrl']? userInfo['avatarUrl'] :'';
+              userInfo['gender'] = userInfo['gender']? userInfo['gender'] :'1';
               var dataobj = {
                 member_id: app.globalData.userid,
-                nickname: app.globalData.userInfo.nickName,
-                headimgurl: app.globalData.userInfo.avatarUrl,
+                nickname: userInfo.nickName,
+                headimgurl: userInfo.avatarUrl,
                 openid: app.globalData.openid,
                 mobile: phone,
-                sex: app.globalData.userInfo.gender
+                sex: userInfo.gender
               };
               console.log('dataobj')
               console.log(dataobj);
@@ -575,9 +599,12 @@ Page({
     var tmpopenadurl = this.data.openadurl;
     if (tmpopenadurl) {
       clearTimeout(this.data.cleartime);
-      wx.navigateTo({
+      wx.redirectTo({
         url: '../web/web?url='+tmpopenadurl
       })
+      /*wx.navigateTo({
+        url: '../web/web?url='+tmpopenadurl
+      })*/
     }
   }
 })

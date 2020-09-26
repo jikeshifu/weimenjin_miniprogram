@@ -74,5 +74,17 @@
 .mt150 {
   margin-top: 150px;
 }
-.adbox2{height:360rpx;position:fixed;left: 50%;top: 50%;margin-top: -180rpx;z-index: 1002;}
-.onlyimg{width:100%;height:360rpx;}
+
+.adbox2 {
+  height: 980rpx;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-top: -490rpx;
+  z-index: 1002;
+}
+
+.onlyimg {
+  width: 100%;
+  height: 980rpx;
+}

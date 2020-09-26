@@ -85,7 +85,7 @@
 			<ad unit-id="adunit-7f4379a208fd83c6"></ad>
 		</view>
 	</view>
-	<view class="adbox2" style="width:{{adw}}rpx;margin-left:-{{adw/2}}rpx;"  wx:if="{{!closeAd && adnum==2}}">
+	<view class="adbox2" style="width:{{adw}}rpx;margin-left:-{{adw/2}}rpx;"  wx:if="{{!closeAd && adnum!=1}}">
 		<view class="onlyone" bindtap="openweb">
 			<image class="onlyimg" mode="aspectFit" src="{{successimg}}"></image>
 		</view>

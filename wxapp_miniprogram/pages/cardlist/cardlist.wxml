@@ -7,9 +7,10 @@
         <view class='shrink11'>
           <view class="name">{{vo.lockcard_username}}</view>
           <view class="phone">卡号：{{vo.lockcard_sn}}</view>
-          <view class="phone">过期时间：{{vo.lockcard_endtime}}</view>
+          <view class="gqtime">过期时间:{{vo.lockcard_endtime}}</view>
         </view>
-        <view class='shrink01 update' bindtap="editCard" data-lockcardid="{{vo.lockcard_id}}">更新</view>
+        <view class='shrink01 facard' bindtap="faCard" data-lockcardid="{{vo.lockcard_id}}">发卡</view>
+        <view class='shrink01 update' bindtap="editCard" data-lockcardid="{{vo.lockcard_id}}">续卡</view>
         <view class='shrink01 delete' bindtap="deleteCard" data-lockcardid="{{vo.lockcard_id}}">删除</view>
       </view>
       <block wx:if="{{listlen <1}}">

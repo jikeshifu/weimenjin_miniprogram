@@ -11,7 +11,12 @@ Page({
     endtime: '', // 过期时间
     startYear: 2020,
     endYear: 2050,
+    lock_id: '0', // 这个卡片对应的锁id，不更新，剔除这张卡
+    lockauth_id: 0, // 这张卡对应的钥匙id，添加卡时统一用这个
     lockcard_id: 0, // 门卡ID
+    lockarr: [], // {"lock_id":1,"lock_name":"设备1","lockauth_id":"1"}
+    lock_user_arr: [], // lock_id=>user_id
+    selectLockid: [], // 选中的门禁id
   },
   onShow:function () {
     console.log('onShow')
@@ -31,7 +36,7 @@ Page({
           lockcard_id: that.data.lockcard_id
         },
         success: function (resa) {
-          console.log('success-resa');
+          console.log('onShow-success-resa');
           console.log(resa);
           //wx.hideLoading();
           if (resa.data.status == 200) {
@@ -39,12 +44,15 @@ Page({
             var endtime = that.timestampToTime(card.lockcard_endtime,'Y-m-d H:i:s');
             var tmpobj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,endtime);
             that.setData({
+              lockcard_sn: card.lockcard_sn,
               lockcard_username: card.lockcard_username,
               lockcard_remark: card.lockcard_remark,
+              lock_id: card.lock_id,
               endtime: endtime,
               dateIndex: tmpobj.dateTime
             });
           }
+          that.getLock();
         },
         fail: function (res) {
           // wx.hideLoading();
@@ -97,6 +105,68 @@ Page({
       endtime: endtime
     });
   },
+  checkboxChange: function(e) {
+    var arr = e.detail.value;
+    console.log('checkboxChange-arr')
+    console.log(arr)
+    this.setData({
+      selectLockid: arr
+    });
+  },
+  getLock: function () {
+    var that = this;
+    var lock_id = that.data.lock_id;
+    wx.request({
+      url: app.globalData.domain+'/api/LockAuth/getauthlistbymemid',
+      method: "POST",
+      header:{
+        "Authorization": app.globalData.token
+      },
+      data: {
+        member_id: app.globalData.userid,
+        limit: 100,
+        page: 1,
+      },
+      success: function (resa) {
+        console.log('getLock-success-resa');
+        console.log(resa);
+        var arr = [];
+        var tmplock_user_arr = {};
+        if (resa.data.status == 200) {
+          var arrdata = resa.data.data.list
+          if(arrdata.length > 0){
+            var timestamp = Date.parse(new Date())/1000;
+            for (var i = 0; i < arrdata.length; i++) {
+              var tmplockidstr = 'l'+ arrdata[i]['lock_id'];
+              var tmpobj = {};
+              tmpobj['lock_name'] = arrdata[i]['lock_name'];
+              tmpobj['online'] = arrdata[i]['online'] == 1 ? true : false;
+              tmpobj['lockauth_id'] = arrdata[i]['lockauth_id'];
+              tmpobj['lock_id'] = arrdata[i]['lock_id'];
+              tmpobj['user_id'] = arrdata[i]['user_id']; // 锁的管理员id
+              if ('1' == arrdata[i]['auth_isadmin']+'' && arrdata[i]['lock_id'] != lock_id) {
+                arr.push(tmpobj);
+                tmplock_user_arr[tmplockidstr] = arrdata[i]['user_id'];// 锁的管理员id
+              }
+            }
+            that.setData({
+              lockarr: arr,
+              lock_user_arr: tmplock_user_arr
+            });
+          }
+        }
+      },
+      fail: function (res) {
+        wx.hideLoading();
+        // wx.showToast({
+        //   title: '网络故障，请稍后重试',
+        //   icon: 'none',
+        //   mask: true, // 防止触摸穿透
+        //   duration: 2000
+        // });
+      }
+    });
+  },
   bindScan(){
     var that = this;
     wx.scanCode({
@@ -118,6 +188,27 @@ Page({
       }
     })
   },
+  addCard: function (postdata) {
+    var that = this;
+    console.log('addCard-postdata:')
+    console.log(postdata)
+    wx.request({
+      url: app.globalData.domain+'/api/LockCard/addauthcard',
+      method: 'POST',
+      header:{
+        "Authorization": app.globalData.token
+      },
+      data: postdata,
+      success: function (res) {
+        console.log('addCard-res');
+        console.log(res);
+        if (res.data.status ==200) {
+          return true;
+        }
+      }
+    })
+    return false;
+  },
   doSubmit() {
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -130,7 +221,6 @@ Page({
       mask: true
     })
     var that = this;
-    // var lockcard_sn = that.data.lockcard_sn;
     var lockcard_username = that.data.lockcard_username;
     var lockauth_id = that.data.lockauth_id;
     if (!lockcard_username) {
@@ -142,42 +232,44 @@ Page({
       });
       return false;
     }
-    var postdata = {
-      lockcard_id: that.data.lockcard_id,
-      // lockcard_sn: that.data.lockcard_sn,
-      lockcard_username: that.data.lockcard_username,
-      lockcard_remark: that.data.lockcard_remark,
-      lockcard_endtime: that.data.endtime
-    };
-    console.log('postdata:')
-    console.log(postdata)
-    wx.request({
-      url: app.globalData.domain+'/api/LockCard/updatecard',
-      method: 'POST',
-      header:{
-        "Authorization": app.globalData.token
-      },
-      data: postdata,
-      success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
-        wx.hideLoading();
-        wx.showToast({
-          title: res.data.msg,
-          icon: 'none',
-          mask: true, // 防止触摸穿透
-          duration: 2000
-        });
-        if (res.data.status ==200) {
-          wx.navigateBack({
-            delta: 1
+    var selectLockid = that.data.selectLockid;
+    var lock_user_arr = that.data.lock_user_arr;
+    console.log('doSubmit-lock_user_arr')
+    console.log(lock_user_arr)
+    var fanum = selectLockid.length;
+    console.log('fanum:'+fanum);
+    var hasfanum = 0;
+    var aaa = setInterval(function(){
+        if (hasfanum < fanum) {
+          var tmplock_id = selectLockid[hasfanum];
+          console.log('tmplock_id:'+tmplock_id);
+          console.log('hasfanum1:'+hasfanum);
+          var tmplockidstr = 'l'+tmplock_id;
+          var postdata = {
+            lockauth_id: that.data.lockauth_id,
+            lockcard_sn: that.data.lockcard_sn,
+            lockcard_username: that.data.lockcard_username,
+            lockcard_remark: that.data.lockcard_remark,
+            lockcard_endtime: that.data.endtime
+          };
+          postdata['user_id'] = lock_user_arr[tmplockidstr];
+          postdata['lock_id'] = tmplock_id;
+          var fares = that.addCard(postdata);
+          hasfanum = hasfanum + 1;
+          console.log('hasfanum2:'+hasfanum);
+        }else{
+          console.log('clear');
+          clearInterval(aaa);  //清除定时器
+          wx.hideLoading();
+          wx.showToast({
+            title: '发卡成功',
+            icon: 'success',
+            mask: true, // 防止触摸穿透
+            duration: 2000
           });
-          // wx.navigateTo({
-          //   url: '../cardlist/cardlist?lock_id='+lock_id
-          // });
         }
-      }
-    })
+        console.log('这是定时器，每隔一定时间执行一次');
+    },1000);
   },
   getDateIndex: function (time) {
     // time 是 Y-m-d H:i:s格式 2020-06-01 12:00:12

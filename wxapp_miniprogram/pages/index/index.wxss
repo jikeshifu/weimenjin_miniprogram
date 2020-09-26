@@ -45,7 +45,10 @@ page {
   line-height: 45px;
 }
 
-.list-footer .listrow{border-bottom:0;}
+.list-footer .listrow {
+  border-bottom: 0;
+}
+
 .shrink0 {
   flex-shrink: 0;
   width: 70rpx;
@@ -53,7 +56,8 @@ page {
   font-size: 11pt;
   text-align: center;
 }
-.opendoor{
+
+.opendoor {
   width: 200rpx;
 }
 
@@ -263,26 +267,81 @@ page {
 }
 
 .img1 {
-  margin:0 auto 6rpx;
-  height:300rpx;
+  margin: 0 auto 6rpx;
+  height: 300rpx;
 }
 
 .img2 {
-  margin:0 auto 6rpx;
-  height:300rpx;
+  margin: 0 auto 6rpx;
+  height: 300rpx;
 }
 
 .miniad {
-  width: 100%;margin:0 auto;
+  width: 100%;
+  margin: 0 auto;
 }
-.miniad ad{margin:0 auto;}
-.relative{position: relative;}
-.absolute{position: absolute;top:40px;right:0; width:440rpx;background-color:#fff; border: 1px solid #e3e3e3;border-radius: 20rpx;z-index:300;padding:10rpx 10rpx 10rpx 0;}
-.absolute .li{width:50%;height:60rpx;line-height:60rpx;padding-left:30rpx;font-size:11pt;float: left;}
-.absolute .imgli{width: 40rpx;height:40rpx;position:relative;top:6rpx;margin-right: 8rpx;}
-.hide{display: none;}
-.iconli{font-size: 11pt;display: inline-block;margin-right: 8rpx;}
-.nodatabox{text-align:center;}
-.adbox2{height:360rpx;position:fixed;left: 50%;top: 50%;margin-top: -180rpx;z-index: 1002;}
-.onlyimg{width:100%;height:360rpx;}
 
+.miniad ad {
+  margin: 0 auto;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 440rpx;
+  background-color: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 20rpx;
+  z-index: 300;
+  padding: 10rpx 10rpx 10rpx 0;
+}
+
+.absolute .li {
+  width: 50%;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding-left: 30rpx;
+  font-size: 11pt;
+  float: left;
+}
+
+.absolute .imgli {
+  width: 40rpx;
+  height: 40rpx;
+  position: relative;
+  top: 6rpx;
+  margin-right: 8rpx;
+}
+
+.hide {
+  display: none;
+}
+
+.iconli {
+  font-size: 11pt;
+  display: inline-block;
+  margin-right: 8rpx;
+}
+
+.nodatabox {
+  text-align: center;
+}
+
+.adbox2 {
+  height: 980rpx;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-top: -490rpx;
+  z-index: 1002;
+}
+
+.onlyimg {
+  width: 100%;
+  height: 980rpx;
+}

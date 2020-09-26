@@ -1,17 +1,21 @@
 // pages/memberps/privacypolicy.js
+const app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    privacyurl:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.setData({
+      privacyurl:app.globalData.domain+'/privacypolicy.html'
+    });
 
   },
 
@@ -26,7 +30,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+   
   },
 
   /**

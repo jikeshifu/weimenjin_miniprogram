@@ -98,17 +98,17 @@ Page({
       });
     }
     // 获取完整的年月日 时分秒，以及默认显示的数组
-    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
-    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear);
+    var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
+    var obj1 = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,enddate);
     // 精确到分的处理，将数组的秒去掉
     // var lastArray = obj1.dateTimeArray.pop();
     // var lastTime = obj1.dateTime.pop();
 
     that.setData({
-      dateTime: obj.dateTime,
+      dateIndex: obj.dateTime,
       dateTimeArray: obj.dateTimeArray,
       dateTimeArray1: obj1.dateTimeArray,
-      dateTime1: obj1.dateTime
+      dateIndex1: obj1.dateTime
     });
   },
   // 查询可开门时间段
