@@ -3,6 +3,13 @@ var CodeInfoDlg = {
 	deptZtree: null,
 	pNameZtree: null,
 	validateFields: {
+		locktimesname: {
+			validators: {
+				notEmpty: {
+					message: '时段名称不能为空'
+	 			},
+	 		}
+	 	},
 	 }
 }
 
@@ -40,6 +47,7 @@ CodeInfoDlg.add = function () {
 	 if (!this.validate()) {
 	 	return;
 	 }
+	 var type = $("input[name = 'type']:checked").val();
 	 var tip = '添加';
 	 var ajax = new $ax(Feng.ctxPath + "/Locktimes/add", function (data) {
 	 	if ('00' === data.status) {
@@ -50,6 +58,7 @@ CodeInfoDlg.add = function () {
 	 		Feng.error(tip + "失败！" + data.msg + "！");
 		 }
 	 })
+	 ajax.set('type',type);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };
@@ -61,6 +70,7 @@ CodeInfoDlg.update = function () {
 	 if (!this.validate()) {
 	 	return;
 	 }
+	 var type = $("input[name = 'type']:checked").val();
 	 var tip = '修改';
 	 var ajax = new $ax(Feng.ctxPath + "/Locktimes/update", function (data) {
 	 	if ('00' === data.status) {
@@ -71,6 +81,7 @@ CodeInfoDlg.update = function () {
 	 		Feng.error(tip + "失败！" + data.msg + "！");
 		 }
 	 })
+	 ajax.set('type',type);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };

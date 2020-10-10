@@ -6,7 +6,7 @@ var CodeInfoDlg = {
 		mobile: {
 			validators: {
 				regexp: {
-					regexp: /^1[345678]\d{9}$/,
+					regexp: /^1[3456789]\d{9}$/,
 					message: ''
 	 			},
 	 		}

@@ -47,6 +47,8 @@ CodeInfoDlg.index = function () {
 	 if (!this.validate()) {
 	 	return;
 	 }
+	 var privacypolicy = UE.getEditor('privacypolicy').getContent();
+	 var serviceagreement = UE.getEditor('serviceagreement').getContent();
 	 var tip = '修改';
 	 var ajax = new $ax(Feng.ctxPath + "/Config/index", function (data) {
 	 	if ('00' === data.status) {
@@ -56,6 +58,8 @@ CodeInfoDlg.index = function () {
 	 		Feng.error(tip + "失败！" + data.msg + "！");
 		 }
 	 })
+	 ajax.set('privacypolicy',privacypolicy);
+	 ajax.set('serviceagreement',serviceagreement);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };

@@ -51,7 +51,7 @@ CodeInfoDlg.close = function () {
 
 
 CodeInfoDlg.collectData = function () {
-	this.set('lock_id').set('lock_id').set('member_id').set('user_id').set('lock_name').set('lock_sn').set('location_check').set('lock_type').set('location').set('lock_qrcode').set('create_time').set('successimg').set('successadimg');
+	this.set('lock_id').set('lock_id').set('member_id').set('user_id').set('lock_name').set('lock_sn').set('lock_type').set('location').set('lock_qrcode').set('create_time').set('successimg').set('successadimg').set('openadurl');
 };
 
 
@@ -64,7 +64,11 @@ CodeInfoDlg.add = function () {
 	 var mobile_check = $("input[name = 'mobile_check']:checked").val();
 	 var applyauth = $("input[name = 'applyauth']:checked").val();
 	 var applyauth_check = $("input[name = 'applyauth_check']:checked").val();
+	 var location_check = $("input[name = 'location_check']:checked").val();
 	 var status = $("input[name = 'status']:checked").val();
+	 var adnum = $("input[name = 'adnum']:checked").val();
+	 var hitshowminiad = $("input[name = 'hitshowminiad']:checked").val();
+	 var qrshowminiad = $("input[name = 'qrshowminiad']:checked").val();
 	 var tip = '添加';
 	 var ajax = new $ax(Feng.ctxPath + "/Lock/add", function (data) {
 	 	if ('00' === data.status) {
@@ -78,7 +82,11 @@ CodeInfoDlg.add = function () {
 	 ajax.set('mobile_check',mobile_check);
 	 ajax.set('applyauth',applyauth);
 	 ajax.set('applyauth_check',applyauth_check);
+	 ajax.set('location_check',location_check);
 	 ajax.set('status',status);
+	 ajax.set('adnum',adnum);
+	 ajax.set('hitshowminiad',hitshowminiad);
+	 ajax.set('qrshowminiad',qrshowminiad);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };
@@ -93,7 +101,11 @@ CodeInfoDlg.update = function () {
 	 var mobile_check = $("input[name = 'mobile_check']:checked").val();
 	 var applyauth = $("input[name = 'applyauth']:checked").val();
 	 var applyauth_check = $("input[name = 'applyauth_check']:checked").val();
+	 var location_check = $("input[name = 'location_check']:checked").val();
 	 var status = $("input[name = 'status']:checked").val();
+	 var adnum = $("input[name = 'adnum']:checked").val();
+	 var hitshowminiad = $("input[name = 'hitshowminiad']:checked").val();
+	 var qrshowminiad = $("input[name = 'qrshowminiad']:checked").val();
 	 var tip = '修改';
 	 var ajax = new $ax(Feng.ctxPath + "/Lock/update", function (data) {
 	 	if ('00' === data.status) {
@@ -107,7 +119,11 @@ CodeInfoDlg.update = function () {
 	 ajax.set('mobile_check',mobile_check);
 	 ajax.set('applyauth',applyauth);
 	 ajax.set('applyauth_check',applyauth_check);
+	 ajax.set('location_check',location_check);
 	 ajax.set('status',status);
+	 ajax.set('adnum',adnum);
+	 ajax.set('hitshowminiad',hitshowminiad);
+	 ajax.set('qrshowminiad',qrshowminiad);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };

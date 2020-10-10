@@ -30,7 +30,7 @@ CodeInfoDlg.close = function () {
 
 
 CodeInfoDlg.collectData = function () {
-	this.set('regpoint_id').set('regpoint_id').set('member_id').set('user_id').set('regpointname').set('regpointurl').set('regpointqrcode').set('create_time');
+	this.set('regpoint_id').set('regpoint_id').set('member_id').set('user_id').set('regpointname').set('regpointurl').set('regpointqrcode').set('create_time').set('lock_id');
 };
 
 
