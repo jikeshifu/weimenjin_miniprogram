@@ -238,7 +238,7 @@ class Lock extends Admin {
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("WMJSN:".$data['lock_sn']);
-				if ($data['lock_type']=7)
+				if ($data['lock_type']==7)
 				{
 				    $wmjapiresult = wmjgwHandle($data['lock_sn'],'reggwlock');
 				}
