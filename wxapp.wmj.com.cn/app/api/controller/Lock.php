@@ -418,7 +418,7 @@ class Lock extends Common {
 			    $data['hitshowminiad'] = 1;
 			    $data['qrshowminiad'] = 1;
 			    $data['create_time'] = time();
-			    $data['successimg'] = '/uploads/admin/202003/5e758dd0d7d15.png';
+			    $data['successimg'] = '/uploads/admin/202007/5f1c6367d68fd.jpg';
     			$res = LockService::add($data);
     			if ($res) 
     			{ 
