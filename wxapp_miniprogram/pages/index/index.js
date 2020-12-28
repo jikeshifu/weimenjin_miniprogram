@@ -6,6 +6,8 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     looding: '../../images/looding.gif',
+    lock_close: '../../images/lock_close.png',
+    lock_open: '../../images/lock_open.png',
     offline: '../../images/offline.png',
     online: '../../images/online.png',
     successimg: '../../images/success.png',
@@ -28,7 +30,8 @@ Page({
     location_check: false, // 是否需要定位，false不需要
     latitude: '',
     longitude: '',
-    dropArr:[]
+    dropArr:[],
+    dropIndex: -1 // 管理下拉显示的索引，-1全不显示下拉。大于-1显示对应索引的下拉
   },
   onPullDownRefresh: function () {
     this.setData({
@@ -61,10 +64,13 @@ Page({
   onShow:function () {
     console.log('index-onShow');
     var that = this
-    wx.showLoading({
+    wx.showToast({
       title: '正在加载',
-      mask: true
-    })
+      icon: 'none',
+      mask: true, // 防止触摸穿透
+      duration: 2000
+    });
+    console.log(app.globalData)
     if (app.globalData.userid < 1) {
       that.login();
       // setTimeout(function(){
@@ -82,19 +88,17 @@ Page({
       //   }
       // },2000);
     }else{
-      // if (that.data.listarr.length <1) {
-        that.getmore(1,that.data.num,0);
-      // } else {
-      //   wx.hideLoading();
-      // }
+      that.getmore(1,that.data.num,0);
     }
+    var aaa = setInterval(function(){
+      //console.log('aa');
+      that.getmore(1,that.data.num,0);
+    },5000);
   },
   onLoad: function () {
-    console.log('index.js-onLoad')
     var that = this;
     wx.getSystemInfo({
       success: function (res){
-        // console.log(res)
         that.setData({
           scrollHeight: res.windowHeight,
           adw: res.windowWidth * 2-60,
@@ -105,10 +109,6 @@ Page({
   getmore: function(page,num,addto){ // addto为0覆盖原有数据，为1在原有数据基础上追加数据
     console.log('index.js-getmore')
     var that = this;
-    wx.showLoading({
-      title: '正在加载',
-      mask: true
-    });
     if (page == undefined) {
       page = 1;
     }
@@ -131,10 +131,10 @@ Page({
           page: page,
         },
         success: function (resa) {
-          console.log('getmore-success-resa');
-          console.log(resa);
-          wx.hideLoading();
+          //console.log('getmore-success-resa');
+          //console.log(resa);
           var arr = [];
+          var tmpdropIndex = that.data.dropIndex;
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
             if(arrdata.length > 0){
@@ -168,6 +168,8 @@ Page({
                 tmpobj['auth_isadmin'] = arrdata[i]['auth_isadmin'];
                 tmpobj['location_check'] = arrdata[i]['location_check']; //
                 tmpobj['auth_shareability'] = arrdata[i]['auth_shareability']; //auth_shareability为0时或已过期时，不能分享，审核中不能分享
+                tmpobj['lockstatus'] = arrdata[i]['lockstatus']; // 0是关上的，1是打开的
+                tmpobj['type'] = arrdata[i]['type']; // 9在锁名后面显示开门状态
                 tmpobj['longitude'] = 0;
                 tmpobj['latitude'] = 0;
                 if (arrdata[i]['location'] != '' && arrdata[i]['location'] != null) {
@@ -193,6 +195,9 @@ Page({
                 var newdata = arr;
                 var newdroparr = tmpdroparr;
               }
+              if (tmpdropIndex > -1) {
+                newdroparr[tmpdropIndex] = true;
+              }
               var tmplistlen = newdata.length;
               that.setData({
                 listarr: newdata,
@@ -210,6 +215,9 @@ Page({
                 var tmplistlen = that.data.listarr.length;
                 var newdroparr = that.data.dropArr;
               }
+              if (tmpdropIndex > -1) {
+                newdroparr[tmpdropIndex] = true;
+              }
               that.setData({
                 listarr: newdata,
                 hidelood: false,
@@ -221,7 +229,6 @@ Page({
           }
         },
         fail: function (res) {
-          wx.hideLoading();
           // wx.showToast({
           //   title: '网络故障，请稍后重试',
           //   icon: 'none',
@@ -251,13 +258,13 @@ Page({
         var timedelay = 3800; // 延迟时间
         wx.getSetting({
           success: (res) => {
-            console.log(JSON.stringify(res))
+            //console.log(JSON.stringify(res))
             if (res.authSetting['scope.userLocation']!= true)
             {
-              console.log('scope.userLocation false')
+              //console.log('scope.userLocation false')
               if (res.authSetting['scope.userLocation'] == undefined)
               {
-                console.log('scope.userLocation undefined')
+                //console.log('scope.userLocation undefined')
                 timedelay = 3800; // 3秒延迟
                 that.getLocation();
                 wx.showLoading({
@@ -269,8 +276,8 @@ Page({
               {
                 wx.openSetting({
                   success: function (dataAu) {
-                    console.log('dataAu')
-                    console.log(dataAu)
+                    //console.log('dataAu')
+                    //console.log(dataAu)
                     if (dataAu.authSetting["scope.userLocation"] == true) {
                       that.getLocation();
                       wx.showLoading({
@@ -319,8 +326,8 @@ Page({
             {
               // 计算开门距离，判断允许开门不  wx.hideLoading();
               var s = that.distance(lock_latitude, lock_longitude, that.data.latitude, that.data.longitude);
-              console.log('scope.userLocation s')
-              console.log(s)
+              //console.log('scope.userLocation s')
+              //console.log(s)
               if (s > location_check) {
                 wx.showToast({
                   title: '失败,不在开门范围,距离' + s + '米',
@@ -341,8 +348,8 @@ Page({
       {
         // 计算开门距离，判断允许开门不
         var s = that.distance(lock_latitude, lock_longitude, that.data.latitude, that.data.longitude);
-        console.log('scope.userLocation2 s')
-        console.log(s)
+        //console.log('scope.userLocation2 s')
+        //console.log(s)
         if (s > location_check) {
           wx.showToast({
             title: '失败,不在开门范围,距离' + s + '米',
@@ -373,7 +380,7 @@ Page({
     var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(La3 / 2), 2) + Math.cos(La1) * Math.cos(La2) * Math.pow(Math.sin(Lb3 / 2), 2)));
     s = s * 6378.137;//地球半径
     s = Math.round(s * 10000) / 10; // 单位m
-    // console.log("计算结果", s)
+    // //console.log("计算结果", s)
     return s
   },
   doOpen:function(adminid,lock_id) {
@@ -395,8 +402,8 @@ Page({
         type: 2
       },
       success: function (res) {
-        console.log('opendoor-res');
-        console.log(res);
+        //console.log('opendoor-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.opendoor_status == '200') {
           that.setData({
@@ -447,8 +454,8 @@ Page({
       title: '登录中',
       mask: true
     })
-    console.log('getUserInfo-e');
-    console.log(e);
+    //console.log('getUserInfo-e');
+    //console.log(e);
     var userInfo = e.detail.userInfo
     app.globalData.userInfo = e.detail.userInfo
     that.setData({
@@ -472,8 +479,8 @@ Page({
         member_ps: 1,
       },
       success: function (resa) {
-        console.log('index-resa');
-        console.log(resa);
+        //console.log('index-resa');
+        //console.log(resa);
         wx.hideLoading();
         if (resa.data.status == 200) {
           that.setData({
@@ -492,7 +499,7 @@ Page({
     })
   },
   updateUserInfo: function(data) {
-    console.log('updateUserInfo');
+    //console.log('updateUserInfo');
     var that = this;
     // 登录
     wx.login({
@@ -512,8 +519,8 @@ Page({
                 },
                 method: 'POST',
                 success: function (resa) {
-                  console.log('index-resa');
-                  console.log(resa);
+                  //console.log('index-resa');
+                  //console.log(resa);
                   if (resa.data.status == 200) {
                     app.globalData.token = resa.data.token;
                     app.globalData.userid = resa.data.data.member_id;
@@ -521,8 +528,8 @@ Page({
                     app.globalData.phone = resa.data.data.mobile;
                   }
                   var tmpdata1 = {member_id: resa.data.data.member_id};
-                  console.log('index-updateUserInfo-tmpdata1')
-                  console.log(tmpdata1)
+                  //console.log('index-updateUserInfo-tmpdata1')
+                  //console.log(tmpdata1)
                   wx.request({
                     url: app.globalData.domain+'/api/Member/viewuserid',
                     method: 'POST',
@@ -533,8 +540,8 @@ Page({
                       member_id: resa.data.data.member_id
                     },
                     success: function (resb) {
-                      console.log('index-updateUserInfo-resb');
-                      console.log(resb);
+                      //console.log('index-updateUserInfo-resb');
+                      //console.log(resb);
                       wx.hideLoading();
                       if (resb.data.status == 200) {
                         var tmpuser_id = resb.data.data.user_id;
@@ -567,6 +574,8 @@ Page({
     // 登录
     wx.login({
       success: res => {
+        console.log('index-login-success-res')
+        console.log(res)
         if (res.code) {
           // 可以将 res 发送给后台解码出 unionId
           //发起网络请求
@@ -579,23 +588,23 @@ Page({
             success: function (resa) {
               console.log('login-resa');
               console.log(resa);
-              wx.hideLoading();
-              if (resa.data.status == 200) {
+              if (resa.data.status+"" == "200") {
                 app.globalData.token = resa.data.token;
                 app.globalData.userid = resa.data.data.member_id;
                 app.globalData.openid = resa.data.data.openid;
                 app.globalData.phone = resa.data.data.mobile == null ? '' :resa.data.data.mobile;
-                if (resa.data.data.useradmininfo.length > 0) {
+                if (resa.data.data.useradmininfo.user_id != undefined) {
                   app.globalData.user_id = resa.data.data.useradmininfo.user_id;
-                  console.log('useradmininfo');
-                }else{
-                  console.log('else-useradmininfo');
                 }
                 if (resa.data.data.headimgurl == null || resa.data.data.headimgurl == '') {
                   that.setData({
                     close:false
                   })
                 }else{
+                  var tmpuserInfo = {};
+                  tmpuserInfo['avatarUrl'] = resa.data.data.headimgurl;
+                  tmpuserInfo['nickName'] = resa.data.data.nickName;
+                  app.globalData.userInfo = tmpuserInfo;
                   that.getmore(1,that.data.num,0);
                 }
               }
@@ -603,13 +612,15 @@ Page({
             }
           })
         }
+      },
+      fail: res =>{
       }
     })
   },
   getLocation(){
     var that = this;
-    console.log('getLocation-that.data');
-    console.log(that.data);
+    //console.log('getLocation-that.data');
+    //console.log(that.data);
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
       success (res) {
@@ -622,8 +633,8 @@ Page({
         //   latitude: res.latitude,
         //   longitude: res.longitude,
         //   success(resa){
-        //     console.log('getLocation-resa')
-        //     console.log(resa)
+        //     //console.log('getLocation-resa')
+        //     //console.log(resa)
 
         //   }
         // })
@@ -646,6 +657,7 @@ Page({
       tmpdrop[index] = true;
     }
     this.setData({
+      dropIndex: index,
       dropArr: tmpdrop
     });
   },
@@ -719,8 +731,8 @@ Page({
       content: '您确定要丢弃此钥匙吗？',
       success (res) {
         if (res.confirm) {
-          console.log('用户点击确定')
-          console.log(id)
+          //console.log('用户点击确定')
+          //console.log(id)
           wx.showLoading({
             title: '执行中',
             mask: true
@@ -736,8 +748,8 @@ Page({
             },
             success: function (resa)
             {
-              console.log('删除反馈')
-              console.log(resa)
+              //console.log('删除反馈')
+              //console.log(resa)
               wx.hideLoading();
               wx.showToast({
                 title: '删除成功',
@@ -758,7 +770,7 @@ Page({
             }
           });
         } else if (res.cancel) {
-          console.log('用户点击取消')
+          //console.log('用户点击取消')
         }
       }
     })
@@ -774,8 +786,8 @@ Page({
         member_id: app.globalData.userid
       },
       success: function (resb) {
-        console.log('index-updateUserInfo-resb');
-        console.log(resb);
+        //console.log('index-updateUserInfo-resb');
+        //console.log(resb);
         if (resb.data.status == 200) {
           var tmpuser_id = resb.data.data.user_id;
           if (tmpuser_id != '') {
@@ -797,5 +809,19 @@ Page({
     var i = date.getMinutes() < 10 ? '0'+date.getMinutes()+':' : date.getMinutes()+':';
     var s = date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds();
     return Y+m+d+H+i+s;
+  },
+
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.xcxname,
+      imageUrl: app.globalData.domain+app.globalData.shareImg,
+      path: "/pages/index/index"
+    };
+  },
+  onShareTimeline: function () {
+    return {
+      title: app.globalData.xcxname,
+      imageUrl: app.globalData.domain+app.globalData.shareImg,
+    }
   }
 })

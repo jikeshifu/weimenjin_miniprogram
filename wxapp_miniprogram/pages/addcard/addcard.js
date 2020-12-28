@@ -17,7 +17,7 @@ Page({
 
   },
   onShow:function () {
-    console.log('addlock-onShow')
+    //console.log('addlock-onShow')
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -26,17 +26,17 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('onLoad-options');
-    console.log(options);
+    //console.log('onLoad-options');
+    //console.log(options);
     var that = this;
-    console.log(app.globalData)
+    //console.log(app.globalData)
     var lock_id = that.data.lock_id;
     var user_id = that.data.user_id;
     var lockauth_id = that.data.lockauth_id;
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
-      console.log('scene:'+scene);
+      //console.log('scene:'+scene);
       var pos = scene.indexOf("?");
       if (pos >=0) {
         pos = parseInt(pos) +1;
@@ -91,8 +91,8 @@ Page({
     var today = that.timestampToTime(timestamp,'Y-m-d',0);
     var nowdate = that.timestampToTime(timestamp,'Y-m-d H:i:s',0);
     var enddate = that.timestampToTime(timestamp, 'Y-m-d H:i:s',1);
-    console.log('today:'+today);
-    console.log('nowdate:'+nowdate);
+    //console.log('today:'+today);
+    //console.log('nowdate:'+nowdate);
     // 获取完整的年月日 时分秒，以及默认显示的数组
     var obj = dateTimePicker.dateTimePicker(that.data.startYear, that.data.endYear,nowdate);
     that.setData({
@@ -126,7 +126,7 @@ Page({
     });
   },
   bindScan(){
-    console.log('aaa');
+    //console.log('aaa');
     var that = this;
     wx.scanCode({
       onlyFromCamera: true, // 只允许从相机扫码
@@ -159,8 +159,8 @@ Page({
       mask: true
     })
     var that = this;
-    console.log('thatdata');
-    console.log(that.data);
+    //console.log('thatdata');
+    //console.log(that.data);
     var lockcard_sn = that.data.lockcard_sn;
     var lockcard_username = that.data.lockcard_username;
     var lockauth_id = that.data.lockauth_id;
@@ -193,8 +193,8 @@ Page({
     if (lockauth_id>0) {
       postdata['lockauth_id'] = lockauth_id;
     }
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/LockCard/addauthcard',
       method: 'POST',
@@ -203,8 +203,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
+        //console.log('doSubmit-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,

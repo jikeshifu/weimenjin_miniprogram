@@ -6,7 +6,7 @@ Page({
     user_id: 0,   // 管理员id，不是小程序用户的id
   },
   onShow:function () {
-    console.log('addlock-onShow')
+    //console.log('addlock-onShow')
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -64,8 +64,8 @@ Page({
       mask: true
     })
     var that = this;
-    console.log('thatdata');
-    console.log(that.data);
+    //console.log('thatdata');
+    //console.log(that.data);
     var lock_sn = that.data.lock_sn;
     var lock_name = that.data.lock_name;
     if (!lock_sn) {
@@ -92,8 +92,8 @@ Page({
       lock_sn: that.data.lock_sn,
       lock_name: that.data.lock_name
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/Lock/add',
       method: 'POST',
@@ -102,8 +102,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
+        //console.log('doSubmit-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,

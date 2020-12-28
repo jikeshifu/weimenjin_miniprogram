@@ -14,7 +14,7 @@ Page({
     lockcard_id: 0, // 门卡ID
   },
   onShow:function () {
-    console.log('onShow')
+    //console.log('onShow')
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -31,8 +31,8 @@ Page({
           lockcard_id: that.data.lockcard_id
         },
         success: function (resa) {
-          console.log('success-resa');
-          console.log(resa);
+          //console.log('success-resa');
+          //console.log(resa);
           //wx.hideLoading();
           if (resa.data.status == 200) {
             var card = resa.data.data;
@@ -149,8 +149,8 @@ Page({
       lockcard_remark: that.data.lockcard_remark,
       lockcard_endtime: that.data.endtime
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/LockCard/updatecard',
       method: 'POST',
@@ -159,8 +159,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
+        //console.log('doSubmit-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,
@@ -194,7 +194,7 @@ Page({
       if (dateTimeArray) {
         for (var i = 0; i < dateTimeArray[0].length; i++) {
           if(Y===dateTimeArray[0][i]){
-            console.log(dateTimeArray[0][i]);
+            //console.log(dateTimeArray[0][i]);
             timeobj['Y'] = i;
           }
         }

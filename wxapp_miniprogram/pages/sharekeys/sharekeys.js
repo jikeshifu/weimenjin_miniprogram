@@ -28,7 +28,7 @@ Page({
     opentimesarr: []
   },
   onShow:function () {
-    console.log('getkeys-onShow');
+    //console.log('getkeys-onShow');
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -39,8 +39,8 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('getkeys-onload-options:');
-    console.log(options);
+    //console.log('getkeys-onload-options:');
+    //console.log(options);
     var that = this;
     var date = new Date();
     var timestamp = Date.parse(new Date());
@@ -88,8 +88,8 @@ Page({
         page:1
       },
       success: function (res) {
-        // console.log('getTimes-res');
-        // console.log(res);
+        // //console.log('getTimes-res');
+        // //console.log(res);
         var arr = [];
         if (res.data.status == 200) {
           var arrdata = res.data.data.list
@@ -162,7 +162,7 @@ Page({
   },
   onShareAppMessage: function (e) {
     var lockauth_id = this.data.lockauth_id;
-    console.log('lockauth_id:'+lockauth_id)
+    //console.log('lockauth_id:'+lockauth_id)
     return {
       title: '点击领取钥匙', // 转发后 所显示的title
       path: '/pages/getkeys/getkeys?member_id='+app.globalData.userid+'&lockauth_id='+lockauth_id, // 相对的路径
@@ -195,8 +195,8 @@ Page({
         auth_status: that.data.auth_status
       },
       success: function (res) {
-        console.log('getkey-res');
-        console.log(res);
+        //console.log('getkey-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.status ==200) {
           wx.showToast({

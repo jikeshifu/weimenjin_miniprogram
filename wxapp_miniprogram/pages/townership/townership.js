@@ -11,7 +11,7 @@ Page({
     lockauth_id: 0, // 钥匙id
   },
   onShow:function () {
-    console.log('configaudio-onShow')
+    //console.log('configaudio-onShow')
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -20,16 +20,16 @@ Page({
     }
   },
   onLoad: function (options) {
-    // console.log('onLoad-options');
-    // console.log(options);
+    // //console.log('onLoad-options');
+    // //console.log(options);
     var that = this;
-    // console.log(app.globalData)
+    // //console.log(app.globalData)
     var lock_id = that.data.lock_id;
     var lockauth_id = that.data.lockauth_id;
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
-      console.log('scene:'+scene);
+      //console.log('scene:'+scene);
       var pos = scene.indexOf("?");
       if (pos >=0) {
         pos = parseInt(pos) +1;
@@ -88,8 +88,8 @@ Page({
         mobile: that.data.mobile
       },
       success: function (res) {
-        console.log('findmobile-res');
-        console.log(res);
+        //console.log('findmobile-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.status == 200) {
           var result = res.data.data;
@@ -124,8 +124,8 @@ Page({
       mask: true
     })
     var that = this;
-    // console.log('thatdata');
-    // console.log(that.data);
+    // //console.log('thatdata');
+    // //console.log(that.data);
     var member_id = that.data.member_id;
     var user_id = that.data.user_id;
     if (member_id < 1) {
@@ -157,8 +157,8 @@ Page({
       member_id: member_id,
       user_id: user_id
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/Lock/townership',
       method: 'POST',
@@ -167,8 +167,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
+        //console.log('doSubmit-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.status ==200) {
           wx.showToast({

@@ -23,11 +23,11 @@ Page({
     longitude: ''
   },
   onShow:function () {
-    console.log('open-onShow')
+    //console.log('open-onShow')
     var that = this;
     var pages = getCurrentPages();
-    console.log('pages')
-    console.log(pages)
+    //console.log('pages')
+    //console.log(pages)
     var len = pages.length;
     var isweb = false;
     if (len>=2) {
@@ -64,12 +64,12 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('options:');
-    console.log(options);
-    console.log('token:');
-    console.log(app.globalData.token)
+    //console.log('options:');
+    //console.log(options);
+    //console.log('token:');
+    //console.log(app.globalData.token)
     var that = this;
-    console.log(app.globalData)
+    //console.log(app.globalData)
     wx.getSystemInfo({
       success: function (res){
         that.setData({
@@ -82,23 +82,23 @@ Page({
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
-      console.log('scene:'+scene);
+      //console.log('scene:'+scene);
       var pos = scene.indexOf("?");
       if (pos >=0) {
-        console.log('pos1:'+pos);
+        //console.log('pos1:'+pos);
         pos = parseInt(pos) +1;
         var str = scene.substr(pos);
-        console.log('str:'+str);
+        //console.log('str:'+str);
         var strarr = str.split('&');
-        console.log('strarr:');
-        console.log(strarr);
+        //console.log('strarr:');
+        //console.log(strarr);
         var paramobj = {};
         for (var i = 0; i < strarr.length; i++) {
           var tmparr = strarr[i].split('=');
           paramobj[tmparr[0]] = tmparr[1];
         }
-        console.log('paramobj:');
-        console.log(paramobj);
+        //console.log('paramobj:');
+        //console.log(paramobj);
         if (paramobj['user_id'] != undefined && paramobj['user_id'] >0) {
           user_id = paramobj['user_id'];
           that.setData({
@@ -144,8 +144,8 @@ Page({
         lock_id: lock_id
       },
       success: function (res) {
-        // console.log('getLock-res');
-        // console.log(res);
+        // //console.log('getLock-res');
+        // //console.log(res);
         // create_time: "1584287501"
         // location: "{"longitude":106.683309,"latitude":26.547251,"address":"贵州省贵阳市南明区太慈社区服务中心车水路74号望水苑"}"
         // location_check: "200"
@@ -176,13 +176,13 @@ Page({
               var timedelay = 3800; // 延迟时间
               wx.getSetting({
                 success: (res) => {
-                  console.log(JSON.stringify(res))
+                  //console.log(JSON.stringify(res))
                   if (res.authSetting['scope.userLocation']!= true)
                   {
-                    console.log('scope.userLocation false')
+                    //console.log('scope.userLocation false')
                     if (res.authSetting['scope.userLocation'] == undefined)
                     {
-                      console.log('scope.userLocation undefined')
+                      //console.log('scope.userLocation undefined')
                       timedelay = 3800; // 3秒延迟
                       that.getLocation();
                       wx.showLoading({
@@ -192,8 +192,8 @@ Page({
                     }else{
                       wx.openSetting({
                         success: function (dataAu) {
-                          console.log('dataAu')
-                          console.log(dataAu)
+                          //console.log('dataAu')
+                          //console.log(dataAu)
                           if (dataAu.authSetting["scope.userLocation"] == true) {
                             that.getLocation();
                             wx.showLoading({
@@ -236,8 +236,8 @@ Page({
                   }else{
                     // 计算开门距离，判断允许开门不  wx.hideLoading();
                     var s = that.distance(lock_latitude, lock_longitude, that.data.latitude, that.data.longitude);
-                    console.log('scope.userLocation s')
-                    console.log(s)
+                    //console.log('scope.userLocation s')
+                    //console.log(s)
                     if (s > location_check) {
                       wx.showToast({
                         title: '失败,不在开门范围,距离' + s + '米',
@@ -264,8 +264,8 @@ Page({
             }else{
               // 计算开门距离，判断允许开门不
               var s = that.distance(lock_latitude, lock_longitude, that.data.latitude, that.data.longitude);
-              console.log('scope.userLocation2 s')
-              console.log(s)
+              //console.log('scope.userLocation2 s')
+              //console.log(s)
               if (s > location_check) {
                 wx.showToast({
                   title: '失败,不在开门范围,距离' + s + '米',
@@ -304,8 +304,8 @@ Page({
     })
   },
   doOpen:function (adminid,lock_id) {
-    console.log('doOpen-lock_id');
-    console.log(lock_id);
+    //console.log('doOpen-lock_id');
+    //console.log(lock_id);
     var that = this;
     wx.request({
       url: app.globalData.domain+'/api/Lock/opendoor',
@@ -320,28 +320,36 @@ Page({
         type: 1
       },
       success: function (res) {
-        console.log('opendoor-res');
-        console.log(res);
+        //console.log('opendoor-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.opendoor_status=='200') {
-          that.setData({
-            closeAd: false,
-            successimg: app.globalData.domain+res.data.successimg,
-            successadimg: app.globalData.domain+res.data.successadimg,
-            openadurl: res.data.openadurl,
-            adnum: res.data.adnum,
-            qrshowminiad:res.data.qrshowminiad
-          })
-          var cleartime = setTimeout(function(){
-            that.setData({
-              closeAd: true
-            })
-            wx.switchTab({
-              url: '../index/index'
-            })
-          },5000);
-          that.setData({
-            cleartime: cleartime
+          // that.setData({
+          //   closeAd: false,
+          //   successimg: app.globalData.domain+res.data.successimg,
+          //   successadimg: app.globalData.domain+res.data.successadimg,
+          //   openadurl: res.data.openadurl,
+          //   adnum: res.data.adnum,
+          //   qrshowminiad:res.data.qrshowminiad
+          // })
+          // var cleartime = setTimeout(function(){
+          //   that.setData({
+          //     closeAd: true
+          //   })
+          //   wx.switchTab({
+          //     url: '../index/index'
+          //   })
+          // },5000);
+          // that.setData({
+          //   cleartime: cleartime
+          // })
+          app.globalData.successimg = app.globalData.domain+res.data.successimg;
+          app.globalData.successadimg = app.globalData.domain+res.data.successadimg;
+          app.globalData.openadurl = res.data.openadurl;
+          app.globalData.adnum = res.data.adnum;
+          app.globalData.qrshowminiad = res.data.qrshowminiad;
+          wx.redirectTo({
+            url: '../opensuccess/opensuccess'
           })
         }else if (res.data.opendoor_status=='202') {
           that.setData({
@@ -380,13 +388,13 @@ Page({
     var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(La3 / 2), 2) + Math.cos(La1) * Math.cos(La2) * Math.pow(Math.sin(Lb3 / 2), 2)));
     s = s * 6378.137;//地球半径
     s = Math.round(s * 10000) / 10; // 单位m
-    // console.log("计算结果", s)
+    // //console.log("计算结果", s)
     return s
   },
   getLocation(){
     var that = this;
-    console.log('getLocation-that.data');
-    console.log(that.data);
+    //console.log('getLocation-that.data');
+    //console.log(that.data);
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
       success (res) {
@@ -398,8 +406,8 @@ Page({
         //   latitude: res.latitude,
         //   longitude: res.longitude,
         //   success(resa){
-        //     console.log('getLocation-resa')
-        //     console.log(resa)
+        //     //console.log('getLocation-resa')
+        //     //console.log(resa)
 
         //   }
         // })
@@ -441,13 +449,13 @@ Page({
       mask: true
     });
     var that = this;
-    console.log('getPhoneNumber-e');
-    console.log(e);
-    console.log(app.globalData)
+    //console.log('getPhoneNumber-e');
+    //console.log(e);
+    //console.log(app.globalData)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
       wx.login({
         success: res => {
-          console.log('res.code:'+res.code)
+          //console.log('res.code:'+res.code)
           wx.request({
             url: app.globalData.domain+'/api/Member/getphonenumber',
             data: {
@@ -457,8 +465,8 @@ Page({
             },
             method: "post",
             success: function (resa) {
-              console.log('getphonenumber-resa');
-              console.log(resa);
+              //console.log('getphonenumber-resa');
+              //console.log(resa);
               var phone = resa.data.phoneNumber;
               if (phone!=null && phone!= undefined) {
                 that.setData({
@@ -479,8 +487,8 @@ Page({
                 mobile: phone,
                 sex: userInfo.gender
               };
-              console.log('dataobj')
-              console.log(dataobj);
+              //console.log('dataobj')
+              //console.log(dataobj);
               wx.request({
                 url: app.globalData.domain+'/api/Member/update',
                 method: "post",
@@ -489,8 +497,8 @@ Page({
                 },
                 data: dataobj,
                 success: function (resb) {
-                  console.log('update-resb');
-                  console.log(resb);
+                  //console.log('update-resb');
+                  //console.log(resb);
                   that.setData({
                     isBindPhone: false
                   })
@@ -541,11 +549,11 @@ Page({
     wx.requestSubscribeMessage({
       tmplIds: ['ZefHClTYrAuPe9MAxoX2nbRPtpeu_cdgxKpDLv7azGw'], // 此处可填写多个模板 ID，但低版本微信不兼容只能授权一个
       success (res) {
-       console.log('已授权接收订阅消息')
+       //console.log('已授权接收订阅消息')
       }
      });
-    console.log('applyauth-uploadData-tmpdata2')
-    console.log(tmpdata2)
+    //console.log('applyauth-uploadData-tmpdata2')
+    //console.log(tmpdata2)
     wx.request({
       url: app.globalData.domain+'/api/LockAuth/applyauth',
       method: 'POST',
@@ -561,8 +569,8 @@ Page({
         auth_status: auth_status
       },
       success: function (res) {
-        console.log('uploadData-res');
-        console.log(res);
+        //console.log('uploadData-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,

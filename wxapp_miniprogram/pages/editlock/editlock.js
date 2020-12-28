@@ -13,7 +13,7 @@ Page({
     status: '', // 启用/禁用
   },
   onShow:function () {
-    console.log('editlock-onShow');
+    //console.log('editlock-onShow');
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -30,7 +30,7 @@ Page({
           lock_id: that.data.lock_id
         },
         success: function (res) {
-          console.log(res);
+          //console.log(res);
           if (res.data.status == 200) {
             var result = res.data.data;
             that.setData({
@@ -107,8 +107,8 @@ Page({
         status: that.data.status
       },
       success: function (res) {
-        console.log('editlock-res');
-        console.log(res);
+        //console.log('editlock-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.status ==200) {
           wx.showToast({

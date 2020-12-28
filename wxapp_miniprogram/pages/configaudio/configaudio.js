@@ -7,7 +7,7 @@ Page({
     lock_id: 0, // 锁id
   },
   onShow:function () {
-    console.log('configaudio-onShow')
+    //console.log('configaudio-onShow')
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -24,7 +24,7 @@ Page({
           lock_id: that.data.lock_id
         },
         success: function (res) {
-          console.log(res);
+          //console.log(res);
           if (res.data.status == 200) {
             var result = res.data.data;
             that.setData({
@@ -37,16 +37,16 @@ Page({
     }
   },
   onLoad: function (options) {
-    // console.log('onLoad-options');
-    // console.log(options);
+    // //console.log('onLoad-options');
+    // //console.log(options);
     var that = this;
-    // console.log(app.globalData)
+    // //console.log(app.globalData)
     var lock_id = that.data.lock_id;
     var user_id = that.data.user_id;
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
-      console.log('scene:'+scene);
+      //console.log('scene:'+scene);
       var pos = scene.indexOf("?");
       if (pos >=0) {
         pos = parseInt(pos) +1;
@@ -106,8 +106,8 @@ Page({
       mask: true
     })
     var that = this;
-    console.log('thatdata');
-    console.log(that.data);
+    //console.log('thatdata');
+    //console.log(that.data);
     var sound = that.data.sound;
     var volume = that.data.volume;
     if (!sound || sound==' ') {
@@ -125,8 +125,8 @@ Page({
       openttscontent: that.data.sound,
       volume: that.data.volume
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/Lock/configaudio',
       method: 'POST',
@@ -135,8 +135,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
+        //console.log('doSubmit-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,

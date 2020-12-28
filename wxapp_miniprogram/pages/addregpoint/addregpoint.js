@@ -31,8 +31,8 @@ Page({
         member_id: app.globalData.userid
       },
       success: function (res) {
-        console.log('getauthlistisadmin-res');
-        console.log(res);
+        //console.log('getauthlistisadmin-res');
+        //console.log(res);
         var tmpnamearr = ["请选择门锁"];
         var tmpidarr = [0];
         if (res.data.status == 200) {
@@ -43,8 +43,8 @@ Page({
               tmpidarr.push(arrdata[i]['lock_id']);
             }
           }
-          console.log(tmpnamearr);
-          console.log(tmpidarr);
+          //console.log(tmpnamearr);
+          //console.log(tmpidarr);
           that.setData({
             locknameArr: tmpnamearr,
             lockidArr: tmpidarr
@@ -61,7 +61,7 @@ Page({
     });
   },
   lockChange(e) {
-    console.log(e);
+    //console.log(e);
     var tmpindex = e.detail.value;
     this.setData({
       lock_id: this.data.lockidArr[tmpindex],
@@ -84,7 +84,7 @@ Page({
       return false;
     }
     var that = this;
-    console.log(that.data);
+    //console.log(that.data);
     var regpointname = that.data.regpointname;
     if (!regpointname) {
       wx.showToast({
@@ -95,7 +95,7 @@ Page({
       });
       return false;
     }
-    console.log('lock_id:'+that.data.lock_id);
+    //console.log('lock_id:'+that.data.lock_id);
     wx.request({
       url: app.globalData.domain+'/api/Regpoint/add',
       method: 'POST',
@@ -110,8 +110,8 @@ Page({
         regpointurl: 'https://wxapp.wmj.com.cn/miniprogram?user_id='
       },
       success: function (res) {
-        console.log('uploadData-res');
-        console.log(res);
+        //console.log('uploadData-res');
+        //console.log(res);
         wx.showToast({
           title: res.data.msg,
           icon: 'none',

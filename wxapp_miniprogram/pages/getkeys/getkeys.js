@@ -14,8 +14,11 @@ Page({
       title: '领取钥匙中',
       mask: true
     })
-    if (app.globalData.userid < 1) {
+    //console.log('getkeys-onShow')
+    //console.log(app.globalData);
+    // if (app.globalData.userid > 1) {
       setTimeout(function(){
+        //console.log('getkeys-onShow-setTimeout')
         if (app.globalData.userid < 1) {
           wx.hideLoading();
           that.setData({
@@ -37,14 +40,14 @@ Page({
           that.getkey();
         }
       },2000);
-    }else{
-      that.getkey();
-    }
+    // }else{
+    //   that.getkey();
+    // }
   },
   onLoad: function (options) {
-    console.log('getkeys-onload-options:');
-    console.log(options);
-    console.log(app.globalData.userid);
+    //console.log('getkeys-onload-options:');
+    //console.log(options);
+    //console.log(app.globalData.userid);
     var that = this;
     if (options.member_id != undefined && options.member_id >0) {
       that.setData({
@@ -85,8 +88,8 @@ Page({
       title: '登录中',
       mask: true
     })
-    console.log('getUserInfo-e');
-    console.log(e);
+    //console.log('getUserInfo-e');
+    //console.log(e);
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -95,7 +98,7 @@ Page({
     this.updateUserInfo(e.detail);
   },
   updateUserInfo: function(data) {
-    console.log('updateUserInfo');
+    //console.log('updateUserInfo');
     var that = this;
     // 登录
     wx.login({
@@ -115,8 +118,8 @@ Page({
                 },
                 method: 'POST',
                 success: function (resa) {
-                  console.log('index-resa');
-                  console.log(resa);
+                  //console.log('index-resa');
+                  //console.log(resa);
                   if (resa.data.status == 200) {
                     app.globalData.token = resa.data.token;
                     app.globalData.userid = resa.data.data.member_id;
@@ -127,8 +130,8 @@ Page({
                     });
                   }
                   var tmpdata1 = {member_id: resa.data.data.member_id};
-                  console.log('getkey-updateUserInfo-tmpdata1')
-                  console.log(tmpdata1)
+                  //console.log('getkey-updateUserInfo-tmpdata1')
+                  //console.log(tmpdata1)
                   wx.request({
                     url: app.globalData.domain+'/api/Member/viewuserid',
                     method: 'POST',
@@ -139,8 +142,8 @@ Page({
                       member_id: resa.data.data.member_id
                     },
                     success: function (resb) {
-                      console.log('getkey-updateUserInfo-resb');
-                      console.log(resb);
+                      //console.log('getkey-updateUserInfo-resb');
+                      //console.log(resb);
                       wx.hideLoading();
                       if (resb.data.status == 200) {
                         var tmpuser_id = resb.data.data.user_id;
@@ -181,10 +184,10 @@ Page({
         lockauth_id: that.data.lockauth_id
       },
       success: function (res) {
-        console.log('getkeys-onShow-res');
-        console.log(res);
+        //console.log('getkeys-onShow-res');
+        //console.log(res);
         if (res.data.status ==200) {
-          wx.hideLoading();
+          // wx.hideLoading();
           wx.showToast({
             title: '钥匙领取成功',
             icon: 'success',
@@ -192,13 +195,13 @@ Page({
             duration: 2000
           });
           setTimeout(function(){
-            wx.hideLoading();
+            // wx.hideLoading();
             wx.switchTab({
               url: '../index/index'
             })
           },2000);
         }else{
-          wx.hideLoading();
+          // wx.hideLoading();
           wx.showToast({
             title: res.data.msg,
             icon: 'none',

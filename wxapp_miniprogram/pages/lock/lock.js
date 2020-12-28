@@ -10,7 +10,7 @@ Page({
     btnstr: '进入发卡模式' // addcardmode为1时是“进入发卡模式”，为2时是“退出发卡模式”
   },
   onShow:function () {
-    console.log('lock-onShow');
+    //console.log('lock-onShow');
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -27,7 +27,7 @@ Page({
           lock_id: that.data.lock_id
         },
         success: function (res) {
-          console.log(res);
+          //console.log(res);
           if (res.data.status == 200) {
             var result = res.data.data;
             var tmplock_sn = result.lock_sn;
@@ -56,8 +56,8 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('lock-onload-options:');
-    console.log(options);
+    //console.log('lock-onload-options:');
+    //console.log(options);
     var that = this;
     if (options.lock_id != undefined && options.lock_id >0) {
       that.setData({
@@ -77,14 +77,14 @@ Page({
       mask: true
     })
     var that = this;
-    console.log('thatdata');
-    console.log(that.data);
+    //console.log('thatdata');
+    //console.log(that.data);
     var postdata = {
       // user_id: that.data.user_id,
       lock_id: that.data.lock_id
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/Lock/configlcd',
       method: 'POST',
@@ -93,8 +93,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('doSubmit-res');
-        console.log(res);
+        //console.log('doSubmit-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,
@@ -133,8 +133,8 @@ Page({
       addcardmode: tmpaddcardmode,
       lock_id: that.data.lock_id
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/Lock/devaddcard',
       method: 'POST',
@@ -143,8 +143,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('devaddcard-res');
-        console.log(res);
+        //console.log('devaddcard-res');
+        //console.log(res);
         wx.hideLoading();
         wx.showToast({
           title: res.data.msg,

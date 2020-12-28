@@ -37,7 +37,7 @@ Page({
     }
   },
   onShow:function () {
-    console.log('healthlist-onShow')
+    //console.log('healthlist-onShow')
     if (app.globalData.userid < 1) {
       wx.navigateTo({
         url: '../wxlogin/wxlogin'
@@ -91,8 +91,8 @@ Page({
           page: page,
         },
         success: function (resa) {
-          console.log('getmore-success-resa');
-          console.log(resa);
+          //console.log('getmore-success-resa');
+          //console.log(resa);
           wx.hideLoading();
           var arr = [];
           if (resa.data.status == 200) {

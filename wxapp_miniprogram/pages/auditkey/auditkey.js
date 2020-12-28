@@ -33,7 +33,7 @@ Page({
     opentimesarr: []
   },
   onShow:function () {
-    // console.log('getkeys-onShow');
+    // //console.log('getkeys-onShow');
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -51,7 +51,7 @@ Page({
           lockauth_id: that.data.lockauth_id
         },
         success: function (res) {
-          // console.log(res);
+          // //console.log(res);
           if (res.data.status == 200) {
             var result = res.data.data[0];
             var auth_starttime = that.timestampToTime(result.auth_starttime,'Y-m-d H:i:s');
@@ -79,8 +79,8 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('getkeys-onload-options:');
-    console.log(options);
+    //console.log('getkeys-onload-options:');
+    //console.log(options);
     var that = this;
     var date = new Date();
     var timestamp = Date.parse(new Date());
@@ -126,8 +126,8 @@ Page({
         page:1
       },
       success: function (res) {
-        // console.log('getTimes-res');
-        // console.log(res);
+        // //console.log('getTimes-res');
+        // //console.log(res);
         var arr = [];
         if (res.data.status == 200) {
           var arrdata = res.data.data.list
@@ -156,8 +156,8 @@ Page({
     });
   },
   startDate: function(e) {
-    // console.log('starttime')
-    // console.log(e);
+    // //console.log('starttime')
+    // //console.log(e);
     var dateTimeArray = this.data.dateTimeArray;
     var dateTime = e.detail.value;
     var starttime = dateTimeArray[0][dateTime[0]]+'-'+dateTimeArray[1][dateTime[1]]+'-'+dateTimeArray[2][dateTime[2]]+' '+dateTimeArray[3][dateTime[3]]+':'+dateTimeArray[4][dateTime[4]]+':'+dateTimeArray[5][dateTime[5]];
@@ -243,8 +243,8 @@ Page({
             },
             success: function (resa)
             {
-              console.log('deleteKey');
-              console.log(resa)
+              //console.log('deleteKey');
+              //console.log(resa)
               wx.hideLoading();
               wx.showToast({
                 title: '删除成功',
@@ -269,7 +269,7 @@ Page({
             }
           });
         } else if (res.cancel) {
-          console.log('用户点击取消')
+          //console.log('用户点击取消')
         }
       }
     })
@@ -300,8 +300,8 @@ Page({
         auth_member_id:app.globalData.userid
       },
       success: function (res) {
-        console.log('getkey-res');
-        console.log(res);
+        //console.log('getkey-res');
+        //console.log(res);
         wx.hideLoading();
         if (res.data.status ==200) {
           wx.showToast({

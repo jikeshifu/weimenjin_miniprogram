@@ -49,7 +49,7 @@ Page({
     }
   },
   onShow:function () {
-    console.log('managekey-onShow');
+    //console.log('managekey-onShow');
     var that = this
     wx.showLoading({
       title: '正在加载',
@@ -71,8 +71,8 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('managekey-onload-options:');
-    console.log(options);
+    //console.log('managekey-onload-options:');
+    //console.log(options);
     var that = this;
     wx.getSystemInfo({
       success: function (res){
@@ -110,7 +110,7 @@ Page({
     var that = this;
     var id = e.currentTarget.dataset['id'];
     id = id+'';
-    console.log('id:'+id);
+    //console.log('id:'+id);
     if (id=='0') {
       that.setData({
         auth_status: id,
@@ -125,7 +125,7 @@ Page({
     that.getmore(1, that.data.num,0);
   },
   getmore: function(page,num,addto){ // addto为0覆盖原有数据，为1在原有数据基础上追加数据
-    console.log('index.js-getmore')
+    //console.log('index.js-getmore')
     var that = this;
     wx.showLoading({
       title: '正在加载',
@@ -148,8 +148,8 @@ Page({
           limit: num,
           page: page
         };
-        console.log('aaa')
-        console.log(aaa);
+        //console.log('aaa')
+        //console.log(aaa);
       wx.request({
         url: app.globalData.domain+'/api/LockAuth/getauthlistbylockid',
         method: "POST",
@@ -164,9 +164,9 @@ Page({
           page: page
         },
         success: function (resa) {
-          console.log('that.data.lock_id:'+that.data.lock_id)
-          console.log('getmore-success-resa');
-          console.log(resa);
+          //console.log('that.data.lock_id:'+that.data.lock_id)
+          //console.log('getmore-success-resa');
+          //console.log(resa);
           wx.hideLoading();
           var arr = [];
           if (resa.data.status == 200) {
@@ -248,8 +248,8 @@ Page({
       content: '您确定要删除此条数据吗？',
       success (res) {
         if (res.confirm) {
-          console.log('用户点击确定')
-          console.log(id)
+          //console.log('用户点击确定')
+          //console.log(id)
           wx.showLoading({
             title: '执行中',
             mask: true
@@ -265,8 +265,8 @@ Page({
             },
             success: function (resa)
             {
-              console.log('删除反馈')
-              console.log(resa)
+              //console.log('删除反馈')
+              //console.log(resa)
               wx.hideLoading();
               wx.showToast({
                 title: '删除成功',
@@ -287,7 +287,7 @@ Page({
             }
           });
         } else if (res.cancel) {
-          console.log('用户点击取消')
+          //console.log('用户点击取消')
         }
       }
     })

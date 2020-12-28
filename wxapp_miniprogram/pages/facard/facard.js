@@ -19,7 +19,7 @@ Page({
     selectLockid: [], // 选中的门禁id
   },
   onShow:function () {
-    console.log('onShow')
+    //console.log('onShow')
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -36,8 +36,8 @@ Page({
           lockcard_id: that.data.lockcard_id
         },
         success: function (resa) {
-          console.log('onShow-success-resa');
-          console.log(resa);
+          //console.log('onShow-success-resa');
+          //console.log(resa);
           //wx.hideLoading();
           if (resa.data.status == 200) {
             var card = resa.data.data;
@@ -107,8 +107,8 @@ Page({
   },
   checkboxChange: function(e) {
     var arr = e.detail.value;
-    console.log('checkboxChange-arr')
-    console.log(arr)
+    //console.log('checkboxChange-arr')
+    //console.log(arr)
     this.setData({
       selectLockid: arr
     });
@@ -128,8 +128,8 @@ Page({
         page: 1,
       },
       success: function (resa) {
-        console.log('getLock-success-resa');
-        console.log(resa);
+        //console.log('getLock-success-resa');
+        //console.log(resa);
         var arr = [];
         var tmplock_user_arr = {};
         if (resa.data.status == 200) {
@@ -190,8 +190,8 @@ Page({
   },
   addCard: function (postdata) {
     var that = this;
-    console.log('addCard-postdata:')
-    console.log(postdata)
+    //console.log('addCard-postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/LockCard/addauthcard',
       method: 'POST',
@@ -200,8 +200,8 @@ Page({
       },
       data: postdata,
       success: function (res) {
-        console.log('addCard-res');
-        console.log(res);
+        //console.log('addCard-res');
+        //console.log(res);
         if (res.data.status ==200) {
           return true;
         }
@@ -234,16 +234,16 @@ Page({
     }
     var selectLockid = that.data.selectLockid;
     var lock_user_arr = that.data.lock_user_arr;
-    console.log('doSubmit-lock_user_arr')
-    console.log(lock_user_arr)
+    //console.log('doSubmit-lock_user_arr')
+    //console.log(lock_user_arr)
     var fanum = selectLockid.length;
-    console.log('fanum:'+fanum);
+    //console.log('fanum:'+fanum);
     var hasfanum = 0;
     var aaa = setInterval(function(){
         if (hasfanum < fanum) {
           var tmplock_id = selectLockid[hasfanum];
-          console.log('tmplock_id:'+tmplock_id);
-          console.log('hasfanum1:'+hasfanum);
+          //console.log('tmplock_id:'+tmplock_id);
+          //console.log('hasfanum1:'+hasfanum);
           var tmplockidstr = 'l'+tmplock_id;
           var postdata = {
             lockauth_id: that.data.lockauth_id,
@@ -256,9 +256,9 @@ Page({
           postdata['lock_id'] = tmplock_id;
           var fares = that.addCard(postdata);
           hasfanum = hasfanum + 1;
-          console.log('hasfanum2:'+hasfanum);
+          //console.log('hasfanum2:'+hasfanum);
         }else{
-          console.log('clear');
+          //console.log('clear');
           clearInterval(aaa);  //清除定时器
           wx.hideLoading();
           wx.showToast({
@@ -268,7 +268,7 @@ Page({
             duration: 2000
           });
         }
-        console.log('这是定时器，每隔一定时间执行一次');
+        //console.log('这是定时器，每隔一定时间执行一次');
     },1000);
   },
   getDateIndex: function (time) {
@@ -286,7 +286,7 @@ Page({
       if (dateTimeArray) {
         for (var i = 0; i < dateTimeArray[0].length; i++) {
           if(Y===dateTimeArray[0][i]){
-            console.log(dateTimeArray[0][i]);
+            //console.log(dateTimeArray[0][i]);
             timeobj['Y'] = i;
           }
         }

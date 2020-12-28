@@ -46,7 +46,7 @@ Page({
       filePath: res.tempFilePath
     }))
     .then(res => {
-      console.log(res);
+      //console.log(res);
       // this.hide();
       wx.showToast({
         title: '保存成功~',
@@ -60,7 +60,7 @@ Page({
       });
     })
     .catch(({ errMsg }) => {
-      console.log(errMsg)
+      //console.log(errMsg)
       // if (~errMsg.indexOf('cancel')) return;
       if (!~errMsg.indexOf('auth')) {
         wx.showToast({
@@ -186,8 +186,8 @@ Page({
           page: page,
         },
         success: function (resa) {
-          console.log('qrcode-getmore-success-resa');
-          console.log(resa);
+          //console.log('qrcode-getmore-success-resa');
+          //console.log(resa);
           wx.hideLoading();
           var arr = [];
           if (resa.data.status == 200) {

@@ -45,7 +45,7 @@ Page({
     var timestamp = Date.parse(new Date());
     timestamp = timestamp /1000;
     var that = this;
-    console.log(that.data);
+    //console.log(that.data);
     var user_id = app.globalData.user_id;
     if (user_id < 1) {
       wx.showToast({
@@ -94,8 +94,8 @@ Page({
         repwd: repwd
       },
       success: function (res) {
-        console.log('uploadData-res');
-        console.log(res);
+        //console.log('uploadData-res');
+        //console.log(res);
         wx.showToast({
           title: res.data.msg,
           icon: 'none',

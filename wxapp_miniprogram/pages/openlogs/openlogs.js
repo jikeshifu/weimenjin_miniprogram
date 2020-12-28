@@ -80,8 +80,8 @@ Page({
     }
   },
   onShow:function () {
-    console.log('openlogs-onShow')
-    // console.log(app.globalData.userid)
+    //console.log('openlogs-onShow')
+    // //console.log(app.globalData.userid)
     var that = this
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -159,8 +159,8 @@ Page({
           end_time: that.data.end_time,
         },
         success: function (resa) {
-          console.log('getmore-success-resa');
-          console.log(resa);
+          //console.log('getmore-success-resa');
+          //console.log(resa);
           wx.hideLoading();
           var arr = [];
           if (resa.data.status == 200) {
@@ -242,8 +242,8 @@ Page({
       title: '登录中',
       mask: true
     })
-    console.log('getUserInfo-e');
-    console.log(e);
+    //console.log('getUserInfo-e');
+    //console.log(e);
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -252,7 +252,7 @@ Page({
     this.updateUserInfo(e.detail);
   },
   updateUserInfo: function(data) {
-    console.log('updateUserInfo');
+    //console.log('updateUserInfo');
     var that = this;
     var route = that.data.route;
     // 登录
@@ -273,8 +273,8 @@ Page({
                 },
                 method: 'POST',
                 success: function (resa) {
-                  console.log('index-resa');
-                  console.log(resa);
+                  //console.log('index-resa');
+                  //console.log(resa);
                   if (resa.data.status == 200) {
                     app.globalData.token = resa.data.token;
                     app.globalData.userid = resa.data.data.member_id;
@@ -282,8 +282,8 @@ Page({
                     app.globalData.phone = resa.data.data.mobile;
                   }
                   var tmpdata1 = {member_id: resa.data.data.member_id};
-                  console.log('index-updateUserInfo-tmpdata1')
-                  console.log(tmpdata1)
+                  //console.log('index-updateUserInfo-tmpdata1')
+                  //console.log(tmpdata1)
                   wx.request({
                     url: app.globalData.domain+'/api/Member/view',
                     method: 'POST',
@@ -294,8 +294,8 @@ Page({
                       member_id: resa.data.data.member_id
                     },
                     success: function (resb) {
-                      console.log('index-updateUserInfo-resb');
-                      console.log(resb);
+                      //console.log('index-updateUserInfo-resb');
+                      //console.log(resb);
                       wx.hideLoading();
                       if (resb.data.status == 200) {
                         var tmpuser_id = resb.data.data.user_id;

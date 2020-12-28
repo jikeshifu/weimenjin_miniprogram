@@ -1,0 +1,14 @@
+<form>
+  <view class="fullmask2 {{closeAd ? 'hide' :''}}"></view>
+  <view class="adbox" style="width:{{adw}}rpx;margin-left:-{{adw/2}}rpx;" wx:if="{{!closeAd && adnum==1}}">
+    <view class="greentip">开门成功</view>
+    <view><image class="img1" mode="aspectFit"  src="{{successimg}}"></image></view>
+    <view><image class="img2" mode="aspectFit" src="{{successadimg}}"></image></view>
+    <view class="miniad {{qrshowminiad ? 'hide' :''}}" ><ad  unit-id="adunit-7f4379a208fd83c6"></ad></view>
+  </view>
+  <view class="adbox2" style="width:{{adw}}rpx;margin-left:-{{adw/2}}rpx;" wx:if="{{!closeAd && adnum!=1}}">
+    <view class="onlyone" bindtap="openweb">
+      <image class="onlyimg" mode="aspectFit" src="{{successimg}}"></image>
+    </view>
+  </view>
+</form>

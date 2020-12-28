@@ -83,8 +83,8 @@ Page({
     }
   },
   onShow:function () {
-    console.log('openlogs-onShow')
-    // console.log(app.globalData.userid)
+    //console.log('openlogs-onShow')
+    // //console.log(app.globalData.userid)
     var that = this
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -172,8 +172,8 @@ Page({
           end_time: that.data.end_time,
         },
         success: function (resa) {
-          console.log('getmore-success-resa');
-          console.log(resa);
+          //console.log('getmore-success-resa');
+          //console.log(resa);
           wx.hideLoading();
           var arr = [];
           if (resa.data.status == 200) {
@@ -268,7 +268,7 @@ Page({
       content: '您确定要删除此卡片吗？',
       success (res) {
         if (res.confirm) {
-          console.log(lockcardid)
+          //console.log(lockcardid)
           wx.showLoading({
             title: '执行中',
             mask: true
@@ -284,7 +284,7 @@ Page({
             },
             success: function (resa)
             {
-              console.log("httpsuccess",resa)
+              //console.log("httpsuccess",resa)
               wx.hideLoading();
               if (resa.data['status']=='200') {
                 wx.showToast({
@@ -296,7 +296,7 @@ Page({
               }
               else
               {
-                console.log("httpsuccesselse",resa)
+                //console.log("httpsuccesselse",resa)
                 wx.showToast({
                   title: '删除失败',
                   icon: 'none',
@@ -319,7 +319,7 @@ Page({
             }
           });
         } else if (res.cancel) {
-          console.log('用户点击取消')
+          //console.log('用户点击取消')
         }
       }
     })

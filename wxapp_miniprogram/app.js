@@ -14,12 +14,12 @@ App({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        // console.log(res.code);
+        // //console.log(res.code);
         if (res.code) {
           wx.getUserInfo({
             success: resuser => {
-              // console.log('getUserInfo-resuser')
-              // console.log(resuser)
+              console.log('getUserInfo-resuser')
+              console.log(resuser)
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = resuser.userInfo
               //发起网络请求
@@ -32,17 +32,20 @@ App({
                 },
                 method: 'POST',
                 success: function (resa) {
-                  console.log('app.js-login-resa');
-                  console.log(resa);
+                  //console.log('app.js-login-resa');
+                  //console.log(resa);
                   if (resa.data.status == 200) {
                     that.globalData.token = resa.data.token;
                     that.globalData.userid = resa.data.data.member_id;
                     that.globalData.openid = resa.data.data.openid;
                     that.globalData.phone = resa.data.data.mobile;
                   }
+                  // if (resa.data.data.useradmininfo.user_id != undefined) {
+                  //   that.globalData.user_id = resa.data.data.useradmininfo.user_id;
+                  // }else{}
                   var tmpdata3 = {member_id: resa.data.data.member_id};
-                  // console.log('app.js-onLaunch-login-tmpdata3')
-                  // console.log(tmpdata3)
+                  console.log('app.js-onLaunch-login-tmpdata3')
+                  console.log(tmpdata3)
                   wx.request({
                     url: that.globalData.domain+'/api/Member/viewuserid',
                     method: 'POST',
@@ -66,6 +69,10 @@ App({
                   })
                 }
               })
+            },
+            fail: resuser => {
+              console.log('fail-resuser')
+              console.log(resuser)
             }
           })
         }
@@ -76,6 +83,8 @@ App({
     token: '', // 用户token
     phone: '', // 用户绑定的手机号
     domain: 'https://wxapp.wmj.com.cn',
+    xcxname:'微门禁',
+    shareImg: '/static/img/shareimg.jpg',
     userInfo: null,
     ishas: false,   // 默认没有微信用户信息
     openid: '',
@@ -84,6 +93,11 @@ App({
     lock_id: 0,     // 扫码开的锁id
     adminInfo:null, // 管理员信息
     sessionkey: '',
-    version: ''
+    version: '',
+    successimg: '',
+    successadimg: '',
+    openadurl: '',
+    adnum: 1, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
+    qrshowminiad: false,
   }
 })

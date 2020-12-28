@@ -26,9 +26,9 @@ Page({
   },
   onLoad: function (options) {
     var that = this;
-    console.log(options)
-    console.log('token:');
-    console.log(app.globalData.token)
+    //console.log(options)
+    //console.log('token:');
+    //console.log(app.globalData.token)
     wx.request({
       url: app.globalData.domain+'/api/Health/view',
       method: "POST",
@@ -40,8 +40,8 @@ Page({
         //health_id: 10,
       },
       success: function (res) {
-        console.log('getmore-success-res');
-        console.log(res);
+        //console.log('getmore-success-res');
+        //console.log(res);
         var manyou = res.data.data.manyou != '' ? app.globalData.domain+res.data.data.manyou : '../../images/upload.png';
         var txz = res.data.data.txz != '' ? app.globalData.domain+res.data.data.txz : '../../images/upload.png';
         var create_time = that.timestampToTime(res.data.data.create_time);

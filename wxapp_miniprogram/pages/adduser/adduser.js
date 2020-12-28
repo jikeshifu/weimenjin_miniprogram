@@ -24,8 +24,8 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('adduser-onLoad-app.globalData');
-    console.log(app.globalData);
+    ////console.log('adduser-onLoad-app.globalData');
+    ////console.log(app.globalData);
   },
   realnameInput:function(e){
     this.setData({
@@ -52,7 +52,7 @@ Page({
       return false;
     }
     var that = this;
-    console.log(that.data);
+    ////console.log(that.data);
     var btn = that.data.btn;
     if (btn=='修改密码') {
       wx.navigateTo({
@@ -96,8 +96,8 @@ Page({
           user: username,
           pwd: pwd
         };
-      console.log('adduser-uploadData-tmpdata2')
-      console.log(tmpdata2)
+      ////console.log('adduser-uploadData-tmpdata2')
+      ////console.log(tmpdata2)
       wx.request({
         url: app.globalData.domain+'/api/User/adduser',
         method: 'POST',
@@ -111,8 +111,8 @@ Page({
           pwd: pwd
         },
         success: function (res) {
-          console.log('uploadData-res');
-          console.log(res);
+          ////console.log('uploadData-res');
+          ////console.log(res);
           wx.showToast({
             title: res.data.msg,
             icon: 'none',

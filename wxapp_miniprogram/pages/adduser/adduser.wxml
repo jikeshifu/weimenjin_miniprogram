@@ -5,15 +5,15 @@
   </view>
   <view class="cu-form-group">
     <view class="title">用户名</view>
-    <input name="username" placeholder="请输入用户名" value="{{username}}" bindinput="usernameInput"></input>
+    <input name="username" placeholder="请输入用户名,字母数字组成" value="{{username}}" bindinput="usernameInput"></input>
   </view>
   <view class="cu-form-group">
     <view class="title">密码</view>
     <input name="pwd" password placeholder="请输入密码" value="" bindinput="pwdInput"></input>
   </view>
-    <view class="cu-form-group margin-top">
+  <!-- <view class="cu-form-group margin-top">
     <view class="manageurl">后台管理地址：<text selectable='true'>{{manageurl}}</text></view>
-  </view>
+  </view> -->
   <view class="padding flex flex-direction">
     <button class="cu-btn bg-green lg" bindtap="uploadData">{{btn}}</button>
   </view>

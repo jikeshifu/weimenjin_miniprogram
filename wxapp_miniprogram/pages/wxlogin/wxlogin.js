@@ -17,11 +17,11 @@ Page({
   //   })
   // },
   onLoad: function () {
-    console.log('wxlogin-onLoad-app.globalData');
-    console.log(app.globalData);
+    //console.log('wxlogin-onLoad-app.globalData');
+    //console.log(app.globalData);
     var pages = getCurrentPages();
-    console.log('pages')
-    console.log(pages)
+    //console.log('pages')
+    //console.log(pages)
     var len = pages.length;
     var route = '';
     if (len>=2) {
@@ -33,7 +33,7 @@ Page({
         })
       }
     }
-    // console.log(prevpage.route);
+    // //console.log(prevpage.route);
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -51,9 +51,9 @@ Page({
     } else if (this.data.canIUse){
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
-      console.log('else-if');
+      //console.log('else-if');
       app.userInfoReadyCallback = res => {
-        console.log(res.userInfo);
+        //console.log(res.userInfo);
         this.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
@@ -70,10 +70,10 @@ Page({
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
-      console.log('else');
+      //console.log('else');
       wx.getUserInfo({
         success: res => {
-          console.log(res.userInfo);
+          //console.log(res.userInfo);
           app.globalData.userInfo = res.userInfo
           this.setData({
             userInfo: res.userInfo,
@@ -94,8 +94,8 @@ Page({
       title: '登录中',
       mask: true
     })
-    console.log('getUserInfo-e');
-    console.log(e);
+    //console.log('getUserInfo-e');
+    //console.log(e);
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -104,7 +104,7 @@ Page({
     this.updateUserInfo(e.detail);
   },
   updateUserInfo: function(data) {
-    console.log('updateUserInfo');
+    //console.log('updateUserInfo');
     var that = this;
     var route = that.data.route;
     // 登录
@@ -125,8 +125,8 @@ Page({
                 },
                 method: 'POST',
                 success: function (resa) {
-                  console.log('app-resa');
-                  console.log(resa);
+                  //console.log('app-resa');
+                  //console.log(resa);
                   if (resa.data.status == 200) {
                     app.globalData.token = resa.data.token;
                     app.globalData.userid = resa.data.data.member_id;
@@ -134,8 +134,8 @@ Page({
                     app.globalData.phone = resa.data.data.mobile;
                   }
                   var tmpdata1 = {member_id: resa.data.data.member_id};
-                  console.log('wxlogin-updateUserInfo-tmpdata1')
-                  console.log(tmpdata1)
+                  //console.log('wxlogin-updateUserInfo-tmpdata1')
+                  //console.log(tmpdata1)
                   wx.request({
                     url: app.globalData.domain+'/api/Member/viewuserid',
                     method: 'POST',
@@ -146,8 +146,8 @@ Page({
                       member_id: resa.data.data.member_id
                     },
                     success: function (resb) {
-                      console.log('wxlogin-updateUserInfo-resb');
-                      console.log(resb);
+                      //console.log('wxlogin-updateUserInfo-resb');
+                      //console.log(resb);
                       if (resb.data.status == 200) {
                         var tmpuser_id = resb.data.data.user_id;
                         if (tmpuser_id != '') {

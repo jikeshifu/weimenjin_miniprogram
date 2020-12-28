@@ -6,7 +6,10 @@
 					<view class="shrink0">
 						<image class="line" src='{{vo.online ? online : offline}}' mode='aspectFill'></image>
 					</view>
-					<view class="shrink1">{{vo.lock_name}}</view>
+					<view class="shrink1">
+						{{vo.lock_name}}
+						<view wx:if="{{vo.type == '9'}}" class="lockstatus"><image class="line" src="{{vo.lockstatus == '0' ? lock_close : lock_open}}" mode='aspectFill'></image></view>
+					</view>
 					<block>
 						<!-- <view class="shrink2">操作/管理</view> -->
 						<view class="shrink2" data-index="{{index}}" bindtap="switchBox"><view class="cuIcon-settings iconli"></view>管理</view>

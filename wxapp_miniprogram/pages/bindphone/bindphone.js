@@ -11,8 +11,8 @@ Page({
     }
   },
   onLoad: function () {
-    console.log('bindphone-onLoad');
-    console.log(app.globalData);
+    //console.log('bindphone-onLoad');
+    //console.log(app.globalData);
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo
@@ -27,13 +27,13 @@ Page({
       return false;
     }
     var that = this;
-    console.log('getPhoneNumber-e');
-    console.log(e);
-    console.log(app.globalData)
+    //console.log('getPhoneNumber-e');
+    //console.log(e);
+    //console.log(app.globalData)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
       wx.login({
         success: res => {
-          console.log('res.code:'+res.code)
+          //console.log('res.code:'+res.code)
           wx.request({
             url: app.globalData.domain+'/api/Member/getphonenumber',
             data: {
@@ -43,8 +43,8 @@ Page({
             },
             method: "post",
             success: function (resa) {
-              console.log('getphonenumber-resa');
-              console.log(resa);
+              //console.log('getphonenumber-resa');
+              //console.log(resa);
               var phone = resa.data.phoneNumber;
               app.globalData.phone = phone;
               var dataobj = {
@@ -55,8 +55,8 @@ Page({
                   mobile: phone,
                   sex: app.globalData.userInfo.gender
                 };
-                console.log('dataobj')
-                console.log(dataobj);
+                //console.log('dataobj')
+                //console.log(dataobj);
               wx.request({
                 url: app.globalData.domain+'/api/Member/update',
                 method: "post",
@@ -65,8 +65,8 @@ Page({
                 },
                 data: dataobj,
                 success: function (resb) {
-                  console.log('update-resb');
-                  console.log(resb);
+                  //console.log('update-resb');
+                  //console.log(resb);
                   wx.showToast({
                     title: resb.data.msg,
                     icon: 'none',

@@ -47,10 +47,10 @@ Page({
     })
   },
   onShow:function () {
-    console.log('health-onShow')
+    //console.log('health-onShow')
     var that = this;
-    console.log('phone:'+that.data.phone);
-    console.log(app.globalData)
+    //console.log('phone:'+that.data.phone);
+    //console.log(app.globalData)
     if (app.globalData.phone =='' || app.globalData.phone == null) {
     }else{
       that.setData({
@@ -64,7 +64,7 @@ Page({
     }else{
       wx.getSetting({
         success: (res) => {
-          console.log(JSON.stringify(res))
+          //console.log(JSON.stringify(res))
           // res.authSetting['scope.userLocation'] == undefined    表示 初始化进入该页面
           // res.authSetting['scope.userLocation'] == false    表示 非初始化进入该页面,且未授权
           // res.authSetting['scope.userLocation'] == true    表示 地理位置授权
@@ -72,7 +72,7 @@ Page({
             wx.getLocation({
               type: 'gcj02', //返回可以用于wx.openLocation的经纬度
               success (res) {
-                console.log('请求授权')
+                //console.log('请求授权')
               }
             })
           }
@@ -89,8 +89,8 @@ Page({
           openid: app.globalData.openid
         },
         success: function (res) {
-          console.log('viewrecently-res');
-          console.log(res);
+          //console.log('viewrecently-res');
+          //console.log(res);
           if (res.data.status ==200) {
             var tmpdata = res.data.data[0];
             var tmpregisterIndex = parseInt(tmpdata.register_type)-1;
@@ -128,12 +128,12 @@ Page({
     }
   },
   onLoad: function (options) {
-    console.log('options:');
-    console.log(options);
-    console.log('token:');
-    console.log(app.globalData.token)
+    //console.log('options:');
+    //console.log(options);
+    //console.log('token:');
+    //console.log(app.globalData.token)
     var that = this;
-    console.log(app.globalData)
+    //console.log(app.globalData)
     var userAgree = wx.getStorageSync('userAgree') || false
     that.setData({
         userAgree
@@ -150,23 +150,23 @@ Page({
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
-      console.log('scene:'+scene);
+      //console.log('scene:'+scene);
       var pos = scene.indexOf("?");
       if (pos >=0) {
-        console.log('pos1:'+pos);
+        //console.log('pos1:'+pos);
         pos = parseInt(pos) +1;
         var str = scene.substr(pos);
-        console.log('str:'+str);
+        //console.log('str:'+str);
         var strarr = str.split('&');
-        console.log('strarr:');
-        console.log(strarr);
+        //console.log('strarr:');
+        //console.log(strarr);
         var paramobj = {};
         for (var i = 0; i < strarr.length; i++) {
           var tmparr = strarr[i].split('=');
           paramobj[tmparr[0]] = tmparr[1];
         }
-        console.log('paramobj:');
-        console.log(paramobj);
+        //console.log('paramobj:');
+        //console.log(paramobj);
         if (paramobj['user_id'] != undefined && paramobj['user_id'] >0) {
           user_id = paramobj['user_id'];
           that.setData({
@@ -207,8 +207,8 @@ Page({
     }
     // var healthkey = "health"+app.globalData.userid;
     // var healthlog = wx.getStorageSync(healthkey);
-    // console.log('healthkey:'+healthkey)
-    // console.log(healthlog)
+    // //console.log('healthkey:'+healthkey)
+    // //console.log(healthlog)
     // if (healthlog != undefined && healthlog != '') {
     //   healthlog = JSON.parse(healthlog);
     //   this.setData({
@@ -251,19 +251,19 @@ Page({
     });
   },
   yiquChange(e) {
-    console.log(e);
+    //console.log(e);
     this.setData({
       yiquIndex: e.detail.value
     })
   },
   registerChange(e) {
-    console.log(e);
+    //console.log(e);
     this.setData({
       registerIndex: e.detail.value
     })
   },
   healthChange(e) {
-    console.log(e);
+    //console.log(e);
     this.setData({
       healthIndex: e.detail.value
     })
@@ -275,7 +275,7 @@ Page({
       sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album'], //从相册选择
       success: (res) => {
-        console.log(res)
+        //console.log(res)
         wx.uploadFile({
           url: app.globalData.domain+'/api/base/upload', //
           filePath: res.tempFilePaths[0],
@@ -287,8 +287,8 @@ Page({
             "Authorization": app.globalData.token
           },
           success (resa){
-            console.log('resa')
-            console.log(resa)
+            //console.log('resa')
+            //console.log(resa)
             var uploadmanyou =  JSON.parse(resa.data);
             uploadmanyou = uploadmanyou['data'];
             that.setData({
@@ -309,7 +309,7 @@ Page({
       sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album'], //从相册选择
       success: (res) => {
-        console.log(res)
+        //console.log(res)
         wx.uploadFile({
           url: app.globalData.domain+'/api/base/upload',// url: 'https://wxapp.wmj.com.cn/api/upload/uploadimg',
           filePath: res.tempFilePaths[0],
@@ -321,8 +321,8 @@ Page({
             "Authorization": app.globalData.token
           },
           success (resa){
-            console.log('resa')
-            console.log(resa)
+            //console.log('resa')
+            //console.log(resa)
             var uploadtxz =  JSON.parse(resa.data);
             uploadtxz = uploadtxz['data'];
             that.setData({
@@ -337,17 +337,17 @@ Page({
     });
   },
   bindTapLocation(){
-    console.log('aaa');
+    //console.log('aaa');
     var that = this;
     wx.getSetting({
       success: (res) => {
-        console.log(JSON.stringify(res))
+        //console.log(JSON.stringify(res))
         if (res.authSetting['scope.userLocation']!= true) {
-          console.log('scope.userLocation!=true')
+          //console.log('scope.userLocation!=true')
           wx.openSetting({
             success: function (dataAu) {
-              console.log('dataAu')
-              console.log(dataAu)
+              //console.log('dataAu')
+              //console.log(dataAu)
               if (dataAu.authSetting["scope.userLocation"] == true) {
                 that.getLocation();
               } else {
@@ -360,37 +360,37 @@ Page({
               }
             },
             fail(res){
-              console.log('openSetting-fail-res')
-              console.log(res)
+              //console.log('openSetting-fail-res')
+              //console.log(res)
             }
           })
         }else{
-          console.log('scope.userLocation==true')
+          //console.log('scope.userLocation==true')
           that.getLocation();
         }
       },
       fail(res){
-        console.log('getSetting-fail-res')
-        console.log(res)
+        //console.log('getSetting-fail-res')
+        //console.log(res)
       }
     })
     /**/
   },
   getLocation(){
     var that = this;
-    console.log('getLocation-that.data');
-    console.log(that.data);
+    //console.log('getLocation-that.data');
+    //console.log(that.data);
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
       success (res) {
-        console.log('getLocation-res');
-        console.log(res)
+        //console.log('getLocation-res');
+        //console.log(res)
         wx.chooseLocation({
           latitude: res.latitude,
           longitude: res.longitude,
           success(resa){
-            console.log('getLocation-resa')
-            console.log(resa)
+            //console.log('getLocation-resa')
+            //console.log(resa)
             that.setData({
               curaddress: resa.name,
               latitude: resa.latitude,
@@ -411,8 +411,8 @@ Page({
     var timestamp = Date.parse(new Date());
     timestamp = timestamp /1000;
     var that = this;
-    // console.log('thatdata');
-    // console.log(that.data);
+    // //console.log('thatdata');
+    // //console.log(that.data);
     var phone = that.data.phone;
     var username = that.data.username;
     var address1 = that.data.address1;
@@ -509,8 +509,8 @@ Page({
       txz: that.data.uploadtxz,
       utime:timestamp
     };
-    console.log('postdata:')
-    console.log(postdata)
+    //console.log('postdata:')
+    //console.log(postdata)
     wx.request({
       url: app.globalData.domain+'/api/Health/add',
       method: 'POST',
@@ -537,8 +537,8 @@ Page({
         utime:timestamp
       },
       success: function (res) {
-        console.log('uploadData-res');
-        console.log(res);
+        //console.log('uploadData-res');
+        //console.log(res);
         wx.showToast({
           title: res.data.msg,
           icon: 'none',
@@ -576,13 +576,13 @@ Page({
       mask: true
     });
     var that = this;
-    console.log('getPhoneNumber-e');
-    console.log(e);
-    console.log(app.globalData)
+    //console.log('getPhoneNumber-e');
+    //console.log(e);
+    //console.log(app.globalData)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
       wx.login({
         success: res => {
-          console.log('res.code:'+res.code)
+          //console.log('res.code:'+res.code)
           wx.request({
             url: app.globalData.domain+'/api/Member/getphonenumber',
             data: {
@@ -592,8 +592,8 @@ Page({
             },
             method: "post",
             success: function (resa) {
-              console.log('getphonenumber-resa');
-              console.log(resa);
+              //console.log('getphonenumber-resa');
+              //console.log(resa);
               var phone = resa.data.phoneNumber;
               if (phone!=null && phone!= undefined) {
                 that.setData({
@@ -609,8 +609,8 @@ Page({
                   mobile: phone,
                   sex: app.globalData.userInfo.gender
                 };
-                console.log('dataobj')
-                console.log(dataobj);
+                //console.log('dataobj')
+                //console.log(dataobj);
               wx.request({
                 url: app.globalData.domain+'/api/Member/update',
                 method: "post",
@@ -619,8 +619,8 @@ Page({
                 },
                 data: dataobj,
                 success: function (resb) {
-                  console.log('update-resb');
-                  console.log(resb);
+                  //console.log('update-resb');
+                  //console.log(resb);
                   wx.hideLoading();
                 }
               })

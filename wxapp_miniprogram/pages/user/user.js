@@ -17,21 +17,25 @@ Page({
     user_id: 0     // 管理员id 大于0显示添加设备
   },
   onShow:function () {
-    console.log('user-onShow')
+    //console.log('user-onShow')
     var that = this;
-    console.log(app.globalData)
+    //console.log(app.globalData)
     if (app.globalData.userid < 1) {
       wx.navigateTo({
         url: '../wxlogin/wxlogin'
       });
     }else{
+      var tmpuserInfo = that.data.tmpuserInfo;
+      if (app.globalData.userInfo != null) {
+        tmpuserInfo = app.globalData.userInfo;
+      }
       var tmpphone = app.globalData.phone;
       that.setData({
         user_id: app.globalData.user_id,
         phone: app.globalData.phone,
         jiamiphone: tmpphone.substr(0,3)+"****"+ tmpphone.substr(7),
-        userInfo: app.globalData.userInfo,
-        tmpuserInfo: app.globalData.userInfo,
+        userInfo: tmpuserInfo,
+        tmpuserInfo: tmpuserInfo,
         hasUserInfo: true
       })
     }
@@ -116,13 +120,13 @@ Page({
   },
   getPhoneNumber: function (e) {
     var that = this;
-    console.log('getPhoneNumber-e');
-    console.log(e);
+    //console.log('getPhoneNumber-e');
+    //console.log(e);
     if (e != undefined) {}
     if (e.detail.errMsg == "getPhoneNumber:ok") {
       wx.login({
         success: res => {
-          console.log('res.code:'+res.code)
+          //console.log('res.code:'+res.code)
           wx.request({
             url: app.globalData.domain+'/api/Member/getphonenumber',
             data: {
@@ -132,8 +136,8 @@ Page({
             },
             method: "post",
             success: function (resa) {
-              console.log('getphonenumber-resa');
-              console.log(resa);
+              //console.log('getphonenumber-resa');
+              //console.log(resa);
               app.globalData.phone = resa.data.phoneNumber;
               var tmpphone = resa.data.phoneNumber;
               that.setData({
@@ -144,6 +148,19 @@ Page({
           })
         }
       })
+    }
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.xcxname,
+      imageUrl: app.globalData.domain+app.globalData.shareImg,
+      path: "/pages/index/index"
+    };
+  },
+  onShareTimeline: function () {
+    return {
+      title: app.globalData.xcxname,
+      imageUrl: app.globalData.domain+app.globalData.shareImg,
     }
   }
 })
