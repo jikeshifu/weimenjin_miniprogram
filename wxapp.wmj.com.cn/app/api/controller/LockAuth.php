@@ -472,6 +472,8 @@ class LockAuth extends Common {
     			 {
     			    $result = wmjHandle($value['lock_sn'], 'lockstate');
     			    $res['list'][$key]['online']       = $result['online'];
+    			    $res['list'][$key]['type']       = $result['type'];
+    			    $res['list'][$key]['lockstatus']       = $result['lockstatus'];
     			 }
              }
 		}catch(\Exception $e){

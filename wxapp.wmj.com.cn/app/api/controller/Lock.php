@@ -695,6 +695,43 @@ class Lock extends Common {
 	}
 /*end*/
 
+/*start*/
+	/**
+	* @api {post} /Lock/getphone 09、获取管理员手机号
+	*/
+	function getphone()
+	{
+		
+		$lock_sn = $this->request->post('sn','','');
+		$authkey = $this->request->post('key','','');
+		if(!$lock_sn) return json(['status'=>'101','msg'=>'sn不能为空']);
+		if(!$authkey) return json(['status'=>'101','msg'=>'key不能为空']);
+		//判断钥匙是否有效
+		if ($authkey!="McpNWnhKQJze7SBK") 
+		{
+			return json(['status'=>'201','msg'=>'秘钥错误']);
+		}
+		$lockmap['lock_sn']=$lock_sn;
+		//根据锁sn拿到锁信息,根据会员id拿到会员信息，根据会员id和锁id拿到钥匙信息
+		$reslookdata=LockDb::getWhereInfo($lockmap);
+		$authdata['lock_id']=$reslookdata['lock_id'];
+		$authdata['auth_member_id']=0;
+		$authdata['auth_isadmin']=1;
+		$resauthdata=\xhadmin\db\LockAuth::getWhereInfo($authdata);
+		$resmemdata=\xhadmin\db\Member::getInfo($resauthdata['member_id']);
+		try{
+				mlog("getphone:".json_encode($resmemdata));
+				if ($resmemdata) 
+				{
+						return json(['status'=>'200','msg'=>'获取成功','mobile'=>$resmemdata['mobile']]);
+				}
+			}
+			catch(\Exception $e)
+			{
+				return json(['status'=>'201','msg'=>'获取失败']);
+			}
+	}
+/*end*/
 
 /*start*/
    function creatqrcode()
