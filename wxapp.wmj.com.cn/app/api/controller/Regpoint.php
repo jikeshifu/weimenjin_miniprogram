@@ -155,7 +155,8 @@ class Regpoint extends Common {
 	function add(){
 		$postField = 'member_id,user_id,regpointname,lock_id,regpointurl,create_time';
 		$data = $this->request->only(explode(',',$postField),'post',null);
-		$url = $this->request->param('regpointurl').$this->request->param('user_id');
+		$regpointurl = 'https://'.$_SERVER['HTTP_HOST'].'/miniprogram?user_id=';
+		$url = $regpointurl.$this->request->param('user_id');
 		//$url = 'https://wxapp.wmj.com.cn/qrdata/qrcode/大地.png';
 		$qrcodename = $this->request->param('regpointname');
 		//$name ='dddddd';
@@ -246,7 +247,7 @@ class Regpoint extends Common {
  /*start*/
    function creatqrcode()
 	{
-		$url='https://wxapp.wmj.com.cn/qrdata/qrcode/%E5%B0%8F%E5%8C%BA%E9%97%A8%E5%8F%A3.png';
+		$url='https://'.$_SERVER['HTTP_HOST'].'/qrdata/qrcode/%E5%B0%8F%E5%8C%BA%E9%97%A8%E5%8F%A3.png';
 		$qrcodename='测试567';
 		return $this->createmarkqrcode($url,$qrcodename);
 	}
@@ -301,7 +302,7 @@ class Regpoint extends Common {
             // header('Content-Type: image/png');//发送头信息 浏览器显示
             imagepng($img,$qrcode_file);//输出图片，输出png使用imagepng方法，输出gif使用imagegif方法
         }
-		return 'https://wxapp.wmj.com.cn/qrdata/qrcode/'.$file;	
+		return 'https://'.$_SERVER['HTTP_HOST'].'/qrdata/qrcode/'.$file;	
 	}
 	/*end*/
 
