@@ -33,17 +33,17 @@
 				</block>
 				<block wx:if="{{vo.auth_status ==1}}">
 					<view class="list-content">{{vo.time}}</view>
+					<block wx:if="{{vo.foot}}">
 					<view class="list-footer">
 						<view class="listrow">
-							<view class="opendoor" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}" data-locationcheck="{{vo.location_check}}" data-longitude="{{vo.longitude}}" data-latitude="{{vo.latitude}}" bindtap="opendoor">
+							<view class="opendoor" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}" data-locationcheck="{{vo.location_check}}" data-longitude="{{vo.longitude}}" data-latitude="{{vo.latitude}}" bindtap="opendoor" wx:if="{{vo.openbtn ==1 || vo.auth_isadmin ==1}}">
 								<view class="cuIcon-lock iconli"></view>开门
 							</view>
               				<view class="shrink1"></view>
-							<block wx:if="{{vo.auth_status ==1 && vo.auth_shareability!=0 && vo.guoqi}}">
-								<view class="shrink2" bindtap="goShare" data-adminid="{{vo.user_id}}"  data-lockid="{{vo.lock_id}}">分享钥匙</view>
-							</block>
+							<view class="shrink2" bindtap="goShare" data-adminid="{{vo.user_id}}"  data-lockid="{{vo.lock_id}}" wx:if="{{vo.auth_status ==1 && vo.auth_shareability!=0 && vo.guoqi}}">分享钥匙</view>
 						</view>
 					</view>
+					</block>
 				</block>
 			</view>
 			<block wx:if="{{listlen <1}}">

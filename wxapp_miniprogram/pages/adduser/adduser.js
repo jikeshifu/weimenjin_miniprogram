@@ -8,6 +8,7 @@ Page({
     manageurl:''
   },
   onShow:function () {
+    var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
         url: '../wxlogin/wxlogin'
@@ -20,6 +21,32 @@ Page({
           btn: '修改密码',
           manageurl:app.globalData.domain
         });
+      }
+      else
+      {
+        wx.request({
+          url: app.globalData.domain+'/api/Member/viewuserid',
+          method: 'POST',
+          header:{
+            "Authorization": app.globalData.token
+          },
+          data: {
+            member_id: app.globalData.userid
+          },
+          success: function (resb) {
+            console.log('app.js-onLaunch-login-resb');
+            console.log(resb);
+            if (resb.data.status == 200) {
+              var tmpuser_id = resb.data.data.user_id;
+              if (tmpuser_id != '') {
+                that.setData({
+                  realname: resb.data.data.name,
+                  username: resb.data.data.user
+                })
+              }
+            }
+          }
+        })
       }
     }
   },

@@ -41,7 +41,7 @@
       <text>我的开门记录</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>
-    <view class="witem {{user_id>0 ? '' : 'hide'}}" bindtap="addLock">
+    <view class="witem" bindtap="addLock">
       <text>添加设备</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>

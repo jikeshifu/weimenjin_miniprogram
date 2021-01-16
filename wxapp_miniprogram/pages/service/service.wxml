@@ -1,0 +1,10 @@
+<view class="">
+  <view class="cu-list grid col-3 no-border solid-top1">
+      <view class="cu-item" wx:for="{{menus}}" wx:for-index="index" wx:for-item="vo" wx:key="id" bindtap="openurl" data-index="{{index}}">
+        <view class="imgnav">
+          <image class="iconimg" src="{{vo.wservice_icon}}"></image>
+        </view>
+        <text>{{vo.wservice_name}}</text>
+      </view>
+    </view>
+</view>

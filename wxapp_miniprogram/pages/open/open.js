@@ -14,6 +14,7 @@ Page({
     phone: '',
     user_id: 0,   // 管理员id，不是小程序用户的id
     lock_id: 0, // 用app.js里的lock_id
+    st: 0, // 二维码上的参数
     realname: '', // 申请人名
     remark: '', // 备注
     auth_status: 0, // 审核状态 已审核|1,未审核|0   204代表1不需要审核直接开门，203代表0需要审核
@@ -79,6 +80,7 @@ Page({
     });
     var user_id = this.data.user_id;
     var lock_id = app.globalData.lock_id;
+    var st = that.data.st;
     if(options.q){
       var scene = decodeURIComponent(options.q)  // 使用decodeURIComponent解析  获取当前二维码的网址
       // scene.decodeURL()
@@ -112,6 +114,12 @@ Page({
           // });
           app.globalData.lock_id = lock_id
         }
+        if (paramobj['st'] != undefined && paramobj['st'] > 0) {
+          st = paramobj['st'];
+          that.setData({
+            st: paramobj['st']
+          });
+        }
       }
     }
     if (options.user_id != undefined && options.user_id >0) {
@@ -126,6 +134,12 @@ Page({
       //   lock_id: lock_id
       // });
       app.globalData.lock_id = lock_id
+    }
+    if (options.st != undefined && options.st >0) {
+      st = options.st
+      that.setData({
+        st: st
+      });
     }
   },
   // 现获取锁信息,判断是否限制距离
@@ -316,6 +330,7 @@ Page({
       data: {
         user_id: adminid,
         lock_id: lock_id,
+        st: that.data.st,
         member_id: app.globalData.userid,
         type: 1
       },

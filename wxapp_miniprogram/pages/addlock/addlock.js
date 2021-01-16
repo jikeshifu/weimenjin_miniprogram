@@ -7,6 +7,7 @@ Page({
   },
   onShow:function () {
     //console.log('addlock-onShow')
+    // app.globalData.user_id = 0;
     var that = this;
     if (app.globalData.userid < 1) {
       wx.navigateTo({
@@ -14,8 +15,8 @@ Page({
       })
     }
     if (app.globalData.user_id < 1) {
-      wx.navigateTo({
-        url: '../wxlogin/wxlogin'
+      wx.redirectTo({
+        url: '../adduser/adduser'
       })
     }
   },

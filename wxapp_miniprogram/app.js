@@ -56,8 +56,8 @@ App({
                       member_id: resa.data.data.member_id
                     },
                     success: function (resb) {
-                      // console.log('app.js-onLaunch-login-resb');
-                      // console.log(resb);
+                      console.log('app.js-onLaunch-login-resb');
+                      console.log(resb);
                       if (resb.data.status == 200) {
                         var tmpuser_id = resb.data.data.user_id;
                         if (tmpuser_id != '') {
@@ -99,5 +99,26 @@ App({
     openadurl: '',
     adnum: 1, // 显示开门成功样式几： 1原来的两张图片的,2新的只显示一张图片的
     qrshowminiad: false,
-  }
+  },
+  compareVersion: function(v1, v2) { // 1是v1>v2,0是v1=v2,-1是v1<v2
+    v1 = v1.split('.');
+    v2 = v2.split('.');
+    const len = Math.max(v1.length, v2.length);
+    while (v1.length < len) {
+      v1.push('0');
+    }
+    while (v2.length < len) {
+      v2.push('0');
+    }
+    for (let i = 0; i < len; i++) {
+      const num1 = parseInt(v1[i]);
+      const num2 = parseInt(v2[i]);
+      if (num1 > num2) {
+        return 1;
+      } else if (num1 < num2) {
+        return -1;
+      }
+    }
+    return 0;
+  },
 })

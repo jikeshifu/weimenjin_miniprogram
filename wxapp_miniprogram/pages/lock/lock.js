@@ -167,5 +167,54 @@ Page({
         }
       }
     })
+  },
+  saveImage(e) {
+    var that =this;
+    var img = e.currentTarget.dataset['img'];
+    console.log('saveImage-img:'+img);
+    if (img != '') {
+      wx.downloadFile({
+        url: img, // 下载文件
+        success (res) {
+          // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
+          if (res.statusCode === 200) {
+            wx.saveImageToPhotosAlbum({
+              filePath: res.tempFilePath,
+              success (resa) {
+                wx.showToast({
+                  title: '保存成功~',
+                  icon: 'success',
+                  mask: true, // 防止触摸穿透
+                  duration: 2000
+                });
+              },
+              fail(resa) {
+                wx.showToast({
+                  title: '保存失败',
+                  icon: 'none',
+                  mask: true, // 防止触摸穿透
+                  duration: 2000
+                });
+              },
+            })
+          }
+        },
+        fail(resa) {
+          wx.showToast({
+            title: '保存失败',
+            icon: 'none',
+            mask: true, // 防止触摸穿透
+            duration: 2000
+          });
+        },
+      })
+    }else{
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none',
+        mask: true, // 防止触摸穿透
+        duration: 2000
+      });
+    }
   }
 })

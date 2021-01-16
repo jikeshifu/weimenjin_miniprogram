@@ -107,7 +107,7 @@ Page({
         member_id: app.globalData.userid,
         user_id: app.globalData.user_id,
         lock_id: that.data.lock_id,
-        regpointurl: 'https://wxapp.wmj.com.cn/miniprogram?user_id='
+        regpointurl: app.globalData.domain+'/miniprogram?user_id='
       },
       success: function (res) {
         //console.log('uploadData-res');

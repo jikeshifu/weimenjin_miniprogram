@@ -131,10 +131,14 @@ Page({
           page: page,
         },
         success: function (resa) {
-          //console.log('getmore-success-resa');
-          //console.log(resa);
+          console.log('getmore-success-resa');
+          console.log(resa);
           var arr = [];
           var tmpdropIndex = that.data.dropIndex;
+          var curtmpdrop = false;
+          if (tmpdropIndex >-1 ) {
+            curtmpdrop = that.data.dropArr[tmpdropIndex];
+          }
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
             if(arrdata.length > 0){
@@ -170,6 +174,18 @@ Page({
                 tmpobj['auth_shareability'] = arrdata[i]['auth_shareability']; //auth_shareability为0时或已过期时，不能分享，审核中不能分享
                 tmpobj['lockstatus'] = arrdata[i]['lockstatus']; // 0是关上的，1是打开的
                 tmpobj['type'] = arrdata[i]['type']; // 9在锁名后面显示开门状态
+                tmpobj['openbtn'] = arrdata[i]['openbtn']; // 1支持远程开门，0不支持
+                var foot = false;
+                if (arrdata[i]['auth_isadmin']==1) {
+                  foot = true;
+                }
+                if (arrdata[i]['openbtn']==1) {
+                  foot = true;
+                }
+                if (arrdata[i]['auth_status'] ==1 && arrdata[i]['auth_shareability']!=0 && arrdata[i]['guoqi']) {
+                  foot = true;
+                }
+                tmpobj['foot'] = foot; // 是否显示底部
                 tmpobj['longitude'] = 0;
                 tmpobj['latitude'] = 0;
                 if (arrdata[i]['location'] != '' && arrdata[i]['location'] != null) {
@@ -196,7 +212,7 @@ Page({
                 var newdroparr = tmpdroparr;
               }
               if (tmpdropIndex > -1) {
-                newdroparr[tmpdropIndex] = true;
+                newdroparr[tmpdropIndex] = curtmpdrop;
               }
               var tmplistlen = newdata.length;
               that.setData({
@@ -216,7 +232,7 @@ Page({
                 var newdroparr = that.data.dropArr;
               }
               if (tmpdropIndex > -1) {
-                newdroparr[tmpdropIndex] = true;
+                newdroparr[tmpdropIndex] = curtmpdrop;
               }
               that.setData({
                 listarr: newdata,
@@ -810,7 +826,6 @@ Page({
     var s = date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds();
     return Y+m+d+H+i+s;
   },
-
   onShareAppMessage: function () {
     return {
       title: app.globalData.xcxname,

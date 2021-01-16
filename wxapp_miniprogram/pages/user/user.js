@@ -75,7 +75,7 @@ Page({
   },
   openLock: function() {
     wx.navigateTo({
-      url: '../open/open?user_id=1&lock_id=11'
+      url: '../open/open?user_id=1&lock_id=11&st=1612096986'
     });
   },
   openlogs: function() {

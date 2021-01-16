@@ -37,10 +37,12 @@ Page({
       // modalName: null
     })
   },
-  saveImage() {
+  saveImage(e) {
     var that =this;
+    var img = e.currentTarget.dataset['img'];
+    console.log('saveImage-img:'+img)
     this.wxToPromise('downloadFile', {
-      url: this.data.url
+      url: img
     })
     .then(res => this.wxToPromise('saveImageToPhotosAlbum', {
       filePath: res.tempFilePath

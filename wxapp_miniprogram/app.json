@@ -1,9 +1,11 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/ce/ce",
     "pages/openlogs/openlogs",
     "pages/allopenlogs/allopenlogs",
     "pages/open/open",
+    "pages/opensuccess/opensuccess",
     "pages/health/health",
     "pages/healthlist/healthlist",
     "pages/healthdetail/healthdetail",
@@ -25,9 +27,11 @@
     "pages/cardlist/cardlist",
     "pages/addcard/addcard",
     "pages/editcard/editcard",
+    "pages/facard/facard",
     "pages/configaudio/configaudio",
     "pages/townership/townership",
     "pages/web/web",
+    "pages/service/service",
     "pages/memberps/serviceagreement",
     "pages/memberps/privacypolicy"
   ],
@@ -45,6 +49,12 @@
         "iconPath": "images/home.png",
         "selectedIconPath": "images/homeon.png",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/service/service",
+        "iconPath": "images/fuwu.png",
+        "selectedIconPath": "images/fuwuon.png",
+        "text": "服务"
       },
       {
         "pagePath": "pages/user/user",
