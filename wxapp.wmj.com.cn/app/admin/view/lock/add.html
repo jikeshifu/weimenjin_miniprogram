@@ -131,6 +131,15 @@
 						</div>
 					</div>
 					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">开门按钮：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['openbtn'])){ $info['openbtn'] = 1; }; ?>
+							<input name="openbtn" value="1" type="radio" {if condition="$info.openbtn eq '1'"}checked{/if} title="开启">
+							<input name="openbtn" value="0" type="radio" {if condition="$info.openbtn eq '0'"}checked{/if} title="关闭">
+							<span class="help-block m-b-none"> 小程序端开门按钮是否启用</span>
+						</div>
+					</div>
+					<div class="form-group layui-form">
 						<label class="col-sm-2 control-label">扫码开门广告：</label>
 						<div class="col-sm-9">
 							<?php if(!isset($info['qrshowminiad'])){ $info['qrshowminiad'] = 1; }; ?>

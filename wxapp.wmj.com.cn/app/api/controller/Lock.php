@@ -196,7 +196,7 @@ class Lock extends Common {
 		    $lockdata=\xhadmin\db\Lock::getInfo($data['lock_id']);
 		    $stateresult = wmjHandle($lockdata['lock_sn'], 'lockstate');
 		    $postdata['sn']=$lockdata['lock_sn'];
-		    $postdata['qrcodeurl']='https://'.$_SERVER['HTTP_HOST'].'/minilock?user_id='.$lockdata['user_id'].'&lock_id='.$data['lock_id'].'&state=';
+		    $postdata['qrcodeurl']='https://'.$_SERVER['HTTP_HOST'].'/minilock?user_id='.$lockdata['user_id'].'&lock_id='.$data['lock_id'].'&st=';
 		    if ($stateresult['online'])
 		    {
 			    $result=wmjManageHandle($lockdata['lock_sn'],'lcdconfig',$postdata);
@@ -407,6 +407,7 @@ class Lock extends Common {
 		if(empty($data['user_id'])) return json(['status'=>$this->errorCode,'msg'=>'管理员ID不能为空']);
 		if(empty($data['member_id'])) return json(['status'=>$this->errorCode,'msg'=>'会员ID不能为空']);
 		try {
+		    $data['lock_sn']=strtoupper($data['lock_sn']);
 		    $wmjapiresult = wmjHandle($data['lock_sn'],'postlock');
 			if ($wmjapiresult['state']) 
 			{
@@ -415,6 +416,7 @@ class Lock extends Common {
 			    $data['applyauth_check'] = 0;
 			    $data['status'] = 1;
 			    $data['location_check'] = 0;
+			    $data['openbtn'] = 1;
 			    $data['hitshowminiad'] = 1;
 			    $data['qrshowminiad'] = 1;
 			    $data['create_time'] = time();
@@ -499,6 +501,7 @@ class Lock extends Common {
 		$lock_id = $this->request->post('lock_id','','intval');
 		$member_id = $this->request->post('member_id','','intval');
 		$user_id = $this->request->post('user_id','','intval');
+		$openst = $this->request->post('st','','intval');
 		$type = $this->request->post('type','','intval');
 		if(!$lock_id) return json(['opendoor_status'=>'101','msg'=>'lock_id不能为空']);
 		if(!$member_id) return json(['opendoor_status'=>'101','msg'=>'member_id不能为空']);
@@ -513,6 +516,16 @@ class Lock extends Common {
 		$umemdata['user_id']=$user_id;
 		$resauthdata=\xhadmin\db\LockAuth::getWhereInfo($authdata);
 		$resumemdata=\xhadmin\db\Umember::getWhereInfo($umemdata);
+		if($openst&&$openst>0)
+		{
+		    $openst=$openst-1314520;
+		    //mlog("openst:".$openst);
+		    if ((time()-$openst)>60) 
+		    {
+		        return json(['opendoor_status'=>'201','msg'=>'二维码已过期']);
+		    }
+		}
+		//创建用户信息
 		if (!$resumemdata) 
 		{
 		    $umemdata['status']=1;

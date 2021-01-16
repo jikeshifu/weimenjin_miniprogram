@@ -321,6 +321,30 @@
 		}
 	}
 
+	CodeGoods.openbtnFormatter = function(value,row,index) {
+		if(value !== null){
+			if(value == 1){
+				return '<input class="mui-switch mui-switch-animbg openbtn'+row.lock_id+'" type="checkbox" onclick="CodeGoods.updateopenbtn('+row.lock_id+',0,\'openbtn\')" checked>';
+			}else{
+				return '<input class="mui-switch mui-switch-animbg openbtn'+row.lock_id+'" type="checkbox" onclick="CodeGoods.updateopenbtn('+row.lock_id+',1,\'openbtn\')">';
+			}
+		}
+	}
+
+
+	CodeGoods.updateopenbtn = function(pk,value,field) {
+		var ajax = new $ax(Feng.ctxPath + "/Lock/updateExt", function (data) {
+			if ('00' !== data.status) {
+				Feng.error(data.msg);
+				$("."+field+pk).prop("checked",!$("."+field+pk).prop("checked"));
+			}
+		});
+		var val = $("."+field+pk).prop("checked") ? 1 : 0;
+		ajax.set('lock_id', pk);
+		ajax.set('openbtn', val);
+		ajax.start();
+	}
+
 	CodeGoods.formParams = function() {
 		var queryData = {};
 		queryData['user_id'] = $("#user_id").val();

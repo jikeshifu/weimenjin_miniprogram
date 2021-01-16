@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		门锁列表
- create_time:	2020-09-26 15:40:00
+ create_time:	2021-01-16 14:53:02
  author:		
  contact:		
 */
@@ -32,7 +32,7 @@ class Lock extends Admin {
 	}
 	/*修改排序、开关按钮操作 如果没有此类操作 可以删除该方法*/
 	function updateExt(){
-		$postField = 'lock_id,mobile_check,applyauth,applyauth_check,status,hitshowminiad,qrshowminiad';
+		$postField = 'lock_id,mobile_check,applyauth,applyauth_check,status,hitshowminiad,openbtn,qrshowminiad';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		if(!$data['lock_id']) $this->error('参数错误');
 		try{
@@ -95,7 +95,7 @@ class Lock extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,qrshowminiad,hitshowminiad,lock_qrcode,create_time,successimg,successadimg,openadurl,adnum';
+			$postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,qrshowminiad,hitshowminiad,lock_qrcode,create_time,openbtn,successimg,successadimg,openadurl,adnum';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("updatelock_data:".json_encode($data));
@@ -234,7 +234,7 @@ class Lock extends Admin {
 		if (!$this->request->isPost()){
 			return $this->display('add');
 		}else{
-			$postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,lock_qrcode,location_check,hitshowminiad,qrshowminiad,successimg,successadimg,openadurl,adnum,create_time';
+			$postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,lock_qrcode,location_check,hitshowminiad,qrshowminiad,successimg,openbtn,successadimg,openadurl,adnum,create_time';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				//mlog("WMJSN:".$data['lock_sn']);

@@ -140,7 +140,7 @@ class LockAuth extends Common {
 	function applyauth(){
 		$postField = 'lock_id,member_id,realname,remark,create_time,auth_status,user_id';
 		$data = $this->request->only(explode(',',$postField),'post',null);
-		mlog("isapplylock_postdata".json_encode($data));
+		//mlog("isapplylock_postdata".json_encode($data));
 		//查询是否已经申请过
 		$field='lockauth_id,lock_id,member_id';
 		$isapplywhere['member_id']=$data['member_id'];
@@ -148,7 +148,7 @@ class LockAuth extends Common {
 		$lockfield='lock_id,user_id,lock_name,lock_sn';
 		$lockwhere['lock_id']=$data['lock_id'];
 		$lockdata = \xhadmin\db\Lock::getWhereInfo($lockwhere,$lockfield);
-		mlog("lockdata:".json_encode($lockdata));
+		//mlog("lockdata:".json_encode($lockdata));
 		$data['user_id'] = $lockdata['user_id'];
 		$isapplylock=LockAuthDb::getWhereInfo($isapplywhere,$field);
 		if ($isapplylock) {
@@ -214,8 +214,8 @@ class LockAuth extends Common {
 		    $authwhere['lock_id']=$lockauthinfo[0]['lock_id'];
 		    $authwhere['auth_member_id']=0;
 		    $adminmember=LockAuthDb::getWhereInfo($authwhere,$field);
-		    mlog("adminmember".json_encode($adminmember['member_id']));
-		    mlog("auth_member_id".json_encode($data['auth_member_id']));
+		    //mlog("adminmember".json_encode($adminmember['member_id']));
+		    //mlog("auth_member_id".json_encode($data['auth_member_id']));
 		    if($data['auth_member_id']==$adminmember['member_id'] and $lockauthinfo[0]['member_id']==$data['auth_member_id']) return json(['status'=>$this->errorCode,'msg'=>'您已是超级管理员，不需要再审核']);
 		    if($data['auth_isadmin']>0 and $data['auth_member_id']!=$adminmember['member_id']) return json(['status'=>$this->errorCode,'msg'=>'您不是该锁超级管理员，无法设置管理员']);
 		    //mlog("lockauth_id".json_encode($data['lockauth_id']));
