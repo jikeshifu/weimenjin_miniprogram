@@ -68,6 +68,7 @@ CodeInfoDlg.add = function () {
 	 var status = $("input[name = 'status']:checked").val();
 	 var adnum = $("input[name = 'adnum']:checked").val();
 	 var hitshowminiad = $("input[name = 'hitshowminiad']:checked").val();
+	 var openbtn = $("input[name = 'openbtn']:checked").val();
 	 var qrshowminiad = $("input[name = 'qrshowminiad']:checked").val();
 	 var tip = '添加';
 	 var ajax = new $ax(Feng.ctxPath + "/Lock/add", function (data) {
@@ -86,6 +87,7 @@ CodeInfoDlg.add = function () {
 	 ajax.set('status',status);
 	 ajax.set('adnum',adnum);
 	 ajax.set('hitshowminiad',hitshowminiad);
+	 ajax.set('openbtn',openbtn);
 	 ajax.set('qrshowminiad',qrshowminiad);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
@@ -105,6 +107,7 @@ CodeInfoDlg.update = function () {
 	 var status = $("input[name = 'status']:checked").val();
 	 var adnum = $("input[name = 'adnum']:checked").val();
 	 var hitshowminiad = $("input[name = 'hitshowminiad']:checked").val();
+	 var openbtn = $("input[name = 'openbtn']:checked").val();
 	 var qrshowminiad = $("input[name = 'qrshowminiad']:checked").val();
 	 var tip = '修改';
 	 var ajax = new $ax(Feng.ctxPath + "/Lock/update", function (data) {
@@ -123,6 +126,7 @@ CodeInfoDlg.update = function () {
 	 ajax.set('status',status);
 	 ajax.set('adnum',adnum);
 	 ajax.set('hitshowminiad',hitshowminiad);
+	 ajax.set('openbtn',openbtn);
 	 ajax.set('qrshowminiad',qrshowminiad);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();

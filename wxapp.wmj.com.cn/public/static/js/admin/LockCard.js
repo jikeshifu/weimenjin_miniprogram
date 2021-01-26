@@ -76,6 +76,29 @@ CodeInfoDlg.update = function () {
 };
 
 
+CodeInfoDlg.batchupcard = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var batchstatus = $("input[name = 'batchstatus']:checked").val();
+	 var tip = '修改';
+	 var ajax = new $ax(Feng.ctxPath + "/LockCard/batchupcard", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(tip + "失败！" + data.msg + "！");
+		 }
+	 })
+	 ajax.set('batchstatus',batchstatus);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
 CodeInfoDlg.validate = function () {
 	  $('#CodeInfoForm').data("bootstrapValidator").resetForm();
 	  $('#CodeInfoForm').bootstrapValidator('validate');

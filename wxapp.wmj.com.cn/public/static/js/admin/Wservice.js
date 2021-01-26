@@ -3,11 +3,10 @@ var CodeInfoDlg = {
 	deptZtree: null,
 	pNameZtree: null,
 	validateFields: {
-		mobile: {
+		wservice_type: {
 			validators: {
-				regexp: {
-					regexp: /^1[3456789]\d{9}$/,
-					message: ''
+				notEmpty: {
+					message: '类型不能为空'
 	 			},
 	 		}
 	 	},
@@ -38,7 +37,7 @@ CodeInfoDlg.close = function () {
 
 
 CodeInfoDlg.collectData = function () {
-	this.set('member_id').set('member_id').set('nickname').set('headimgurl').set('openid').set('ali_user_id').set('mobile').set('username').set('password').set('create_time').set('user_id').set('unionid');
+	this.set('wservice_id').set('wservice_id').set('wservice_name').set('wservice_icon').set('wservice_appid').set('wservice_url').set('wservice_sort');
 };
 
 
@@ -48,10 +47,9 @@ CodeInfoDlg.add = function () {
 	 if (!this.validate()) {
 	 	return;
 	 }
-	 var sex = $("input[name = 'sex']:checked").val();
-	 var status = $("input[name = 'status']:checked").val();
+	 var wservice_type = $("input[name = 'wservice_type']:checked").val();
 	 var tip = '添加';
-	 var ajax = new $ax(Feng.ctxPath + "/Member/add", function (data) {
+	 var ajax = new $ax(Feng.ctxPath + "/Wservice/add", function (data) {
 	 	if ('00' === data.status) {
 	 		Feng.success(data.msg);
 	 		window.parent.CodeGoods.table.refresh();
@@ -60,8 +58,7 @@ CodeInfoDlg.add = function () {
 	 		Feng.error(tip + "失败！" + data.msg + "！");
 		 }
 	 })
-	 ajax.set('sex',sex);
-	 ajax.set('status',status);
+	 ajax.set('wservice_type',wservice_type);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };
@@ -73,10 +70,9 @@ CodeInfoDlg.update = function () {
 	 if (!this.validate()) {
 	 	return;
 	 }
-	 var sex = $("input[name = 'sex']:checked").val();
-	 var status = $("input[name = 'status']:checked").val();
+	 var wservice_type = $("input[name = 'wservice_type']:checked").val();
 	 var tip = '修改';
-	 var ajax = new $ax(Feng.ctxPath + "/Member/update", function (data) {
+	 var ajax = new $ax(Feng.ctxPath + "/Wservice/update", function (data) {
 	 	if ('00' === data.status) {
 	 		Feng.success(data.msg);
 	 		window.parent.CodeGoods.table.refresh();
@@ -85,31 +81,7 @@ CodeInfoDlg.update = function () {
 	 		Feng.error(tip + "失败！" + data.msg + "！");
 		 }
 	 })
-	 ajax.set('sex',sex);
-	 ajax.set('status',status);
-	 ajax.set(this.CodeInfoData);
-	 ajax.start();
-};
-
-
-CodeInfoDlg.resetpassword = function () {
-	 this.clearData();
-	 this.collectData();
-	 if (!this.validate()) {
-	 	return;
-	 }
-	 var tip = '操作';
-	 var ajax = new $ax(Feng.ctxPath + "/Member/resetpassword", function (data) {
-	 	if ('00' === data.status) {
-	 		Feng.success(tip + "成功" );
-	 		window.parent.CodeGoods.table.refresh();
-	 		CodeInfoDlg.close();
-	 	} else {
-	 		Feng.error(tip + "失败！" + data.msg + "！");
-		 }
-	 }, function (data) {
-	 	Feng.error("操作失败!" + data.responseJSON.message + "!");
-	 });
+	 ajax.set('wservice_type',wservice_type);
 	 ajax.set(this.CodeInfoData);
 	 ajax.start();
 };
