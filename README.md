@@ -11,22 +11,9 @@ wxapp.wmj.com.cn为管理后台源码。
 wxapp_miniprogram为微信小程序源码。
 
 #### 管理后台安装教程
-
-1.  基于ThinkPHP6.0开发，建议使用宝塔面板
-2.  PHP7.2+,默认用Nginx，如果用Apache需要在伪静态配置文件增加配置：SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
-
-```
- <IfModule mod_rewrite.c>
- RewriteEngine on
- RewriteBase /
- RewriteCond %{REQUEST_FILENAME} !-d
- RewriteCond %{REQUEST_FILENAME} !-f
- RewriteRule ^(.*)$ index.php?s=/$1 [QSA,PT,L]
- #增加如下内容
- SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
-</IfModule>
-```
-
+对于新手，强烈建议使用宝塔面板。
+1.  基于ThinkPHP6.0开发，用Nginx，站点伪静态设置为ThinkPHP。
+2.  PHP7.2+,
 3.  Mysql5.5+
 4.  修改数据库连接在根目录下.env文件,数据库脚本为weimenjin_miniprogram_db.sql
 5.  后台超级管理员admin,默认密码wmj123456
