@@ -1,0 +1,191 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='locktimes_id' id='locktimes_id' value="{$info.locktimes_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">时段名称：</label>
+						<div class="col-sm-9">
+							<input type="text" id="locktimesname" value="{$info.locktimesname}" name="locktimesname" class="form-control" placeholder="请输入时段名称">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['type'])){ $info['type'] = 1; }; ?>
+							<input name="type" value="1" type="radio" {if condition="$info.type eq '1'"}checked{/if} title="锁可用时段">
+							<input name="type" value="2" type="radio" {if condition="$info.type eq '2'"}checked{/if} title="钥匙可用时段">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">周开始：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="startweek" class="form-control" id="startweek">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.startweek eq '1'"}selected{/if}>周一</option>
+								<option value="2" {if condition="$info.startweek eq '2'"}selected{/if}>周二</option>
+								<option value="3" {if condition="$info.startweek eq '3'"}selected{/if}>周三</option>
+								<option value="4" {if condition="$info.startweek eq '4'"}selected{/if}>周四</option>
+								<option value="5" {if condition="$info.startweek eq '5'"}selected{/if}>周五</option>
+								<option value="6" {if condition="$info.startweek eq '6'"}selected{/if}>周六</option>
+								<option value="7" {if condition="$info.startweek eq '7'"}selected{/if}>周日</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">小时开始：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="starthour" class="form-control" id="starthour">
+								<option value="">请选择</option>
+								<option value="0" {if condition="$info.starthour eq '0'"}selected{/if}>0:00</option>
+								<option value="1" {if condition="$info.starthour eq '1'"}selected{/if}>1:00</option>
+								<option value="2" {if condition="$info.starthour eq '2'"}selected{/if}>2:00</option>
+								<option value="3" {if condition="$info.starthour eq '3'"}selected{/if}>3:00</option>
+								<option value="4" {if condition="$info.starthour eq '4'"}selected{/if}>4:00</option>
+								<option value="5" {if condition="$info.starthour eq '5'"}selected{/if}>5:00</option>
+								<option value="6" {if condition="$info.starthour eq '6'"}selected{/if}>6:00</option>
+								<option value="7" {if condition="$info.starthour eq '7'"}selected{/if}>7:00</option>
+								<option value="8" {if condition="$info.starthour eq '8'"}selected{/if}>8:00</option>
+								<option value="9" {if condition="$info.starthour eq '9'"}selected{/if}>9:00</option>
+								<option value="10" {if condition="$info.starthour eq '10'"}selected{/if}>10:00</option>
+								<option value="11" {if condition="$info.starthour eq '11'"}selected{/if}>11:00</option>
+								<option value="12" {if condition="$info.starthour eq '12'"}selected{/if}>12:00</option>
+								<option value="13" {if condition="$info.starthour eq '13'"}selected{/if}>13:00</option>
+								<option value="14" {if condition="$info.starthour eq '14'"}selected{/if}>14:00</option>
+								<option value="15" {if condition="$info.starthour eq '15'"}selected{/if}>15:00</option>
+								<option value="16" {if condition="$info.starthour eq '16'"}selected{/if}>16:00</option>
+								<option value="17" {if condition="$info.starthour eq '17'"}selected{/if}>17:00</option>
+								<option value="18" {if condition="$info.starthour eq '18'"}selected{/if}>18:00</option>
+								<option value="19" {if condition="$info.starthour eq '19'"}selected{/if}>19:00</option>
+								<option value="20" {if condition="$info.starthour eq '20'"}selected{/if}>20:00</option>
+								<option value="21" {if condition="$info.starthour eq '21'"}selected{/if}>21:00</option>
+								<option value="22" {if condition="$info.starthour eq '22'"}selected{/if}>22:00</option>
+								<option value="23" {if condition="$info.starthour eq '23'"}selected{/if}>23:00</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">分钟开始：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="startminute" class="form-control" id="startminute">
+								<option value="">请选择</option>
+								<option value="0" {if condition="$info.startminute eq '0'"}selected{/if}>0</option>
+								<option value="5" {if condition="$info.startminute eq '5'"}selected{/if}>5</option>
+								<option value="10" {if condition="$info.startminute eq '10'"}selected{/if}>10</option>
+								<option value="15" {if condition="$info.startminute eq '15'"}selected{/if}>15</option>
+								<option value="20" {if condition="$info.startminute eq '20'"}selected{/if}>20</option>
+								<option value="25" {if condition="$info.startminute eq '25'"}selected{/if}>25</option>
+								<option value="30" {if condition="$info.startminute eq '30'"}selected{/if}>30</option>
+								<option value="35" {if condition="$info.startminute eq '35'"}selected{/if}>35</option>
+								<option value="40" {if condition="$info.startminute eq '40'"}selected{/if}>40</option>
+								<option value="45" {if condition="$info.startminute eq '45'"}selected{/if}>45</option>
+								<option value="50" {if condition="$info.startminute eq '50'"}selected{/if}>50</option>
+								<option value="55" {if condition="$info.startminute eq '55'"}selected{/if}>55</option>
+								<option value="59" {if condition="$info.startminute eq '59'"}selected{/if}>59</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">周结束：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="endweek" class="form-control" id="endweek">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.endweek eq '1'"}selected{/if}>周一</option>
+								<option value="2" {if condition="$info.endweek eq '2'"}selected{/if}>周二</option>
+								<option value="3" {if condition="$info.endweek eq '3'"}selected{/if}>周三</option>
+								<option value="4" {if condition="$info.endweek eq '4'"}selected{/if}>周四</option>
+								<option value="5" {if condition="$info.endweek eq '5'"}selected{/if}>周五</option>
+								<option value="6" {if condition="$info.endweek eq '6'"}selected{/if}>周六</option>
+								<option value="7" {if condition="$info.endweek eq '7'"}selected{/if}>周日</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">小时结束：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="endhour" class="form-control" id="endhour">
+								<option value="">请选择</option>
+								<option value="0" {if condition="$info.endhour eq '0'"}selected{/if}>0:00</option>
+								<option value="1" {if condition="$info.endhour eq '1'"}selected{/if}>1:00</option>
+								<option value="2" {if condition="$info.endhour eq '2'"}selected{/if}>2:00</option>
+								<option value="3" {if condition="$info.endhour eq '3'"}selected{/if}>3:00</option>
+								<option value="4" {if condition="$info.endhour eq '4'"}selected{/if}>4:00</option>
+								<option value="5" {if condition="$info.endhour eq '5'"}selected{/if}>5:00</option>
+								<option value="6" {if condition="$info.endhour eq '6'"}selected{/if}>6:00</option>
+								<option value="7" {if condition="$info.endhour eq '7'"}selected{/if}>7:00</option>
+								<option value="8" {if condition="$info.endhour eq '8'"}selected{/if}>8:00</option>
+								<option value="9" {if condition="$info.endhour eq '9'"}selected{/if}>9:00</option>
+								<option value="10" {if condition="$info.endhour eq '10'"}selected{/if}>10:00</option>
+								<option value="11" {if condition="$info.endhour eq '11'"}selected{/if}>11:00</option>
+								<option value="12" {if condition="$info.endhour eq '12'"}selected{/if}>12:00</option>
+								<option value="13" {if condition="$info.endhour eq '13'"}selected{/if}>13:00</option>
+								<option value="14" {if condition="$info.endhour eq '14'"}selected{/if}>14:00</option>
+								<option value="15" {if condition="$info.endhour eq '15'"}selected{/if}>15:00</option>
+								<option value="16" {if condition="$info.endhour eq '16'"}selected{/if}>16:00</option>
+								<option value="17" {if condition="$info.endhour eq '17'"}selected{/if}>17:00</option>
+								<option value="18" {if condition="$info.endhour eq '18'"}selected{/if}>18:00</option>
+								<option value="19" {if condition="$info.endhour eq '19'"}selected{/if}>19:00</option>
+								<option value="20" {if condition="$info.endhour eq '20'"}selected{/if}>20:00</option>
+								<option value="21" {if condition="$info.endhour eq '21'"}selected{/if}>21:00</option>
+								<option value="22" {if condition="$info.endhour eq '22'"}selected{/if}>22:00</option>
+								<option value="23" {if condition="$info.endhour eq '23'"}selected{/if}>23:00</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">分钟结束：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="endminute" class="form-control" id="endminute">
+								<option value="">请选择</option>
+								<option value="0" {if condition="$info.endminute eq '0'"}selected{/if}>0</option>
+								<option value="5" {if condition="$info.endminute eq '5'"}selected{/if}>5</option>
+								<option value="10" {if condition="$info.endminute eq '10'"}selected{/if}>10</option>
+								<option value="15" {if condition="$info.endminute eq '15'"}selected{/if}>15</option>
+								<option value="20" {if condition="$info.endminute eq '20'"}selected{/if}>20</option>
+								<option value="25" {if condition="$info.endminute eq '25'"}selected{/if}>25</option>
+								<option value="30" {if condition="$info.endminute eq '30'"}selected{/if}>30</option>
+								<option value="35" {if condition="$info.endminute eq '35'"}selected{/if}>35</option>
+								<option value="40" {if condition="$info.endminute eq '40'"}selected{/if}>40</option>
+								<option value="45" {if condition="$info.endminute eq '45'"}selected{/if}>45</option>
+								<option value="50" {if condition="$info.endminute eq '50'"}selected{/if}>50</option>
+								<option value="55" {if condition="$info.endminute eq '55'"}selected{/if}>55</option>
+								<option value="59" {if condition="$info.endminute eq '59'"}selected{/if}>59</option>
+							</select>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Locktimes.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery-migrate-1.1.1.js'></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery.dragsort-0.5.1.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['form'], function () {
+	window.form = layui.form();
+});
+laydate.render({elem: '#create_time',type: 'datetime',trigger:'click'});
+</script>
+
+
+{/block}

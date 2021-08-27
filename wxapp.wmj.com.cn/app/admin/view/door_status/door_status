@@ -1,0 +1,18 @@
+var number = {$lock_status};
+    function lock_status(){
+     
+          $.post("/admin/DoorStatus/lock_status",{suggest:1},function(result){
+           if(number != result){
+               number =result
+               CodeGoods.search() 
+           }
+         });
+       setTimeout(function(){
+           
+         lock_status()
+           
+       },2000);
+    
+    }
+    
+    lock_status();

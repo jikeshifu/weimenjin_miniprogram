@@ -1,0 +1,136 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>登录日志管理</h5>
+				<button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()" id="">
+					<i class="fa fa-refresh"></i>
+				</button>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="row" id="searchGroup">
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">用户名</button>
+									</div>
+									<input type="text" class="form-control" id="username" placeholder="用户名" />
+								</div>
+							</div>
+							<!-- search end -->
+							<div class="col-sm-2">
+									<button type="button" class="btn btn-primary " onclick="CodeGoods.search()" id="">
+										<i class="fa fa-search"></i>&nbsp;搜索
+									</button>
+							</div>
+						</div>
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+						{if condition="in_array('/admin/Log/delete',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
+						<i class="fa fa-trash"></i>&nbsp;删除
+						</button>
+						{/if}
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '编号', field: 'log_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '用户名', field: 'username', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '昵称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '所属分组', field: 'group_name', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '操作', field: 'event', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '登录IP', field: 'ip', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '最后登录时间', field: 'time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.timeFormatter},
+ 		];
+ 	};
+
+	CodeGoods.timeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		queryData['username'] = $("#username").val();
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.delete = function (value) {
+		if(value){
+			Feng.confirm("是否删除选中项？", function () {
+				var ajax = new $ax(Feng.ctxPath + "/Log/delete", function (data) {
+					if ('00' === data.status) {
+						Feng.success(data.msg);
+						CodeGoods.table.refresh();
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('log_ids', value);
+				ajax.start();
+			});
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.log_id;
+				});
+				idx = idx.substr(1);
+				Feng.confirm("是否删除选中项？", function () {
+					var ajax = new $ax(Feng.ctxPath + "/Log/delete", function (data) {
+						if ('00' === data.status) {
+							Feng.success(data.msg);
+							CodeGoods.table.refresh();
+						} else {
+							Feng.error(data.msg);
+						}
+					});
+					ajax.set('log_ids', idx);
+					ajax.start();
+				});
+			}
+		}
+	}
+
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/Log/index"+url,defaultColunms,20);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+</script>
+{/block}

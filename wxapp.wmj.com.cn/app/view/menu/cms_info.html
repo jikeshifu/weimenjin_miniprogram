@@ -1,0 +1,76 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name="table_status" id="table_status" value="1">
+<input type="hidden" name="pk_id" id="pk_id" value="data_id">
+{if condition="$info.app_id eq ''"}
+<input type="hidden" name='app_id' id='app_id' value="{$app_id}" />
+{/if}
+<input type="hidden" name='menu_id' id='menu_id' value="{$info.menu_id}" />
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row" style="margin-top:-20px;">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-12">
+							<!-- form start -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">模型名称：</label>
+									<div class="col-sm-9">
+										<input type="text" id="title" value="{$info.title}" name="title" class="form-control" placeholder="请输入菜单名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">数据库表名：</label>
+									<div class="col-sm-9">
+										<input type="text" id="table_name" value="{$info.table_name}" name="table_name" class="form-control" placeholder="请输入数据库表名">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">状态：</label>
+									<div class="col-sm-9">
+									<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+										<input name="status" value="1" type="radio" {if condition="$info.status eq 1"}checked{/if}  title="正常">
+										<input name="status" value="0" type="radio" {if condition="$info.status eq 0"}checked{/if}  title="禁用">
+									</div>
+								</div>
+							<!-- form end -->
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="{if condition="$info.app_id neq ''"}CodeInfoDlg.update(){else/}CodeInfoDlg.add(){/if}" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Menu.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+});
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+
+</script>
+
+
+{/block}

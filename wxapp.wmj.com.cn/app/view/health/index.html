@@ -1,0 +1,397 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5></h5>
+				<button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()" id="">
+					<i class="fa fa-refresh"></i>
+				</button>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="row" id="searchGroup">
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">姓名</button>
+									</div>
+									<input type="text" class="form-control" id="name" placeholder="姓名" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
+									</div>
+									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">是否来自疫区</button>
+									</div>
+									<select class="form-control" id="yiqu">
+										<option value="">请选择</option>
+										<option value="1">是</option>
+										<option value="2">否</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">登记类型</button>
+									</div>
+									<select class="form-control" id="register_type">
+										<option value="">请选择</option>
+										<option value="1">村居(物业)</option>
+										<option value="2">乡镇社区</option>
+										<option value="3">区县</option>
+										<option value="4">交通运输</option>
+										<option value="5">其他</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">健康状况</button>
+									</div>
+									<select class="form-control" id="health">
+										<option value="">请选择</option>
+										<option value="1">健康</option>
+										<option value="2">发热</option>
+										<option value="3">发热咳嗽</option>
+										<option value="4">头晕乏力</option>
+										<option value="5">腹泻</option>
+										<option value="6">其他</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">登记时间开始</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="开始时间" class="form-control" id="create_time_start">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">登记时间结束</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="结束时间" class="form-control" id="create_time_end">
+								</div>
+							</div>
+							<!-- search end -->
+							<div class="col-sm-2">
+									<button type="button" class="btn btn-primary " onclick="CodeGoods.search()" id="">
+										<i class="fa fa-search"></i>&nbsp;搜索
+									</button>
+							</div>
+						</div>
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+						{if condition="in_array('/admin/Health/add',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
+						<i class="fa fa-plus"></i>&nbsp;添加
+						</button>
+						{/if}
+						{if condition="in_array('/admin/Health/update',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="update" class="btn btn-success button-margin" onclick="CodeGoods.update()">
+						<i class="fa fa-pencil"></i>&nbsp;修改
+						</button>
+						{/if}
+						{if condition="in_array('/admin/Health/delete',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
+						<i class="fa fa-trash"></i>&nbsp;删除
+						</button>
+						{/if}
+						{if condition="in_array('/admin/Health/view',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="view" class="btn btn-info button-margin" onclick="CodeGoods.view()">
+						<i class="fa fa-plus"></i>&nbsp;查看数据
+						</button>
+						{/if}
+						{if condition="in_array('/admin/Health/dumpData',session('admin.nodes')) || session('admin.role') eq 1"}
+						<button type="button" id="dumpData" class="btn btn-warning button-margin" onclick="CodeGoods.dumpData()">
+						<i class="fa fa-download"></i>&nbsp;导出
+						</button>
+						{/if}
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '姓名', field: 'name', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '家庭地址', field: 'first_address', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '第二居住地址', field: 'second_address', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '当前位置', field: 'position', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '工作或学习单位', field: 'job', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '是否来自疫区', field: 'yiqu', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.yiquFormatter},
+ 			{title: '登记类型', field: 'register_type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.register_typeFormatter},
+ 			{title: '健康状况', field: 'health', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.healthFormatter},
+ 			{title: '漫游地截图', field: 'manyou', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.manyouFormatter},
+ 			{title: '登记时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
+ 			{title: '所属用户', field: 'user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+ 		];
+ 	};
+
+	CodeGoods.buttonFormatter = function(value,row,index) {
+		if(row.health_id){
+			var str= '';
+			{if condition="in_array('/admin/Health/update',session('admin.nodes')) || session('admin.role') eq 1"}
+			str += '<button type="button" class="btn btn-success btn-xs" title="修改"  onclick="CodeGoods.update('+row.health_id+')"><i class="fa fa-pencil"></i>&nbsp;修改</button>&nbsp;';
+			{/if}
+			{if condition="in_array('/admin/Health/delete',session('admin.nodes')) || session('admin.role') eq 1"}
+			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.health_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
+			{/if}
+			return str;
+		}
+	}
+
+	CodeGoods.yiquFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '是';
+				break;
+				case '2':
+					return '否';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.register_typeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '村居(物业)';
+				break;
+				case '2':
+					return '乡镇社区';
+				break;
+				case '3':
+					return '区县';
+				break;
+				case '4':
+					return '交通运输';
+				break;
+				case '5':
+					return '其他';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.healthFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-primary">健康</span>';
+				break;
+				case '2':
+					return '<span class="label label-danger">发热</span>';
+				break;
+				case '3':
+					return '<span class="label label-danger">发热咳嗽</span>';
+				break;
+				case '4':
+					return '<span class="label label-warning">头晕乏力</span>';
+				break;
+				case '5':
+					return '<span class="label label-warning">腹泻</span>';
+				break;
+				case '6':
+					return '<span class="label label-warning">其他</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.manyouFormatter = function(value,row,index) {
+		if(value){
+			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
+		}
+	}
+
+	CodeGoods.create_timeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		queryData['name'] = $("#name").val();
+		queryData['mobile'] = $("#mobile").val();
+		queryData['yiqu'] = $("#yiqu").val();
+		queryData['register_type'] = $("#register_type").val();
+		queryData['health'] = $("#health").val();
+		queryData['create_time_start'] = $("#create_time_start").val();
+		queryData['create_time_end'] = $("#create_time_end").val();
+		queryData['user_id'] = $("#user_id").val();
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.add = function (value) {
+		var url = location.search;
+		var index = layer.open({type: 2,title: '添加',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Health/add'+url});
+		this.layerIndex = index;
+		if(!IsPC()){layer.full(index)}
+	}
+
+
+	CodeGoods.update = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Health/update?health_id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.health_id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Health/update?health_id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.delete = function (value) {
+		if(value){
+			Feng.confirm("是否删除选中项？", function () {
+				var ajax = new $ax(Feng.ctxPath + "/Health/delete", function (data) {
+					if ('00' === data.status) {
+						Feng.success(data.msg);
+						CodeGoods.table.refresh();
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('health_ids', value);
+				ajax.start();
+			});
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.health_id;
+				});
+				idx = idx.substr(1);
+				Feng.confirm("是否删除选中项？", function () {
+					var ajax = new $ax(Feng.ctxPath + "/Health/delete", function (data) {
+						if ('00' === data.status) {
+							Feng.success(data.msg);
+							CodeGoods.table.refresh();
+						} else {
+							Feng.error(data.msg);
+						}
+					});
+					ajax.set('health_ids', idx);
+					ajax.start();
+				});
+			}
+		}
+	}
+
+
+	CodeGoods.view = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '查看数据',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Health/view?health_id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.health_id;
+				});
+				idx = idx.substr(1);
+				var index = layer.open({type: 2,title: '查看数据',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Health/view?health_id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.dumpData = function (value) {
+		var select_id = '';
+		if (this.check()){
+			$.each(CodeGoods.seItem, function() {
+				select_id += ',' + this.health_id;
+			});
+		}
+		select_id = select_id.substr(1);
+		Feng.confirm("是否确定导出记录?", function() {
+			var index = layer.msg('正在导出下载，请耐心等待...', {
+				time : 3600000,
+				icon : 16,
+				shade : 0.01
+			});
+			var idx =[];
+			$("li input:checked").each(function(){
+				idx.push($(this).attr('data-field'));
+			});
+			var queryData = CodeGoods.formParams();
+			window.location.href = Feng.ctxPath + '/Health/dumpData?action_id=802&' + Feng.parseParam(queryData) + '&' +Feng.parseParam(idx) + '&health_id=' + select_id;
+			setTimeout(function() {
+				layer.close(index)
+			}, 1000);
+		});
+	}
+
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/Health/index"+url,defaultColunms,20);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+	laydate.render({elem: '#create_time_start',type: 'datetime'});
+	laydate.render({elem: '#create_time_end',type: 'datetime'});
+</script>
+{/block}

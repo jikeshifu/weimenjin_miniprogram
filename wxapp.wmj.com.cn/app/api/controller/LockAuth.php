@@ -284,7 +284,7 @@ class LockAuth extends Common {
 		if(empty($idx)) return json(['status'=>$this->errorCode,'msg'=>'参数错误']);
 		
 		//查询是否管理员，是的话不能删除自己
-		$field='lockauth_id,lock_id,member_id,auth_isadmin';
+		$field='lockauth_id,lock_id,member_id,auth_isadmin,auth_member_id';
 		$isadminwhere['lockauth_id']=$idx;
 		$isadminlock=LockAuthDb::getWhereInfo($isadminwhere,$field);
 		//mlog("delete_auth_isadminlock:".json_encode($isadminlock));

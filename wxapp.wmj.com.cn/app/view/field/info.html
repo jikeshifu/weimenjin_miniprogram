@@ -1,0 +1,315 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name="id" id="id" value="{$info.id}">
+<input type="hidden" name="menu_id" id="menu_id" value="{$menu_id}">
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row" style="margin-top:-20px;">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<ul class="layui-tab-title">
+						<li class="layui-this">基本信息</li>
+						<li>拓展信息</li>
+						<li>字段数据表配置</li>
+					</ul>
+					
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-10">
+								<!-- form start -->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">字段名：</label>
+								<div class="col-sm-9">
+									<input type="text" value="{$info.name}" id="name" name="name" class="form-control" placeholder="请输入字段名称">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">字段：</label>
+								<div class="col-sm-9">
+									<input type="text" value="{$info.field}" id="field" name="field" class="form-control" placeholder="请输入字段">
+									<span class="help-block m-b-none">如果是地区三级联动请用|隔开 也支持一级  二级 如province|city|district</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">字段类型：</label>
+								<div class="col-sm-9">
+									
+									<select lay-ignore name="type" class="form-control" id="type">
+										<option value="">请选择</option>
+										{volist name="fieldList" id="vo"}
+											<option value="{$key}" {if condition="$info.type eq $key"}selected{/if}>{$vo.name}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">是否列表显示：</label>
+								<div class="col-sm-9">
+								<?php if(!isset($info['list_show'])){ $info['list_show'] = 1; }; ?>
+									<input name="list_show" value="1" type="radio" {if condition="$info.list_show eq 1"}checked{/if} title="是">
+									<input name="list_show" value="0" type="radio" {if condition="$info.list_show eq 0"}checked{/if} title="否">
+									<input name="list_show" value="2" type="radio" {if condition="$info.list_show eq 2"}checked{/if} title="隐藏">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">是否搜索：</label>
+								<div class="col-sm-9">
+								<?php if(!isset($info['search_show'])){ $info['search_show'] = 1; }; ?>
+									<input name="search_show" value="1" type="radio" {if condition="$info.search_show eq 1"}checked{/if} title="是">
+									<input name="search_show" value="0" type="radio" {if condition="$info.search_show eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">是否录入：</label>
+								<div class="col-sm-9">
+								<?php if(!isset($info['is_post'])){ $info['is_post'] = 1; }; ?>
+									<input name="is_post" value="1" type="radio" {if condition="$info.is_post eq 1"}checked{/if} title="是">
+									<input name="is_post" value="0" type="radio" {if condition="$info.is_post eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if condition="$info.id neq ''"}更新{else/}创建{/if}数据表字段：</label>
+								<div class="col-sm-9">
+								<?php if(!isset($info['is_field'])){ $info['is_field'] = 1; }; ?>
+									<input name="is_field" value="1" type="radio" {if condition="$info.is_field eq 1"}checked{/if} title="是">
+									<input name="is_field" value="0" type="radio" {if condition="$info.is_field eq 0"}checked{/if} title="否">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">字段配置：</label>
+								<div class="col-sm-6">
+									<input type="text" id="config" name="config" value="{$info.config}" class="form-control" placeholder="字段配置">
+									<span class="help-block m-b-none">名称|值|标签背景色,
+		<span class="label label-primary">primary</span>
+		<span class="label label-success">success</span>
+		<span class="label label-info">info</span>
+		<span class="label label-warning">warning</span>
+		<span class="label label-danger">danger</span></span>
+								</div>
+								<div class="col-sm-2" style="margin-left:-30px;">
+									<select lay-ignore name="configType" class="form-control" id="configType">
+										<option value="">字段配置</option>
+										<option value="男|1|success,女|2|warning">性别</option>
+										<option value="正常|1|success,禁用|0|danger">状态</option>
+										<option value="开启|1,关闭|0">开关</option>
+										
+									</select>
+								</div>
+								
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">字段默认值：</label>
+								<div class="col-sm-6">
+									<input id="default_value" name="default_value" value="{$info.default_value}" class="form-control" placeholder="表单默认输入值">
+								</div>
+								<div class="col-sm-2" style="margin-left:-30px;">
+									<select lay-ignore name="dateType" class="form-control" id="dateType">
+										<option value="">日期框默认值</option>
+										{volist name="dateList" id="vo"}
+											<option value="{$key}">{$key}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">验证方式：</label>
+								<div class="col-sm-9">
+									<input value="notEmpty" {if in_array('notEmpty',explode(',',$info['validate']))}checked{/if} name="validate" lay-filter="hope" class="checkbox" type="checkbox" title="不为空">	
+									<input value="unique" {if in_array('unique',explode(',',$info['validate']))}checked{/if} name="validate" lay-filter="hope" class="checkbox" type="checkbox" title="唯一值">	
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">验证规则：</label>
+								<div class="col-sm-6">
+									<input type="text" id="rule" name="rule" value="{$info.rule}" class="form-control" placeholder="字段验证">
+								</div>
+								<div class="col-sm-2" style="margin-left:-30px;">
+									<select lay-ignore name="ruleType" class="form-control" id="ruleType">
+										<option value="">验证规则</option>
+										{volist name="ruleList" id="vo"}
+											<option value="{$vo}">{$key}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">错误提示：</label>
+								<div class="col-sm-9">
+									<input type="text" id="message" name="message" value="{$info.message}" class="form-control" placeholder="请输入错误提示">
+								</div>
+							</div>
+					
+				<!-- form end -->
+							</div>
+						</div>
+						
+						<div class="layui-tab-item">
+							<div class="col-sm-10">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">搜索方式：</label>
+									<div class="col-sm-9">
+										<input name="search_type" value="0" {if condition="$info.search_type eq 0"}checked{/if} type="radio" checked title="精确匹配">
+										<input name="search_type" value="1" {if condition="$info.search_type eq 1"}checked{/if} type="radio" title="模糊搜索">
+									</div>
+								</div>
+					
+								<div class="form-group">
+									<label class="col-sm-2 control-label">字段位置：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="align" class="form-control" id="align">
+											<option value="">请选择</option>
+											<?php if(!isset($info['align'])){ $info['align'] = 'center'; }; ?>
+											<option value="left" {if condition="$info.align eq 'left'"}selected{/if}>居左</option>
+											<option value="center" {if condition="$info.align eq 'center'"}selected{/if}>居中</option>
+											<option value="right" {if condition="$info.align eq 'right'"}selected{/if}>居右</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">字段数据源：</label>
+									<div class="col-sm-9">
+										<textarea id="sql" name="sql" class="form-control" placeholder="字段数据源sql语句 第一个字段数据值 第二个名称 如有第三个字段并且是父类ID则生成树级列表">{$info.sql}</textarea>
+										<span class="help-block m-b-none">例如select class_id,title,pid from cd_catagory 主要用于下拉框，单选框，多选框数据生成</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">字段说明：</label>
+									<div class="col-sm-9">
+										<textarea id="note" name="block_name" class="form-control" placeholder="请输入字段说明">{$info.note}</textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">所属选项卡：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="tab_menu_name" class="form-control" id="tab_menu_name">
+											<option value="">请选择</option>
+											{volist name="tabList" id="vo"}
+												<option value="{$vo}" {if condition="$info.tab_menu_name eq $vo"}selected{/if}>{$vo}</option>
+											{/volist}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="layui-tab-item">
+							<div class="col-sm-10">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">字段数据类型：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="datatype" class="form-control" id="datatype">
+											<option value="">请选择</option>
+											{volist name="propertyList" id="vo"}
+											<option value="{$vo.name}" {if condition="$info.datatype eq $vo.name"}selected{/if}>{$vo.name}</option>
+											{/volist}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">字段长度：</label>
+									<div class="col-sm-9">
+										<input type="text" id="length" name="length" value="{$info.length}" class="form-control" placeholder="请输入字段长度">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">字段索引：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="indexdata" class="form-control" id="indexdata">
+											<option value="">请选择</option>
+											<option value="INDEX" {if condition="$info.indexdata eq 'INDEX'"}selected{/if}>普通索引</option>
+											<option value="UNIQUE" {if condition="$info.indexdata eq 'UNIQUE'"}selected{/if}>唯一索引</option>
+										</select>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+				
+			</div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10">
+					<button type="button" class="btn btn-primary" onclick="{if condition="$info.id neq ''"}CodeInfoDlg.update(){else/}CodeInfoDlg.add(){/if}" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Field.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+});
+
+$(function(){
+	$("#ruleType").change(function(){
+		val = $("#ruleType option:selected").val();
+		$("#rule").val(val);
+	});
+})
+
+
+$(function(){
+	$("#configType").change(function(){
+		val = $("#configType option:selected").val();
+		$("#config").val(val);
+	});
+})
+
+
+$(function(){
+	$("#dateType").change(function(){
+		val = $("#dateType option:selected").val();
+		$("#default_value").val(val);
+	});
+})
+
+$(function(){
+	$('#type').change(function() {
+		var ajax = new $ax(Feng.ctxPath + "/Field/getFieldConfig", function (data) {
+			$("#length").val(data.maxlen);
+			$("#datatype").val(data.name);
+		});
+		 
+		ajax.set('type', $("#type option:selected").val());
+		ajax.start();
+	})
+	
+})
+
+$(function(){
+	$("#name").blur(function(){
+		var ajax = new $ax(Feng.ctxPath + "/Field/getPy", function (data) {
+			$("#field").val(data.fieldname);
+		});
+		 
+		ajax.set('fieldname', $("#name").val());
+		ajax.start();
+	})
+})
+
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+
+</script>
+
+
+{/block}

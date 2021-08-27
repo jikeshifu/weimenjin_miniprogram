@@ -1,0 +1,47 @@
+{extend name='common/_container'} 
+{block name="content"}
+<div class="ibox float-e-margins">
+
+	<div class="ibox-content">
+		<div class="form-horizontal">
+		<form action="" method="post" enctype="multipart/form-data">
+			<div class="row">
+				<div class="col-sm-6 b-r">
+					<div class='form-group'>
+						<label class='col-sm-3 control-label'>Excel文件</label>
+						<div class='col-sm-9'>
+							<input class='form-control' id='file_name' name='file_name' type="file"></div> </div><div class="hr-line-dashed">
+						</div>
+						<p style="margin-top: -10px; color: red;">注：1.第一行为导入字段中文名称；2.按照字段的排序不可打乱顺序以免出错</p>
+					</div>
+				</div>
+			</div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10">
+					<button type="submit" class="btn btn-info" id="ensure" style="margin-right:10px;">
+					    <i class="fa fa-check"></i>&nbsp;提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="ImportDlg.close()" id="cancel">
+					    <i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var ImportDlg = {
+	    deptZtree: null,
+	    pNameZtree: null
+	};
+
+	/**
+	 * 关闭此对话框
+	 */
+	ImportDlg.close = function () {
+		var index = parent.layer.getFrameIndex(window.name);
+	    parent.layer.close(index);
+	};
+</script>
+{/block}

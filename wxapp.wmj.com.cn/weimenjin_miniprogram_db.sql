@@ -11,7 +11,7 @@
  Target Server Version : 50562
  File Encoding         : 65001
 
- Date: 13/12/2020 20:30:06
+ Date: 27/08/2021 09:59:34
 */
 
 SET NAMES utf8mb4;
@@ -373,7 +373,7 @@ CREATE TABLE `cd_config`  (
 -- ----------------------------
 INSERT INTO `cd_config` VALUES ('copyright', '黔ICP备12003086号-3');
 INSERT INTO `cd_config` VALUES ('default_themes', '');
-INSERT INTO `cd_config` VALUES ('description', '微门禁小程序管理平台');
+INSERT INTO `cd_config` VALUES ('description', '门禁小程序管理平台');
 INSERT INTO `cd_config` VALUES ('domain', '');
 INSERT INTO `cd_config` VALUES ('file_size', '100');
 INSERT INTO `cd_config` VALUES ('file_type', 'gif,png,jpg,jpeg,doc,docx,xls,xlsx,csv,pdf,rar,zip,txt,mp4,flv');
@@ -382,10 +382,27 @@ INSERT INTO `cd_config` VALUES ('keyword', '');
 INSERT INTO `cd_config` VALUES ('privacypolicy', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;隐私政策&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;贵州智云信通科技有限公司（以下简称&amp;amp;amp;quot;本公司&amp;amp;amp;quot;，产品“微门禁”）在此郑重承诺，尊重和保护您的个人隐私，在使用微门禁相关产品前，请务必仔细阅读并理解本政策，在同意的情况下使用相关产品或服务。您一旦访问本公司旗下产品微门禁公众号及小程序等应用平台，则表明您已同意本《隐私政策》的内容。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;一、个人信息定义&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;个人信息是指您的任何标识性信息，包括：姓名、性别、身份证件号码、地址、健康状况、定位信息、电话号码、工作单位等。通常情况下，您无须提供您的个人信息即可，访问本网站。但为了提高服务质量，本公司可能需要您提供一些个人信息，以使本公司更好地了解您的需求来为您服务，同时，本公司有权采取措施验证您提供的个人信息的真实性。如果您提供了有关他人的个人信息，则表明您已取得了他人的正式许可。本公司承诺，除非出于您自己的意愿，本公司不会将您的个人信息提供给本公司之外的任何第三方。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;二、个人信息的收集目的&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁需要您提供个人信息的目的是确保您有权开启所需要的门禁系统，门禁所属单位对您进行验证审核并开放使用权限，提供安全便捷的开门服务，我们会征求您的同意，以便根据您的请求向您提供服务或执行事务，包括：接收有关本公司的产品和服务的信息、注册参加活、购买或注册本公司的产品、客户满意度调查、法律强制性规定等。另外，为抗击新冠肺炎疫情需要，我们提供的健康登记系统，将采集您的健康相关信息，为抗击疫情提供基础信息技术服务。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;3、 个人信息的使用&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;您提供的个人信息将仅在本公司内部使用，使用您的个人信息只是为了更好地了解您的需要并为您提供更好的服务或执行事务，同时本公司可能会使用您的个人信息与您联系以便向您提供服务。为抗击新冠肺炎疫情需要，我们开发了健康登记系统平台，健康相关信息由相应申请使用单位掌握，请知悉。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;4、 个人信息的安全&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;本公司承诺，保护您个人信息的安全性，同时，本公司已采取现有的可靠的安全措施保护您的个人信息免于未经授权的访问、使用或泄露。这些安全措施包括向云服务提供商备份数据和对用户密码加密。尽管有这些安全措施，但本公司不保证这些信息的绝对安全。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;5、 未成年人保护&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;未满十八岁的未成年人可在父母或监护人指导使用我们的服务。我们建议未成年人的父母或监护人阅读本《隐私政策》，并建议未成年人在提交的个人信息之前寻求父母或监护人的同意和指导。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;6、 关于Cookie&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;当您访问微门禁微信公众号、微信小程序、支付宝小程序及Web管理站点时，本公司可能会以&amp;amp;amp;quot;Cookie&amp;amp;amp;quot;的形式将某些信息存入您的手机或计算机，&amp;amp;amp;quot;Cookie&amp;amp;amp;quot;是网页服务器放置在您的计算机上的一个小的文本文件，&amp;amp;amp;quot;Cookie&amp;amp;amp;quot;不能用于运行程序，也不会将病毒传播到您的计算机上。使用&amp;amp;amp;quot;Cookie&amp;amp;amp;quot;的目的是为您提供一项节省时间的简便功能，但并不表示本公司可自动获悉有关您的任何个人信息。本网站可能还会使用session技术或其他技术以便能更好地调整本网站，从而提供优质服务。您可以选择接受或拒绝&amp;amp;amp;quot;Cookie&amp;amp;amp;quot;。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;7、 其他站点的链接&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁各平台及网站可能包含与其他站点的链接，但都是只读服务。本公司不对其他站点内容突变造成的《隐私政策》或内容负责。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;8、 法律性公开&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;根据法律强制性规定，安防法规条款等约束，微门禁应用平台及网站可能需要公开您的个人信息而无须获得您的预先同意并对此不负任何责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;9、 本《隐私政策》的修改&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;本《隐私政策》的修改权和解释权属于本公司。本公司可能适时修订本《隐私政策》的条款并予以公布，修订的内容自公布之日起生效，若您继续使用我们的服务，即表示同意受经修订的本《隐私政策》的约束。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;10、 纠纷解决&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;本《隐私政策》或有关使用微门禁应用平台及网站的任何行为受中华人民共和国法律管辖，如双方发生争议先协商解决，协商不成的，则交由本公司法定地址所在地的人民法院作出裁决。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;11、 联系方式&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;如果您有任何疑问和建议，可以通过微门禁应用平台及网站上的联系方式与本公司联系，本公司将尽最大的努力去解决。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;lt;br/&amp;amp;gt;&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;贵州智云信通科技有限公司&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;二零二零年三月&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;lt;br/&amp;amp;gt;&amp;amp;lt;/p&amp;amp;gt;&amp;lt;/p&amp;gt;&lt;/p&gt;');
 INSERT INTO `cd_config` VALUES ('serviceagreement', '&lt;p&gt;&amp;lt;p&amp;gt;微门禁用户服务协议&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;一、服务条款&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;您在使用微门禁服务前，应当仔细阅读《微门禁用户服务协议》（以下简称&amp;amp;quot;本协议&amp;amp;quot;或&amp;amp;quot;用户协议&amp;amp;quot;）的全部内容，您在用户注册页面点击&amp;amp;quot;同意以下协议并注册&amp;amp;quot;按钮后，即视为您已阅读、理解并同意本协议的全部内容。敬请注意，一旦您注册（登录）成功，本协议即在您与微门禁之间产生法律效力，成为对双方均具有约束力的法律文件。您应遵守以下协议的各项条款。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;二、目的&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;本协议是约定您使用微门禁提供的服务时，微门禁与您的权利、义务、服务条款等基本事宜为目的。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;三、遵守法律及法律效力&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;在您完成在线注册成功后，您就已与微门禁缔结了本协议，且本协议自您注册（登录）成功之日起产生法律效力。 您同意遵守《中华人民共和国保密法》、《计算机信息系统国际联网保密管理规定》、《中华人民共和国计算机信息系统安全保护条例》、《计算机信息网络国际联网安全保护管理办法》、《中华人民共和国计算机信息网络国际联网管理暂行规定》及其实施办法等相关法律法规的任何及所有的规定，并对您以任何方式使用服务的任何行为及其结果承担全部责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;在任何情况下，如果微门禁合理地认为您的任何行为，包括但不限于您的任何言论和其他违反或可能违反上述法律法规规定的任何行为，微门禁可在不经任何事先通知的情况下终止向您提供服务。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁有权利修改更新本协议的有关条款，一旦条款内容发生变动，微门禁将会在相关的页面提示修改内容。在更改此用户服务协议时，微门禁将说明更改内容的执行日期，变更理由等。且应同现行的使用服务协议一起，在更改内容发生效力前7日内向您公告。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;请仔细阅读用户协议更改内容，如因个人原因未能获知变更内容所带来的损害，微门禁一概不予负责。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;如果不同意微门禁对服务条款所做的修改，用户有权停止使用网络服务。如果用户继续使用网络服务，则视为用户接受变更后的用户协议。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;四、服务内容&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁服务的具体内容由微门禁根据实际情况提供，微门禁保留随时变更、中断或终止部分或全部微门禁服务的权利。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;五、您的义务&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;用户在申请使用微门禁服务时，必须向微门禁提供准确的个人资料，如个人资料有任何变动，必须及时更新。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;用户注册成功后，微门禁将给予每个用户一个用户帐号及相应的密码，该用户帐号和密码由用户负责保管；用户应当对以其用户帐号进行的所有活动和事件负法律责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;用户在使用微门禁网络服务过程中，必须遵循以下原则：&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;遵守中国有关的法律和法规；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;不得为任何非法目的而使用网络服务系统；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;遵守所有与网络服务有关的网络协议、规定和程序&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;不得利用微门禁服务系统传输任何危害社会，侵蚀道德风尚，宣传不法宗教组织等内容；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;不得利用微门禁服务系统进行任何可能对互联网的正常运转造成不利影响的行为；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;不得利用微门禁服务系统上传、传输任何非法、有害、胁迫、滥用、骚扰、侵害、中伤、粗俗、猥亵、诽谤、侵害他人隐私、辱骂性的、恐吓性的、庸俗淫秽的及有害或种族歧视的或道德上令人不快的包括其他任何非法的信息资料；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;不得利用微门禁服务系统进行任何不利于微门禁的行为；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;如发现任何非法使用用户帐号或帐号出现安全漏洞的情况，应立即通知微门禁。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;六、微门禁的权利及义务&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁除特殊情况外（例如：协助公安等相关部门调查破案等），致力于努力保护您的个人资料不被外漏，且不得在未经本人的同意下向第三者提供您的个人资料。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁根据提供服务的过程，经营上的变化，有权变更所提供服务的内容。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁在提供服务过程中，应及时解决您提出的不满事宜，如在解决过程中确有难处，可以采取公开通知方式或向您发送电子邮件寻求解决办法。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁在下列情况下有权未经通知，直接删除您上载的内容：&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;有损于微门禁，您或第三者名誉的内容；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;利用微门禁服务系统上载、张贴或传送任何非法、有害、胁迫、滥用、骚扰、侵害、中伤、粗俗、猥亵、诽谤、侵害他人隐私、辱骂性的、恐吓性的、庸俗淫秽的及有害或种族歧视的或道德上令人不快的包括其他任何非法的内容；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;侵害微门禁或第三者的版权，著作权等内容；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;存在与微门禁提供的服务无关的内容；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;无故盗用他人的ID(固有用户名)，姓名上传、传播任何内容及恶意更改，伪造他人上载内容。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;七、知识产权声明&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁所有的产品、技术、程序、页面（包括但不限于页面设计及内容）以及资料内容（包括但不限于本站所刊载的图片、视频）均属于知识产权，仅供用户交流、学习、研究和欣赏，未经授权，任何人不得擅自使用，否则，将依法追究法律责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁用户上传的资料内容（包括但不限于图片、视频、点评等），应保证为原创或已得到充分授权，并具有准确性、真实性、正当性、合法性，且不含任何侵犯第三人权益的内容，因抄袭、转载、侵权等行为所产生的纠纷由用户自行解决，微门禁不承担任何法律责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;八、免责声明&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;任何人因使用微门禁而可能遭致的意外及其造成的损失（包括因使用微门禁可能链接的第三方网站内容而感染电脑病毒），我们对此概不负责，亦不承担任何法律责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;微门禁禁止制作、复制、发布、传播等具有反动、色情、暴力、淫秽等内容的信息，一经发现，立即删除。若您因此触犯法律，我们对此不承担任何法律责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;您自行上传或通过网络收集的资源，我们仅提供一个展示、交流的平台，不对其内容的准确性、真实性、正当性、合法性负责，也不承担任何法律责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;任何单位或个人认为通过微门禁展示的内容可能涉嫌侵犯其著作权，应该及时向我们提出书面权利通知，并提供身份证明、权属证明及详细侵权情况证明。我们收到上述法律文件后，将会依法尽快处理。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;九、服务变更、中断或终止&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;如因系统维护或升级的需要而需暂停微门禁服务，微门禁将尽可能事先进行通告。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;如发生下列任何一种情形，微门禁有权随时中断或终止向用户提供本协议项下的微门禁服务而无需通知用户：&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;用户提供的个人资料不真实；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;用户违反本用户协议中规定的使用规则。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;在用户违反本协议时，微门禁同时保留在不事先通知用户的情况下随时中断或终止部分或全部微门禁服务的权利，对于所有服务的中断或终止而造成的任何损失，微门禁无需对用户或任何第三方承担任何责任。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;2020.03&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;（以下无正文）&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;lt;br/&amp;gt;&amp;lt;/p&amp;gt;&lt;/p&gt;');
 INSERT INTO `cd_config` VALUES ('site_logo', '/uploads/admin/202004/5e90014472f46.jpg');
-INSERT INTO `cd_config` VALUES ('site_title', '微门禁小程序管理平台');
+INSERT INTO `cd_config` VALUES ('site_title', '门禁小程序');
 INSERT INTO `cd_config` VALUES ('wmjaeskey', '');
-INSERT INTO `cd_config` VALUES ('wmjappid', 'wmj_sP3ucguIBQU');
-INSERT INTO `cd_config` VALUES ('wmjappsecret', 'aOzP1QddgBC04KkLr2eOlujrD9VUDJTP');
+INSERT INTO `cd_config` VALUES ('wmjappid', 'wmj_r3cdriDGrPK');
+INSERT INTO `cd_config` VALUES ('wmjappsecret', '8urP5giJS10S3MCxmua7RcG7rB2f2K2q');
+
+-- ----------------------------
+-- Table structure for cd_doorstatus
+-- ----------------------------
+DROP TABLE IF EXISTS `cd_doorstatus`;
+CREATE TABLE `cd_doorstatus`  (
+  `doorstatus_id` int(11) NOT NULL AUTO_INCREMENT,
+  `doorstatus_sn` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '序列号',
+  `doorstatus_action` smallint(6) NULL DEFAULT NULL COMMENT '状态',
+  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理用户',
+  `doorstatus_time` int(11) NULL DEFAULT NULL COMMENT '时间',
+  PRIMARY KEY (`doorstatus_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+
+-- ----------------------------
+-- Records of cd_doorstatus
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for cd_ext_health
@@ -830,8 +847,10 @@ CREATE TABLE `cd_lock`  (
   `addcardmode` int(11) NULL DEFAULT 2 COMMENT '进出发卡模式',
   `openadurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '开门成功外链',
   `adnum` smallint(6) NULL DEFAULT NULL COMMENT '成功弹层方式',
+  `openbtn` tinyint(4) NULL DEFAULT 1 COMMENT '开门按钮',
+  `opsucnt` tinyint(4) NULL DEFAULT NULL COMMENT '开门通知',
   PRIMARY KEY (`lock_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cd_lock
@@ -861,7 +880,7 @@ CREATE TABLE `cd_lockauth`  (
   `auth_tmp` smallint(6) NULL DEFAULT NULL COMMENT '领取标志',
   `auth_openused` int(11) NULL DEFAULT NULL COMMENT '已开次数',
   PRIMARY KEY (`lockauth_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cd_lockauth
@@ -881,6 +900,7 @@ CREATE TABLE `cd_lockcard`  (
   `lockcard_remark` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `lockcard_createtime` int(11) NULL DEFAULT NULL COMMENT '发卡时间',
   `lockauth_id` int(11) NULL DEFAULT NULL COMMENT '钥匙ID',
+  `batchstatus` smallint(6) NULL DEFAULT NULL COMMENT '发卡状态',
   PRIMARY KEY (`lockcard_id`) USING BTREE,
   INDEX `lkcdsn`(`lockcard_sn`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
@@ -944,7 +964,7 @@ CREATE TABLE `cd_locktype`  (
   `locktype_id` int(11) NOT NULL AUTO_INCREMENT,
   `locktype_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
   PRIMARY KEY (`locktype_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cd_locktype
@@ -954,8 +974,8 @@ INSERT INTO `cd_locktype` VALUES (2, '插卡版(2G)');
 INSERT INTO `cd_locktype` VALUES (3, '插卡版(4G)');
 INSERT INTO `cd_locktype` VALUES (4, '网线版');
 INSERT INTO `cd_locktype` VALUES (5, '插卡版本2G+刷卡');
-INSERT INTO `cd_locktype` VALUES (6, '插卡版4G+刷卡');
-INSERT INTO `cd_locktype` VALUES (7, '蓝牙锁');
+INSERT INTO `cd_locktype` VALUES (9, '5G版本');
+INSERT INTO `cd_locktype` VALUES (10, '22');
 
 -- ----------------------------
 -- Table structure for cd_log
@@ -969,7 +989,7 @@ CREATE TABLE `cd_log`  (
   `ip` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time` int(10) NULL DEFAULT NULL,
   PRIMARY KEY (`log_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 94 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 300 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cd_log
@@ -1067,6 +1087,211 @@ INSERT INTO `cd_log` VALUES (90, 98, 'admin', '用户登录', '210.21.214.205', 
 INSERT INTO `cd_log` VALUES (91, 98, 'admin', '用户登录', '116.139.60.236', 1607672657);
 INSERT INTO `cd_log` VALUES (92, 98, 'admin', '用户登录', '111.121.8.200', 1607861122);
 INSERT INTO `cd_log` VALUES (93, 98, 'admin', '用户登录', '111.121.8.200', 1607861667);
+INSERT INTO `cd_log` VALUES (94, 98, 'admin', '用户登录', '113.118.87.252', 1607916299);
+INSERT INTO `cd_log` VALUES (95, 98, 'admin', '用户登录', '183.14.30.169', 1607997522);
+INSERT INTO `cd_log` VALUES (96, 98, 'admin', '用户登录', '113.46.9.177', 1608398857);
+INSERT INTO `cd_log` VALUES (97, 98, 'admin', '用户登录', '113.248.155.202', 1608622219);
+INSERT INTO `cd_log` VALUES (98, 98, 'admin', '用户登录', '113.116.5.139', 1608716796);
+INSERT INTO `cd_log` VALUES (99, 98, 'admin', '用户登录', '112.246.75.236', 1608867454);
+INSERT INTO `cd_log` VALUES (100, 98, 'admin', '用户登录', '183.221.16.149', 1609172500);
+INSERT INTO `cd_log` VALUES (101, 98, 'admin', '用户登录', '112.65.1.123', 1609253967);
+INSERT INTO `cd_log` VALUES (102, 98, 'admin', '用户登录', '120.231.95.129', 1609258278);
+INSERT INTO `cd_log` VALUES (103, 98, 'admin', '用户登录', '14.104.201.88', 1609379925);
+INSERT INTO `cd_log` VALUES (105, 98, 'admin', '用户登录', '1.86.56.177', 1609646465);
+INSERT INTO `cd_log` VALUES (106, 98, 'admin', '用户登录', '120.235.32.132', 1609653967);
+INSERT INTO `cd_log` VALUES (107, 98, 'admin', '用户登录', '113.118.199.14', 1609726795);
+INSERT INTO `cd_log` VALUES (108, 98, 'admin', '用户登录', '106.84.16.150', 1609810655);
+INSERT INTO `cd_log` VALUES (109, 98, 'admin', '用户登录', '113.118.199.14', 1609811033);
+INSERT INTO `cd_log` VALUES (110, 98, 'admin', '用户登录', '14.221.99.45', 1609826190);
+INSERT INTO `cd_log` VALUES (111, 98, 'admin', '用户登录', '120.231.95.144', 1609861123);
+INSERT INTO `cd_log` VALUES (112, 98, 'admin', '用户登录', '113.200.57.42', 1609898007);
+INSERT INTO `cd_log` VALUES (113, 98, 'admin', '用户登录', '111.19.41.112', 1610069155);
+INSERT INTO `cd_log` VALUES (114, 98, 'admin', '用户登录', '183.250.89.190', 1610069492);
+INSERT INTO `cd_log` VALUES (115, 98, 'admin', '用户登录', '111.19.41.112', 1610069566);
+INSERT INTO `cd_log` VALUES (116, 98, 'admin', '用户登录', '220.166.97.47', 1610078277);
+INSERT INTO `cd_log` VALUES (117, 98, 'admin', '用户登录', '49.69.112.186', 1610148862);
+INSERT INTO `cd_log` VALUES (118, 98, 'admin', '用户登录', '116.2.92.222', 1610259975);
+INSERT INTO `cd_log` VALUES (119, 98, 'admin', '用户登录', '223.104.247.203', 1610336836);
+INSERT INTO `cd_log` VALUES (120, 98, 'admin', '用户登录', '60.253.255.234', 1610931781);
+INSERT INTO `cd_log` VALUES (121, 98, 'admin', '用户登录', '115.220.204.149', 1610935817);
+INSERT INTO `cd_log` VALUES (122, 98, 'admin', '用户登录', '60.216.87.190', 1611036720);
+INSERT INTO `cd_log` VALUES (123, 98, 'admin', '用户登录', '61.141.255.53', 1611200666);
+INSERT INTO `cd_log` VALUES (124, 98, 'admin', '用户登录', '117.114.138.106', 1611213846);
+INSERT INTO `cd_log` VALUES (125, 98, 'admin', '用户登录', '124.240.9.228', 1611223013);
+INSERT INTO `cd_log` VALUES (126, 98, 'admin', '用户登录', '113.73.33.62', 1611238976);
+INSERT INTO `cd_log` VALUES (127, 98, 'admin', '用户登录', '111.18.37.88', 1611547318);
+INSERT INTO `cd_log` VALUES (128, 98, 'admin', '用户登录', '60.1.147.236', 1611729548);
+INSERT INTO `cd_log` VALUES (129, 98, 'admin', '用户登录', '210.21.223.178', 1612148649);
+INSERT INTO `cd_log` VALUES (130, 98, 'admin', '用户登录', '117.61.10.8', 1612283059);
+INSERT INTO `cd_log` VALUES (131, 98, 'admin', '用户登录', '182.246.145.209', 1612319364);
+INSERT INTO `cd_log` VALUES (132, 98, 'admin', '用户登录', '1.85.217.229', 1612422123);
+INSERT INTO `cd_log` VALUES (133, 98, 'admin', '用户登录', '117.136.0.209', 1612681989);
+INSERT INTO `cd_log` VALUES (134, 98, 'admin', '用户登录', '120.230.107.200', 1612786296);
+INSERT INTO `cd_log` VALUES (135, 98, 'admin', '用户登录', '117.136.41.62', 1613030124);
+INSERT INTO `cd_log` VALUES (136, 98, 'admin', '用户登录', '36.47.140.50', 1613317118);
+INSERT INTO `cd_log` VALUES (137, 98, 'admin', '用户登录', '120.230.126.171', 1613390289);
+INSERT INTO `cd_log` VALUES (138, 98, 'admin', '用户登录', '120.230.126.171', 1613390672);
+INSERT INTO `cd_log` VALUES (139, 98, 'admin', '用户登录', '125.95.61.33', 1613457444);
+INSERT INTO `cd_log` VALUES (140, 98, 'admin', '用户登录', '221.225.72.39', 1613464278);
+INSERT INTO `cd_log` VALUES (141, 98, 'admin', '用户登录', '223.73.56.19', 1613603876);
+INSERT INTO `cd_log` VALUES (142, 98, 'admin', '用户登录', '117.136.32.59', 1613607021);
+INSERT INTO `cd_log` VALUES (143, 98, 'admin', '用户登录', '1.193.37.3', 1613637961);
+INSERT INTO `cd_log` VALUES (144, 98, 'admin', '用户登录', '112.115.183.10', 1613701946);
+INSERT INTO `cd_log` VALUES (145, 98, 'admin', '用户登录', '119.123.103.114', 1614046268);
+INSERT INTO `cd_log` VALUES (146, 98, 'admin', '用户登录', '121.32.12.201', 1614065745);
+INSERT INTO `cd_log` VALUES (147, 98, 'admin', '用户登录', '58.247.31.2', 1614139370);
+INSERT INTO `cd_log` VALUES (148, 98, 'admin', '用户登录', '120.230.135.74', 1614159057);
+INSERT INTO `cd_log` VALUES (149, 98, 'admin', '用户登录', '111.30.201.79', 1614343226);
+INSERT INTO `cd_log` VALUES (150, 98, 'admin', '用户登录', '113.90.238.150', 1614565550);
+INSERT INTO `cd_log` VALUES (151, 98, 'admin', '用户登录', '113.90.238.150', 1614571378);
+INSERT INTO `cd_log` VALUES (152, 98, 'admin', '用户登录', '113.90.238.150', 1614579539);
+INSERT INTO `cd_log` VALUES (153, 98, 'admin', '用户登录', '113.90.238.150', 1614648262);
+INSERT INTO `cd_log` VALUES (154, 98, 'admin', '用户登录', '58.211.48.234', 1614655005);
+INSERT INTO `cd_log` VALUES (155, 98, 'admin', '用户登录', '36.112.117.138', 1614680285);
+INSERT INTO `cd_log` VALUES (156, 98, 'admin', '用户登录', '113.118.87.96', 1614737872);
+INSERT INTO `cd_log` VALUES (157, 98, 'admin', '用户登录', '163.125.255.14', 1614744625);
+INSERT INTO `cd_log` VALUES (158, 98, 'admin', '用户登录', '119.4.121.86', 1614762929);
+INSERT INTO `cd_log` VALUES (159, 98, 'admin', '用户登录', '182.119.131.210', 1614824782);
+INSERT INTO `cd_log` VALUES (160, 98, 'admin', '用户登录', '144.0.143.46', 1614867724);
+INSERT INTO `cd_log` VALUES (161, 98, 'admin', '用户登录', '182.32.178.213', 1614937675);
+INSERT INTO `cd_log` VALUES (162, 98, 'admin', '用户登录', '175.152.3.14', 1615009896);
+INSERT INTO `cd_log` VALUES (163, 98, 'admin', '用户登录', '117.24.25.65', 1615046762);
+INSERT INTO `cd_log` VALUES (164, 98, 'admin', '用户登录', '115.204.140.200', 1615357646);
+INSERT INTO `cd_log` VALUES (165, 98, 'admin', '用户登录', '60.233.1.100', 1615365413);
+INSERT INTO `cd_log` VALUES (166, 98, 'admin', '用户登录', '113.90.238.150', 1615448942);
+INSERT INTO `cd_log` VALUES (167, 98, 'admin', '用户登录', '113.90.238.150', 1615542309);
+INSERT INTO `cd_log` VALUES (168, 98, 'admin', '用户登录', '113.88.104.221', 1615606170);
+INSERT INTO `cd_log` VALUES (169, 98, 'admin', '用户登录', '218.68.145.113', 1615886905);
+INSERT INTO `cd_log` VALUES (170, 98, 'admin', '用户登录', '27.18.128.6', 1615938920);
+INSERT INTO `cd_log` VALUES (171, 98, 'admin', '用户登录', '112.32.93.227', 1615997444);
+INSERT INTO `cd_log` VALUES (172, 98, 'admin', '用户登录', '112.31.208.45', 1616030227);
+INSERT INTO `cd_log` VALUES (173, 98, 'admin', '用户登录', '113.116.5.248', 1616035524);
+INSERT INTO `cd_log` VALUES (174, 98, 'admin', '用户登录', '111.75.163.254', 1616120388);
+INSERT INTO `cd_log` VALUES (175, 98, 'admin', '用户登录', '111.18.140.128', 1616124677);
+INSERT INTO `cd_log` VALUES (176, 98, 'admin', '用户登录', '185.209.179.203', 1616125996);
+INSERT INTO `cd_log` VALUES (177, 98, 'admin', '用户登录', '39.189.35.47', 1616320146);
+INSERT INTO `cd_log` VALUES (178, 98, 'admin', '用户登录', '119.136.115.79', 1616391490);
+INSERT INTO `cd_log` VALUES (179, 98, 'admin', '用户登录', '36.170.32.76', 1616416811);
+INSERT INTO `cd_log` VALUES (180, 98, 'admin', '用户登录', '223.104.204.17', 1616417767);
+INSERT INTO `cd_log` VALUES (181, 98, 'admin', '用户登录', '120.84.186.210', 1616490831);
+INSERT INTO `cd_log` VALUES (182, 98, 'admin', '用户登录', '119.123.74.105', 1616491309);
+INSERT INTO `cd_log` VALUES (183, 98, 'admin', '用户登录', '112.49.96.214', 1616500635);
+INSERT INTO `cd_log` VALUES (184, 98, 'admin', '用户登录', '171.221.101.62', 1616756989);
+INSERT INTO `cd_log` VALUES (185, 98, 'admin', '用户登录', '114.222.179.31', 1617073482);
+INSERT INTO `cd_log` VALUES (186, 98, 'admin', '用户登录', '36.48.110.172', 1617263667);
+INSERT INTO `cd_log` VALUES (187, 98, 'admin', '用户登录', '113.88.144.65', 1617274089);
+INSERT INTO `cd_log` VALUES (188, 98, 'admin', '用户登录', '124.134.61.13', 1617460116);
+INSERT INTO `cd_log` VALUES (189, 98, 'admin', '用户登录', '202.107.31.83', 1617758131);
+INSERT INTO `cd_log` VALUES (190, 98, 'admin', '用户登录', '120.224.236.211', 1617848008);
+INSERT INTO `cd_log` VALUES (191, 98, 'admin', '用户登录', '117.136.104.182', 1617853987);
+INSERT INTO `cd_log` VALUES (192, 98, 'admin', '用户登录', '117.28.131.117', 1617871522);
+INSERT INTO `cd_log` VALUES (193, 98, 'admin', '用户登录', '121.35.100.164', 1617930941);
+INSERT INTO `cd_log` VALUES (194, 98, 'admin', '用户登录', '27.38.9.81', 1618064569);
+INSERT INTO `cd_log` VALUES (195, 98, 'admin', '用户登录', '183.192.238.130', 1618143798);
+INSERT INTO `cd_log` VALUES (196, 98, 'admin', '用户登录', '183.128.228.67', 1618195443);
+INSERT INTO `cd_log` VALUES (197, 98, 'admin', '用户登录', '117.181.138.94', 1618282200);
+INSERT INTO `cd_log` VALUES (198, 98, 'admin', '用户登录', '183.14.29.232', 1618286179);
+INSERT INTO `cd_log` VALUES (199, 98, 'admin', '用户登录', '49.74.17.122', 1618292811);
+INSERT INTO `cd_log` VALUES (200, 98, 'admin', '用户登录', '36.17.81.21', 1618361250);
+INSERT INTO `cd_log` VALUES (201, 98, 'admin', '用户登录', '59.49.106.119', 1618371465);
+INSERT INTO `cd_log` VALUES (202, 98, 'admin', '用户登录', '119.137.55.73', 1618383694);
+INSERT INTO `cd_log` VALUES (203, 98, 'admin', '用户登录', '125.95.62.15', 1618455129);
+INSERT INTO `cd_log` VALUES (204, 98, 'admin', '用户登录', '39.79.106.132', 1618471495);
+INSERT INTO `cd_log` VALUES (205, 98, 'admin', '用户登录', '125.95.62.15', 1618538979);
+INSERT INTO `cd_log` VALUES (206, 98, 'admin', '用户登录', '125.70.229.109', 1618556748);
+INSERT INTO `cd_log` VALUES (207, 98, 'admin', '用户登录', '112.18.215.66', 1618567129);
+INSERT INTO `cd_log` VALUES (208, 98, 'admin', '用户登录', '101.204.175.230', 1618579750);
+INSERT INTO `cd_log` VALUES (209, 98, 'admin', '用户登录', '119.136.152.232', 1618896882);
+INSERT INTO `cd_log` VALUES (210, 98, 'admin', '用户登录', '58.22.113.107', 1618907341);
+INSERT INTO `cd_log` VALUES (211, 98, 'admin', '用户登录', '119.136.152.251', 1618986707);
+INSERT INTO `cd_log` VALUES (212, 98, 'admin', '用户登录', '124.129.11.56', 1618993451);
+INSERT INTO `cd_log` VALUES (213, 98, 'admin', '用户登录', '36.48.113.92', 1619060532);
+INSERT INTO `cd_log` VALUES (214, 98, 'admin', '用户登录', '119.136.152.251', 1619062184);
+INSERT INTO `cd_log` VALUES (215, 98, 'admin', '用户登录', '119.136.152.251', 1619147762);
+INSERT INTO `cd_log` VALUES (216, 98, 'admin', '用户登录', '119.187.252.54', 1619157511);
+INSERT INTO `cd_log` VALUES (217, 98, 'admin', '用户登录', '49.118.179.145', 1619162807);
+INSERT INTO `cd_log` VALUES (218, 98, 'admin', '用户登录', '119.136.154.161', 1619336235);
+INSERT INTO `cd_log` VALUES (219, 98, 'admin', '用户登录', '223.157.169.61', 1619627981);
+INSERT INTO `cd_log` VALUES (220, 98, 'admin', '用户登录', '113.122.232.186', 1620179210);
+INSERT INTO `cd_log` VALUES (221, 98, 'admin', '用户登录', '111.19.32.215', 1620220469);
+INSERT INTO `cd_log` VALUES (222, 98, 'admin', '用户登录', '114.216.114.250', 1620291247);
+INSERT INTO `cd_log` VALUES (223, 98, 'admin', '用户登录', '111.85.93.99', 1620311868);
+INSERT INTO `cd_log` VALUES (224, 98, 'admin', '用户登录', '113.87.46.27', 1620638731);
+INSERT INTO `cd_log` VALUES (225, 98, 'admin', '用户登录', '222.91.199.239', 1620718223);
+INSERT INTO `cd_log` VALUES (226, 98, 'admin', '用户登录', '58.34.133.162', 1620723487);
+INSERT INTO `cd_log` VALUES (227, 98, 'admin', '用户登录', '58.34.133.162', 1620782810);
+INSERT INTO `cd_log` VALUES (228, 98, 'admin', '用户登录', '120.245.102.242', 1620787486);
+INSERT INTO `cd_log` VALUES (229, 98, 'admin', '用户登录', '123.161.201.237', 1620830526);
+INSERT INTO `cd_log` VALUES (230, 98, 'admin', '用户登录', '1.80.38.1', 1620879190);
+INSERT INTO `cd_log` VALUES (231, 98, 'admin', '用户登录', '1.85.49.37', 1620884507);
+INSERT INTO `cd_log` VALUES (232, 98, 'admin', '用户登录', '115.217.198.233', 1620884639);
+INSERT INTO `cd_log` VALUES (233, 98, 'admin', '用户登录', '218.69.156.153', 1620891936);
+INSERT INTO `cd_log` VALUES (234, 98, 'admin', '用户登录', '58.34.133.162', 1620954873);
+INSERT INTO `cd_log` VALUES (235, 98, 'admin', '用户登录', '1.181.213.194', 1620975265);
+INSERT INTO `cd_log` VALUES (236, 98, 'admin', '用户登录', '1.181.213.194', 1620979358);
+INSERT INTO `cd_log` VALUES (237, 98, 'admin', '用户登录', '1.181.213.194', 1620983062);
+INSERT INTO `cd_log` VALUES (238, 98, 'admin', '用户登录', '120.231.95.121', 1621013051);
+INSERT INTO `cd_log` VALUES (239, 98, 'admin', '用户登录', '49.73.108.85', 1621239447);
+INSERT INTO `cd_log` VALUES (240, 98, 'admin', '用户登录', '49.67.60.108', 1621300786);
+INSERT INTO `cd_log` VALUES (241, 98, 'admin', '用户登录', '219.138.203.90', 1621325525);
+INSERT INTO `cd_log` VALUES (242, 98, 'admin', '用户登录', '115.205.1.129', 1621491685);
+INSERT INTO `cd_log` VALUES (243, 98, 'admin', '用户登录', '58.34.133.162', 1621493479);
+INSERT INTO `cd_log` VALUES (244, 98, 'admin', '用户登录', '218.19.205.138', 1621506849);
+INSERT INTO `cd_log` VALUES (245, 98, 'admin', '用户登录', '113.140.160.153', 1621746141);
+INSERT INTO `cd_log` VALUES (246, 98, 'admin', '用户登录', '116.22.149.12', 1622684795);
+INSERT INTO `cd_log` VALUES (247, 98, 'admin', '用户登录', '101.232.41.212', 1622689802);
+INSERT INTO `cd_log` VALUES (248, 98, 'admin', '用户登录', '120.231.182.107', 1622714453);
+INSERT INTO `cd_log` VALUES (249, 98, 'admin', '用户登录', '183.67.61.127', 1622772703);
+INSERT INTO `cd_log` VALUES (250, 98, 'admin', '用户登录', '122.238.3.137', 1622949633);
+INSERT INTO `cd_log` VALUES (251, 98, 'admin', '用户登录', '113.88.167.185', 1623034064);
+INSERT INTO `cd_log` VALUES (252, 98, 'admin', '用户登录', '58.49.98.26', 1623740335);
+INSERT INTO `cd_log` VALUES (253, 98, 'admin', '用户登录', '114.86.93.11', 1623813101);
+INSERT INTO `cd_log` VALUES (254, 98, 'admin', '用户登录', '219.142.144.30', 1624002746);
+INSERT INTO `cd_log` VALUES (255, 98, 'admin', '用户登录', '118.113.16.200', 1624003708);
+INSERT INTO `cd_log` VALUES (256, 98, 'admin', '用户登录', '223.72.12.78', 1624047247);
+INSERT INTO `cd_log` VALUES (257, 98, 'admin', '用户登录', '223.72.12.78', 1624047300);
+INSERT INTO `cd_log` VALUES (258, 98, 'admin', '用户登录', '59.58.164.59', 1624267195);
+INSERT INTO `cd_log` VALUES (259, 98, 'admin', '用户登录', '101.85.0.102', 1624311639);
+INSERT INTO `cd_log` VALUES (260, 98, 'admin', '用户登录', '59.58.164.59', 1624346622);
+INSERT INTO `cd_log` VALUES (261, 98, 'admin', '用户登录', '223.104.212.59', 1624348590);
+INSERT INTO `cd_log` VALUES (262, 100, 'spr_77', '用户登录', '223.104.212.59', 1624348773);
+INSERT INTO `cd_log` VALUES (263, 98, 'admin', '用户登录', '59.58.164.59', 1624429693);
+INSERT INTO `cd_log` VALUES (264, 98, 'admin', '用户登录', '115.213.84.149', 1624500589);
+INSERT INTO `cd_log` VALUES (265, 98, 'admin', '用户登录', '125.94.201.150', 1624622013);
+INSERT INTO `cd_log` VALUES (266, 98, 'admin', '用户登录', '106.18.137.196', 1624852552);
+INSERT INTO `cd_log` VALUES (267, 98, 'admin', '用户登录', '222.129.36.186', 1624934211);
+INSERT INTO `cd_log` VALUES (268, 98, 'admin', '用户登录', '60.173.201.28', 1624936691);
+INSERT INTO `cd_log` VALUES (269, 98, 'admin', '用户登录', '113.110.220.43', 1624950239);
+INSERT INTO `cd_log` VALUES (270, 101, '测试1', '用户登录', '113.110.220.43', 1624951056);
+INSERT INTO `cd_log` VALUES (271, 98, 'admin', '用户登录', '113.110.220.43', 1624951233);
+INSERT INTO `cd_log` VALUES (272, 98, 'admin', '用户登录', '123.161.201.237', 1625104198);
+INSERT INTO `cd_log` VALUES (273, 98, 'admin', '用户登录', '171.118.148.108', 1625453446);
+INSERT INTO `cd_log` VALUES (274, 98, 'admin', '用户登录', '180.164.37.122', 1625624451);
+INSERT INTO `cd_log` VALUES (275, 98, 'admin', '用户登录', '122.232.87.82', 1625747258);
+INSERT INTO `cd_log` VALUES (276, 98, 'admin', '用户登录', '116.232.76.150', 1626067159);
+INSERT INTO `cd_log` VALUES (277, 98, 'admin', '用户登录', '59.57.167.99', 1626076369);
+INSERT INTO `cd_log` VALUES (278, 98, 'admin', '用户登录', '182.102.184.167', 1626507650);
+INSERT INTO `cd_log` VALUES (279, 98, 'admin', '用户登录', '183.194.173.110', 1626831276);
+INSERT INTO `cd_log` VALUES (280, 98, 'admin', '用户登录', '182.129.2.141', 1626957297);
+INSERT INTO `cd_log` VALUES (281, 98, 'admin', '用户登录', '113.116.30.246', 1627212539);
+INSERT INTO `cd_log` VALUES (282, 98, 'admin', '用户登录', '183.206.168.146', 1627403671);
+INSERT INTO `cd_log` VALUES (283, 98, 'admin', '用户登录', '27.211.18.190', 1627456221);
+INSERT INTO `cd_log` VALUES (284, 98, 'admin', '用户登录', '111.162.129.37', 1627546556);
+INSERT INTO `cd_log` VALUES (285, 98, 'admin', '用户登录', '218.13.32.86', 1627784973);
+INSERT INTO `cd_log` VALUES (286, 98, 'admin', '用户登录', '115.199.255.212', 1627972423);
+INSERT INTO `cd_log` VALUES (287, 98, 'admin', '用户登录', '118.116.89.229', 1628093482);
+INSERT INTO `cd_log` VALUES (288, 98, 'admin', '用户登录', '110.184.35.98', 1628131216);
+INSERT INTO `cd_log` VALUES (289, 98, 'admin', '用户登录', '171.218.85.110', 1628229589);
+INSERT INTO `cd_log` VALUES (290, 98, 'admin', '用户登录', '111.19.78.98', 1628303352);
+INSERT INTO `cd_log` VALUES (291, 98, 'admin', '用户登录', '222.247.153.185', 1628523023);
+INSERT INTO `cd_log` VALUES (292, 98, 'admin', '用户登录', '125.95.21.105', 1628564010);
+INSERT INTO `cd_log` VALUES (293, 98, 'admin', '用户登录', '113.200.54.82', 1628659510);
+INSERT INTO `cd_log` VALUES (294, 98, 'admin', '用户登录', '221.217.239.171', 1628730704);
+INSERT INTO `cd_log` VALUES (295, 98, 'admin', '用户登录', '119.103.22.101', 1628925658);
+INSERT INTO `cd_log` VALUES (296, 98, 'admin', '用户登录', '219.232.72.50', 1629558617);
+INSERT INTO `cd_log` VALUES (297, 98, 'admin', '用户登录', '112.10.127.212', 1629615070);
+INSERT INTO `cd_log` VALUES (298, 98, 'admin', '用户登录', '113.72.10.161', 1629704991);
+INSERT INTO `cd_log` VALUES (299, 98, 'admin', '用户登录', '125.120.47.176', 1629874002);
 
 -- ----------------------------
 -- Table structure for cd_member
@@ -1087,12 +1312,15 @@ CREATE TABLE `cd_member`  (
   `ali_user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付宝用户id',
   `member_type` smallint(6) NULL DEFAULT NULL COMMENT '会员类型',
   `member_ps` smallint(6) NULL DEFAULT NULL COMMENT '同意政策和协议',
+  `unionid` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT 'unionid',
   PRIMARY KEY (`member_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cd_member
 -- ----------------------------
+INSERT INTO `cd_member` VALUES (5, '', '', '', '', '', 'd36fe307706ee96649b4030001e4dba9', 1616391716, 1, 1, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `cd_member` VALUES (7, '', '', '', '', '', 'd36fe307706ee96649b4030001e4dba9', 1621493677, 1, 0, NULL, NULL, NULL, NULL, '0');
 
 -- ----------------------------
 -- Table structure for cd_menu
@@ -1208,12 +1436,35 @@ CREATE TABLE `cd_user`  (
   `status` tinyint(4) NULL DEFAULT NULL COMMENT '10正常 0禁用',
   `create_time` int(10) NULL DEFAULT NULL COMMENT '添加时间',
   `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
-  PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 99 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`user_id`) USING BTREE,
+  UNIQUE INDEX `member_id`(`member_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 102 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cd_user
 -- ----------------------------
+INSERT INTO `cd_user` VALUES (100, 'AJ', 'spr_77', 'e821032e0f2bee0db5f4770fbc7f76d0', 1, 1, '', 1, 1624348735, NULL);
 INSERT INTO `cd_user` VALUES (98, '管理员', 'admin', '305afeb46a6aa7bca43880dcb29d634d', 1, 1, '', 1, 1599545031, NULL);
+INSERT INTO `cd_user` VALUES (101, '测试1', '测试1', 'b96f037ce426b1f0c987164be5305cd3', 7, 2, '', 1, 1624951027, NULL);
+
+-- ----------------------------
+-- Table structure for cd_wservice
+-- ----------------------------
+DROP TABLE IF EXISTS `cd_wservice`;
+CREATE TABLE `cd_wservice`  (
+  `wservice_id` int(11) NOT NULL AUTO_INCREMENT,
+  `wservice_type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
+  `wservice_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+  `wservice_appid` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'appid',
+  `wservice_url` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'url',
+  `wservice_icon` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
+  `wservice_sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `wservice_status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`wservice_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+
+-- ----------------------------
+-- Records of cd_wservice
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

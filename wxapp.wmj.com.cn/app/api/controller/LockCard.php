@@ -1,8 +1,8 @@
 <?php 
 /*
  module:		卡管理
- create_time:	2020-05-18 00:43:19
- author:		duanxy
+ create_time:	2021-01-19 18:47:25
+ author:		
  contact:		
 */
 
@@ -343,6 +343,40 @@ class LockCard extends Common {
 		}
 		Log::info('接口输出：'.print_r($res,true));
 		return json(['status'=>$this->successCode,'data'=>$res[0]]);
+	}
+	function cardtask()
+	{
+	    
+        $lockcarddata=db()->table('cd_lockcard')->where(['batchstatus'=>1])->find();
+        mlog("lockcarddata:".json_encode($lockcarddata));
+		$lockdata=\xhadmin\db\Lock::getInfo($lockcarddata['lock_id']);
+			try {
+			    $postdata['sn']=$lockdata['lock_sn'];
+			    $postdata['cardsn']=$lockcarddata['lockcard_sn'];
+			    $postdata['endtime']=$lockcarddata['lockcard_endtime'];
+			    if ($lockdata['lock_sn']) 
+			    {
+			        mlog("card_data:".json_encode($postdata));
+			        $result=wmjManageHandle($lockdata['lock_sn'],'addcard',$postdata);
+			        if ($result['state']) 
+			        {
+			            $data['batchstatus']= 2;
+			            $where['lockcard_id'] = $lockcarddata['lockcard_id'];
+			            $res = LockCardService::updatecard($where,$data);
+			        }
+				    else
+				    {
+				        return json(['status'=>'201','msg'=>$result['state_msg']]);
+				    }
+				   
+			    }
+			    
+				
+			} 
+		catch (\Exception $e) {
+			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
+		}
+		return json(['status'=>$this->successCode,'msg'=>$result['state_msg']]);
 	}
 /*end*/
 

@@ -222,7 +222,6 @@ class Member extends Common {
 	* @apiGroup Member
 	* @apiVersion 1.0.0
 	* @apiDescription  小程序登录
-	
 	* @apiParam (输入参数：) {string}     		code 小程序传入
 	* @apiParam (输入参数：) {string}     		encryptedData 小程序传入
 	* @apiParam (输入参数：) {string}     		iv 小程序传入
@@ -239,18 +238,18 @@ class Member extends Common {
 	* @apiErrorExample {json} 02 失败示例
 	* {"status":"201","msg":"操作失败"}
 	*/
-	function xcxlogin(){
-
+	function xcxlogin()
+	{
 		$wxuser = \utils\wechart\UserService::getXcxUserInfo($this->_data);	//获取小程序用户信息
 		if(!$wxuser) return json(['status'=>$this->errorCode,'msg'=>'小程序信息获取失败']);
-        //mlog("xcxlogin_wxopenid:".json_encode($wxopenid));
+        mlog("xcxlogin_wxuser:".json_encode($wxuser));
 		$returnField = 'member_id,nickname,headimgurl,openid,mobile,username,password,sex,status,create_time';
 		$res = MemberDb::getWhereInfo(['openid'=>$wxuser['openId']],$returnField);	//查询用户表的当前openid是否存在
-
 		//如果用户信息已经存在 则返回用户信息 并且生成token 将用户ID写入token
 		if($res)
 		{ 
 			$ret = ['status'=>$this->successCode,'data'=>$res,'token'=>$this->setToken($res[''])];
+			
 			return json($ret);
 		}
 		else
@@ -305,13 +304,18 @@ class Member extends Common {
 	function login(){
 		$wxuser = \utils\wechart\UserService::getXcxUserOpenid($this->_data);	//获取小程序用户信息
 		if(!$wxuser) return json(['status'=>$this->errorCode,'msg'=>'小程序信息获取失败']);
-        //mlog("xcxlogin_data".json_encode($wxuser));
+        mlog("xcxlogin_data".json_encode($wxuser));
 		$returnField = 'member_id,nickname,headimgurl,openid,mobile,username,password,sex,status,create_time';
 		$res = MemberDb::getWhereInfo(['openid'=>$wxuser['openid']],$returnField);	//查询用户表的当前openid是否存在
 
 		//如果用户信息已经存在 则返回用户信息 并且生成token 将用户ID写入token
+		if ($wxuser['unionid']&&!$res['unionid']) 
+		{
+		   MemberDb::editWhere(['openid'=>$res['openid']],['unionid'=>$wxuser['unionid']]);
+		}
 		if($res)
-		{ 
+		{
+		    
 		    $userwhere['member_id']=$res['member_id'];
 		    $useradmininfo=db()->name('user')->where($userwhere)->find();
 		    if ($useradmininfo) 
@@ -335,7 +339,7 @@ class Member extends Common {
 			$data['member_type']	= 1;//微信用户
 			$data['user_id'] = 0;
 			$data['create_time']	= time();
-
+            $data['unionid'] = $wxuser['unionid']?$wxuser['unionid']:'0';
 			$ret = MemberDb::createData($data);	//创建用户 并且返回用户id
 		    if($ret)
 		    { 

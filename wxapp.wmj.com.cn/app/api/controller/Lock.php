@@ -407,47 +407,57 @@ class Lock extends Common {
 		if(empty($data['user_id'])) return json(['status'=>$this->errorCode,'msg'=>'管理员ID不能为空']);
 		if(empty($data['member_id'])) return json(['status'=>$this->errorCode,'msg'=>'会员ID不能为空']);
 		try {
-		    $data['lock_sn']=strtoupper($data['lock_sn']);
-		    $wmjapiresult = wmjHandle($data['lock_sn'],'postlock');
-			if ($wmjapiresult['state']) 
-			{
-			    $data['mobile_check'] = 1;
-			    $data['applyauth'] = 0;
-			    $data['applyauth_check'] = 0;
-			    $data['status'] = 1;
-			    $data['location_check'] = 0;
-			    $data['openbtn'] = 1;
-			    $data['hitshowminiad'] = 1;
-			    $data['qrshowminiad'] = 1;
-			    $data['create_time'] = time();
-			    $data['successimg'] = '/uploads/admin/202007/5f1c6367d68fd.jpg';
-    			$res = LockService::add($data);
-    			if ($res) 
-    			{ 
-    			    $lock_id=$res;
-					$qrcodeurl="https://".$_SERVER['HTTP_HOST']."/minilock?"."user_id=".$data['user_id']."&lock_id=".$lock_id;
-					$data['lock_qrcode'] = $this->createmarkqrcode($qrcodeurl,$data['lock_name']);
-					$where['lock_id'] = $lock_id;
-					$ret = LockService::update($where,$data);
-					//给自己添加钥匙
-    			    $authdata['lock_id']=$res;
-    				$authdata['member_id']=$data['member_id'];
-    				$authdata['auth_member_id']=0;
-    				$authdata['auth_shareability']=1;
-    				$authdata['auth_sharelimit']=0;
-    				$authdata['auth_openlimit']=0;
-    				$authdata['auth_starttime']=time();
-    				$authdata['auth_endtime']=0;
-    				$authdata['auth_isadmin']=1;
-    				$authdata['auth_status']=1;
-    				$authdata['user_id']=$data['user_id'];
-    				$ret = \xhadmin\service\api\LockAuthService::applyauth($authdata);
+		    $lockmap['lock_sn']=$data['lock_sn'];
+		    //根据锁sn拿到锁信息,根据会员id拿到会员信息，根据会员id和锁id拿到钥匙信息
+		    $reslookdata=LockDb::getWhereInfo($lockmap);
+		    if ($reslookdata) 
+		    {
+		        return json(['status'=>'00','msg'=>'设备已添加过']);
+		    }
+		    else
+		    {
+    		    $data['lock_sn']=strtoupper($data['lock_sn']);
+    		    $wmjapiresult = wmjHandle($data['lock_sn'],'postlock');
+    			if ($wmjapiresult['state']) 
+    			{
+    			    $data['mobile_check'] = 1;
+    			    $data['applyauth'] = 0;
+    			    $data['applyauth_check'] = 0;
+    			    $data['status'] = 1;
+    			    $data['location_check'] = 0;
+    			    $data['openbtn'] = 1;
+    			    $data['hitshowminiad'] = 1;
+    			    $data['qrshowminiad'] = 1;
+    			    $data['create_time'] = time();
+    			    $data['successimg'] = '/uploads/admin/202007/5f1c6367d68fd.jpg';
+        			$res = LockService::add($data);
+        			if ($res) 
+        			{ 
+        			    $lock_id=$res;
+    					$qrcodeurl="https://".$_SERVER['HTTP_HOST']."/minilock?"."user_id=".$data['user_id']."&lock_id=".$lock_id;
+    					$data['lock_qrcode'] = $this->createmarkqrcode($qrcodeurl,$data['lock_name']);
+    					$where['lock_id'] = $lock_id;
+    					$ret = LockService::update($where,$data);
+    					//给自己添加钥匙
+        			    $authdata['lock_id']=$res;
+        				$authdata['member_id']=$data['member_id'];
+        				$authdata['auth_member_id']=0;
+        				$authdata['auth_shareability']=1;
+        				$authdata['auth_sharelimit']=0;
+        				$authdata['auth_openlimit']=0;
+        				$authdata['auth_starttime']=time();
+        				$authdata['auth_endtime']=0;
+        				$authdata['auth_isadmin']=1;
+        				$authdata['auth_status']=1;
+        				$authdata['user_id']=$data['user_id'];
+        				$ret = \xhadmin\service\api\LockAuthService::applyauth($authdata);
+        			}
     			}
-			}
-			else 
-			{
-				return json(['status'=>'00','msg'=>$wmjapiresult['state_msg']]);
-			}
+    			else 
+    			{
+    				return json(['status'=>'00','msg'=>$wmjapiresult['state_msg']]);
+    			}
+		    }
 		} catch (\Exception $e) {
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}
@@ -520,7 +530,7 @@ class Lock extends Common {
 		{
 		    $openst=$openst-1314520;
 		    //mlog("openst:".$openst);
-		    if ((time()-$openst)>60) 
+		    if ((time()-$openst)>300) 
 		    {
 		        return json(['opendoor_status'=>'201','msg'=>'二维码已过期']);
 		    }
@@ -691,6 +701,18 @@ class Lock extends Common {
 					if ($result['state'])
 					{
 						$data['status']=1;
+						if ($reslookdata['opsucnt']) 
+		                {
+		                    $ntsql = 'select a.member_id,b.unionid from cd_lockauth as a inner join cd_member as b on a.member_id=b.member_id where lock_id ='. $reslookdata['lock_id'] .' and auth_isadmin = 1 order by member_id asc limit 10';
+				            $ntres = db()->query($ntsql);
+				            mlog("ntlist:".json_encode($ntres));
+				            $senddata['lock_id']=$lock_id;
+				            $senddata['lockname']=$reslookdata['lock_name'];
+				            $senddata['locksn']=$reslookdata['lock_sn'];
+				            $senddata['opentype']=$data['type'];
+				            $senddata['uniondata']=$ntres;
+				            wmjSendWechatMsg('wxappopsucnt',$senddata);
+		                }
 						\xhadmin\service\api\LockLogService::add($data);
 						return json(['opendoor_status'=>'200','msg'=>'开门成功','successimg'=>$resdata['successimg'],'successadimg'=>$resdata['successadimg'],'hitshowminiad'=>$resdata['hitshowminiad'],'qrshowminiad'=>$resdata['qrshowminiad'],'openadurl'=>$resdata['openadurl'],'adnum'=>$resdata['adnum']]);
 					}

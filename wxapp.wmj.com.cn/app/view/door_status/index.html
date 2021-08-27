@@ -1,0 +1,164 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>门状态数据</h5>
+				<button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()" id="">
+					<i class="fa fa-refresh"></i>
+				</button>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="row" id="searchGroup">
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">序列号</button>
+									</div>
+									<input type="text" class="form-control" id="doorstatus_sn" placeholder="序列号" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">名称</button>
+									</div>
+									<input type="text" class="form-control" id="lock_name" placeholder="名称" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">状态</button>
+									</div>
+									<select class="form-control" id="doorstatus_action">
+										<option value="">请选择</option>
+										<option value="1">打开</option>
+										<option value="0">关闭</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">时间开始</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="开始时间" class="form-control" id="doorstatus_time_start">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">时间结束</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="结束时间" class="form-control" id="doorstatus_time_end">
+								</div>
+							</div>
+							<!-- search end -->
+							<div class="col-sm-2">
+									<button type="button" class="btn btn-primary " onclick="CodeGoods.search()" id="">
+										<i class="fa fa-search"></i>&nbsp;搜索
+									</button>
+							</div>
+						</div>
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    var number = {$lock_status};
+    function lock_status(){
+     
+          $.post("/admin/DoorStatus/lock_status",{suggest:1},function(result){
+           if(number != result){
+               number =result
+               CodeGoods.search() 
+           }
+         });
+       setTimeout(function(){
+           
+         lock_status()
+           
+       },2000);
+    
+    }
+    lock_status();
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '编号', field: 'doorstatus_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '序列号', field: 'doorstatus_sn', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '状态', field: 'doorstatus_action', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.doorstatus_actionFormatter},
+ 			{title: '时间', field: 'doorstatus_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.doorstatus_timeFormatter},
+ 		];
+ 	};
+
+	CodeGoods.doorstatus_actionFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">打开</span>';
+				break;
+				case '0':
+					return '<span class="label label-primary">关闭</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.doorstatus_timeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		queryData['doorstatus_sn'] = $("#doorstatus_sn").val();
+		queryData['lock_name'] = $("#lock_name").val();
+		queryData['doorstatus_action'] = $("#doorstatus_action").val();
+		queryData['doorstatus_time_start'] = $("#doorstatus_time_start").val();
+		queryData['doorstatus_time_end'] = $("#doorstatus_time_end").val();
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/DoorStatus/index"+url,defaultColunms,20);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+	laydate.render({elem: '#doorstatus_time_start',type: 'datetime'});
+	laydate.render({elem: '#doorstatus_time_end',type: 'datetime'});
+</script>
+{/block}

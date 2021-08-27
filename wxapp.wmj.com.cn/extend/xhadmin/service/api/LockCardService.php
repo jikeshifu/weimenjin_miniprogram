@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		卡管理
- create_time:	2020-06-07 01:10:35
+ create_time:	2021-01-19 18:47:25
  author:		
  contact:		
 */
@@ -65,6 +65,26 @@ class LockCardService extends CommonService {
 	public static function delcard($where){
 		try{
 			$res = LockCard::delete($where);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		if(!$res){
+			throw new \Exception('操作失败');
+		}
+		return $res;
+	}
+
+
+	/*
+ 	* @Description  编辑数据
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @param (输入参数：)  {array}        where 修改条件
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function cardtask($where,$data){
+		try{
+
+			$res = LockCard::editWhere($where,$data);
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}

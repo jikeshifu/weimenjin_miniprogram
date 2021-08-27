@@ -1,0 +1,148 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='health_id' id='health_id' value="{$info.health_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">姓名：</label>
+						<div class="col-sm-9">
+							<input type="text" id="name" value="" name="name" class="form-control" placeholder="请输入姓名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">手机号：</label>
+						<div class="col-sm-9">
+							<input type="text" id="mobile" value="" name="mobile" class="form-control" placeholder="请输入手机号">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">家庭地址：</label>
+						<div class="col-sm-9">
+							<input type="text" id="first_address" value="" name="first_address" class="form-control" placeholder="请输入家庭地址">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">第二居住地址：</label>
+						<div class="col-sm-9">
+							<input type="text" id="second_address" value="" name="second_address" class="form-control" placeholder="请输入第二居住地址">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">当前位置：</label>
+						<div class="col-sm-9">
+							<input type="text" id="position" value="" name="position" class="form-control" placeholder="请输入当前位置">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">工作或学习单位：</label>
+						<div class="col-sm-9">
+							<input type="text" id="job" value="" name="job" class="form-control" placeholder="请输入工作或学习单位">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">是否来自疫区：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['yiqu'])){ $info['yiqu'] = 2; }; ?>
+							<input name="yiqu" value="1" type="radio" {if condition="$info.yiqu eq '1'"}checked{/if} title="是">
+							<input name="yiqu" value="2" type="radio" {if condition="$info.yiqu eq '2'"}checked{/if} title="否">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">登记类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['register_type'])){ $info['register_type'] = 1; }; ?>
+							<input name="register_type" value="1" type="radio" {if condition="$info.register_type eq '1'"}checked{/if} title="村居(物业)">
+							<input name="register_type" value="2" type="radio" {if condition="$info.register_type eq '2'"}checked{/if} title="乡镇社区">
+							<input name="register_type" value="3" type="radio" {if condition="$info.register_type eq '3'"}checked{/if} title="区县">
+							<input name="register_type" value="4" type="radio" {if condition="$info.register_type eq '4'"}checked{/if} title="交通运输">
+							<input name="register_type" value="5" type="radio" {if condition="$info.register_type eq '5'"}checked{/if} title="其他">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">健康状况：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['health'])){ $info['health'] = 1; }; ?>
+							<input name="health" value="1" type="radio" {if condition="$info.health eq '1'"}checked{/if} title="健康">
+							<input name="health" value="2" type="radio" {if condition="$info.health eq '2'"}checked{/if} title="发热">
+							<input name="health" value="3" type="radio" {if condition="$info.health eq '3'"}checked{/if} title="发热咳嗽">
+							<input name="health" value="4" type="radio" {if condition="$info.health eq '4'"}checked{/if} title="头晕乏力">
+							<input name="health" value="5" type="radio" {if condition="$info.health eq '5'"}checked{/if} title="腹泻">
+							<input name="health" value="6" type="radio" {if condition="$info.health eq '6'"}checked{/if} title="其他">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">漫游地截图：</label>
+						<div class="col-sm-6">
+							<input type="text" id="manyou" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="manyou" class="form-control" placeholder="请输入漫游地截图">
+							<span class="help-block m-b-none manyou_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="manyou_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">通行证截图：</label>
+						<div class="col-sm-6">
+							<input type="text" id="txz" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="txz" class="form-control" placeholder="请输入通行证截图">
+							<span class="help-block m-b-none txz_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="txz_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">经度：</label>
+						<div class="col-sm-9">
+							<input type="text" id="lat" value="" name="lat" class="form-control" placeholder="请输入经度">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">纬度：</label>
+						<div class="col-sm-9">
+							<input type="text" id="lng" value="" name="lng" class="form-control" placeholder="请输入纬度">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">openid：</label>
+						<div class="col-sm-9">
+							<input type="text" id="openid" value="" name="openid" class="form-control" placeholder="请输入openid">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Health.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery-migrate-1.1.1.js'></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery.dragsort-0.5.1.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['form'], function () {
+	window.form = layui.form();
+});
+uploader('manyou_upload','manyou','image',false,'','{:url("admin/Upload/uploadImages")}');
+uploader('txz_upload','txz','image',false,'','{:url("admin/Upload/uploadImages")}');
+laydate.render({elem: '#create_time',type: 'datetime',trigger:'click'});
+</script>
+
+
+{/block}
