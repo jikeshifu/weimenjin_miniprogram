@@ -243,8 +243,8 @@ Page({
             },
             success: function (resa)
             {
-              //console.log('deleteKey');
-              //console.log(resa)
+              console.log('deleteKey');
+              console.log(resa)
               wx.hideLoading();
               wx.showToast({
                 title: '删除成功',

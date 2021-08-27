@@ -72,7 +72,10 @@
 			<view class="shrink3">
 				<view class="btn1" bindtap="closemask">暂不登录</view>
 			</view>
-			<view class="shrink3"><button class="lgbtn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button></view>
+			<view class="shrink3">
+				<button class="lgbtn {{canIUseGetUserProfile ? 'hide' :''}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
+				<button class="lgbtn {{canIUseGetUserProfile ? '' :'hide'}}" bindtap="getUserProfile">登录</button>
+			</view>
 		</view>
 	</view>
 	<view class="fullmask2 {{closeAd ? 'hide' :''}}"></view>

@@ -21,12 +21,18 @@ Page({
     apply: false, // 是否显示申请信息 false不显示申请信息
     isBindPhone: false, // 是否显示绑定手机
     latitude: '',
-    longitude: ''
+    longitude: '',
+    canIUseGetUserProfile: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    hasheadimgurl: true // true默认头像，登录后没有头像再改成false，false显示登录
   },
   onShow:function () {
     //console.log('open-onShow')
     var that = this;
     var pages = getCurrentPages();
+    if (wx.getUserProfile) {
+      that.setData({canIUseGetUserProfile:true})
+    }
     //console.log('pages')
     //console.log(pages)
     var len = pages.length;
@@ -44,21 +50,23 @@ Page({
         url: '../index/index'
       })
     }else{
-      wx.showLoading({
-        title: '命令执行中',
-        mask: true
-      });
+      // wx.showLoading({
+      //   title: '命令执行中',
+      //   mask: true
+      // });
       if (app.globalData.userid < 1) {
-        setTimeout(function(){
-          if (app.globalData.userid < 1) {
-            wx.hideLoading();
-            wx.navigateTo({
-              url: '../wxlogin/wxlogin'
-            })
-          }else{
-            that.getLock();
-          }
-        },2000);
+        that.login();
+        // setTimeout(function(){
+        //   if (app.globalData.userid < 1) {
+        //     wx.hideLoading();
+        //     wx.navigateTo({
+        //       url: '../wxlogin/wxlogin'
+        //     })
+        //   }
+        //   else{
+        //     that.getLock();
+        //   }
+        // },2000);
       }else{
         that.getLock();
       }
@@ -141,6 +149,48 @@ Page({
         st: st
       });
     }
+  },
+  login: function () {
+    var that = this;
+    // 登录
+    wx.login({
+      success: res => {
+        console.log('open-login-success-res')
+        console.log(res)
+        if (res.code) {
+          // 可以将 res 发送给后台解码出 unionId
+          //发起网络请求
+          wx.request({
+            url: app.globalData.domain + '/api/Member/login',
+            data: {
+              code: res.code,
+            },
+            method: 'POST',
+            success: function (resa) {
+              console.log('login-resa');
+              console.log(resa);
+              if (resa.data.status + "" == "200") {
+                app.globalData.token = resa.data.token;
+                app.globalData.userid = resa.data.data.member_id;
+                app.globalData.openid = resa.data.data.openid;
+                app.globalData.nickname = resa.data.data.nickname;
+                app.globalData.headimgurl = resa.data.data.headimgurl;
+                app.globalData.phone = resa.data.data.mobile == null ? '' : resa.data.data.mobile;
+                if (resa.data.data.useradmininfo.user_id != undefined) {
+                  app.globalData.user_id = resa.data.data.useradmininfo.user_id;
+                }
+                if (resa.data.data.headimgurl == '' || resa.data.data.headimgurl==app.globalData.defaultimg) {
+                  that.setData({hasheadimgurl:false}); // 显示登录按钮
+                }else{
+                  that.getLock();
+                }
+              }
+            }
+          })
+        }
+      },
+      fail: res => {}
+    })
   },
   // 现获取锁信息,判断是否限制距离
   getLock:function () {
@@ -321,19 +371,22 @@ Page({
     //console.log('doOpen-lock_id');
     //console.log(lock_id);
     var that = this;
+    var jsondata = {
+      user_id: adminid,
+      lock_id: lock_id,
+      member_id: app.globalData.userid,
+      type: 1
+    };
+    if (that.data.st > 0) {
+      jsondata['st'] = that.data.st;
+    }
     wx.request({
       url: app.globalData.domain+'/api/Lock/opendoor',
       method: 'POST',
       header:{
         "Authorization": app.globalData.token
       },
-      data: {
-        user_id: adminid,
-        lock_id: lock_id,
-        st: that.data.st,
-        member_id: app.globalData.userid,
-        type: 1
-      },
+      data: jsondata,
       success: function (res) {
         //console.log('opendoor-res');
         //console.log(res);
@@ -629,5 +682,103 @@ Page({
         url: '../web/web?url='+tmpopenadurl
       })*/
     }
-  }
+  },
+  getUserProfile(e) {
+    // console.log('getUserProfile-e');
+    // console.log(e);
+    var that = this;
+    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
+    // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
+    wx.getUserProfile({
+      desc: '用于登录获取用户头像', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res) => {
+        wx.showLoading({
+          title: '登录中',
+          mask: true
+        })
+        // 用户授权获取用户信息后，直接更新用户信息到用户表
+        var userInfo = res.userInfo;
+        app.globalData.userInfo = userInfo;
+        app.globalData.nickname = userInfo.nickName;
+        app.globalData.headimgurl = userInfo.headimgurl;
+        // this.updateUserInfo(e.detail);
+        wx.request({
+          url: app.globalData.domain+'/api/Member/update',
+          method: 'POST',
+          header:{
+            "Authorization": app.globalData.token
+          },
+          data: {
+            member_id: app.globalData.userid,
+            nickname: userInfo.nickName,
+            headimgurl: userInfo.avatarUrl,
+            openid: app.globalData.openid,
+            mobile: app.globalData.phone,
+            sex: userInfo.gender,
+            member_ps: 1,
+          },
+          success: function (resa) {
+            wx.hideLoading();
+            if (resa.data.status == 200) {
+              that.setData({hasheadimgurl:true});
+              that.getLock();
+            }else{
+              wx.showToast({
+                title: resa.data.msg,
+                icon: 'none',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
+            }
+          }
+        })
+      }
+    })
+  },
+  getUserInfo: function(e) {
+    var that = this;
+    wx.showLoading({
+      title: '登录中',
+      mask: true
+    })
+    //console.log('getUserInfo-e');
+    //console.log(e);
+    var userInfo = e.detail.userInfo
+    app.globalData.userInfo = userInfo;
+    app.globalData.nickname = userInfo.nickName;
+    app.globalData.headimgurl = userInfo.headimgurl;
+    // this.updateUserInfo(e.detail);
+    wx.request({
+      url: app.globalData.domain+'/api/Member/update',
+      method: 'POST',
+      header:{
+        "Authorization": app.globalData.token
+      },
+      data: {
+        member_id: app.globalData.userid,
+        nickname: userInfo.nickName,
+        headimgurl: userInfo.avatarUrl,
+        openid: app.globalData.openid,
+        mobile: app.globalData.phone,
+        sex: userInfo.gender,
+        member_ps: 1,
+      },
+      success: function (resa) {
+        //console.log('index-resa');
+        //console.log(resa);
+        wx.hideLoading();
+        if (resa.data.status == 200) {
+          that.setData({hasheadimgurl:true});
+          that.getLock();
+        }else{
+          wx.showToast({
+            title: resa.data.msg,
+            icon: 'none',
+            mask: true, // 防止触摸穿透
+            duration: 2000
+          });
+        }
+      }
+    })
+  },
 })

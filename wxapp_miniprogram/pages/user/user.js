@@ -20,7 +20,7 @@ Page({
     //console.log('user-onShow')
     var that = this;
     //console.log(app.globalData)
-    if (app.globalData.userid < 1) {
+    if (app.globalData.userid < 1 || app.globalData.defaultimg == app.globalData.headimgurl || app.globalData.headimgurl == '') {
       wx.navigateTo({
         url: '../wxlogin/wxlogin'
       });
@@ -75,7 +75,7 @@ Page({
   },
   openLock: function() {
     wx.navigateTo({
-      url: '../open/open?user_id=1&lock_id=11&st=1612096986'
+      url: '../open/open?user_id=1&lock_id=11'
     });
   },
   openlogs: function() {
