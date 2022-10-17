@@ -23,6 +23,7 @@
 						<view class="li {{vo.showcard>0 ? '' : 'hide'}}" bindtap="addcard" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}"><view class="cuIcon-vipcard iconli"></view>添加门卡</view>
 						<view class="li {{vo.audio>0 ? '' : 'hide'}}" bindtap="configaudio" data-adminid="{{vo.user_id}}" data-lockid="{{vo.lock_id}}"><view class="cuIcon-sound iconli"></view>语音配置</view>
 						<view class="li" bindtap="townership" data-lockauthid="{{vo.lockauth_id}}" data-lockid="{{vo.lock_id}}"><view class="cuIcon-order iconli"></view>转移权限</view>
+						<view class="li" bindtap="dellock"  data-lockid="{{vo.lock_id}}"><view class="cuIcon-delete iconli"></view>删除</view>
 					</view>
 					<view wx:if="{{vo.auth_isadmin !=1}}" class="absolute {{dropArr[index] ? '' :'hide'}}">
 					  <view class="li" bindtap="deleteKey" data-lockauthid="{{vo.lockauth_id}}"><view class="cuIcon-delete iconli"></view>丢弃钥匙</view>
@@ -47,7 +48,7 @@
 				</block>
 			</view>
 			<block wx:if="{{listlen <1}}">
-				<view class="nodatabox">
+				<view class="nodatabox" style="padding-top:80px;">
 					<view class="cuIcon-warn micon"></view>
 					<view class="wz">没有钥匙，请联系管理员获取</view>
 				</view>

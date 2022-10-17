@@ -247,7 +247,7 @@ Page({
               console.log(resa)
               wx.hideLoading();
               wx.showToast({
-                title: '删除成功',
+                title: resa.data.msg,
                 icon: 'success',
                 mask: true, // 防止触摸穿透
                 duration: 2000

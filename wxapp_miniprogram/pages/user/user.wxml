@@ -1,9 +1,11 @@
 <view class="">
   <view class="userbox">
     <view class="userinfo">
-      <image class="userinfo-avatar" src="{{tmpuserInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{tmpuserInfo.nickName}}</text>
+      <image class="userinfo-avatar" src="{{avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{nickName}}</text>
       <text class="userinfo-nickname">{{phone==null ? '' : jiamiphone}}</text>
+      <button class="wxdlbtn {{canIUseGetUserProfile ? 'hide' :''}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">更新</button>
+      <button class="wxdlbtn {{canIUseGetUserProfile ? '' :'hide'}}" bindtap="getUserProfile">更新</button>
     </view>
   </view>
   <view class="listrow {{dropArr[0] ? 'dropdown' : ''}}" data-on="{{dropArr[0]}}" data-index="0" bindtap="drop">
@@ -49,7 +51,7 @@
       <text>管理员信息</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>
-    <view class="witem {{phone==null ? '' : 'hide'}}" bindtap="bindPhone">
+    <view class="witem {{phone==null || phone=='' ? '' : 'hide'}}" bindtap="bindPhone">
       <text>绑定手机号</text>
       <image class="imgarrow" src="{{imgarrow}}" mode="aspectFill" />
     </view>

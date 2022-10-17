@@ -67,9 +67,13 @@
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
   },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序位置接口"
+      "desc": "为了正常搜索附近蓝牙设备"
     }
   },
   "sitemapLocation": "sitemap.json"

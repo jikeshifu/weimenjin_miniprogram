@@ -1,7 +1,7 @@
 /**user.wxss**/
 page{background-color: #ffffff;}
-.userbox{width:100%;height:370rpx;background:#21cf3e;}
-.userinfo{display:flex;flex-direction:column;align-items:center;padding-top:50rpx;margin-bottom:10rpx;}
+.userbox{width:100%;height:400rpx;background:#21cf3e;}
+.userinfo{display:flex;flex-direction:column;align-items:center;padding-top:30rpx;margin-bottom:10rpx;}
 .userinfo-avatar{width:128rpx;height:128rpx;margin:20rpx auto 30rpx;border-radius:50%;}
 .userinfo-nickname{color:#ffffff;font-size:13pt;}
 .widgetsbox{padding-left:30rpx;}
@@ -17,3 +17,4 @@ page{background-color: #ffffff;}
 .dropup{width:34rpx;height:34rpx;position: relative;top:4rpx;right: 20rpx;transform:rotate(-90deg);-webkit-transform:rotate(-90deg);}
 .dropdown .dropup{transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 .widgetsbox.dropdown{display: none;}
+.wxdlbtn{height:72rpx;line-height:72rpx;font-size:12pt;}

@@ -10,87 +10,19 @@ App({
     var that = this;
     var version = wx.getSystemInfoSync().SDKVersion;
     this.globalData.version = version;
-    // 登录2021-07-16注释
-    /*wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        // //console.log(res.code);
-        if (res.code) {
-          wx.getUserInfo({
-            success: resuser => {
-              console.log('getUserInfo-resuser')
-              console.log(resuser)
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = resuser.userInfo
-              //发起网络请求
-              wx.request({
-                url: this.globalData.domain+'/api/Member/xcxlogin',
-                data: {
-                  code: res.code,
-                  encryptedData: resuser.encryptedData,
-                  iv: resuser.iv
-                },
-                method: 'POST',
-                success: function (resa) {
-                  //console.log('app.js-login-resa');
-                  //console.log(resa);
-                  if (resa.data.status == 200) {
-                    that.globalData.token = resa.data.token;
-                    that.globalData.userid = resa.data.data.member_id;
-                    that.globalData.openid = resa.data.data.openid;
-                    that.globalData.phone = resa.data.data.mobile;
-                    that.globalData.nickname = resa.data.data.nickname;
-                    that.globalData.headimgurl = resa.data.data.headimgurl;
-                  }
-                  // if (resa.data.data.useradmininfo.user_id != undefined) {
-                  //   that.globalData.user_id = resa.data.data.useradmininfo.user_id;
-                  // }else{}
-                  var tmpdata3 = {member_id: resa.data.data.member_id};
-                  console.log('app.js-onLaunch-login-tmpdata3')
-                  console.log(tmpdata3)
-                  wx.request({
-                    url: that.globalData.domain+'/api/Member/viewuserid',
-                    method: 'POST',
-                    header:{
-                      "Authorization": resa.data.token
-                    },
-                    data: {
-                      member_id: resa.data.data.member_id
-                    },
-                    success: function (resb) {
-                      console.log('app.js-onLaunch-login-resb');
-                      console.log(resb);
-                      if (resb.data.status == 200) {
-                        var tmpuser_id = resb.data.data.user_id;
-                        if (tmpuser_id != '') {
-                          that.globalData.user_id = resb.data.data.user_id;
-                          that.globalData.adminInfo = resb.data.data;
-                        }
-                      }
-                    }
-                  })
-                }
-              })
-            },
-            fail: resuser => {
-              console.log('fail-resuser')
-              console.log(resuser)
-            }
-          })
-        }
-      }
-    })*/
   },
   globalData: {
     token: '', // 用户token
     phone: '', // 用户绑定的手机号
-    domain: 'https://wxapp.wmj.com.cn',
+    domain: 'https://wx.wmj.com.cn',
     xcxname:'微门禁',
     shareImg: '/static/img/shareimg.jpg',
     userInfo: null,
-    nickname: '', // 微信昵称
-    headimgurl: '', // 微信头像
+    nickname: '未登录游客', // 微信昵称
+    headimgurl: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132', // 微信头像
     defaultimg: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132', // 微信错误头像
+    avatarUrl:'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
+    gender:'0',
     ishas: false,   // 默认没有微信用户信息
     openid: '',
     userid: 0,      // 自己的用户id  即member_id

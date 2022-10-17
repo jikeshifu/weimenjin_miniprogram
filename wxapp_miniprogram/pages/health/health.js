@@ -537,8 +537,8 @@ Page({
         utime:timestamp
       },
       success: function (res) {
-        //console.log('uploadData-res');
-        //console.log(res);
+        console.log('uploadData-res');
+        console.log(res);
         wx.showToast({
           title: res.data.msg,
           icon: 'none',
@@ -552,7 +552,7 @@ Page({
           // })
           if (lock_id > 0) {
             wx.navigateTo({
-              url: '../open/open?user_id='+user_id+'&lock_id='+lock_id
+              url: '../open/open?user_id='+user_id+'&lock_id='+lock_id+'&isscan=1'
             });
           }else{
             wx.navigateTo({
@@ -580,12 +580,17 @@ Page({
     //console.log(e);
     //console.log(app.globalData)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
+      var phonecode = '';
+      if (e.detail.code != undefined) {
+        phonecode = e.detail.code;
+      }
       wx.login({
         success: res => {
           //console.log('res.code:'+res.code)
           wx.request({
             url: app.globalData.domain+'/api/Member/getphonenumber',
             data: {
+              phonecode: phonecode,
               encryptedData: e.detail.encryptedData,
               iv: e.detail.iv,
               code: res.code
@@ -624,6 +629,14 @@ Page({
                   wx.hideLoading();
                 }
               })
+            },
+            fail: function (res) {
+              wx.showToast({
+                title: '操作失败',
+                icon: 'none',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
             }
           })
         }

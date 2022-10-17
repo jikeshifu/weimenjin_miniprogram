@@ -1,3 +1,5 @@
 /* .locationbox .cuIcon-locationfil{font-size:32px;} */
-.locationbox{width:80rpx;height:80rpx;line-height:80rpx; text-align: right;font-size:20pt;color: red;}
+.locationbox{width:80rpx;height:80rpx;line-height:80rpx; text-align: right;font-size:18pt;color: #666;}
 .lg{width:100%;}
+.fz16{font-size:34rpx;}
+.wztips{padding:30rpx;background-color:#fff;margin-top:20px;color:red;}

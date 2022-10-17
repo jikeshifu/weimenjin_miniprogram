@@ -50,7 +50,6 @@ Page({
     }, 3000);
   },
   scrolltoupper: function () {
-    //
   },
   scrolltolower: function () {
     this.setData({
@@ -68,62 +67,14 @@ Page({
     if (wx.getUserProfile) {
       this.setData({canIUseGetUserProfile:true})
     }
-    wx.showToast({
-      title: '正在加载',
-      icon: 'none',
-      mask: true, // 防止触摸穿透
-      duration: 2000
-    });
     console.log(app.globalData)
     if (app.globalData.userid < 1) {
       that.login();
-      // setTimeout(function(){
-      //   if (app.globalData.userid < 1) {
-      //     wx.hideLoading();
-      //     that.setData({
-      //       close:false
-      //     })
-      //   }else{
-      //     // if (that.data.listarr.length <1) {
-      //       that.getmore(1,that.data.num,0);
-      //     // } else {
-      //     //   wx.hideLoading();
-      //     // }
-      //   }
-      // },2000);
     } else {
       that.getmore(1, that.data.num, 0);
     }
-    var aaa = setInterval(function () {
-      //console.log('aa');
-      that.getmore(1, that.data.num, 0);
-    }, 5000);
   },
   onLoad: function () {
-    // // 在页面中定义激励视频广告
-    // let videoAd = null
-
-    // // 在页面onLoad回调事件中创建激励视频广告实例
-    // if (wx.createRewardedVideoAd) {
-    //   videoAd = wx.createRewardedVideoAd({
-    //     adUnitId: 'adunit-02222114b9baeb78'
-    //   })
-    //   videoAd.onLoad(() => {})
-    //   videoAd.onError((err) => {})
-    //   videoAd.onClose((res) => {})
-    // }
-
-    // // 用户触发广告后，显示激励视频广告
-    // if (videoAd) {
-    //   videoAd.show().catch(() => {
-    //     // 失败重试
-    //     videoAd.load()
-    //       .then(() => videoAd.show())
-    //       .catch(err => {
-    //         console.log('激励视频 广告显示失败')
-    //       })
-    //   })
-    // }
     var that = this;
     wx.getSystemInfo({
       success: function (res) {
@@ -136,6 +87,10 @@ Page({
   },
   getmore: function (page, num, addto) { // addto为0覆盖原有数据，为1在原有数据基础上追加数据
     console.log('index.js-getmore')
+    wx.showLoading({
+      title: '正在加载',
+      mask: true
+    })
     var that = this;
     if (page == undefined) {
       page = 1;
@@ -159,19 +114,18 @@ Page({
           page: page,
         },
         success: function (resa) {
-          console.log('getmore-success-resa');
-          console.log(resa);
+          wx.hideLoading();
           var arr = [];
           var tmpdropIndex = that.data.dropIndex;
           var curtmpdrop = false;
           if (tmpdropIndex > -1) {
             curtmpdrop = that.data.dropArr[tmpdropIndex];
           }
+          var tmpdroparr = [];
           if (resa.data.status == 200) {
             var arrdata = resa.data.data.list
             if (arrdata.length > 0) {
               var timestamp = Date.parse(new Date()) / 1000;
-              var tmpdroparr = [];
               for (var i = 0; i < arrdata.length; i++) {
                 tmpdroparr.push(false);
                 var tmpobj = {};
@@ -273,12 +227,7 @@ Page({
           }
         },
         fail: function (res) {
-          // wx.showToast({
-          //   title: '网络故障，请稍后重试',
-          //   icon: 'none',
-          //   mask: true, // 防止触摸穿透
-          //   duration: 2000
-          // });
+          wx.hideLoading();
         }
       });
     }
@@ -299,11 +248,8 @@ Page({
         var timedelay = 3800; // 延迟时间
         wx.getSetting({
           success: (res) => {
-            //console.log(JSON.stringify(res))
             if (res.authSetting['scope.userLocation'] != true) {
-              //console.log('scope.userLocation false')
               if (res.authSetting['scope.userLocation'] == undefined) {
-                //console.log('scope.userLocation undefined')
                 timedelay = 3800; // 3秒延迟
                 that.getLocation();
                 wx.showLoading({
@@ -313,8 +259,6 @@ Page({
               } else {
                 wx.openSetting({
                   success: function (dataAu) {
-                    //console.log('dataAu')
-                    //console.log(dataAu)
                     if (dataAu.authSetting["scope.userLocation"] == true) {
                       that.getLocation();
                       wx.showLoading({
@@ -661,8 +605,7 @@ Page({
     // 登录
     wx.login({
       success: res => {
-        console.log('index-login-success-res')
-        console.log(res)
+        // console.log('index-login-success-res',res)
         if (res.code) {
           // 可以将 res 发送给后台解码出 unionId
           //发起网络请求
@@ -673,8 +616,7 @@ Page({
             },
             method: 'POST',
             success: function (resa) {
-              console.log('login-resa');
-              console.log(resa);
+              // console.log('login-resa',resa);
               if (resa.data.status + "" == "200") {
                 app.globalData.token = resa.data.token;
                 app.globalData.userid = resa.data.data.member_id;
@@ -693,6 +635,7 @@ Page({
                   var tmpuserInfo = {};
                   tmpuserInfo['avatarUrl'] = resa.data.data.headimgurl;
                   tmpuserInfo['nickName'] = resa.data.data.nickName;
+                  tmpuserInfo['gender'] = resa.data.data.sex;
                   app.globalData.userInfo = tmpuserInfo;
                   that.getmore(1, that.data.num, 0);
                 }
@@ -835,9 +778,59 @@ Page({
               lockauth_ids: id,
             },
             success: function (resa) {
-              console.log('deleteback')
-              console.log('删除反馈')
-              console.log(resa)
+              // console.log('deleteback')
+              // console.log(resa)
+              wx.hideLoading();
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
+              that.getmore(1, that.data.num, 0);
+            },
+            fail: function (res) {
+              wx.hideLoading();
+              wx.showToast({
+                title: '网络故障，请稍后重试',
+                icon: 'none',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
+            }
+          });
+        } else if (res.cancel) {
+          //console.log('用户点击取消')
+        }
+      }
+    })
+  },
+  dellock: function (e) {
+    var that = this;
+    var id = e.currentTarget.dataset['lockid']; //
+    wx.showModal({
+      title: '删除',
+      content: '您确定要删除么？',
+      success(res) {
+        if (res.confirm) {
+          //console.log('用户点击确定')
+          //console.log(id)
+          wx.showLoading({
+            title: '执行中',
+            mask: true
+          });
+          wx.request({
+            url: app.globalData.domain + '/api/Lock/delete',
+            method: "POST",
+            header: {
+              "Authorization": app.globalData.token
+            },
+            data: {
+              lock_ids: id,
+            },
+            success: function (resa) {
+              // console.log('deleteback')
+              // console.log(resa)
               wx.hideLoading();
               wx.showToast({
                 title: '删除成功',

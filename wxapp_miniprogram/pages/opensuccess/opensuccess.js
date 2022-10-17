@@ -25,17 +25,17 @@ Page({
       adnum: adnum,
       qrshowminiad: qrshowminiad
     })
-    var cleartime = setTimeout(function(){
-      that.setData({
-        closeAd: true
-      })
-      wx.switchTab({
-        url: '../index/index'
-      })
-    },4000);
-    that.setData({
-      cleartime: cleartime
-    })
+    // var cleartime = setTimeout(function(){
+    //   that.setData({
+    //     closeAd: true
+    //   })
+    //   // wx.switchTab({
+    //   //   url: '../index/index'
+    //   // })
+    // },4000);
+    // that.setData({
+    //   cleartime: cleartime
+    // })
   },
   onLoad: function () {
     var that = this;

@@ -24,7 +24,8 @@ Page({
     longitude: '',
     canIUseGetUserProfile: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    hasheadimgurl: true // true默认头像，登录后没有头像再改成false，false显示登录
+    hasheadimgurl: true, // true默认头像，登录后没有头像再改成false，false显示登录
+    isscan: false, // 打开页面方式:false不是扫码，true是扫码
   },
   onShow:function () {
     //console.log('open-onShow')
@@ -54,29 +55,32 @@ Page({
       //   title: '命令执行中',
       //   mask: true
       // });
-      if (app.globalData.userid < 1) {
-        that.login();
-        // setTimeout(function(){
-        //   if (app.globalData.userid < 1) {
-        //     wx.hideLoading();
-        //     wx.navigateTo({
-        //       url: '../wxlogin/wxlogin'
-        //     })
-        //   }
-        //   else{
-        //     that.getLock();
-        //   }
-        // },2000);
+      var isscan = that.data.isscan;
+      if (isscan) {
+        if (app.globalData.userid < 1) {
+          that.login();
+          // setTimeout(function(){
+          //   if (app.globalData.userid < 1) {
+          //     wx.hideLoading();
+          //     wx.navigateTo({
+          //       url: '../wxlogin/wxlogin'
+          //     })
+          //   }
+          //   else{
+          //     that.getLock();
+          //   }
+          // },2000);
+        }else{
+          that.getLock();
+        }
       }else{
-        that.getLock();
+        wx.switchTab({
+          url: '../index/index'
+        })
       }
     }
   },
   onLoad: function (options) {
-    //console.log('options:');
-    //console.log(options);
-    //console.log('token:');
-    //console.log(app.globalData.token)
     var that = this;
     //console.log(app.globalData)
     wx.getSystemInfo({
@@ -121,6 +125,9 @@ Page({
           //   lock_id: paramobj['lock_id']
           // });
           app.globalData.lock_id = lock_id
+          that.setData({
+            isscan: true,
+          });
         }
         if (paramobj['st'] != undefined && paramobj['st'] > 0) {
           st = paramobj['st'];
@@ -142,6 +149,14 @@ Page({
       //   lock_id: lock_id
       // });
       app.globalData.lock_id = lock_id
+      that.setData({
+        isscan: false,
+      });
+    }
+    if (options.isscan != undefined && options.isscan >0) {
+      that.setData({
+        isscan: true,
+      });
     }
     if (options.st != undefined && options.st >0) {
       st = options.st
@@ -521,12 +536,17 @@ Page({
     //console.log(e);
     //console.log(app.globalData)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
+      var phonecode = '';
+      if (e.detail.code != undefined) {
+        phonecode = e.detail.code;
+      }
       wx.login({
         success: res => {
           //console.log('res.code:'+res.code)
           wx.request({
             url: app.globalData.domain+'/api/Member/getphonenumber',
             data: {
+              phonecode: phonecode,
               encryptedData: e.detail.encryptedData,
               iv: e.detail.iv,
               code: res.code
@@ -544,9 +564,16 @@ Page({
               }
               app.globalData.phone = phone;
               var userInfo = app.globalData.userInfo;
-              userInfo['nickName'] = userInfo['nickName']? userInfo['nickName'] :'';
-              userInfo['avatarUrl'] = userInfo['avatarUrl']? userInfo['avatarUrl'] :'';
-              userInfo['gender'] = userInfo['gender']? userInfo['gender'] :'1';
+              if (userInfo) {
+                userInfo['nickName'] = userInfo['nickName'] ? userInfo['nickName'] : '我是游客';
+                userInfo['avatarUrl'] = userInfo['avatarUrl'] ? userInfo['avatarUrl'] : 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132';
+                userInfo['gender'] = userInfo['gender'] ? userInfo['gender'] : '1';
+              }else{
+                userInfo={};
+                userInfo['nickName'] = '未登录';
+                userInfo['avatarUrl'] = 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132';
+                userInfo['gender'] = '1';
+              }
               var dataobj = {
                 member_id: app.globalData.userid,
                 nickname: userInfo.nickName,
@@ -578,10 +605,29 @@ Page({
                   var adminid = that.data.user_id; // 管理员user_id的值
                   var lock_id = app.globalData.lock_id; //
                   that.doOpen(adminid,lock_id);
+                },
+                fail: function (res) {
+                  wx.showToast({
+                    title: '操作失败',
+                    icon: 'none',
+                    mask: true, // 防止触摸穿透
+                    duration: 2000
+                  });
                 }
               })
+            },
+            fail: function (res) {
+              wx.showToast({
+                title: '操作失败',
+                icon: 'none',
+                mask: true, // 防止触摸穿透
+                duration: 2000
+              });
             }
           })
+        },
+        fail: function (res) {
+          wx.hideLoading();
         }
       })
     }
@@ -668,6 +714,9 @@ Page({
             })
           },2000);
         }
+      },
+      fail: function (res) {
+        wx.hideLoading();
       }
     })
   },
