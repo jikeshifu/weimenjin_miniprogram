@@ -5,6 +5,8 @@
 ![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%872.png)
 
 ![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%873.png)
+
+![输入图片说明](wxapp.wmj.com.cn/public/upload/tao.png)
 #### 介绍
 微门禁小程序项目,免费开源;
 体验二维码无法放，请搜索微门禁小程序进入体验
