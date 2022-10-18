@@ -1,5 +1,10 @@
 # 微门禁小程序项目
 
+![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%871.png)
+
+![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%872.png)
+
+![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%873.png)
 #### 介绍
 微门禁小程序项目,免费开源;
 体验二维码无法放，请搜索微门禁小程序进入体验
@@ -68,10 +73,3 @@ wxapp_miniprogram为微信小程序源码。
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142419_a58e3a8e_1840059.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142245_39927691_1840059.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142309_6dad72e4_1840059.png "屏幕截图.png")
-配套门禁机：
-
-![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%871.png)
-
-![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%872.png)
-
-![输入图片说明](wxapp.wmj.com.cn/public/upload/%E5%9B%BE%E7%89%873.png)
