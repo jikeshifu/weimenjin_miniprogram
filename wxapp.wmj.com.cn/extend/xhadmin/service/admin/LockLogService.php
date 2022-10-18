@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		开门记录
- create_time:	2020-07-10 13:07:48
+ create_time:	2022-03-10 17:43:11
  author:		
  contact:		
 */
@@ -52,11 +52,12 @@ class LockLogService extends CommonService {
 			$sheet->setCellValue('B1','锁名称');
 			$sheet->setCellValue('C1','头像');
 			$sheet->setCellValue('D1','呢称');
-			$sheet->setCellValue('E1','手机号');
-			$sheet->setCellValue('F1','状态');
-			$sheet->setCellValue('G1','类型');
-			$sheet->setCellValue('H1','备注');
-			$sheet->setCellValue('I1','开门时间');
+			$sheet->setCellValue('E1','姓名');
+			$sheet->setCellValue('F1','备注');
+			$sheet->setCellValue('G1','手机号');
+			$sheet->setCellValue('H1','状态');
+			$sheet->setCellValue('I1','类型');
+			$sheet->setCellValue('J1','开门时间');
 
 			//excel表内容
 			foreach($list as $k=>$v){
@@ -64,14 +65,15 @@ class LockLogService extends CommonService {
 				$sheet->setCellValue('B'.($k+2),$v['lock_name']);
 				$sheet->setCellValue('C'.($k+2),$v['headimgurl']);
 				$sheet->setCellValue('D'.($k+2),$v['nickname']);
-				$sheet->setCellValue('E'.($k+2),$v['mobile']);
+				$sheet->setCellValue('E'.($k+2),$v['realname']);
+				$sheet->setCellValue('F'.($k+2),$v['remark']);
+				$sheet->setCellValue('G'.($k+2),$v['mobile']);
 				$v['status'] = getFieldVal($v['status'],'成功|1|primary,失败|0|danger');
-				$sheet->setCellValue('F'.($k+2),$v['status']);
+				$sheet->setCellValue('H'.($k+2),$v['status']);
 				$v['type'] = getFieldVal($v['type'],'扫码开门|1|primary,点击开门|2|info,后台开门|3|success');
-				$sheet->setCellValue('G'.($k+2),$v['type']);
-				$sheet->setCellValue('H'.($k+2),$v['remark']);
+				$sheet->setCellValue('I'.($k+2),$v['type']);
 				$v['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
-				$sheet->setCellValue('I'.($k+2),$v['create_time']);
+				$sheet->setCellValue('J'.($k+2),$v['create_time']);
 			}
 			
 			$filename = date('YmdHis');

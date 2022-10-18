@@ -37,9 +37,9 @@ class MemberService extends CommonService {
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
 		}
-		if(!$res){
-			throw new \Exception('操作失败');
-		}
+// 		if(!$res){
+// 			throw new \Exception('操作失1败');
+// 		}
 		return $res;
 	}
 

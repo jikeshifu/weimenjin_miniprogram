@@ -1,7 +1,7 @@
 <?php 
 /*
  module:		用户管理
- create_time:	2020-08-23 22:15:59
+ create_time:	2022-09-24 18:38:47
  author:		
  contact:		
 */
@@ -35,13 +35,28 @@ class UmemberService extends CommonService {
 
 
 	/*
+ 	* @Description  编辑数据
+ 	* @param (输入参数：)  {array}        data 原始数据
+ 	* @return (返回参数：) {bool}        
+ 	*/
+	public static function authlocks($data){
+		try{
+
+			$res = Umember::edit($data);
+		}catch(\Exception $e){
+			throw new \Exception($e->getMessage());
+		}
+		return $res;
+	}
+
+
+	/*
  	* @Description  修改
  	* @param (输入参数：)  {array}        data 原始数据
  	* @return (返回参数：) {bool}        
  	*/
 	public static function update($data){
 		try{
-			$data['ucreate_time'] = strtotime($data['ucreate_time']);
 
 			$res = Umember::edit($data);
 		}catch(\Exception $e){

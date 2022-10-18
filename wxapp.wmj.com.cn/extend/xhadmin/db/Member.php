@@ -101,7 +101,7 @@ class Member extends Common
 			$result = Db::name(self::$tableName)->where($where)->update($data);
 		}catch(\Exception $e){
 			self::setLog($e->getMessage());
-			throw new \Exception(self::$errMsg);
+			throw new \Exception($e->getMessage());
 		}
 		
 		return $result;

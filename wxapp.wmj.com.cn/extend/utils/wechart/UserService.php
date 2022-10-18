@@ -43,7 +43,8 @@ class UserService
 			[provider] => WeChat
 		)
 	 */
-	 
+	/*start*/
+    /*end*/
 	public static function getUserInfo($redirect_url,$data,$snsapi='snsapi_userinfo'){
 		
 		$app = Factory::officialAccount(config('my.official_accounts'));
@@ -108,6 +109,7 @@ class UserService
 		
 		return $session;
 	}
+	/*start*/
 	/**
 	 * 获取小程序用户信息
 	 * @description 小程序传入 code、iv、encryptedData  先通过code获取 session_key  然后在解码出用户信息
@@ -122,17 +124,41 @@ class UserService
 		//print_r("encryptedData:".$data['encryptedData']."\n");
 		//exit();
 		$app = Factory::miniProgram(config('my.mini_program'));
+        $token = $app->auth->getAccessToken()->getToken();
 		try{
-			$session = self::getOpenId($data['code']);	//通过code获取 session信息
-			//解码用户信息
-			$decryptedData = $app->encryptor->decryptPhoneData($data['encryptedData'],$data['iv'],$session['session_key']);
+		    if ($data['phonecode']) 
+		    {
+		    // 新方法
+		        mlog("NewFunphonecode:".$data['phonecode']);
+	            $url = 'https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token='.$token['access_token'];
+                $postdata = [];
+                $postdata['code'] = $data['phonecode'];
+                // mlog("phonecode:1");
+                $postres = json_decode(http_post($url,$postdata),true);
+                // mlog("phonecode:2".json_encode($postres));
+                if (isset($postres['errcode']) && $postres['errcode'] == 0) 
+                {
+                    $phone = $postres['phone_info']['phoneNumber'];
+                }
+            $decryptedData = [];
+            $decryptedData['phoneNumber'] = $phone;
+            $decryptedData = json_encode($decryptedData);
+            mlog('NewFuncGetPhone:'.$phone);
+		    }
+    		else
+    		{
+    			$session = self::getOpenId($data['code']);	//通过code获取 session信息
+    			//解码用户信息
+    			$decryptedData = $app->encryptor->decryptPhoneData($data['encryptedData'],$data['iv'],$session['session_key']);
+    			mlog("OldFuncGetPhone:".$decryptedData);
+    		}
 		}catch(\Exception $e){
 			log::error('小程序获取信息失败:'.print_r($e->getMessage(),true));
 		}
 		
 		return $decryptedData;
 	}
-	/*start*/
+	
 	/**
 	 * 获取小程序用户信息
 	 * @description 小程序传入 code、iv、encryptedData  先通过code获取 session_key  然后在解码出用户信息
