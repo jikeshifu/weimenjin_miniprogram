@@ -414,6 +414,35 @@ function mlog($txt,$filename='log.txt') {
     $txt = date('Y/m/d H:i:s').": {$txt}\r\n";
     file_put_contents('./'.$filename, $txt, FILE_APPEND); //追加内容
 }
+/**
+     * curl请求指定url(POST请求)
+     * $url请求的URL
+     * $data 请求传递的数据
+     */
+ function http_post($url,$data = array(),$headers=array())
+{
+    $curl = curl_init();
+    if( count($headers) >= 1 ){
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    }
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+    if (count($data) >= 1 ){
+        $data = json_encode($data,JSON_UNESCAPED_UNICODE);
+    }else{
+        $data = '{}';
+    }
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($curl);
+    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    return $output;
+}
 function sign($data, $key)
 {
     array_filter($data);
