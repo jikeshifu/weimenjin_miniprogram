@@ -1,0 +1,140 @@
+<!--
+此文件为开发者工具生成，生成时间: 2020/12/28 上午12:00:23 
+使用方法：
+在 D:\work\code\miniprogram\wmj_miniprogram\pages\index\index.wxml 引入模板
+
+```
+<import src="index.skeleton.wxml"/>
+<template is="skeleton" wx-if="{{loading}}" />
+```
+
+在 D:\work\code\miniprogram\wmj_miniprogram\pages\index\index.wxss 中引入样式
+```
+@import "./index.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="wrap">
+      <scroll-view scroll-y="true" class="scrollbox" lower-threshold="50" style="height:642px;" upper-threshold="50">
+        <view class="listbox">
+          <view class="key-list" style="border: none;">
+            <view class="listrow relative" style="border: none;">
+              <view class="shrink0">
+                <image class="line sk-image" mode="aspectFill"></image>
+              </view>
+              <view class="shrink1 sk-transparent">
+                机柜锁
+                <view class="lockstatus">
+                  <image class="line sk-image" mode="aspectFill"></image>
+                </view>
+              </view>
+              <view class="shrink2 sk-transparent" data-index="0">
+                <view class="cuIcon-settings iconli sk-pseudo sk-pseudo-circle"></view>管理</view>
+            </view>
+            <view class="list-content sk-transparent sk-text-14-2857-156 sk-text">永不过期</view>
+            <view class="list-footer" style="border: none;">
+              <view class="listrow">
+                <view class="opendoor sk-transparent" data-adminid="1" data-latitude="0" data-locationcheck="0" data-lockid="354" data-longitude="0">
+                  <view class="cuIcon-lock iconli sk-pseudo sk-pseudo-circle"></view>开门
+                </view>
+                <view class="shrink1"></view>
+                <view class="shrink2 sk-transparent sk-text-33-7037-792 sk-text" data-adminid="1" data-lockid="354">分享钥匙</view>
+              </view>
+            </view>
+          </view>
+          <view class="key-list" style="border: none;">
+            <view class="listrow relative" style="border: none;">
+              <view class="shrink0">
+                <image class="line sk-image" mode="aspectFill"></image>
+              </view>
+              <view class="shrink1 sk-transparent sk-text-33-7037-146 sk-text">
+                0350
+              </view>
+              <view class="shrink2 sk-transparent" data-index="1">
+                <view class="cuIcon-settings iconli sk-pseudo sk-pseudo-circle"></view>管理</view>
+            </view>
+            <view class="list-content sk-transparent sk-text-14-2857-747 sk-text">永不过期</view>
+            <view class="list-footer" style="border: none;">
+              <view class="listrow">
+                <view class="opendoor sk-transparent" data-adminid="1" data-latitude="0" data-locationcheck="0" data-lockid="352" data-longitude="0">
+                  <view class="cuIcon-lock iconli sk-pseudo sk-pseudo-circle"></view>开门
+                </view>
+                <view class="shrink1"></view>
+                <view class="shrink2 sk-transparent sk-text-33-7037-812 sk-text" data-adminid="1" data-lockid="352">分享钥匙</view>
+              </view>
+            </view>
+          </view>
+          <view class="key-list" style="border: none;">
+            <view class="listrow relative" style="border: none;">
+              <view class="shrink0">
+                <image class="line sk-image" mode="aspectFill"></image>
+              </view>
+              <view class="shrink1 sk-transparent sk-text-33-7037-542 sk-text">
+                门禁
+              </view>
+              <view class="shrink2 sk-transparent" data-index="2">
+                <view class="cuIcon-settings iconli sk-pseudo sk-pseudo-circle"></view>管理</view>
+            </view>
+            <view class="list-content sk-transparent sk-text-14-2857-723 sk-text">永不过期</view>
+            <view class="list-footer" style="border: none;">
+              <view class="listrow">
+                <view class="opendoor sk-transparent" data-adminid="1" data-latitude="0" data-locationcheck="0" data-lockid="350" data-longitude="0">
+                  <view class="cuIcon-lock iconli sk-pseudo sk-pseudo-circle"></view>开门
+                </view>
+                <view class="shrink1"></view>
+                <view class="shrink2 sk-transparent sk-text-33-7037-35 sk-text" data-adminid="1" data-lockid="350">分享钥匙</view>
+              </view>
+            </view>
+          </view>
+          <view class="key-list" style="border: none;">
+            <view class="listrow relative" style="border: none;">
+              <view class="shrink0">
+                <image class="line sk-image" mode="aspectFill"></image>
+              </view>
+              <view class="shrink1 sk-transparent sk-text-33-7037-949 sk-text">
+                7222
+              </view>
+              <view class="shrink2 sk-transparent" data-index="3">
+                <view class="cuIcon-settings iconli sk-pseudo sk-pseudo-circle"></view>管理</view>
+            </view>
+            <view class="list-content sk-transparent sk-text-14-2857-312 sk-text">永不过期</view>
+            <view class="list-footer" style="border: none;">
+              <view class="listrow">
+                <view class="opendoor sk-transparent" data-adminid="1" data-latitude="0" data-locationcheck="0" data-lockid="340" data-longitude="0">
+                  <view class="cuIcon-lock iconli sk-pseudo sk-pseudo-circle"></view>开门
+                </view>
+                <view class="shrink1"></view>
+                <view class="shrink2 sk-transparent sk-text-33-7037-187 sk-text" data-adminid="1" data-lockid="340">分享钥匙</view>
+              </view>
+            </view>
+          </view>
+          <view class="key-list" style="border: none;">
+            <view class="listrow relative" style="border: none;">
+              <view class="shrink0">
+                <image class="line sk-image" mode="aspectFill"></image>
+              </view>
+              <view class="shrink1 sk-transparent sk-text-33-7037-63 sk-text">
+                开发演示设备
+              </view>
+              <view class="shrink2 sk-transparent" data-index="4">
+                <view class="cuIcon-settings iconli sk-pseudo sk-pseudo-circle"></view>管理</view>
+            </view>
+            <view class="list-content sk-transparent sk-text-14-2857-924 sk-text">永不过期</view>
+            <view class="list-footer" style="border: none;">
+              <view class="listrow">
+                <view class="opendoor sk-transparent" data-adminid="1" data-latitude="0" data-locationcheck="0" data-lockid="335" data-longitude="0">
+                  <view class="cuIcon-lock iconli sk-pseudo sk-pseudo-circle"></view>开门
+                </view>
+                <view class="shrink1"></view>
+                <view class="shrink2 sk-transparent sk-text-33-7037-922 sk-text" data-adminid="1" data-lockid="335">分享钥匙</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</template>

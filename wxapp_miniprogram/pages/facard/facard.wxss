@@ -1,0 +1,10 @@
+/* .locationbox .cuIcon-locationfil{font-size:32px;} */
+.locationbox{width:80rpx;height:80rpx;line-height:80rpx; text-align: right;font-size:20pt;color: #444;}
+.lg{width:100%;}
+.cu-form-group.checkgroup{min-height:60rpx;height:60rpx;background-color:#fff;}
+.cu-form-group.checkgroup+.cu-form-group.checkgroup{border-top:0;}
+.bb1{border-bottom: 1rpx solid #eee;}
+.bt1{border-top: 1rpx solid #eee;}
+.mb10{margin-bottom: 20rpx;}
+.mt10{margin-top:20rpx;}
+.cu-form-group input{text-align: right;}

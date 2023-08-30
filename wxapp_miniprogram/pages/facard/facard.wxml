@@ -1,0 +1,35 @@
+<form>
+  <view class="cu-form-group margin-top1">
+    <view class="title">卡号（IC卡UID）</view>
+    <view class="title">{{lockcard_sn}}</view>
+    <!-- <input name="lockcard_sn"  placeholder="" value="{{lockcard_sn}}" bindinput="lockcardsnInput"></input>
+    <view class="picker locationbox" bindtap="bindScan">
+      <view class="cuIcon-scan"></view>
+    </view> -->
+  </view>
+  <view class="cu-form-group">
+    <view class="title">持有人</view>
+    <input name="lockcard_username"  placeholder="输入持有人" value="{{lockcard_username}}" bindinput="lockcardusernameInput"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">过期时间</view>
+    <picker mode="multiSelector" value="{{dateIndex}}"  end="2050-09-01" bindchange="endDate" range="{{dateTimeArray}}">
+      <view class="picker">
+        {{endtime}}
+      </view>
+    </picker>
+  </view>
+  <view class="cu-form-group bb1 mb10">
+    <view class="title">备注</view>
+    <input name="lockcard_remark"  placeholder="输入备注" value="{{lockcard_remark}}" bindinput="lockcardremarkInput"></input>
+  </view>
+  <checkbox-group bindchange="checkboxChange">
+    <view class="cu-form-group checkgroup" wx:for="{{lockarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+      <view class="title">{{vo.lock_name}}</view>
+      <checkbox value="{{vo.lock_id}}"></checkbox>
+    </view>
+  </checkbox-group>
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-green lg" bindtap="doSubmit">立即提交</button>
+  </view>
+</form>

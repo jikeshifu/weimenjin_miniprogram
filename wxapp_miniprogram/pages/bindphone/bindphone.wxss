@@ -1,0 +1,5 @@
+/**user.wxss**/
+page{background-color: #ffffff;}
+.flex{display: flex;flex-direction:row;}
+.lg{width:100%;}
+.mt150{margin-top:150px;}

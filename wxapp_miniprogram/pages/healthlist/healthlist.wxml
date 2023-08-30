@@ -1,0 +1,22 @@
+<view class="wrap">
+  <scroll-view class="scrollbox" scroll-y style="height:{{scrollHeight}}px;" upper-threshold="50" lower-threshold="50" bindscrolltoupper="scrolltoupper" bindscrolltolower="scrolltolower" bindscroll="scrollfun">
+    <view class="advicebox">
+      <view class="cardbox" wx:for="{{listarr}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+        <navigator url="../healthdetail/healthdetail?id={{vo.health_id}}">
+          <view class="listrow">
+            <view class='shrink1'>{{vo.position}}</view>
+            <view class='shrink0'>{{vo.create_time}}</view>
+            <image class="imgarrow" src="../../images/arrowr.png" mode="aspectFill" />
+          </view>
+        </navigator>
+      </view>
+      <view class="looding {{!hidelood ? 'hide': ''}}">
+        <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
+        <text class="lwz">正在加载</text>
+      </view>
+      <view class="looding {{!nodata ? 'hide': ''}}">
+        <text class="lwz">不要再划了，没有啦！</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

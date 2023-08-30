@@ -1,0 +1,4 @@
+2022/04/27 11:22:01: lockcarddata:null
+2022/04/27 11:22:37: ntlist:[{"member_id":73690,"unionid":"oKGkgv6SAX1_01--izaO6yqKABBY"}]
+2022/04/27 11:23:01: lockcarddata:null
+2022/04/27 11:23:24: ntlist:[{"member_id":118878,"unionid":"oKGkgvwlEfUS0FPekLf_W7MNoiCA"},{"member_id":127659,"unionid":"oKGkgvzlskM_z-YLE3JPYztdPEMo"}]

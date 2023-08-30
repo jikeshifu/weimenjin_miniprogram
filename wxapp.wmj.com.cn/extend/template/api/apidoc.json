@@ -1,0 +1,15 @@
+{
+  "name": "appname", 
+  "version": "1.0.0",
+  "description": "appname",
+  "title": "appname",
+  "url" : "domain",
+  "header": {
+    "title": "接口文档",
+    "filename": ""
+  },
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": false
+  }
+} 

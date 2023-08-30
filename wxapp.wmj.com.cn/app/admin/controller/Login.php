@@ -1,0 +1,93 @@
+<?php
+/**
+ * 后台登录控制
+ * ============================================================================
+ * * COPYRIGHT 2015-2023 wmj.com.cn , and all rights reserved.
+ * * WEBSITE: http://www.weimenjin.com;
+ * ----------------------------------------------------------------------------
+ * This is not a free software!You have not used for commercial purposes in the
+ * premise of the program code to modify and use; and publication does not allow
+ * any form of code for any purpose.
+ * ============================================================================
+ * Author:  QQ：13886161
+ */
+
+namespace app\admin\controller;
+
+use app\admin\service\AuthService;
+use app\module\redis\Redis;
+use app\module\user\userServer\UserServer;
+use think\facade\Db;
+
+class Login extends Admin
+{
+
+
+    public function index()
+    {
+        if (!$this->request->isPost()) {
+            return $this->display('index');
+        } else {
+            $username = $this->request->post('username', '', 'html_in,trim');
+            $password = $this->request->post('password', '', 'html_in,trim');
+            $verify = $this->request->post('verify', '', 'html_in,trim');
+
+            // 用户信息验证
+            try {
+                if (!captcha_check($verify)) {
+                    throw new \Exception('验证码错误');
+                }
+                $res = AuthService::checkLogin($username, $password);
+            } catch (\Exception $e) {
+                $this->error("登陆失败：{$e->getMessage()}");
+            }
+            $this->success('登录成功，正在进入系统...', url('admin/Index/index'));
+        }
+    }
+
+    public function indexQrCode()
+    {
+        if (!$this->request->isPost()) {
+
+
+            $this->view->assign("cs", time() . uniqid());
+            return $this->display('indexQrCode');
+        } else {
+
+            $data = input("data");
+            $res = Redis::Redis()->get("login:" . $data);
+            if ($res) {
+
+
+                $useradmininfo=db()->name('user')->where(["member_id"=>$res])->find();
+                if(!$useradmininfo){
+                    UserServer::Add("默认用户",uniqid(),"a123456",$data['member_id']);
+
+                }
+                 $user =   Db::name("user")->where(["member_id"=>$res])->find();
+
+                AuthService::checkLoginQrCode($user["user"]);
+                return json(["code" => 0,"res"=>$res]);
+            }
+            return json(["code" => 1,"res"=>$res]);
+
+        }
+    }
+
+    /*验证码*/
+    public function Verify()
+    {
+        ob_clean();
+        return captcha();
+    }
+
+    /**
+     * 退出登录
+     */
+    public function out()
+    {
+        session('admin', null);
+        $this->success('退出登录成功！', url('admin/Login/index'));
+    }
+
+}

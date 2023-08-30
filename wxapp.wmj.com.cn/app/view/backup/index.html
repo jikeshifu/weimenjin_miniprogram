@@ -1,0 +1,178 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>数据备份管理</h5>
+				<button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()" id="">
+					<i class="fa fa-refresh"></i>
+				</button>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+							<!-- search start -->
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+							{if condition="in_array('/admin/Backup/add',session('admin.nodes')) || session('admin.role') eq 1"}
+							<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
+								<i class="fa fa-plus"></i>&nbsp;新建备份
+							</button>
+							{/if}
+							{if condition="in_array('/admin/Backup/delete',session('admin.nodes')) || session('admin.role') eq 1"}
+							<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
+								<i class="fa fa-trash"></i>&nbsp;删除
+							</button>
+							{/if}
+							
+						</div>
+						
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '文件名', field: 'name', visible: true, align: 'center', valign: 'middle'},
+ 			{title: '创建时间', field: 'time', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.create_timeFormatter'},
+			{title: '操作', field: 'name', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+ 		];
+ 	};
+	
+	CodeGoods.buttonFormatter = function(value,row,index) {
+		if(value){
+			var str= '';
+			var lst = value.indexOf(".");
+			var fileName =value.substring(0,lst);
+
+			str += '<button type="button" class="btn btn-primary btn-xs" title="数据下载"  onclick="CodeGoods.download(\''+fileName+'\')"><i class="glyphicon glyphicon-download-alt"></i></button>&nbsp;'
+			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete(\''+fileName+'\')"><i class="fa fa-trash"></i></button>&nbsp;'
+			return str;
+		}
+	}
+	
+	CodeGoods.create_timeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value);	
+		}
+	}
+
+	function formatDateTime(timeStamp) { 
+		var date = new Date();
+		date.setTime(timeStamp * 1000);
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
+		m = m < 10 ? ('0' + m) : m;
+		var d = date.getDate();
+		d = d < 10 ? ('0' + d) : d;
+		var h = date.getHours();
+		h = h < 10 ? ('0' + h) : h;
+		var minute = date.getMinutes();
+		 var second = date.getSeconds();
+		minute = minute < 10 ? ('0' + minute) : minute;
+		second = second < 10 ? ('0' + second) : second;
+		return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+	}
+
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.add = function (value) {
+		var index = layer.open({type: 2,title: '数据表列表',area: ['700px', '90%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Backup/table'});
+			this.layerIndex = index;
+	}
+	
+	CodeGoods.delete = function (value) {
+		if(value){
+			Feng.confirm("是否删除选中项？", function () {
+				var ajax = new $ax(Feng.ctxPath + "/Backup/delete", function (data) {
+					if ('00' === data.status) {
+						Feng.success(data.msg);
+						CodeGoods.table.refresh();
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('filename', value);
+				ajax.start();
+			});
+		}else{
+			if (this.check()) {
+				var filename = '';
+
+				$.each(CodeGoods.seItem, function() {
+					filename += ',' + this.time;
+				});
+
+				filename = filename.substr(1);
+				Feng.confirm("是否删除选中项？", function () {
+					var ajax = new $ax(Feng.ctxPath + "/Backup/delete", function (data) {
+						if ('00' === data.status) {
+							Feng.success(data.msg);
+							CodeGoods.table.refresh();
+						} else {
+							Feng.error(data.msg);
+						}
+					});
+					ajax.set('filename', filename);
+					ajax.start();
+				});
+			}
+		}
+	}
+	
+	CodeGoods.download = function (value) {
+		if(value){			
+			var ajax = new $ax(Feng.ctxPath + "/Backup/download", function (data) {
+				if(data.filepath){
+					location.href = data.filepath;
+				}else{
+					Feng.error(data.msg);
+				}	
+			});
+			ajax.set('filename', value);
+			ajax.start();			
+		}
+	}
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	CodeGoods.orderby = function() {
+		var queryData = CodeGoods.formParams();
+		queryData['orderby'] = $("#orderby").val();
+		CodeGoods.table.refresh({query : queryData});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath + "/Backup/listData"+url,defaultColunms);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+</script>
+{/block}

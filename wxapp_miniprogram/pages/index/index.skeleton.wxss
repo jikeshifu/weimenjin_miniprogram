@@ -1,0 +1,114 @@
+/*
+此文件为开发者工具生成，生成时间: 2020/12/28 上午12:00:23 
+
+在 D:\work\code\miniprogram\wmj_miniprogram\pages\index\index.wxss 中引入样式
+```
+@import "./index.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+*/
+.sk-transparent {
+    color: transparent !important;
+  }
+.sk-text-14-2857-156 {
+    background-image: linear-gradient(transparent 14.2857%, #EEEEEE 0%, #EEEEEE 85.7143%, transparent 0%) !important;
+    background-size: 100% 41.0668rpx;
+    position: relative !important;
+  }
+.sk-text {
+    background-origin: content-box !important;
+    background-clip: content-box !important;
+    background-color: transparent !important;
+    color: transparent !important;
+    background-repeat: repeat-y !important;
+  }
+.sk-text-33-7037-792 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-146 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-14-2857-747 {
+    background-image: linear-gradient(transparent 14.2857%, #EEEEEE 0%, #EEEEEE 85.7143%, transparent 0%) !important;
+    background-size: 100% 41.0668rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-812 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-542 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-14-2857-723 {
+    background-image: linear-gradient(transparent 14.2857%, #EEEEEE 0%, #EEEEEE 85.7143%, transparent 0%) !important;
+    background-size: 100% 41.0668rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-35 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-949 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-14-2857-312 {
+    background-image: linear-gradient(transparent 14.2857%, #EEEEEE 0%, #EEEEEE 85.7143%, transparent 0%) !important;
+    background-size: 100% 41.0668rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-187 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-63 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-text-14-2857-924 {
+    background-image: linear-gradient(transparent 14.2857%, #EEEEEE 0%, #EEEEEE 85.7143%, transparent 0%) !important;
+    background-size: 100% 41.0668rpx;
+    position: relative !important;
+  }
+.sk-text-33-7037-922 {
+    background-image: linear-gradient(transparent 33.7037%, #EEEEEE 0%, #EEEEEE 66.2963%, transparent 0%) !important;
+    background-size: 100% 90.0000rpx;
+    position: relative !important;
+  }
+.sk-image {
+    background: #EFEFEF !important;
+  }
+.sk-pseudo::before, .sk-pseudo::after {
+      background: #EFEFEF !important;
+      background-image: none !important;
+      color: transparent !important;
+      border-color: transparent !important;
+    }
+.sk-pseudo-rect::before, .sk-pseudo-rect::after {
+      border-radius: 0 !important;
+    }
+.sk-pseudo-circle::before, .sk-pseudo-circle::after {
+      border-radius: 50% !important;
+    }
+.sk-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: transparent;
+  }

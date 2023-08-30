@@ -1,0 +1,36 @@
+{extend name='common/_container'} 
+{block name="content"}
+<div class="container-fluid" style="padding: 0 !important;">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="alert alert-success alert-dismissable">
+				<button aria-hidden="true" data-dismiss="alert" class="close"
+					type="button">×</button>
+				{:session('ApplicationName.username')}，欢迎使用{:config('xhadmin.site_title')}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-6">
+			<table class="table">
+				<colgroup>
+					<col width="40%">
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center" colspan="2">系统信息</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>版本</td>
+						<td>v3.0.0</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</div>
+{/block}

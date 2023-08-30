@@ -1,0 +1,15 @@
+{
+  "name": "api", 
+  "version": "1.0.0",
+  "description": "api",
+  "title": "api",
+  "url" : "https://wxapp.wmj.com.cn/api",
+  "header": {
+    "title": "接口文档",
+    "filename": ""
+  },
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": false
+  }
+} 

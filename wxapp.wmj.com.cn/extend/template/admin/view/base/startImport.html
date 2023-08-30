@@ -1,0 +1,53 @@
+{extend name='common/_container'} 
+{block name="content"}
+<div class="ibox float-e-margins">
+
+	<div class="ibox-content">
+		<div class="progress progress-striped active">
+			<div class="progress-bar progress-bar-success" role="progressbar"
+				 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">		
+			</div>		
+		</div>
+	    <div style="text-align:center" class="success"><div class="finash" style="">已完成<span class="percent" style="color:#ff0000 ;font-size:14px;"></span>%</div></div>
+	</div>
+</div>
+<script type="text/javascript">
+	var ImportDlg = {
+	    deptZtree: null,
+	    pNameZtree: null
+	};
+    
+	var sendsms;
+	sendsms = setInterval("send()",300);
+	 
+	var p = 1;
+	function send(){
+	    var ajax = new $ax("{$url}", function(data){
+			if(data.error == '10'){
+			    clearInterval(sendsms);
+				$(".finash").remove();
+				$(".success").text('导入完成');
+				setTimeout(function(){
+					window.parent.CodeGoods.table.refresh();
+					ImportDlg.close();
+					
+				},1000)
+			}else{
+			    $(".progress-bar").css('width',data.data.percent+'%');
+				$(".percent").text(data.data.percent);
+				$(".phone").text(data.data.phone);
+			}
+		});
+		ajax.set('p',p++);
+		ajax.start();
+	}
+
+	/**
+	 * 关闭此对话框
+	 */
+	ImportDlg.close = function () {
+		var index = parent.layer.getFrameIndex(window.name);
+	    parent.layer.close(index);
+	};
+</script>
+{/block}

@@ -1,0 +1,6 @@
+page{background:#fff;box-sizing:border-box;}
+.wrap{width:100%;padding:0rpx 0 20rpx 30rpx;box-sizing:border-box;}
+.bb1{border-bottom: 1rpx solid #eee;}
+.bt1{border-top: 1rpx solid #eee;}
+.mb10{margin-bottom: 20rpx;}
+.mt10{margin-top:20rpx;}

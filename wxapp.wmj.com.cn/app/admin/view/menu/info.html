@@ -1,0 +1,153 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='app_id' id='app_id' value="{$app_id}" />
+<input type="hidden" name='menu_id' id='menu_id' value="{$info.menu_id}" />
+	<div class="ibox-content layui-form">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row" style="margin-top:-20px;">
+				<div class="layui-tab layui-tab-brief" lay-filter="test">
+					<ul class="layui-tab-title">
+						<li class="layui-this">基本信息</li>
+						<li>拓展信息</li>
+					</ul>
+					<div class="layui-tab-content" style="margin-top:10px;">
+						<div class="layui-tab-item layui-show">
+							<div class="col-sm-12">
+							<!-- form start -->
+					
+								<div class="form-group">
+									<label class="col-sm-2 control-label">所属父类：</label>
+									<div class="col-sm-9">
+										<select lay-ignore name="pid" class="form-control" id="pid">
+											<option value="">请选择父类</option>
+											{volist name="menuList" id="vo"}
+											<option value="{$vo.menu_id}" {if condition="$vo.menu_id eq $info.pid"}selected{/if}>{$vo.title}</option>
+											{/volist}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">菜单名称：</label>
+									<div class="col-sm-9">
+										<input type="text" id="title" value="{$info.title}" name="title" class="form-control" placeholder="请输入菜单名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">控制器名：</label>
+									<div class="col-sm-9">
+										<input type="text" value="{$info.controller_name}" id="controller_name" name="controller_name" class="form-control" placeholder="请输入控制器名">
+										<span class="help-block m-b-none">支持二级控制器，例如 Sys/Goods  </span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">数据库表名：</label>
+									<div class="col-sm-9">
+										<input type="text" id="table_name" value="{$info.table_name}" name="table_name" class="form-control" placeholder="请输入数据库表名">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">主键ID：</label>
+									<div class="col-sm-9">
+										<input type="text" id="pk_id" value="{$info.pk_id}" name="pk_id" class="form-control" placeholder="请输入主键ID">
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否生成代码：</label>
+									<div class="col-sm-9">
+									<?php if(!isset($info['is_create'])){ $info['is_create'] = 1; }; ?>
+										<input name="is_create" value="1" type="radio" {if condition="$info.is_create eq 1"}checked{/if} title="是">
+										<input name="is_create" value="0" type="radio" {if condition="$info.is_create eq 0"}checked{/if} title="否">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否生成数据表：</label>
+									<div class="col-sm-9">
+									<?php if(!isset($info['table_status'])){ $info['table_status'] = 1; }; ?>
+										<input name="table_status" value="1" type="radio" {if condition="$info.table_status eq 1"}checked{/if}  title="是">
+										<input name="table_status" value="0" type="radio" {if condition="$info.table_status eq 0"}checked{/if}  title="否">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否菜单：</label>
+									<div class="col-sm-9">
+									<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+										<input name="status" value="1"  {if condition="$info.status eq 1"}checked{/if} type="radio" title="是">
+										<input name="status" value="0"  {if condition="$info.status eq 0"}checked{/if} type="radio" title="否">
+									</div>
+								</div>
+								
+								
+							<!-- form end -->
+							</div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="col-sm-12">
+							<!-- form start -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">url地址：</label>
+									<div class="col-sm-9">
+										<input type="text" id="url" name="url" value="{$info.url}" class="form-control" placeholder="请输入url地址">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">选项卡配置：</label>
+									<div class="col-sm-9">
+										<input type="text" id="tab_menu" name="tab_menu" value="{$info.tab_menu}" class="form-control" placeholder="选项卡竖线|隔开">
+										<span class="help-block m-b-none">例如 基本信息|拓展信息</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">icon图标：</label>
+									<div class="col-sm-9">
+										<input type="text" id="menu_icon" name="menu_icon" value="{$info.menu_icon}" class="form-control" placeholder="请输入图标">
+										<span class="help-block m-b-none"><a  target="_blank" style="color:#ff0000" onclick="CodeInfoDlg.icon('menu_icon')">点击查看图标列表 </a></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否允许投稿：</label>
+									<div class="col-sm-9">
+									<?php if(!isset($info['is_submit'])){ $info['is_submit'] = 0; }; ?>
+										<input name="is_submit" value="1" type="radio" {if condition="$info.is_submit eq 1"}checked{/if} title="是">
+										<input name="is_submit" value="0" type="radio" {if condition="$info.is_submit eq 0"}checked{/if} title="否">
+									</div>
+								</div>
+							<!-- form end -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="{if condition="$info.app_id neq ''"}CodeInfoDlg.update(){else/}CodeInfoDlg.add(){/if}" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Menu.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['layer', 'form'], function () {
+	window.layer = layui.layer;
+	window.form = layui.form();
+});
+layui.use('element', function(){
+	var element = layui.element();
+	element.on('tab(test)', function(elem){
+	});
+});
+
+</script>
+
+
+{/block}

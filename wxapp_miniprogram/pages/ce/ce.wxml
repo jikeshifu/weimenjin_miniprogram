@@ -1,0 +1,5 @@
+<view class="wrap">
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-green lg" bindtap="tourl">跳转小程序</button>
+  </view>
+</view>

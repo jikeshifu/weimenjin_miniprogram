@@ -1,0 +1,60 @@
+<view class="content">
+    <!-- <button  type="submit" bindtap="get_wifi_sn">
+        查找附近设备 
+    </button> -->
+    <!-- <view class="pop_up" wx:if="{{device_up}}">
+        <view class="one">
+            <view class="icon" bindtap="set_device_up" data-index="{{false}}">X</view>
+            <view class="list">
+                <scroll-view scroll-y="true" class="scroll-Y">
+                    <view class="txt" wx:for="{{sn_arr}}" bindtap="set_sn" data-index="{{item}}">
+                        <view class="left">{{item}}</view>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </view> -->
+    <view class="login" style="position: absolute; left: 375rpx; top: 321rpx">
+        <image class="icon" src="../../images/wifi/wifi.svg"></image>
+        <view class="title"></view>
+        <form>
+            <view class="ssid">
+            <view>
+                <input model:value="{{device_ssid}}"   placeholder="请输入设备序列号" />
+                </view>
+                <view class="cuIcon-scan scan" bindtap="get_device"></view>
+            </view>
+            <view >
+                <input model:value="{{ssid}}"  placeholder="请输入WIFI信号名称" />
+            </view>
+            <view class="pwd">
+                <input model:value="{{pwd}}" type="text" wx:if="{{show_pwd}}" placeholder="请输入WIFI密码" />
+                <input model:value="{{pwd}}" bindinput="" type="password" wx:if="{{!show_pwd}}" placeholder="请输入WIFI密码" />
+                <image wx:if="{{!show_pwd}}" class="pwd_icon" bindtap="set_show_pwd" data-index="{{true}}" src="../../images/wifi/close.svg"></image>
+                <image wx:if="{{show_pwd}}" class="pwd_icon" bindtap="set_show_pwd" data-index="{{false}}" src="../../images/wifi/open.svg"></image>
+            </view>
+            <button class="button" type="submit" bindtap="set_wifi">确定</button>
+            <!-- <button class="button" type="submit" bindtap="set_device">连接设备</button> -->
+        </form>
+        <view><span>*注意：</span></view>
+        <view><span>1.仅支持2.4GHz频段，非中文信号名称</span></view>
+        <view><span>2.多开微信无权限调用WiFi接口</span></view>
+    </view>
+    <!-- <view class="pop_up" wx:if="{{pop_up}}">
+        <view class="one">
+            <view class="icon" bindtap="set_pop_up" data-index="{{false}}">X</view>
+            <view class="form">
+                <input model:value="{{ssid}}" class="inp" placeholder="请输入WIFI名称" />
+                <view class="btn" bindtap="set_pop_up" data-index="{{false}}">确定</view>
+            </view>
+            <view class="list">
+                <scroll-view scroll-y="true" class="scroll-Y">
+                    <view class="txt" wx:for="{{wifi_list}}" bindtap="set_ssid" data-index="{{item.ssid}}">
+                        <view class="left">{{item.ssid}}</view>
+                        <view class="right">{{item.rssi}}</view>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </view> -->
+</view>

@@ -1,0 +1,41 @@
+<view class="wrap1">
+  <scroll-view class="scrollbox" scroll-y style="height:{{scrollHeight}}px;" upper-threshold="50" lower-threshold="50" bindscrolltolower="bindscrolltolower" >
+
+    <view class="listbox">
+      <view class="listrow1" style="position: relative;height: 150rpx;" wx:for="{{List}}" wx:for-index="index" wx:for-item="vo" wx:key="id">
+
+        <view class='shrink11' >
+          <view class="name">{{vo.face_name}}</view>
+          <view class="gqtime">人脸id:{{vo.sCertificateNumber}}</view>
+          <view class="cs" style="position: absolute;right: 200rpx;top: 10px;">
+            <image style="width:100rpx ;" src="https://wxapp.wmj.com.cn{{vo.face_images}}" mode="widthFix"/>
+            </view>
+        </view>
+
+        <view class='shrink01 delete' bindtap="pwdDel" data-pwd_id="{{vo.face_id}}">删除</view>
+      </view>
+      <block wx:if="{{listlen <1}}">
+        <view class="nodatabox">
+          <view class="cuIcon-warn micon"></view>
+          <view class="wz">没有数据</view>
+        </view>
+      </block>
+      <view class="looding {{!hidelood ? 'hide': ''}}">
+        <image mode="aspectFit" class="scanimg" src="{{looding}}"></image>
+        <text class="lwz">正在加载</text>
+      </view>
+      <block wx:if="{{listlen > 12}}">
+        <view class="looding {{!nodata ? 'hide': ''}}">
+          <text class="lwz">不要再划了，没有啦！</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+  <view class="operate"  bindtap="operate">
+    操作
+  </view>
+  <!-- <view class="addPwd"  bindtap="addPwd">
+    添加密码
+  </view> -->
+
+</view>

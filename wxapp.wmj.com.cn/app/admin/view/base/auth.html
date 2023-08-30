@@ -1,0 +1,129 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row row-lg">
+           <form  action="">
+			<input type="hidden" name="id" id="id" value="{$id}">
+					<div class="col-sm-12">					
+						<div >
+						{if condition="$cmsAccess neq ''"}
+						<table class="table table-bordered" style="margin-bottom:2px;"> 
+							<tbody>
+								<tr> 
+									<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="180px"><input type="checkbox" name="authorize" {if in_array('/admin/Cms',$myAccess)}checked{/if} level="1" value="/admin/Cms">cms管理</td>
+									<td></td>									
+								</tr>
+								
+								{volist name="cmsAccess[0]['sub']" id="item"}
+								<tr> 
+									<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="180px">
+									&nbsp;&nbsp;&nbsp;&nbsp;<input name="authorize" type="checkbox" {if in_array($item['url'],$myAccess)}checked{/if} value="{$item.url}" level="2">├─{$item.title}</td>
+									<td>
+										{volist name="$item['action']" id="vo"}
+											<input type="checkbox" name="authorize" {if in_array($vo['val'],$myAccess)}checked{/if} value="{$vo.val}"> {$vo.title}
+										{/volist}
+									</td>								
+								</tr>
+								{/volist}
+								
+							</tbody> 
+						</table>
+						{/if}
+						
+						{volist name="list" id="vo"}
+						<table class="table table-bordered" style="margin-bottom:2px;"> 
+							<tbody>
+								<tr> 
+									<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="180px"><input type="checkbox" name="authorize" {if in_array($vo['value'],$myAccess)}checked{/if} level="1" value="{$vo.value}">{$vo.title}</td>
+									<td>
+										{query table="action" sqlstr="menu_id=$vo[menu_id]"}
+											{if $query.jump <> ''}
+											<input type="checkbox" name="authorize" {if in_array('/admin'.$query['jump'],$myAccess)}checked{/if} value="/admin{$query.jump}"> {$query.name}
+											{else/}
+											<input type="checkbox" name="authorize" {if in_array($vo['value'].'/'.$query['action_name'],$myAccess)}checked{/if} value="{$vo.value}/{$query.action_name}"> {$query.name}
+											{/if}
+										{/query}
+									</td>									
+								</tr>
+								{if condition="$vo['subdata'][0]['subdata'] neq ''"}
+									{volist name="vo[subdata]" id="item"}
+									<tr> 
+										<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="180px">
+										&nbsp;&nbsp;&nbsp;&nbsp;<input name="authorize" type="checkbox" {if in_array($item['value'],$myAccess)}checked{/if} value="{$item.value}" level="2">├─{$item.title}</td>
+										<td>
+										{query table="action" sqlstr="menu_id=$item[menu_id]"}
+											{if $query.jump <> ''}
+											<input type="checkbox" name="authorize" {if in_array('/admin'.$query['jump'],$myAccess)}checked{/if} value="/admin{$query.jump}"> {$query.name}
+											{else/}
+											<input type="checkbox" name="authorize" {if in_array($item['value'].'/'.$query['action_name'],$myAccess)}checked{/if} value="{$item.value}/{$query.action_name}"> {$query.name}
+											{/if}
+										{/query}
+										</td>								
+									</tr>
+									
+									{if condition="$item['subdata'] neq ''"}
+										{volist name="item['subdata']" id="third"}
+										<tr> 
+											<td style="background-color:#F5F5F6; font-weight:bold; text-align:left" width="180px">
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="authorize" type="checkbox" {if in_array($third['value'],$myAccess)}checked{/if} value="{$third.value}" level="2">├─{$third.title}</td>
+											<td>
+											{query table="action" sqlstr="menu_id=$third[menu_id]"}
+												{if $query.jump <> ''}
+												<input type="checkbox" name="authorize" {if in_array('/admin'.$query['jump'],$myAccess)}checked{/if} value="/admin{$query.jump}"> {$query.name}
+												{else/}
+												<input type="checkbox" name="authorize" {if in_array($third['value'].'/'.$query['action_name'],$myAccess)}checked{/if} value="{$third.value}/{$query.action_name}"> {$query.name}
+												{/if}
+											{/query}
+											</td>								
+										</tr>
+										{/volist}
+									{/if}
+									
+									{/volist}
+									
+									
+									
+								{/if}
+								
+								
+								
+							</tbody> 
+						</table>
+						{/volist}
+						
+						</div>
+						<div class="row btn-group-m-t">
+							<div class="col-sm-10">
+								<button type="button" class="btn btn-info " onclick="CodeInfoDlg.addAuth()" id="ensure">
+									<i class="fa fa-check"></i>&nbsp;提交
+								</button>
+								<button type="button" class="btn btn-danger " onclick="CodeInfoDlg.close()" id="cancel">
+									<i class="fa fa-eraser"></i>&nbsp;取消
+								</button>
+							</div>
+						</div>
+						
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/Base.js"></script>
+<script type="text/javascript">
+    $('input[level=1]').click(function(){
+	      var inputs = $(this).parent().parent().parent().parent().find('input');
+		  inputs.prop("checked", $(this).prop("checked"));  
+	});
+	
+	$('input[level=2]').click(function(){
+	      var inputs = $(this).parent().parent().find('input');
+		  inputs.prop("checked", $(this).prop("checked"));  
+	});
+</script>
+{/block}
+
+

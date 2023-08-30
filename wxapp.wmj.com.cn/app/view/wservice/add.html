@@ -1,0 +1,87 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='wservice_id' id='wservice_id' value="{$info.wservice_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['wservice_type'])){ $info['wservice_type'] = 1; }; ?>
+							<input name="wservice_type" value="1" type="radio" {if condition="$info.wservice_type eq '1'"}checked{/if} title="内部小程序">
+							<input name="wservice_type" value="2" type="radio" {if condition="$info.wservice_type eq '2'"}checked{/if} title="外部小程序">
+							<input name="wservice_type" value="3" type="radio" {if condition="$info.wservice_type eq '3'"}checked{/if} title="网页">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">名称：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wservice_name" value="" name="wservice_name" class="form-control" placeholder="请输入名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">图标：</label>
+						<div class="col-sm-6">
+							<input type="text" id="wservice_icon" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="wservice_icon" class="form-control" placeholder="请输入图标">
+							<span class="help-block m-b-none wservice_icon_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="wservice_icon_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">appid：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wservice_appid" value="" name="wservice_appid" class="form-control" placeholder="请输入appid">
+							<span class="help-block m-b-none">小程序或公众号appid,如:wx51f303bf1367a448</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">url：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wservice_url" value="" name="wservice_url" class="form-control" placeholder="请输入url">
+							<span class="help-block m-b-none">小程序页面路径或公众号页面链接,如:pages/index/index</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">排序：</label>
+						<div class="col-sm-9">
+							<input type="text" id="wservice_sort" value="0" name="wservice_sort" class="form-control" placeholder="请输入排序">
+							<span class="help-block m-b-none">排序</span>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/admin/Wservice.js?t=<?php echo rand(1000,9999)?>" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js?t=1498856285724" charset="utf-8"></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery-migrate-1.1.1.js'></script>
+<script src='__PUBLIC__/static/js/plugins/paixu/jquery.dragsort-0.5.1.min.js'></script>
+<script>
+layui.config({dir: '__PUBLIC__/static/js/plugins/layui/'});
+	layui.use(['form'], function () {
+	window.form = layui.form();
+});
+uploader('wservice_icon_upload','wservice_icon','image',false,'','{:url("admin/Upload/uploadImages")}');
+</script>
+
+
+{/block}
