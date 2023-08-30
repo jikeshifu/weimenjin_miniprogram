@@ -1,0 +1,263 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/equipment/equipment",
+			"style": {
+				"navigationBarTitleText": "设备信息"
+			}
+		},
+		{
+			"path": "pages/operateList/operateList",
+			"style": {
+				"navigationBarTitleText": "操作记录",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/audioConfig/audioConfig",
+			"style": {
+				"navigationBarTitleText": "语音设置",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/keyList/keyList",
+			"style": {
+				"navigationBarTitleText": "权限管理",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/fingerprintList/fingerprintList",
+			"style": {
+				"navigationBarTitleText": "指纹管理",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/addEquipment/addEquipment",
+			"style": {
+				"navigationBarTitleText": "添加设备"
+			}
+		},
+		{
+			"path": "pages/sim/sim",
+			"style": {
+				"navigationBarTitleText": "物联SIM卡查询"
+			}
+		},
+		{
+			"path": "pages/passwordList/passwordList",
+			"style": {
+				"navigationBarTitleText": "密码管理",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/addPassword/addPassword",
+			"style": {
+				"navigationBarTitleText": "密码管理"
+			}
+		},
+		{
+			"path": "pages/familyList/familyList",
+			"style": {
+				"navigationBarTitleText": "分组管理"
+			}
+		},
+		{
+			"path": "pages/addFamily/addFamily",
+			"style": {
+				"navigationBarTitleText": "分组名称"
+			}
+		},
+		{
+			"path": "pages/familyDateil/familyDateil",
+			"style": {
+				"navigationBarTitleText": "分组详情",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/addCard/addCard",
+			"style": {
+				"navigationBarTitleText": "添加卡"
+			}
+		},
+		{
+			"path": "pages/addFingerprint/addFingerprint",
+			"style": {
+				"navigationBarTitleText": "添加指纹"
+			}
+		},
+		{
+			"path": "pages/arguments/arguments",
+			"style": {
+				"navigationBarTitleText": "参数设置"
+			}
+		},
+		{
+			"path": "pages/faceList/faceList",
+			"style": {
+				"navigationBarTitleText": "人脸管理",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/addFace/addFace",
+			"style": {
+				"navigationBarTitleText": "人脸"
+			}
+		},
+		{
+			"path": "pages/keyDetail/keyDetail",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/share/share",
+			"style": {
+				"navigationBarTitleText": "生成钥匙"
+			}
+		},
+		{
+			"path": "pages/getLock/getLock",
+			"style": {
+				"navigationBarTitleText": " 领取钥匙"
+			}
+		},
+		{
+			"path": "pages/memberList/memberList",
+			"style": {
+				"navigationBarTitleText": "添加成员"
+			}
+		},
+		{
+			"path": "pages/doorCardList/doorCardList",
+			"style": {
+				"navigationBarTitleText": "门卡列表",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/addDoorCard/addDoorCard",
+			"style": {
+				"navigationBarTitleText": "添加门卡"
+			}
+		},
+		{
+			"path": "pages/webview/webview",
+			"style": {
+				"navigationBarTitleText": "使用帮助"
+			}
+		},
+		{
+			"path": "pages/transfer/transfer",
+			"style": {
+				"navigationBarTitleText": "权限转移"
+			}
+		},
+		{
+			"path": "pages/service/service",
+			"style": {
+				"navigationBarTitleText": "服务"
+			}
+		},
+		{
+			"path": "pages/personal/personal",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/bluetooth/bluetooth",
+			"style": {
+				"navigationBarTitleText": "设备配网"
+			}
+		},
+		{
+			"path": "pages/wifi/wifi",
+			"style": {
+				"navigationBarTitleText": "WiFi配网工具"
+			}
+		},
+		{
+			"path": "pages/hotspot/hotspot",
+			"style": {
+				"navigationBarTitleText": "设备配网"
+			}
+		},
+		{
+			"path": "pages/open/open",
+			"style": {
+				"navigationBarTitleText": "登记页"
+			}
+		},
+		{
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "测试人员"
+			}
+		},
+		{
+			"path": "pages/realTime/realTime",
+			"style": {
+				"navigationBarTitleText": "实时状态"
+			}
+		},
+		{
+			"path": "pages/issue/issue",
+			"style": {
+				"navigationBarTitleText": "发卡"
+			}
+		}
+		
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "微门禁",
+		"navigationBarBackgroundColor": "#21CF3E",
+		"backgroundColor": "#F7F7FA"
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#21CF3E",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/shouye.png",
+				"selectedIconPath": "static/shouye-on.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/service/service",
+				"iconPath": "static/fuwu.png",
+				"selectedIconPath": "static/fuwu-on.png",
+				"text": "服务"
+			},
+			{
+				"pagePath": "pages/personal/personal",
+				"iconPath": "static/wode.png",
+				"selectedIconPath": "static/wode-on.png",
+				"text": "我的"
+			}
+		]
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称search
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}

@@ -1,0 +1,72 @@
+.big-box {
+	padding: 28rpx 54rpx 0;
+	.background {
+		width: 100%;
+		height: 352rpx;
+		background: rgb(33, 207, 62);
+		opacity: 0.2;
+		box-shadow: 0px 8rpx 374rpx rgb(58, 137, 254);
+		filter: blur(120rpx);
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.info-box {
+		background: linear-gradient(180.00deg, rgb(255, 255, 255),rgba(255, 255, 255, 0) 100%);
+		box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+		border-radius: 24rpx;
+		padding: 44rpx 60rpx;
+		position: relative;
+		z-index: 10;
+		.top-text {
+			font-size: 32rpx;
+			color: #444444;
+		}
+		.qrcode {
+			margin-top: 30rpx;
+			height: 514rpx;
+			width: 514rpx;
+		}
+		.name {
+			margin-top: 24rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 32rpx;
+			color: #444444;
+		}
+		.flex-box {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.cell-box {
+			.cell-item {
+				margin-top: 34rpx;
+				display: flex;
+				align-items: center;
+				.label {
+					font-size: 28rpx;
+					color: #999999;
+					flex-shrink: 0;
+				}
+				.value {
+					font-size: 26rpx;
+				}
+			}
+		}
+	}
+	.save {
+		margin-top: 46rpx;
+		width: 100%;
+		height: 90rpx;
+		background: rgb(33, 207, 62);
+		box-shadow: 16rpx 16rpx 33rpx rgba(117, 160, 232, 0.3);
+		border-radius: 50rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+		font-size: 28rpx;
+	}
+}
