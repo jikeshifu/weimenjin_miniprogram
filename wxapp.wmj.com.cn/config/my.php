@@ -22,7 +22,7 @@ return [
 	'max_dump_data'		=> 50000,  				//excel最大导出数据量
 	'upload_dir'		=> './uploads',			//文件上传根目录
 	'upload_subdir'		=> 'Ym',				//文件上传二级目录 标准的日期格式
-	'nocheck'			=> ['/admin/Login/Verify','/admin/Login/index','/admin/Index/index','/admin/Index/main','/admin/Login/out','/admin/Upload/editorUpload','/admin/Upload/uploadImages','/admin/Upload/uploadUeditor','/admin/Login/captcha'],   					//不需要验证权限的url
+	'nocheck'			=> ['/admin/Login/Verify','/admin/Login/indexQrCode','/admin/Login/index','/admin/Index/index','/admin/Index/main','/admin/Login/out','/admin/Upload/editorUpload','/admin/Upload/uploadImages','/admin/Upload/uploadUeditor','/admin/Login/captcha'],   					//不需要验证权限的url
 	'img_show_status'	=> true,				//图片输入框 鼠标移动上去 是否显示图片 true 显示 false 不显示
 	
 	'export_per_num'	=> 50,					//excel每次导入的数据量 建议不要高于200
