@@ -28,33 +28,26 @@
 			};
 		},
 		mounted() {
-		
+			if (wx.onNeedPrivacyAuthorization) {
+				wx.onNeedPrivacyAuthorization((resolve) => {
+					this.resolvePrivacyAuthorization = resolve;
+				});
+			}
+
+			if (wx.getPrivacySetting) {
+				wx.getPrivacySetting({
+					success: (res) => {
+						console.log(res, 'getPrivacySetting');
+						if (res.needAuthorization) {
+							this.privacyContractName = res.privacyContractName;
+							this.showPrivacy = true;
+						}
+					},
+				});
+			}
 		},
-		onShow() {
-				console.log("onShow",onShow)
-		},
+
 		methods: {
-			
-			csinit(){
-				
-				if (wx.onNeedPrivacyAuthorization) {
-					wx.onNeedPrivacyAuthorization((resolve) => {
-						this.resolvePrivacyAuthorization = resolve;
-					});
-				}
-				
-				if (wx.getPrivacySetting) {
-					wx.getPrivacySetting({
-						success: (res) => {
-							console.log(res, 'getPrivacySetting');
-							if (res.needAuthorization) {
-								this.privacyContractName = res.privacyContractName;
-								this.showPrivacy = true;
-							}
-						},
-					});
-				}
-			},
 			openPrivacyContract() {
 				wx.openPrivacyContract({
 					success: () => {

@@ -35,10 +35,18 @@
 
 		</view>
 
+		<!-- 隐私协议 -->
+
+		<!-- #ifdef MP-WEIXIN -->
+		<privacy-popup ref="privacyComponent"></privacy-popup>
+		<!-- #endif -->
 	</view>
+	
 </template>
 
 <script>
+	
+		import PrivacyPopup from '@/components/privacy-popup/privacy-popup.vue';
 	import device from '../../module/device/index.js'
 	import lockServer from '../../module/device/lock.js'
 	import ble from '../../module/ble/index.js'
@@ -53,6 +61,9 @@
 		applyAuth_api
 	} from '../../api/index.js';
 	export default {
+		components: {
+			PrivacyPopup
+		},
 		data() {
 			return {
 				pageType: '',
@@ -88,6 +99,7 @@
 				uni.setNavigationBarTitle({
 					title: '绑定手机号'
 				})
+				return
 			}
 
 			// #ifdef MP-WEIXIN

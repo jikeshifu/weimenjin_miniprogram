@@ -76,8 +76,14 @@
 				}
 			}
 		}
+		.btn-box {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin: 30rpx 0 0;
+		}
 		.bottom-btn {
-			margin: 0 30rpx 60rpx;
+			flex: 1;
 			height: 90rpx;
 			background: rgb(33, 207, 62);
 			box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.3);
@@ -97,7 +103,7 @@
 }
 
 .explain {
-	margin: 20rpx 40rpx 0;
+	margin: 60rpx 40rpx 0;
 	font-size: 28rpx;
 	opacity: 0.7;
 	.text {

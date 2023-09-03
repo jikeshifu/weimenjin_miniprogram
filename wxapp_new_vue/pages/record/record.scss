@@ -1,0 +1,50 @@
+.background {
+	width: 100%;
+	height: 352rpx;
+	background: rgb(33, 207, 62);
+	opacity: 0.2;
+	box-shadow: 0px 8rpx 374rpx rgb(58, 137, 254);
+	filter: blur(120rpx);
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.content {
+	position: relative;
+	z-index: 10;
+	padding-bottom: 100rpx;
+	.list {
+		margin: 30rpx 40rpx 0;
+		.item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid #e3e3e3;
+			height: 140rpx;
+			color: #444444;
+			.left-box {
+				.text {
+					font-size: 30rpx;
+					font-weight: bold;
+				}
+				.time {
+					margin-top: 20rpx;
+					font-size: 28rpx;
+				}
+			}
+			.right-box {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				.status {
+					color: #FF0000;
+					font-size: 30rpx;
+				}
+				.price {
+					font-size: 30rpx;
+					margin-top: 20rpx;
+				}
+			}
+		}
+	}
+}

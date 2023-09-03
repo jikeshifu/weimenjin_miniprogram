@@ -299,3 +299,18 @@ export function sendCard_api(params){
 	return request.myRequest('/device.Device/sendCard', params, 'POST');
 }
 
+// 查询充值列表
+export function simRenew_api(params){
+	return request.myRequest('/device.Device/simRenew', params, 'POST');
+}
+
+// 下单
+export function simOrder_api(params){
+	return request.myRequest('/device.Device/simOrder', params, 'POST');
+}
+
+// 订单列表
+export function orderList_api(params){
+	return request.myRequest('/order.Order/list', params, 'POST');
+}
+

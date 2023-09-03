@@ -249,6 +249,7 @@
 				hornItem: {},
 				longitude: '',
 				latitude: '',
+				showPrivacyPopup: false,
 			}
 		},
 		onLoad(option) {
@@ -269,8 +270,26 @@
 			// #endif
 		},
 		onShow() {
-			
-			this.$refs.privacyComponent.csinit()
+			// #ifdef MP-WEIXIN
+			// 在设置 showPrivacyPopup = true 后使用 $nextTick
+			if (wx.getPrivacySetting) {
+				wx.getPrivacySetting({
+					success: (res) => {
+						console.log('打印', res)
+						if (res.needAuthorization) {
+							this.showPrivacyPopup = true;
+							this.$nextTick(() => {
+								if (this.$refs.privacyComponent) {
+									this.$refs.privacyComponent.showPrivacy = true;
+								}
+							});
+						}
+					},
+				});
+			}
+
+			// #endif
+
 		},
 		onHide() {
 			// #ifdef MP-WEIXIN

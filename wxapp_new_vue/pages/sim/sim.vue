@@ -10,7 +10,12 @@
 					</view>
 					<image src="../../static/saomiao.png" @click="scanCode"></image>
 				</view>
-				<view class="bottom-btn" style="margin-top: 20rpx" @click="onSubmit">查询</view>
+				<view class="btn-box">
+					<view class="bottom-btn" @click="onSubmit">查询</view>
+					<view class="bottom-btn" style="margin-left: 30rpx; background: #EDAB00;" @click="goRecord('/pages/record/record')">续费记录</view>
+					<view class="bottom-btn" style="margin-left: 30rpx;" @click="goRenew('/pages/renew/renew?sim_sn=' + sim_sn)">续费</view>
+				</view>
+
 			</view>
 			<view class="explain">
 				<view class="text">业务卡号:{{data.msisdn}}</view>
@@ -26,46 +31,48 @@
 </template>
 
 <script>
-	import { simInfo } from '../../api/index.js'
+	import {
+		simInfo
+	} from '../../api/index.js'
 	export default {
 		data() {
 			return {
 				sim_sn: '',
-				data:{
-					msisdn:"",
-					iccid:"",
-					imsi:"",
-					status:"",
-					sp_code:"",
-					data_plan:"",
-					carrier:"",
-					operator:"",
-					data_usage:"",
-					account_status:"",
-					expiry_date:"",
-					expirationTime:"",
-					totaldata:"",
-					outdata:"",
-					active:"",
-					test_valid_date:"",
-					silent_valid_date:"",
-					test_used_data_usage:"",
-					active_date:"",
-					data_balance:"",
-					outbound_date:"",
-					support_sms:"",
+				data: {
+					msisdn: "",
+					iccid: "",
+					imsi: "",
+					status: "",
+					sp_code: "",
+					data_plan: "",
+					carrier: "",
+					operator: "",
+					data_usage: "",
+					account_status: "",
+					expiry_date: "",
+					expirationTime: "",
+					totaldata: "",
+					outdata: "",
+					active: "",
+					test_valid_date: "",
+					silent_valid_date: "",
+					test_used_data_usage: "",
+					active_date: "",
+					data_balance: "",
+					outbound_date: "",
+					support_sms: "",
 				}
 
 			}
 		},
 		onLoad(option) {
-					console.log("onShow",option)
-					if(option && option.iccid){
-						this.sim_sn =option.iccid
-					}
+			console.log("onShow", option)
+			if (option && option.iccid) {
+				this.sim_sn = option.iccid
+			}
 		},
 		onShow() {
-	
+
 		},
 		methods: {
 
@@ -78,7 +85,10 @@
 			},
 
 			async onSubmit() {
-
+				if (!this.sim_sn) {
+					this.showToast('请输入iccid号')
+					return;
+				}
 
 				let data = {
 					sim_sn: this.sim_sn,
@@ -86,41 +96,41 @@
 				}
 				uni.showLoading({
 					title: '加载中...',
-					mask:true
+					mask: true
 				})
 				let res = await simInfo(data)
 				if (res.code === 0) {
 					uni.hideLoading()
-				this.data =res.data
+					this.data = res.data
 
 
 				} else {
-					
-					this.data={
-						msisdn:"",
-						iccid:"",
-						imsi:"",
-						status:"",
-						sp_code:"",
-						data_plan:"",
-						carrier:"",
-						operator:"",
-						data_usage:"",
-						account_status:"",
-						expiry_date:"",
-						expirationTime:"",
-						totaldata:"",
-						outdata:"",
-						active:"",
-						test_valid_date:"",
-						silent_valid_date:"",
-						test_used_data_usage:"",
-						active_date:"",
-						data_balance:"",
-						outbound_date:"",
-						support_sms:"",
+
+					this.data = {
+						msisdn: "",
+						iccid: "",
+						imsi: "",
+						status: "",
+						sp_code: "",
+						data_plan: "",
+						carrier: "",
+						operator: "",
+						data_usage: "",
+						account_status: "",
+						expiry_date: "",
+						expirationTime: "",
+						totaldata: "",
+						outdata: "",
+						active: "",
+						test_valid_date: "",
+						silent_valid_date: "",
+						test_used_data_usage: "",
+						active_date: "",
+						data_balance: "",
+						outbound_date: "",
+						support_sms: "",
 					}
-					
+
 					uni.hideLoading()
 					this.showToast(res.msg)
 				}
@@ -128,8 +138,22 @@
 			showToast(msg) {
 				uni.showToast({
 					title: msg,
-					icon:'none',
+					icon: 'none',
 					mask: true
+				})
+			},
+			goRenew(url) {
+				if (!this.sim_sn) {
+					this.showToast('请输入iccid号')
+					return;
+				}
+				uni.navigateTo({
+					url: url
+				})
+			},
+			goRecord(url) {
+				uni.navigateTo({
+					url: url
 				})
 			}
 		}

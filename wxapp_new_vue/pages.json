@@ -218,6 +218,19 @@
 			"style": {
 				"navigationBarTitleText": "发卡"
 			}
+		},
+		{
+			"path": "pages/renew/renew",
+			"style": {
+				"navigationBarTitleText": "续费"
+			}
+		},
+		{
+			"path": "pages/record/record",
+			"style": {
+				"navigationBarTitleText": "续费记录",
+				"enablePullDownRefresh": true
+			}
 		}
 		
 	],
