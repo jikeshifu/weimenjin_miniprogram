@@ -68,9 +68,28 @@ class Device
     }
     static function SimInfo($iccid)
     {
+
         $senddata['simiccid']=$iccid;
         $res = self::postsimurl("https://www.wmj.com.cn/api/querysiminfo", $senddata);
         return  json_decode($res);
+
+    }
+
+    static function SimRenew($iccid)
+    {
+
+
+        $res = self::postsimurl("https://www.wmj.com.cn/api/simRenew?sim=".$iccid, []);
+        return  json_decode($res,true);
+
+    }
+    static function SimPay($iccid,$product_id,$order_sn)
+    {
+
+        $url ="https://www.wmj.com.cn/Payback/simPay?sim=".$iccid."&product_id=".$product_id."&extra_no=".$order_sn;
+        print_r($url);
+        $res = self::postsimurl($url, []);
+        return  json_decode($res,true);
 
     }
     static function postsimurl($url,$params)
@@ -92,7 +111,7 @@ class Device
         if (curl_errno($curl)) {
             echo 'Errno'.curl_error($curl);//捕抓异常
         }
-        curl_close($curl); 
+        curl_close($curl);
         return $result;
 
 }

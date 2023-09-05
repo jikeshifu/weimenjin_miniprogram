@@ -28,12 +28,14 @@ class server
      */
     public function QrCodeSet($device_sn,$qrcode_data)
     {
-        $res = self::Request("register", [
+        $res = self::Request("send", [
             "device_sn" => $device_sn,
             "data"=>[
                 "cmd_type"=>"set_qrcode",
                 "info"=>[
                     "qrcode_data"=>$qrcode_data,
+                    "qrcode"=>$qrcode_data,
+                    "mode"=>"both",
                     "update_time"=>10,
                 ],
             ]
@@ -73,6 +75,7 @@ class server
                 "cmd_type" => "set_qrcode",
                 "info" => [
                     "qrcode" =>$qr,
+                    "qrcode_data" =>$qr,
                     "mode" =>$mode,
 
                 ],
@@ -143,12 +146,55 @@ class server
 
     public function Logout($device_sn)
     {
+        if (mb_substr($device_sn, 0, 3) == "W77"||mb_substr($device_sn, 0, 4) == "W766"||mb_substr($device_sn, 0, 4) == "W765") {
+            $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "cmd_type" => "card_clr",
+                "info" => [],
+            ]
+            ]);
+            $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "cmd_type" => "set_qrcode",
+                "info" => ["qrcode" =>$device_sn,
+                    "mode" =>"both",
+                    ],
+            ]
+            ]);
+            if ($res["code"] != 0 && $res["code"] != 1005) {
+            return ["err" => $res["msg"]];
+            }
+        }
+        if (mb_substr($device_sn, 0, 4) == "W766") {
+            $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "cmd_type" => "pwd_clr",
+                "info" => [],
+            ]
+            ]);
+            if ($res["code"] != 0 && $res["code"] != 1005) {
+            return ["err" => $res["msg"]];
+            }
+        }
+        if (mb_substr($device_sn, 0, 3) == "W77") {
+            $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "cmd_type" => "face_clr",
+                "info" => [],
+            ]
+            ]);
+            if ($res["code"] != 0 && $res["code"] != 1005) {
+            return ["err" => $res["msg"]];
+            }
+        }
         $res = self::Request("logout", ["device_sn" => $device_sn]);
         if ($res["code"] != 0 && $res["code"] != 1005) {
             return ["err" => $res["msg"]];
         }
-
-
         return ["err" => null];
     }
 

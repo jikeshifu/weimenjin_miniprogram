@@ -14,7 +14,7 @@ class Callback
     {
 
         $cmd = input("cmd");
-        if(!$cmd){
+        if (!$cmd) {
             $cmd = input("cmd_type");
         }
 
@@ -53,9 +53,19 @@ class Callback
                     "imei" => $info["imei"],
                 ]);
                 break;
+
+            case "notify";
+                //查询人脸
+                $face = Db::name("face")->where(["sCertificateNumber" =>$info["sCertificateNumber"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
+                LockLog::add($face["member_id"], $lock["lock_id"], 11,1, $face["face_name"]);
+                break;
+            case "card_notify";
+                //查询卡
+                $lockcard = Db::name("lockcard")->where(["lockcard_sn" =>$info["card_id"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
+                LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1,$lockcard["lockcard_username"]);
+                break;
             case "open":
             case "lock_open";
-
 
                 switch ($info["open_type"]) {
                     //指纹开门
@@ -104,11 +114,11 @@ class Callback
 
     public function lock1()
     {
-      $device_sn =  input("device_sn") ;
+        $device_sn = input("device_sn");
 
-     $deviceData=   Redis::Redis()->get("device_sn:replystatus1:$device_sn");
+        $deviceData = Redis::Redis()->get("device_sn:replystatus1:$device_sn");
 
-        $cs=$deviceData ;
+        $cs = $deviceData;
         echo "<html
         <head>
         <meta http-equiv=\"refresh\" content=\"1\">

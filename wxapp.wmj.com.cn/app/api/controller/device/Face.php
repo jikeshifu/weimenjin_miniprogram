@@ -7,7 +7,7 @@ namespace app\api\controller\device;
 use app\api\controller\Base;
 use app\module\code\Code;
 
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use app\module\member\memberServer\MemberServer;
 use think\facade\Db;
 
@@ -80,7 +80,7 @@ class Face extends Base
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
 
 
-        $addres = HardwareClout::Face()->Add($lock["lock_sn"], $sCertificateNumber, "https://wxapp.wmj.com.cn" . $face_images, $end_time, $face_name);
+        $addres = HardwareCloud::Face()->Add($lock["lock_sn"], $sCertificateNumber, "https://wxapp.wmj.com.cn" . $face_images, $end_time, $face_name);
         if ($addres["err"]) {
 
 
@@ -121,7 +121,7 @@ class Face extends Base
         $face_id = input("face_id");
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
         $face = Db::name("face")->where(["face_id" => $face_id])->find();
-        $addres = HardwareClout::Face()->Del($lock["lock_sn"], $face["sCertificateNumber"]);
+        $addres = HardwareCloud::Face()->Del($lock["lock_sn"], $face["sCertificateNumber"]);
         if ($addres["err"]) {
             return json(Code::CodeErr(1000, $addres["err"], $addres));
         }
@@ -142,7 +142,7 @@ class Face extends Base
         $face_name = input("face_name");
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
         $face = Db::name("face")->where(["face_id" => $face_id])->find();
-//        $addres = HardwareClout::Face()->Edit($lock["lock_sn"], $face["sCertificateNumber"]);
+//        $addres = HardwareCloud::Face()->Edit($lock["lock_sn"], $face["sCertificateNumber"]);
 //        if ($addres["err"]) {
 //            return json(Code::CodeErr(1000, $addres["err"], $addres));
 //        }

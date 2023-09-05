@@ -34,7 +34,7 @@ class DeviceGroup
             $vo["device_count"] = LockAuth::CountWDeviceGroupId($vo["device_group_id"], $member_id);
         }
 
-        $Redis->set($key,json_encode($device_group),86500);
+        $Redis->set($key,json_encode($device_group),3600);
         return $device_group;
     }
 

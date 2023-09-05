@@ -9,10 +9,12 @@ use app\BaseController;
 use app\module\code\Code;
 use app\module\lockServer\Lock;
 use app\module\lockServer\LockLog;
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use app\module\member\memberServer\MemberServer;
 use app\module\model\LockAuth;
+use app\module\order\OrderServer;
 use app\module\user\userServer\UserServer;
+use app\module\wechat\WechatServer;
 use think\facade\Db;
 use xhadmin\db\Lock as LockDb;
 use xhadmin\service\api\LockService;
@@ -75,7 +77,6 @@ class Device extends Base
         if ($info["auth_member_id"] === 0) {
             \app\module\lockAuthServer\LockAuth::DelLockId($info["lock_id"]);
             Lock::Del($info["lock_id"]);
-
             return json(Code::CodeOk(['msg' => "超管删除成功"]));
         }
         \app\module\lockAuthServer\LockAuth::Del($info["lockauth_id"]);
@@ -178,8 +179,6 @@ class Device extends Base
 
     function qrOpenLock()
     {
-
-
         $lock_id = input("lock_id");
         $lock = Lock::Info($lock_id);
 
@@ -188,7 +187,7 @@ class Device extends Base
         $data['lock_id'] = $lock_id;
 
         $memberInfo = MemberServer::Info($data['member_id']);
-        if (!$memberInfo["mobile"]) {
+        if ($lock['mobile_check'] && strlen($memberInfo['mobile']) < 10) {
 
             return json(Code::CodeErr(1001, "需要先绑定手机号", $memberInfo));
         }
@@ -272,7 +271,7 @@ class Device extends Base
         $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
 
         $lock = Lock::Info($lockAuth["lock_id"]);
-        $OpenLock = HardwareClout::AirSwitch()->ElectricityStart($lock["lock_sn"]);
+        $OpenLock = HardwareCloud::AirSwitch()->ElectricityStart($lock["lock_sn"]);
         $UidRes = MemberServer::Uid();
 
         $member_id = $UidRes["uid"];
@@ -290,7 +289,7 @@ class Device extends Base
         $lock_sn = input("lock_sn");
 
         $lock = Lock::InfoWLockSn($lock_sn);
-        $OpenLock = HardwareClout::AirSwitch()->ElectricityStart($lock_sn);
+        $OpenLock = HardwareCloud::AirSwitch()->ElectricityStart($lock_sn);
 
 
         if ($OpenLock["err"]) {
@@ -309,7 +308,7 @@ class Device extends Base
         $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
 
         $lock = Lock::Info($lockAuth["lock_id"]);
-        $OpenLock = HardwareClout::AirSwitch()->ElectricityStop($lock["lock_sn"]);
+        $OpenLock = HardwareCloud::AirSwitch()->ElectricityStop($lock["lock_sn"]);
         $UidRes = MemberServer::Uid();
 
         $member_id = $UidRes["uid"];
@@ -328,7 +327,7 @@ class Device extends Base
         $lock_sn = input("lock_sn");
 
         $lock = Lock::InfoWLockSn($lock_sn);
-        $OpenLock = HardwareClout::AirSwitch()->ElectricityStop($lock_sn);
+        $OpenLock = HardwareCloud::AirSwitch()->ElectricityStop($lock_sn);
         $UidRes = MemberServer::Uid();
 
         $member_id = $UidRes["uid"];
@@ -345,7 +344,7 @@ class Device extends Base
     {
         $lock_id = input("lock_id");
         $lockInfo = LockDb::getInfo($lock_id);
-        $OpenLock = HardwareClout::AirSwitch()->ElectricityStart($lockInfo["lock_sn"]);
+        $OpenLock = HardwareCloud::AirSwitch()->ElectricityStart($lockInfo["lock_sn"]);
         $member_id = $this->_data["uid"];
         if ($OpenLock["err"]) {
             LockLog::add($member_id, $lock_id, 5, 0);
@@ -360,7 +359,7 @@ class Device extends Base
     {
         $lock_id = input("lock_id");
         $lockInfo = LockDb::getInfo($lock_id);
-        $OpenLock = HardwareClout::AirSwitch()->ElectricityStop($lockInfo["lock_sn"]);
+        $OpenLock = HardwareCloud::AirSwitch()->ElectricityStop($lockInfo["lock_sn"]);
         $member_id = $this->_data["uid"];
         if ($OpenLock["err"]) {
             LockLog::add($member_id, $lock_id, 6, 0);
@@ -375,7 +374,7 @@ class Device extends Base
     {
         $lock_id = input("lock_id");
         $lockInfo = LockDb::getInfo($lock_id);
-        $OpenLock = HardwareClout::AirSwitch()->Getdevinfo($lockInfo["lock_sn"]);
+        $OpenLock = HardwareCloud::AirSwitch()->Getdevinfo($lockInfo["lock_sn"]);
         if ($OpenLock["err"]) {
             return json(Code::CodeErr(1000, ($OpenLock["err"])));
         }
@@ -474,13 +473,14 @@ class Device extends Base
             $info["addcardmode_status"] = 1;
             $info["qrServer_status"] = 1;
         }
-
+        if (mb_substr($lock["lock_sn"], 0, 3) == "W77") {
+            $info["addcardmode_status"] = 0;
+            $info["qrServer_status"] = 1;
+        }
         if (mb_substr($lock["lock_sn"], 0, 3) == "W76") {
             $info["qrServer_type"] = 1;
 
         }
-
-
         return json(Code::CodeOk([
             "msg" => "获取成功",
             "data" => $info,
@@ -510,7 +510,10 @@ class Device extends Base
         $model = LockAuth::where(["member_id" => $member_id])->whereNull("deleted_at")->where(["auth_status" => 1]);
 
         if ($DeviceGroupInfo["type"] == 1) {
-            $model->where(["device_group_id" => 0]);
+            $model->where(function ($q)use($DeviceGroupInfo){
+                $q->whereOr(["device_group_id" => 0])  ;
+                $q->whereOr(["device_group_id" => $DeviceGroupInfo["device_group_id"]]);
+            });
 
         } else {
             $model->where(["device_group_id" => $DeviceGroupInfo["device_group_id"]]);
@@ -530,6 +533,17 @@ class Device extends Base
         foreach ($lockauth as &$vo) {
 
             $vo["lock"] = \app\module\lockServer\Lock::Online($vo["lock"]);
+
+            if(mb_substr($vo["lock"]["lock_sn"],0,3)=="W71"){
+                $Getdevinfo = HardwareCloud::AirSwitch()->Getdevinfo($vo["lock"]["lock_sn"]);
+                if (!$Getdevinfo["err"]) {
+                    $vo["lock"]["switch_state"]=$Getdevinfo["data"]["info"]["switch_state"];
+
+                }else{
+                    $vo["lock"]["switch_state"]=0;
+                }
+
+            }
 
             $vo["auth_endtime1"] = " ";
             $vo["cs"] = " ";
@@ -562,60 +576,62 @@ class Device extends Base
     function audioConfig()
     {
         $lock_id = input("lock_id");
-        $info = Db::name("lock")->where(["lock_id"=>$lock_id])->field(["openttscontent","volume"])->find();
+        $info = Db::name("lock")->where(["lock_id" => $lock_id])->field(["openttscontent", "volume"])->find();
         return json(Code::CodeOk(["msg" => "获取成功", "data" => $info,]));
     }
+
     function audioConfigSet()
     {
         $lock_id = input("lock_id");
         $tts = input("tts");
-        $volume= input("volume");
-         Db::name("lock")->where(["lock_id"=>$lock_id])->update([
-            "openttscontent"=>$tts,
-            "volume"=>$volume,
+        $volume = input("volume");
+        Db::name("lock")->where(["lock_id" => $lock_id])->update([
+            "openttscontent" => $tts,
+            "volume" => $volume,
         ]);
         //查询锁序列号
-        $lockdata=\xhadmin\db\Lock::getInfo($lock_id);
+        $lockdata = \xhadmin\db\Lock::getInfo($lock_id);
 
         if (mb_substr($lockdata["lock_sn"], 0, 3) == "W82") {
-            $Cloudspeaker= HardwareClout::Horn()->Cloudspeaker($lockdata["lock_sn"],$tts,$volume);
-            if($Cloudspeaker["err"]){
-         
-                return json(Code::CodeErr(1000,$Cloudspeaker["err"]));
+            $Cloudspeaker = HardwareCloud::Horn()->Cloudspeaker($lockdata["lock_sn"], $tts, $volume);
+            if ($Cloudspeaker["err"]) {
+
+                return json(Code::CodeErr(1000, $Cloudspeaker["err"]));
             }
 
 
-        }else{
+        }
+        elseif(mb_substr($lockdata["lock_sn"], 0, 3) == "W76")
+        {
+            $Accesscontrolres = HardwareCloud::Accesscontrol()->Configaudio($lockdata["lock_sn"], $tts, $volume);
+            if ($Accesscontrolres["err"]) {
+                return json(Code::CodeErr(1000, $Accesscontrolres["err"]));
+            }
+        }
+        else {
 
             $stateresult = wmjHandle($lockdata['lock_sn'], 'lockstate');
-            $postdata['sn']=$lockdata['lock_sn'];
-            $postdata['openttscontent']=$tts;
-            $postdata['volume']=$volume;
-            if ($stateresult['online'])
-            {
+            $postdata['sn'] = $lockdata['lock_sn'];
+            $postdata['openttscontent'] = $tts;
+            $postdata['volume'] = $volume;
+            if ($stateresult['online']) {
 
-                $result=wmjManageHandle($lockdata['lock_sn'],'audioconfig',$postdata);
-                if (!$result['state'])
-                {
+                $result = wmjManageHandle($lockdata['lock_sn'], 'audioconfig', $postdata);
+                if (!$result['state']) {
 
-                    return json(Code::CodeErr(1000,$result['state_msg']));
+                    return json(Code::CodeErr(1000, $result['state_msg']));
                 }
 
-            }
-            else
-            {
+            } else {
 
-                return json(Code::CodeErr(1000,"操作失败,设备不在线"));
+                return json(Code::CodeErr(1000, "操作失败,设备不在线"));
             }
 
         }
 
 
-
-
         return json(Code::CodeOk(["msg" => "设置成功",]));
     }
-
 
 
     function listCard()
@@ -702,7 +718,7 @@ class Device extends Base
                 }
 
 
-                $res = HardwareClout::App()->CardModeSet($lockdata['lock_sn'], $state);
+                $res = HardwareCloud::App()->CardModeSet($lockdata['lock_sn'], $state);
                 if ($res["err"]) {
                     return json(Code::CodeErr(1001, $res["err"]));
                 }
@@ -742,7 +758,6 @@ class Device extends Base
 
             $postdata['sn'] = $lockdata['lock_sn'];
             $postdata['qrcodeurl'] = 'https://' . $_SERVER['HTTP_HOST'] . '/minilock?user_id=' . $lockdata['user_id'] . '&lock_id=' . $lockdata['lock_id'] . '&st=';
-
             if (mb_substr($lockdata['lock_sn'], 0, 3) == "W76") {
                 $type = input("type");
                 $model = "passive";
@@ -756,12 +771,30 @@ class Device extends Base
 
                 }
 
-                $res = HardwareClout::App()->QrSet($lockdata['lock_sn'], $postdata['qrcodeurl'], $model);
+                $res = HardwareCloud::App()->QrSet($lockdata['lock_sn'], $postdata['qrcodeurl'], $model);
                 if ($res["err"]) {
                     return json(Code::CodeErr(1001, $res["err"]));
                 }
 
-            } else {
+            } 
+            elseif(mb_substr($lockdata['lock_sn'], 0, 3) == "W77")
+            {
+                $type = input("type");
+                $model = "passive";
+                switch ($type) {
+                    case 2;
+                        $model = "active";
+                        break;
+                    case 3;
+                        $model = "both";
+                        break;
+                }
+                $res = HardwareCloud::App()->QrSet($lockdata['lock_sn'], $postdata['qrcodeurl'], $model);
+                if ($res["err"]) {
+                    return json(Code::CodeErr(1001, $res["err"]));
+                }
+            }
+            else {
                 $stateresult = wmjHandle($lockdata['lock_sn'], 'lockstate');
                 if ($stateresult['online']) {
 
@@ -860,20 +893,22 @@ class Device extends Base
 
         $res = MemberServer::Uid();
         $member_id = $res["uid"];
-        $page = input("page");
-        $limit = input("limit");
+
         $device_group_id = input("device_group_id");
         $DeviceGroupInfo = \app\module\device\server\DeviceGroup::Info($device_group_id);
 
-        $model = LockAuth::where(["member_id" => $member_id])->whereNull("deleted_at");
+        $model = LockAuth::where(["member_id" => $member_id])->where("auth_status","<>",0)->whereNull("deleted_at");
 
         if ($DeviceGroupInfo["type"] == 1) {
-            $model->where(["device_group_id" => 0]);
+            $model->where(function ($q)use($DeviceGroupInfo){
+                $q->whereOr(["device_group_id" => 0])  ;
+                $q->whereOr(["device_group_id" => $DeviceGroupInfo["device_group_id"]]);
+            });
         } else {
             $model->where(["device_group_id" => $DeviceGroupInfo["device_group_id"]]);
         }
         $count = $model->count();
-        $lockauth = $model->with("lock")->order("lockauth_id desc")->page($page, $limit)->select();
+        $lockauth = $model->with("lock")->order("lockauth_id desc")->select();
 
 
         return json(Code::CodeOk(["msg" => "获取成功", "data" => [
@@ -928,7 +963,7 @@ class Device extends Base
         $lock = Lock::Info($lockAuth["lock_id"]);
 
         $UidRes = MemberServer::Uid();
-        $res = HardwareClout::Horn()->Play($lock["lock_sn"], $tts, $volume);
+        $res = HardwareCloud::Horn()->Play($lock["lock_sn"], $tts, $volume);
         if ($res["err"]) {
 
 
@@ -950,6 +985,65 @@ class Device extends Base
         return json($res);
     }
 
+    //查询续费信息
+    public function simRenew()
+    {
+        $sim_sn = input("sim_sn");
+        $res = \app\module\device\server\Device::SimRenew($sim_sn);
+        if ($res["code"] != 0) {
+            return json(Code::CodeErr(1000, $res["msg"]));
+        }
+        $price = $res["data"]["price"];
+        $product_id = $res["data"]["product_id"];
+
+
+        return json(Code::CodeOk(["data" => [
+            "price" => ($price / 100) . "元",
+            "product_id" => $product_id,
+        ]]));
+    }
+
+    //下单支付
+    public function simOrder()
+    {
+        $sim_sn = input("sim_sn");
+        $res = \app\module\device\server\Device::SimRenew($sim_sn);
+        if ($res["code"] != 0) {
+            return json(Code::CodeErr(1000, $res["msg"]));
+        }
+        $price = $res["data"]["price"];
+        $product_id = $res["data"]["product_id"];
+        $Uid = MemberServer::Uid();
+
+
+        $data = OrderServer::Add($Uid["uid"], $price, $product_id,$sim_sn);
+
+
+        //查询用户信息
+        $memberInfo = MemberServer::Info($Uid["uid"]);
+
+        $app = WechatServer::PayApp();
+        $result = $app->order->unify([
+            'body' => 'sim卡续费',
+            'out_trade_no' => $data["order_sn"],
+            'total_fee' => $price,
+//            'total_fee' => 1,
+//            'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
+            'notify_url' => 'https://wxapp.wmj.com.cn/api/pay.Notify/index', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+            'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
+            'openid' => $memberInfo["openid"],
+        ]);
+
+        $jssdk = $app->jssdk;
+        $config = $jssdk->bridgeConfig($result["prepay_id"], false); // 返回数组
+
+        return json(Code::CodeOk(["data" => [
+            "price" => ($price / 100) . "元",
+            "product_id" => $product_id,
+            "payData" => $config
+        ]]));
+    }
+
     public function hornTest()
     {
 
@@ -961,7 +1055,7 @@ class Device extends Base
         $lock = Lock::InfoWLockSn($lock_sn);
 
 
-        $res = HardwareClout::Horn()->Play($lock_sn, $tts, $volume);
+        $res = HardwareCloud::Horn()->Play($lock_sn, $tts, $volume);
         if ($res["err"]) {
             return json(Code::CodeErr(1000, $res["err"]));
         }
@@ -991,7 +1085,7 @@ class Device extends Base
         $lock_sn = input("lock_sn");
 
 
-        $res = HardwareClout::App()->Logout($lock_sn);
+        $res = HardwareCloud::App()->Logout($lock_sn);
 
 
         $wmjHandleRes = wmjHandle($lock_sn, 'dellock');

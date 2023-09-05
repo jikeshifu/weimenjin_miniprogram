@@ -6,7 +6,7 @@ namespace app\api\controller\device;
 
 use app\module\code\Code;
 
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use think\facade\Db;
 
 class Pwd
@@ -51,7 +51,7 @@ class Pwd
             return json(Code::CodeErr(1001,"密码不能小于8位"));
         }
 
-       $addres= HardwareClout::WifiLock()->PwdAdd($lock["lock_sn"], $pwd, $lock["device_cid"], 0, $end_time);
+       $addres= HardwareCloud::WifiLock()->PwdAdd($lock["lock_sn"], $pwd, $lock["device_cid"], 0, $end_time);
         if($addres["err"]){
            return json(Code::CodeErr(1000,$addres["err"],$addres));
         }
@@ -71,7 +71,7 @@ class Pwd
 
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
 
-        $addres= HardwareClout::WifiLock()->PasswordTemporary($lock["lock_sn"], $lock["device_cid"], $lock["admin_pwd"]);
+        $addres= HardwareCloud::WifiLock()->PasswordTemporary($lock["lock_sn"], $lock["device_cid"], $lock["admin_pwd"]);
         if($addres["err"]){
             return json(Code::CodeErr(1000,$addres["err"]));
         }
@@ -90,7 +90,7 @@ class Pwd
         $pwd_id = input("pwd_id");
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
         $pwd = Db::name("pwd")->where(["pwd_id" => $pwd_id])->find();
-        $addres= HardwareClout::WifiLock()->PwdDel($lock["lock_sn"], $pwd["pwd"], $lock["device_cid"]);
+        $addres= HardwareCloud::WifiLock()->PwdDel($lock["lock_sn"], $pwd["pwd"], $lock["device_cid"]);
         if($addres["err"]){
             return json(Code::CodeErr(1000,$addres["err"],[$lock,$addres,$pwd]));
         }

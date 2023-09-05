@@ -5,7 +5,7 @@ namespace app\api\controller\device;
 
 
 use app\module\code\Code;
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use think\facade\Db;
 
 class Finger
@@ -52,7 +52,7 @@ class Finger
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
 
 
-       $addres= HardwareClout::WifiLock()->FingerAdd($lock["lock_sn"],  $lock["device_cid"], 0, $end_time);
+       $addres= HardwareCloud::WifiLock()->FingerAdd($lock["lock_sn"],  $lock["device_cid"], 0, $end_time);
         if($addres["err"]){
             return json(Code::CodeErr(1000,$addres["err"]));
         }
@@ -78,7 +78,7 @@ class Finger
         $finger= Db::name("finger")->where(["finger_id" => $finger_id])->find();
 
 
-        $addres= HardwareClout::WifiLock()->FingerEdit($lock["lock_sn"],  $lock["device_cid"],$finger["fp_id"], time(), $end_time);
+        $addres= HardwareCloud::WifiLock()->FingerEdit($lock["lock_sn"],  $lock["device_cid"],$finger["fp_id"], time(), $end_time);
         if($addres["err"]){
             return json(Code::CodeErr(1000,$addres["err"]));
         }
@@ -96,7 +96,7 @@ class Finger
         $finger_id = input("finger_id");
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
         $finger = Db::name("finger")->where(["finger_id" => $finger_id])->find();
-        $addres= HardwareClout::WifiLock()->FingerDel($lock["lock_sn"], $finger["fp_id"], $lock["device_cid"]);
+        $addres= HardwareCloud::WifiLock()->FingerDel($lock["lock_sn"], $finger["fp_id"], $lock["device_cid"]);
         if($addres["err"]){
             return json(Code::CodeErr(1000,$addres["err"],$addres));
         }

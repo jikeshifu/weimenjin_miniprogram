@@ -5,7 +5,7 @@ namespace app\api\controller\device;
 
 
 use app\module\code\Code;
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use app\module\lockServer\Lock;
 use app\module\lockServer\LockLog;
 use app\module\member\memberServer\MemberServer;

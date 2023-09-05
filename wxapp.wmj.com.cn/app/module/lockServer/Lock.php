@@ -5,7 +5,7 @@ namespace app\module\lockServer;
 
 
 use app\module\device\server\Device;
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use app\module\lockAuthServer\LockAuth;
 
 use app\module\redis\Redis;
@@ -34,7 +34,7 @@ class Lock
        }
        $lock= Db::name("lock")->where(["lock_id" => $lock_id])->whereNull("deleted_at")->find();
        if($lock){
-           $Redis->set($key,json_encode($lock),120);
+           $Redis->set($key,json_encode($lock),5);
        }
 
         return $lock;
@@ -80,7 +80,7 @@ class Lock
     static function Logout($lock_sn)
     {
         wmjHandle($lock_sn, 'dellock');
-        HardwareClout::App()->Logout($lock_sn);
+        HardwareCloud::App()->Logout($lock_sn);
     }
 
     /**
@@ -93,7 +93,7 @@ class Lock
 
 
         if (in_array(mb_substr($lockInfo["lock_sn"], 0, 2), self::$Yjy)) {
-            $lockInfo['online'] = HardwareClout::App()->OnLineGet($lockInfo["lock_sn"]);
+            $lockInfo['online'] = HardwareCloud::App()->OnLineGet($lockInfo["lock_sn"]);
         } else {
             if ($lockInfo['lock_type'] == 7) {
                 $result = wmjgwHandle($lockInfo['lock_sn'], 'getlplockstate');
@@ -125,7 +125,7 @@ class Lock
     {
 
         if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
-            $CardAdd = HardwareClout::WifiLock()->CardAdd($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], time(), $endtime);
+            $CardAdd = HardwareCloud::WifiLock()->CardAdd($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], time(), $endtime);
             $result["data"] = $CardAdd;
             if ($CardAdd["err"]) {
                 $result['state'] = 0;
@@ -161,7 +161,7 @@ class Lock
     static function CardDel($lockInfo, $cardsn)
     {
         if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
-            $CardAdd = HardwareClout::WifiLock()->CardDel($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"]);
+            $CardAdd = HardwareCloud::WifiLock()->CardDel($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"]);
             $result['data'] = $CardAdd;
             if ($CardAdd["err"]) {
                 $result['state'] = 0;
@@ -217,7 +217,7 @@ class Lock
 
 
         if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W82" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
-            $OpenLock = HardwareClout::WifiLock()->OpenLock($lockInfo["lock_sn"], $lockInfo["device_cid"]);
+            $OpenLock = HardwareCloud::WifiLock()->OpenLock($lockInfo["lock_sn"], $lockInfo["device_cid"]);
 
             if ($OpenLock["err"]) {
                 $result['state'] = 0;
@@ -255,7 +255,7 @@ class Lock
     static function Register($data)
     {
         if (in_array(mb_substr($data["lock_sn"], 0, 2), self::$Yjy)) {
-            $Register = HardwareClout::App()->Register($data["lock_sn"]);
+            $Register = HardwareCloud::App()->Register($data["lock_sn"]);
          
 
             if ($Register["err"]) {
@@ -263,7 +263,7 @@ class Lock
 
             }
             if (mb_substr($data["lock_sn"], 0, 3) == "W89") {
-                $ActivateRes = HardwareClout::WifiLock()->Activate($data["lock_sn"]);
+                $ActivateRes = HardwareCloud::WifiLock()->Activate($data["lock_sn"]);
                 if ($ActivateRes["err"]) {
                     return ["err" => $ActivateRes["err"]];
 
@@ -303,7 +303,7 @@ class Lock
         $lock_id = LockService::add($data);
         $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $data['user_id'] . "&lock_id=" . $lock_id;
 
-        HardwareClout::App()->QrCodeSet($data["lock_sn"],$qrcodeurl);
+        HardwareCloud::App()->QrCodeSet($data["lock_sn"],$qrcodeurl);
         $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
 
         LockService::update(["lock_id" => $lock_id], $data);

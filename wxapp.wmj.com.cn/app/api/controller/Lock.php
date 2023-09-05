@@ -8,7 +8,7 @@
 
 namespace app\api\controller;
 
-use app\module\hardwareCloud\HardwareClout;
+use app\module\hardwareCloud\HardwareCloud;
 use app\module\member\memberServer\MemberServer;
 use app\module\user\userServer\UserServer;
 use app\module\wifiLock\wifi;
@@ -273,7 +273,7 @@ class Lock extends Common {
 		    $lockdata=\xhadmin\db\Lock::getInfo($data['lock_id']);
 
             if (mb_substr($lockdata["lock_sn"], 0, 3) == "W82") {
-                $Cloudspeaker= HardwareClout::Horn()->Cloudspeaker($lockdata["lock_sn"],$data['openttscontent'],$data['volume']);
+                $Cloudspeaker= HardwareCloud::Horn()->Cloudspeaker($lockdata["lock_sn"],$data['openttscontent'],$data['volume']);
                 if($Cloudspeaker["err"]){
                     return json(['status'=>$this->successCode,'msg'=>$Cloudspeaker["err"]]);
                 }

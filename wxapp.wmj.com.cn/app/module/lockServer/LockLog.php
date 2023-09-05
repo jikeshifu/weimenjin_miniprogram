@@ -21,6 +21,7 @@ class LockLog
         "8" => '蓝牙开门',
         "9" => '喇叭操作',
         "10" => '生成钥匙',
+        "11" => '人脸开门',
     ];
 
     static function add($member_id, $lock_id, $type, $status = 1,$user_name="")
