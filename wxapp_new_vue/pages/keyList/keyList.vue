@@ -55,6 +55,8 @@ export default {
 	onPageScroll(e) {
 		this.scrollTop = e.scrollTop
 	},
+	onShareAppMessage() {},
+	onShareTimeline() {},
 	onLoad(option) {
 		this.lockauth_id = option.lockauth_id
 	},

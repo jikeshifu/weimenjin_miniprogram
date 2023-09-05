@@ -56,13 +56,15 @@
 				focusLink: ''
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {},
 		onShow() {
-			let WifiData=	uni.getStorageSync("WifiData")
-						//初始化蓝牙
-						if(WifiData){
-							  this.data=  WifiData
-						}
+			let WifiData = uni.getStorageSync("WifiData")
+			//初始化蓝牙
+			if (WifiData) {
+				this.data = WifiData
+			}
 		},
 		methods: {
 			focusClick(key) {
@@ -71,10 +73,10 @@
 				}, 500)
 			},
 			scanCode() {
-				let _this =this 
+				let _this = this
 				uni.scanCode({
 					success: (res) => {
-						_this.data.device_ssid =res.result
+						_this.data.device_ssid = res.result
 						// 二维码内容
 						console.log(res)
 					}
@@ -136,7 +138,7 @@
 
 			},
 			set_wifi() {
-	uni.setStorageSync("WifiData", this.data)
+				uni.setStorageSync("WifiData", this.data)
 				if (!this.data.device_ssid) {
 					this.show_toast("请先获取设备序列号(SN)")
 					return;

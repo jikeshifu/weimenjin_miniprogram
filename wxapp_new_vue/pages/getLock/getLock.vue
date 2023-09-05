@@ -5,54 +5,60 @@
 </template>
 
 <script>
-import { getShareAuth_api } from '../../api/index.js'	
-export default {
-	data() {
-		return {
-			share_lockauth_id: ''
-		}
-	},
-	methods: {
+	import {
+		getShareAuth_api
+	} from '../../api/index.js'
+	export default {
+		data() {
+			return {
+				share_lockauth_id: ''
+			}
+		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			if (option.share_lockauth_id) {
 				this.share_lockauth_id = option.share_lockauth_id
 				this.getShareAuth()
 			}
 		},
-		// 领取钥匙
-		async getShareAuth() {
-			uni.showLoading({
-				title: '领取钥匙中...',
-				mask: true
-			})
-			let res = await getShareAuth_api({ share_lockauth_id: this.share_lockauth_id })
-			if (res.code === 0) {
-				uni.hideLoading()
-				uni.showToast({
-					title: '领取成功',
-					icon: 'none'
+		methods: {
+			// 领取钥匙
+			async getShareAuth() {
+				uni.showLoading({
+					title: '领取钥匙中...',
+					mask: true
 				})
-				setTimeout(() => {
-					uni.switchTab({
-						url: '/pages/index/index'
-					})
-				}, 800)
-			} else {
-				uni.hideLoading()
-				uni.showToast({
-					title: res.msg,
-					icon: 'none'
+				let res = await getShareAuth_api({
+					share_lockauth_id: this.share_lockauth_id
 				})
-				setTimeout(() => {
-					uni.switchTab({
-						url: '/pages/index/index'
+				if (res.code === 0) {
+					uni.hideLoading()
+					uni.showToast({
+						title: '领取成功',
+						icon: 'none'
 					})
-				}, 800)
-			
-			}
-		},
+					setTimeout(() => {
+						uni.switchTab({
+							url: '/pages/index/index'
+						})
+					}, 800)
+				} else {
+					uni.hideLoading()
+					uni.showToast({
+						title: res.msg,
+						icon: 'none'
+					})
+					setTimeout(() => {
+						uni.switchTab({
+							url: '/pages/index/index'
+						})
+					}, 800)
+
+				}
+			},
+		}
 	}
-}	
 </script>
 
 <style scoped>

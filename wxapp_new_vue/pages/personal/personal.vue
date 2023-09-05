@@ -77,6 +77,8 @@
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onShow() {
 			this.getUserInfo()
 		},

@@ -1,9 +1,12 @@
 /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: 'iconfont';  /* Project id 4165096 */
-  src: url('https://at.alicdn.com/t/c/font_4165096_n74cxpjanxe.woff2?t=1690780561994') format('woff2'),
-       url('https://at.alicdn.com/t/c/font_4165096_n74cxpjanxe.woff?t=1690780561994') format('woff'),
-       url('https://at.alicdn.com/t/c/font_4165096_n74cxpjanxe.ttf?t=1690780561994') format('truetype');
+  font-family: 'iconfont'; 
+ /* src: url('https://at.alicdn.com/t/c/font_4165096_n74cxpjanxe.woff2') format('woff2'),
+         url('https://at.alicdn.com/t/c/font_4165096_n74cxpjanxe.woff') format('woff'),
+         url('https://at.alicdn.com/t/c/font_4165096_n74cxpjanxe.ttf') format('truetype'); */
+  src: url('https://wxapp.wmj.com.cn/static/fonts/font_4165096_n74cxpjanxe.woff2') format('woff2'),
+		url('https://wxapp.wmj.com.cn/static/fonts/font_4165096_n74cxpjanxe.woff') format('woff'),
+       url('https://wxapp.wmj.com.cn/static/fonts/font_4165096_n74cxpjanxe.ttf') format('truetype');
 }
 
 .iconfont {

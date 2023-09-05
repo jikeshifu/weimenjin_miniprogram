@@ -63,6 +63,8 @@
 				]
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		methods: {
 			confirm(e) {
 				console.log(e)

@@ -52,6 +52,9 @@
 				},
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {},
 		async onShow() {
 		 let bluetoothFormData=	uni.getStorageSync("bluetoothFormData")

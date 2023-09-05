@@ -57,6 +57,8 @@
 				lock_ids: []
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.info = JSON.parse(decodeURIComponent(option.item));
 			this.getList()

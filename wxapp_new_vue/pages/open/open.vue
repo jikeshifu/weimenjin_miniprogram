@@ -76,7 +76,8 @@
 				longitude: ''
 			}
 		},
-
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			console.log('option', option)
 

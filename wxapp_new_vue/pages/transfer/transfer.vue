@@ -37,6 +37,8 @@
 		filters: {
 			imgPath
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.lockauth_id = option.lockauth_id
 		},

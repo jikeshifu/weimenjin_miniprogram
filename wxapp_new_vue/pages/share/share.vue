@@ -92,6 +92,8 @@
 				}
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			// let now = new Date()
 			// this.formData.startTime = Date.parse(now) / 1000 //当前时间

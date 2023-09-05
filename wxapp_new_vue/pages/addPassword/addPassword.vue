@@ -45,6 +45,9 @@
 				focusLink: ''
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.lock_id = option.lock_id
 			let now = new Date()

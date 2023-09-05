@@ -63,6 +63,9 @@
 				info: {}
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.lockauth_id = option.lockauth_id
 			this.getInfo()

@@ -48,6 +48,9 @@
 				isShow: false
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.device_group_id = option.device_group_id ? option.device_group_id : ''
 			this.isShow = option.device_group_id ? false : true

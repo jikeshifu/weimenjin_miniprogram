@@ -22,15 +22,19 @@
 
 			</view>
 			<view class="list">
-				<view class="item" v-for="(item, index) in dataList" :key="index">
-					<view class="flex-box">
-						<image src="../../static/moren.png"></image>
-						<view class="user-name" v-if="item.lock">{{ item.lock.lock_name }}</view>
+				<picker @change="bindPickerChange" :range="groupList" range-key="device_group_name">
+					<view class="item" v-for="(item, index) in dataList" :key="index" @click="onItem(item)">
+						<view class="flex-box">
+							<image src="../../static/moren.png"></image>
+							<view class="user-name" v-if="item.lock">{{ item.lock.lock_name }}</view>
+						</view>
+						<view class="right-box">
+							<view class="delete-btn" @click.stop="delDevice(item.lockauth_id)">删除</view>
+						</view>
+						
 					</view>
-					<view class="right-box">
-						<view class="delete-btn" @click="delDevice(item.lockauth_id)">删除</view>
-					</view>
-				</view>
+				</picker>
+				
 
 				<uni-load-more :status="noMore" empty_text="暂无数据～" style="margin-top: 40rpx;"></uni-load-more>
 			</view>
@@ -45,7 +49,9 @@
 	import {
 		DeviceGroupDetail_api,
 		delDeviceGroup_api,
-		delDevice_api
+		delDevice_api,
+		getDeviceGroup_api,
+		switch_api
 	} from '../../api/index.js';
 	export default {
 		data() {
@@ -54,11 +60,19 @@
 				noMore: 'loading',
 				page: 1,
 				dataList: [],
-				groupInfo: {}
+				groupInfo: {},
+				groupList: [],
+				changeLockauth_id: '',
+				changeDevice_group_id: ''
+				
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.device_group_id = option.device_group_id
+			this.getGroupList()
 		},
 		onShow() {
 			this.dataList = []
@@ -91,6 +105,46 @@
 					this.noMore = 'noMore';
 				}
 
+			},
+			async getGroupList() {
+				let res = await getDeviceGroup_api()
+				this.groupList = res.data
+			},
+			bindPickerChange(e) {
+				this.changeDevice_group_id = this.groupList[e.detail.value].device_group_id
+				console.log('this.changeDevice_group_id', this.changeDevice_group_id)
+				console.log('this.changeLockauth_id', this.changeLockauth_id)
+				uni.showModal({
+					title: '提示',
+					content: '确定要切换分组?',
+					success: async (msg) => {
+						if (msg.confirm) {
+							let res = await switch_api({
+								device_group_id: this.changeDevice_group_id,
+								lockauth_id: this.changeLockauth_id
+							})
+							if (res.code === 0) {
+								uni.showToast({
+									title: '切换成功！',
+									icon: 'none',
+									mask: true
+								})
+								this.dataList = []
+								this.page = 1
+								this.getList()
+							} else {
+								uni.showToast({
+									title: res.msg,
+									icon: 'none',
+									mask: true
+								})
+							}
+						}
+					}
+				})
+			},
+			onItem(item) {
+				this.changeLockauth_id = item.lockauth_id
 			},
 			onDelete() {
 				uni.showModal({

@@ -37,6 +37,9 @@
 				expirationTime: ''
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad() {
 
 		},

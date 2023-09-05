@@ -19,6 +19,8 @@ export default {
 		return {
 		}
 	},
+	onShareAppMessage() {},
+	onShareTimeline() {},
 	onShow(){
 	
 	}

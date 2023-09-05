@@ -65,6 +65,8 @@
 
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			console.log("onShow", option)
 			if (option && option.iccid) {

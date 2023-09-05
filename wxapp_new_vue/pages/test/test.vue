@@ -77,6 +77,8 @@
 				tts: '', //播放内容
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			let location = uni.getStorageSync('location')
 			this.longitude = location.longitude

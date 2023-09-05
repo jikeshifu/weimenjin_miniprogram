@@ -59,6 +59,8 @@ export default {
 	onPageScroll(e) {
 		this.scrollTop = e.scrollTop
 	},
+	onShareAppMessage() {},
+	onShareTimeline() {},
 	onLoad(option) {
 		this.lock_id = option.lock_id ? option.lock_id : ''
 	},

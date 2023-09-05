@@ -314,3 +314,8 @@ export function orderList_api(params){
 	return request.myRequest('/order.Order/list', params, 'POST');
 }
 
+// 切换分组
+export function switch_api(params){
+	return request.myRequest('/device.DeviceGroup/switch', params, 'POST');
+}
+

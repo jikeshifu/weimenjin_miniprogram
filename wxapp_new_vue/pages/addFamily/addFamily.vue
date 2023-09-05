@@ -23,6 +23,9 @@
 				device_group_id: ''
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.device_group_id = option.device_group_id ? option.device_group_id : ''
 			this.device_group_name = option.device_group_name ? option.device_group_name : ''

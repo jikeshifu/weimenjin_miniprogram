@@ -66,6 +66,9 @@
 				isEdit: false
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.formData.lock_id = option.lock_id
 			if (option.item) {
@@ -79,20 +82,7 @@
 					lockcard_remark: item.lockcard_remark,
 					lockcard_id: item.lockcard_id
 				}
-			} else {
-				// let now = new Date()
-				// // 一年后的时间
-				// let year = now.getFullYear() + 1;
-				// let month = (now.getMonth() + 1).toString().padStart(2, "0"); //得到月份
-				// let day = (now.getDate()).toString().padStart(2, "0"); //得到日期
-				// let hours = now.getHours().toString().padStart(2, "0") // 得到小时;
-				// let minutes = now.getMinutes().toString().padStart(2, "0") // 得到分钟;
-				// let seconds = now.getSeconds().toString().padStart(2, "0") // 得到秒;
-				// let endTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-				// this.formData.lockcard_endtime = Date.parse(endTime) / 1000
 			}
-			
-			
 		},
 		methods: {
 			async onSubmit() {

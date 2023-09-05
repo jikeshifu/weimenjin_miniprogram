@@ -3,10 +3,6 @@
 		<view class="background"></view>
 		<view class="content">
 			<view class="top-box">
-			
-
-			
-
 				<view class="cell-item">
 					<view class="flex-box">
 						<view class="label">播放内容</view>
@@ -16,7 +12,8 @@
 				<view class="cell-item">
 					<view class="flex-box">
 						<view class="label">播放音量</view>
-						<input placeholder="请输入播放音量1-7" type="number" placeholder-class="placeholder" v-model="volume"/>
+						<input placeholder="请输入播放音量1-7" type="number" placeholder-class="placeholder"
+							v-model="volume" />
 					</view>
 				</view>
 
@@ -30,33 +27,38 @@
 
 <script>
 	import {
-	
+
 		audioConfig,
-			audioConfigSet,
-	
+		audioConfigSet,
+
 	} from '../../api/index.js'
 	export default {
 		data() {
 			return {
 				lock_id: '',
-			
+
 				volume: 5, // 音量大小
 				tts: '门已打开', //播放内容
 			}
 		},
-	 async	onLoad(option) {
-			this.lock_id =option.lock_id
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
+		async onLoad(option) {
+			this.lock_id = option.lock_id
 			let location = uni.getStorageSync('location')
 			this.longitude = location.longitude
 			this.latitude = location.latitude
-			
-			let audioConfigRes= await audioConfig({"lock_id":this.lock_id})
-			console.log("audioConfigRes",audioConfigRes)
-			this.tts =audioConfigRes.data.openttscontent
-			this.volume =audioConfigRes.data.volume
+
+			let audioConfigRes = await audioConfig({
+				"lock_id": this.lock_id
+			})
+			console.log("audioConfigRes", audioConfigRes)
+			this.tts = audioConfigRes.data.openttscontent
+			this.volume = audioConfigRes.data.volume
 		},
 		methods: {
-	
+
 			// 立即播放
 			async playhorn() {
 				if (!this.tts) {
@@ -78,10 +80,10 @@
 					mask: true
 				})
 				let res = await audioConfigSet({
-					lock_id:this.lock_id,
+					lock_id: this.lock_id,
 					volume: this.volume,
 					tts: this.tts,
-				
+
 				})
 				if (res.code === 0) {
 					uni.showToast({

@@ -32,6 +32,8 @@
 				dataList: [],
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.getList()
 		},

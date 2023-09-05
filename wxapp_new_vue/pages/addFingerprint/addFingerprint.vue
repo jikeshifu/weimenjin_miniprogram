@@ -38,6 +38,9 @@
 				finger_id: ''
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.lock_id = option.lock_id ? option.lock_id : ''
 			this.finger_id = option.finger_id ? option.finger_id : ''

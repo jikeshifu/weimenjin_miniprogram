@@ -54,6 +54,9 @@
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			this.lock_id = option.lock_id
 		},

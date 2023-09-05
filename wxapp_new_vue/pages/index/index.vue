@@ -33,11 +33,12 @@
 				</view>
 			</view>
 			<view class="list">
-				<view :class="['item', item.status !== 1 ? 'item-on' : '']" v-for="(item, index) in dataList"
+				<view :class="['item', item.status !== 1||item.lock.switch_state ? 'item-on' : '']"
+					v-for="(item, index) in dataList"
 					:key="index">
 					<view class="flex-box">
 						<view class="share">
-							<image src="../../static/fenxiang.png" v-if="item.status !== 1"></image>
+							<image src="../../static/fenxiang.png" v-if="item.status !== 1||item.lock.switch_state"></image>
 							<block v-else>
 								<image src="../../static/fenxiang-on.png" @click="onShare(item)"
 									v-if="item.auth_shareability === 1 && item.lock.online == 1"></image>
@@ -45,7 +46,7 @@
 							</block>
 						</view>
 						<view class="site" @click="changeSite(index,item)">
-							<image src="../../static/shezhi.png" v-if="item.status !== 1"></image>
+							<image src="../../static/shezhi.png" v-if="item.status !== 1 ||item.lock.switch_state"></image>
 							<block v-else>
 								<image src="../../static/shezhi-on.png" v-if="item.lock.online == 1"></image>
 								<image src="../../static/shezhi-hui.png" v-else></image>
@@ -69,14 +70,17 @@
 						</view>
 						<block v-else>
 							<block v-if="item.lock.online === 1">
-								<view class="btn" @click="unlocking(item)" v-if="item.device_type === 'lock'">
-									<i class="iconfont icon-yuechi icon-default"></i>
+								<view class="btn" :class="{'btn-on':item.lock.switch_state}" @click="unlocking(item)"
+									v-if="item.device_type === 'lock'">
+									<i class="iconfont icon-yuechi icon-default" :class="{'icon-on':item.lock.switch_state}"></i>
 								</view>
-								<view class="btn" @click="onSwitch(item)" v-if="item.device_type === 'switch'">
-									<i class="iconfont icon-shandian icon-default"></i>
+								<view class="btn" :class="{'btn-on':item.lock.switch_state}" @click="onSwitch(item)"
+									v-if="item.device_type === 'switch'">
+									<i class="iconfont icon-shandian icon-default" :class="{'icon-on':item.lock.switch_state}"></i>
 								</view>
-								<view class="btn" @click="onPlay(item)" v-if="item.device_type === 'horn'">
-									<i class="iconfont icon-laba icon-default"></i>
+								<view class="btn" :class="{'btn-on':item.lock.switch_state}" @click="onPlay(item)"
+									v-if="item.device_type === 'horn'">
+									<i class="iconfont icon-laba icon-default" :class="{'icon-on':item.lock.switch_state}"></i>
 								</view>
 							</block>
 							<block v-else>
@@ -252,6 +256,9 @@
 				showPrivacyPopup: false,
 			}
 		},
+		// 小程序显示分享
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {
 			console.log('option', option)
 			if (option.q) {
@@ -269,7 +276,21 @@
 			this.getLocation()
 			// #endif
 		},
+		onShareAppMessage(){
+			
+		},
+		onShareTimeline(){
+			
+		},
 		onShow() {
+			uni.getSystemInfo({
+				success(res) {
+					uni.setNavigationBarTitle({
+						title:res.appName
+					});
+
+				}
+			})
 			// #ifdef MP-WEIXIN
 			// 在设置 showPrivacyPopup = true 后使用 $nextTick
 			if (wx.getPrivacySetting) {
@@ -287,9 +308,7 @@
 					},
 				});
 			}
-
 			// #endif
-
 		},
 		onHide() {
 			// #ifdef MP-WEIXIN
@@ -357,6 +376,7 @@
 							item.status = 1
 							uni.hideLoading()
 							if (res.code === 0) {
+								item.lock.switch_state = !item.lock.switch_state;
 								uni.showToast({
 									title: res.msg,
 								})
@@ -376,6 +396,7 @@
 							item.status = 1
 							uni.hideLoading()
 							if (res.code === 0) {
+								item.lock.switch_state = !item.lock.switch_state;
 								uni.showToast({
 									title: res.msg,
 								})

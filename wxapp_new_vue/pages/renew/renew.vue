@@ -28,6 +28,8 @@ export default {
 			renewData: {}
 		}
 	},
+	onShareAppMessage() {},
+	onShareTimeline() {},
 	onLoad(option) {
 		this.sim_sn = option.sim_sn
 		this.getData()

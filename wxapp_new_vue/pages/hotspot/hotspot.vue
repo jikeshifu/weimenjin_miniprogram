@@ -42,6 +42,8 @@
 				hotspot: ""
 			}
 		},
+		onShareAppMessage() {},
+		onShareTimeline() {},
 		onLoad(option) {},
 		onShow() {
 			let hotspotData = uni.getStorageSync("hotspotData")

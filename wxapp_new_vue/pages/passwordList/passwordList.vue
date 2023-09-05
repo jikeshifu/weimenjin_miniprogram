@@ -40,6 +40,8 @@ export default {
 			dataList: []
 		}
 	},
+	onShareAppMessage() {},
+	onShareTimeline() {},
 	onLoad(option) {
 		this.lock_id = option.lock_id
 	},

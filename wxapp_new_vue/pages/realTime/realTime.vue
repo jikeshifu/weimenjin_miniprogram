@@ -55,6 +55,8 @@ export default {
 			info: {}
 		}
 	},
+	onShareAppMessage() {},
+	onShareTimeline() {},
 	onLoad(option) {
 		this.lock_id = option.lock_id;
 		this.getdata()
