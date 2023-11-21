@@ -13,13 +13,9 @@ class DeviceGroup
     static function All($member_id)
     {
 
-        $Redis = Redis::Redis();
-        $key = "DeviceGroupAll:" . $member_id;
-        $cacheData = $Redis->get($key);
 
-        if ($cacheData) {
-            return json_decode($cacheData, true);
-        }
+
+
 
         $device_group = Db::name("device_group")->where(["member_id" => $member_id])->whereNull("deleted_at")->order("updated_at desc")->select()->toArray();
 
@@ -34,19 +30,15 @@ class DeviceGroup
             $vo["device_count"] = LockAuth::CountWDeviceGroupId($vo["device_group_id"], $member_id);
         }
 
-        $Redis->set($key,json_encode($device_group),3600);
+
         return $device_group;
     }
 
-    static function ClearCache($member_id){
-        $Redis = Redis::Redis();
-        $key = "DeviceGroupAll:" . $member_id;
-        $Redis->del($key);
-    }
+
     static function Add($data)
     {
 
-        self::ClearCache($data["member_id"]);
+
 
         $data["created_at"] = time();
         Db::name("device_group")->insert($data);
@@ -67,7 +59,7 @@ class DeviceGroup
         $device_group = self::Info($device_group_id);
 
 
-        self::ClearCache($device_group["member_id"]);
+
         //默认分组不可删除
         if ($device_group["type"] == 1) {
             $res["err"] = "默认分组不可删除";

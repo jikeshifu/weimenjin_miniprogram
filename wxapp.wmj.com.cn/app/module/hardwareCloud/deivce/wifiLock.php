@@ -85,7 +85,7 @@ class wifiLock
 
 
         if ($res["code"] != 0) {
-            return ["err" => $res["msg"]];
+            return ["err" => $res["msg"],"errRes"=>$res];
         }
         if ($res["data"]["info"]["err_code"] != 0) {
             return ["err" =>"开锁失败".$res["data"]["info"]["err_code"]];
@@ -100,36 +100,48 @@ class wifiLock
      */
     public function CardAdd($device_sn,$card_sn,$device_cid,$start_time,$endTime)
     {
+        $res="";
+        try{
 
-        $res = server::Request("send", [
-            "device_sn" => $device_sn,
-            "data" => [
-                "device_cid"=>$device_cid,
-                "cmd_type" => "card_add",
+            $res = server::Request("send", [
+                "device_sn" => $device_sn,
                 "data" => [
-                    "card_id" =>$card_sn,
+                    "device_cid"=>$device_cid,
+                    "cmd_type" => "card_add",
+                    "data" => [
+                        "card_id" =>$card_sn,
 
-                    "card_type" => 0,
-                    "user_id" => 0,
-                    "start_time" => (int)$start_time,
-                    "end_time" => (int)$endTime,
-                ],   "info" => [
-                    "card_id" =>$card_sn,
+                        "card_type" => 0,
+                        "user_id" => 0,
+                        "start_time" => (int)$start_time,
+                        "end_time" => (int)$endTime,
+                    ],   "info" => [
+                        "card_id" =>$card_sn,
 
-                    "card_type" => 0,
-                    "user_id" => 0,
-                    "start_time" => (int)$start_time,
-                    "end_time" => (int)$endTime,
-                ],
-            ]
-        ]);
+                        "card_type" => 0,
+                        "user_id" => 0,
+                        "start_time" => (int)$start_time,
+                        "end_time" => (int)$endTime,
+                    ],
+                ]
+            ]);
 
-        if ($res["code"] != 0) {
-            return ["err" => $res["msg"]];
+            if ($res["code"] != 0) {
+                return ["err" => $res["msg"]];
+            }
+
+            if ($res["data"]["info"]["err_code"] != 0 || $res["data"]["info"]["code"] !=0) {
+                if($res["data"]["info"]["code"] !=17){
+                    return ["err" =>"添加失败".$res["data"]["info"]["err_code"].$res["data"]["info"]["msg"]];
+                }
+
+            }
+        }catch(\Exception $e){
+           print_r($e->getMessage());
+           print_r($res);
+
         }
-        if ($res["data"]["info"]["err_code"] != 0 || $res["data"]["info"]["code"] !=0) {
-            return ["err" =>"添加失败".$res["data"]["info"]["err_code"].$res["data"]["info"]["msg"]];
-        }
+
 
         return ["err" => null,"res"=>$res];
     }

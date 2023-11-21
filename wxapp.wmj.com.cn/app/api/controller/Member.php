@@ -11,9 +11,11 @@ namespace app\api\controller;
 use app\module\member\memberServer\MemberServer;
 use app\module\redis\Redis;
 use app\module\user\userServer\UserServer;
+use app\module\lockAuthServer\LockAuth;
 use think\facade\Db;
 use xhadmin\service\api\MemberService;
 use xhadmin\db\Member as MemberDb;
+use xhadmin\db\LockAuth as LockAuthDb;
 use think\facade\Cache;
 use think\facade\Log;
 
@@ -198,6 +200,12 @@ class Member extends Common
         //如果用户信息已经存在 则返回用户信息 并且生成token 将用户ID写入token
         if ($memberInfo) {
             $ret = ['status' => $this->successCode, 'data' => $memberInfo, 'token' => $this->setToken($memberInfo['member_id'])];
+            // //查询是否有演示钥匙，没有就加一个
+            // $lockauthres = LockAuthDb::getWhereInfo(['lock_id' => 11,'member_id' => $memberInfo['member_id']],'lockauth_id');
+            // if(!$lockauthres)
+            // {
+            //     LockAuth::Addtestauth(11, $memberInfo['member_id'], 1, 0);
+            // }
             return json($ret);
         } else {
             //$data['username']		= $userInfo['user_name'];		//用户名;
@@ -212,6 +220,8 @@ class Member extends Common
             if ($ret) {
                 $data['member_id'] = $ret;
                 $res = ['status' => $this->successCode, 'data' => $data, 'token' => $this->setToken($ret)];
+                //添加演示钥匙
+                //LockAuth::Addtestauth(11, $data['member_id'], 1, 0);
                 return json($res);
             }
             return json($memberInfo);

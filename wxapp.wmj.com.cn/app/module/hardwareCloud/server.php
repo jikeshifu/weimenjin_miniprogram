@@ -132,7 +132,7 @@ class server
      * @return int|mixed|string
      * 请求
      */
-    public function Request($path, $data = [])
+    public static function Request($path, $data = [])
     {
         $data["app_id"] = serverConfig::GetAppId();
         $data["app_secret"] =  serverConfig::GetAppSecret();

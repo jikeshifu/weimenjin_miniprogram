@@ -41,10 +41,8 @@ class Pwd
         $lock_id = input("lock_id");
         $pwd = input("pwd");
         $pwd_name = input("pwd_name");
-        $end_time = strtotime(input("end_time"));
-        if($end_time==0){
-            $end_time = input("end_time");
-        }
+        $end_time = input("end_time");
+
 
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
         if (strlen($pwd)<8){
@@ -53,7 +51,7 @@ class Pwd
 
        $addres= HardwareCloud::WifiLock()->PwdAdd($lock["lock_sn"], $pwd, $lock["device_cid"], 0, $end_time);
         if($addres["err"]){
-           return json(Code::CodeErr(1000,$addres["err"],$addres));
+           return json(Code::CodeErr(1000,$addres["err"],[$addres,$end_time]));
         }
         Db::name("pwd")->insert([
             "lock_id" => $lock_id,
@@ -62,7 +60,7 @@ class Pwd
             "end_time" => $end_time,
             "created_at" => time(),
         ]);
-        return json(Code::CodeOk(["res"=>$addres]));
+        return json(Code::CodeOk(["res"=>$addres,"cs"=>[$end_time]]));
     }
 
     public function temporaryPassword()

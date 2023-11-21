@@ -33,17 +33,22 @@ class face
         ]);
 
         if ($res["code"] != 0) {
-            return ["err" => $res["msg"]];
+            return ["err" => $res["msg"],"res"=>$res];
         }
+        if (isset($res["data"]["info"]["code"]) && $res["data"]["info"]["code"]  != 0 ) {
 
-
-        if ($res["data"]["info"]["err_code"] != 0 || $res["data"]["info"]["stateCode"] != 200) {
             if (isset($res["data"]["info"]["stateCode"]) && $res["data"]["info"]["stateCode"] != 203) {
 
+                return ["err" => "添加失败" . $res["data"]["info"]["code"] . $res["data"]["info"]["detail"],"res"=>$res];
 
-                return ["err" => "添加失败" . $res["data"]["info"]["err_code"] . $res["data"]["info"]["detail"]];
             }
 
+
+        }
+
+        if (isset($res["data"]["info"]["err_code"]) && ($res["data"]["info"]["err_code"] != 0 || $res["data"]["info"]["stateCode"] != 200)) {
+
+            return ["err" => "添加失败" . $res["data"]["info"]["err_code"] . $res["data"]["info"]["detail"],"res"=>$res];
         }
 
         return ["err" => null, 'res' => $res];

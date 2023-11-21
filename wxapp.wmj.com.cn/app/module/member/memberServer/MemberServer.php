@@ -96,31 +96,30 @@ class MemberServer
         $umemdata['user_id']=$user_id;
         $resumemdata=\xhadmin\db\Umember::getWhereInfo($umemdata);//获取当前这个普通管理员下这个用户是否有信息
 
-
         //创建用户信息
         if (!$resumemdata)
         {
             $umemdata['status']=1;
             $umemdata['ucreate_time']=time();
             $umemcreate=\xhadmin\db\Umember::createData($umemdata);
-            return $res;
         }
-
-        if($resumemdata["status"]==0){
-            $res["err"]="黑名单用户";
-        }else    if($resumemdata["status"]==2){
-            $Redis =Redis::Redis();
-            $key ="blacklist:".$resumemdata["status"];
-            if($Redis->get($key)==1){
-
-                $res["err"]="黑名单用户".  $resumemdata["umember_id"];
-            }else{
-                $Redis->set($key,1,3600*24);
-            }
-
-        }
-
-
-        return $res;
+        // if($resumemdata["status"]==0)
+        // {
+        //     $res["err"]="黑名单用户";
+        // }
+        // elseif($resumemdata["status"]==2)
+        // {
+        //     $Redis =Redis::Redis();
+        //     $key ="blacklist:".$resumemdata["status"];
+        //     if($Redis->get($key)==1)
+        //     {
+        //         $res["err"]="黑名单用户".  $resumemdata["umember_id"];
+        //     }
+        //     else
+        //     {
+        //         $Redis->set($key,1,3600*24);
+        //     }
+        // }
+        return $resumemdata;
     }
 }

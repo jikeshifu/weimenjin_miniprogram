@@ -33,6 +33,7 @@ class Lock
            return  json_decode($data,true);
        }
        $lock= Db::name("lock")->where(["lock_id" => $lock_id])->whereNull("deleted_at")->find();
+       //mlog("LockInfo_data:".json_encode($lock));
        if($lock){
            $Redis->set($key,json_encode($lock),5);
        }
@@ -123,7 +124,9 @@ class Lock
      */
     static function CardAdd($lockInfo, $cardsn, $endtime)
     {
-
+        if(!$endtime){
+            $endtime ="2862831776";
+        }
         if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
             $CardAdd = HardwareCloud::WifiLock()->CardAdd($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], time(), $endtime);
             $result["data"] = $CardAdd;
@@ -141,7 +144,7 @@ class Lock
         } else {
 
 
-            $result = wmjManageHandle($lockInfo['lock_sn'], 'addcard', [
+            $result = self::wmjAddCard($lockInfo['lock_sn'], 'addcard', [
                 "sn" => $lockInfo['lock_sn'],
                 "cardsn" => $cardsn,
                 "endtime" => $endtime,
@@ -152,7 +155,39 @@ class Lock
 
     }
 
+//卡管理
+   static function wmjAddCard($wmjsn, $type, $data=[])
+    {
+        $resconfig=\app\admin\db\Config::loadList();
 
+        $data['appid']=$resconfig['wmjappid'];
+        $data['appsecret']=$resconfig['wmjappsecret'];
+
+        $url = 'https://www.wmj.com.cn/platformapi/'.$type.'.html';
+        $result = self::wmjCardHttpPost($url, http_build_query($data));
+        return $result;
+    }
+
+
+   static function wmjCardHttpPost($url, $str) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,FALSE);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Content-Length: ' . strlen($str))
+        );
+        $res = curl_exec ($curl);
+        curl_close($curl);
+        $res = trim($res, "\xEF\xBB\xBF");
+        $res = json_decode($res, true);
+        return $res;
+    }
     /**
      * @param $lockInfo
      * @return mixed
@@ -184,6 +219,13 @@ class Lock
 
             ]);
         }
+
+        if( $result['state_msg'] == "当前卡未注册过"){
+            $result['state'] = 1;
+            $result['state_code'] = 200;
+            $result['state_msg'] = "删除卡成功";
+        }
+
         return $result;
 
     }
@@ -223,6 +265,7 @@ class Lock
                 $result['state'] = 0;
                 $result['state_code'] = 2003;
                 $result['state_msg'] = $OpenLock["err"];
+                $result['err'] = $OpenLock;
             } else {
                 $result['state'] = 1;
                 $result['state_code'] = 200;
@@ -245,7 +288,46 @@ class Lock
         return $result;
 
     }
+    /**
+     * @param $lockInfo
+     * @return mixed
+     * 开门
+     */
+    static function OpenLockTest($lock_sn)
+    {
 
+        //计算距离
+
+
+
+        if (mb_substr($lock_sn, 0, 3) == "W89" || mb_substr($lock_sn, 0, 3) == "W82" || mb_substr($lock_sn, 0, 3) == "W76" || mb_substr($lock_sn, 0, 3) == "W77") {
+            $OpenLock = HardwareCloud::WifiLock()->OpenLock($lock_sn, "88888888888888888888");
+
+            if ($OpenLock["err"]) {
+                $result['state'] = 0;
+                $result['state_code'] = 2003;
+                $result['state_msg'] = $OpenLock["err"];
+                $result['err'] = $OpenLock;
+            } else {
+                $result['state'] = 1;
+                $result['state_code'] = 200;
+                $result['state_msg'] = "开门成功";
+            }
+
+
+        } else {
+
+                wmjgwHandle($lock_sn, 'ctrlgwl');
+                $result = wmjHandle($lock_sn, 'openlock');
+
+        }
+
+
+
+
+        return $result;
+
+    }
     static $Yjy = [
         "W8",
         "W8",
@@ -256,7 +338,7 @@ class Lock
     {
         if (in_array(mb_substr($data["lock_sn"], 0, 2), self::$Yjy)) {
             $Register = HardwareCloud::App()->Register($data["lock_sn"]);
-         
+
 
             if ($Register["err"]) {
                 return ["err" => $Register["err"]];

@@ -28,8 +28,8 @@ class Member
 //        }
 
         $memberInfo = MemberServer::InfoWOpenid($wxUserRes["res"]["openid"]);
-        if(isset($wxUserRes["res"]["unionid"])&&!$memberInfo["unionid"]){
-            MemberServer::Edit($memberInfo["member_id"],['unionid'=>$wxUserRes["res"]["unionid"]]);
+        if (isset($wxUserRes["res"]["unionid"]) && !$memberInfo["unionid"]) {
+            MemberServer::Edit($memberInfo["member_id"], ['unionid' => $wxUserRes["res"]["unionid"]]);
         }
 
         return json(Code::CodeOk(["data" => [
@@ -40,19 +40,20 @@ class Member
 
     }
 
-    function deviceInfoSet(){
+    function deviceInfoSet()
+    {
         $res = MemberServer::Uid();
-        $data=[
-            "SDKVersion"=>input("SDKVersion"),
-            "bluetoothEnabled"=>input("bluetoothEnabled"),
-            "locationEnabled"=>input("locationEnabled"),
-            "wx_model"=>input("wx_model"),
-            "wx_platform"=>input("wx_platform"),
-            "wx_system"=>input("wx_system"),
-            "wx_version"=>input("wx_version"),
+        $data = [
+            "SDKVersion" => input("SDKVersion"),
+            "bluetoothEnabled" => input("bluetoothEnabled"),
+            "locationEnabled" => input("locationEnabled"),
+            "wx_model" => input("wx_model"),
+            "wx_platform" => input("wx_platform"),
+            "wx_system" => input("wx_system"),
+            "wx_version" => input("wx_version"),
         ];
         $member_id = $res["uid"];
-        $memberInfo = MemberServer::Edit($member_id,$data);
+        $memberInfo = MemberServer::Edit($member_id, $data);
         return json(Code::CodeOk(["data" => $memberInfo]));
 
     }
@@ -112,10 +113,41 @@ class Member
         }
         $res = Redis::Redis()->get($key);
         if (!$res) {
-            Redis::Redis()->set($key, $member_id,7200);
+            Redis::Redis()->set($key, $member_id, 7200);
             return json(Code::CodeOk(["msg" => "登录成功"]));
         }
         return json(Code::CodeErr(1000, "扫描登录失败"));
 
+    }
+
+
+    function account()
+    {
+        $res = MemberServer::Uid();
+        $member_id = $res["uid"];
+
+        $user = Db::name("user")->where(["member_id" => $member_id])->find();
+        return json(Code::CodeOk(["msg" => "查询成功", "data" => $user]));
+    }
+
+    function accountSet()
+    {
+        $res = MemberServer::Uid();
+        $member_id = $res["uid"];
+        $user = input("user");
+        $password = input("pwd");
+        $password = !empty(config('my.password_secrect')) ? trim($password) . config('my.password_secrect') : trim($password);
+        $password = md5($password);
+
+
+        $user1 = Db::name("user")->where(["user" => $user])->where("member_id", "<>", $member_id)->find();
+        if ($user1) {
+            return json(Code::CodeErr(1000, "账号已存在"));
+        }
+        $user = Db::name("user")->where(["member_id" => $member_id])->update([
+            "pwd" => $password,
+            "user" => $user
+        ]);
+        return json(Code::CodeOk(["msg" => "查询成功", "data" => $user]));
     }
 }

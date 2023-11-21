@@ -756,7 +756,7 @@ class BuildService extends CommonService
 				$str .="						</div>\n";
 				$str .="					</div>\n";
 				
-				$str .="					<script type=\"text/javascript\" src=\"https://webapi.amap.com/maps?v=1.3&key=ed1fafa0307bb4991da41f54d8a88b46\"></script>\n";
+				$str .="					<script type=\"text/javascript\" src=\"https://webapi.amap.com/maps?v=1.3&key=af5cdc6f55d7452b0b0ce9c2db489930\"></script>\n";
 				$str .="					<script src=\"__PUBLIC__/static/js/plugins/map/bootstrap.AMapPositionPicker.js\"></script>\n";
 				$str .="					<script type=\"text/javascript\">\n";
 				$str .="					$(function () {\n";

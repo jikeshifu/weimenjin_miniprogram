@@ -9,6 +9,7 @@ use app\module\hardwareCloud\HardwareCloud;
 use app\module\lockServer\Lock;
 use app\module\lockServer\LockLog;
 use app\module\member\memberServer\MemberServer;
+use app\module\redis\Redis;
 use think\facade\Db;
 use xhadmin\db\LockAuth as LockAuthDb;
 use xhadmin\service\api\LockAuthService;
@@ -19,6 +20,10 @@ class LockAuth
     {
 
         $lockauth_id = input("lockauth_id");
+        $uidInfo = MemberServer::Uid();
+
+        Redis::Redis()->set("applyAuth:".$uidInfo["uid"],$lockauth_id,360);
+
 
         $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
         $limit = input("limit");
@@ -120,6 +125,8 @@ class LockAuth
     {
 
         $uidInfo = MemberServer::Uid();
+
+
         $data['member_id'] = $uidInfo["uid"];
 
 
@@ -170,9 +177,9 @@ class LockAuth
 
 
 
-
+        $lockauth = Db::name("lockauth")->where(["lock_id" => $data["lock_id"]])->whereNull("deleted_at")->find();
         $senddata['lock_id'] = $data['lock_id'];
-        $senddata['lockauth_id'] = $lockauth[0]['lockauth_id'];
+        $senddata['lockauth_id'] = $lockauth['lockauth_id'];
         $senddata['lockname'] = $lockdata['lock_name'];
         $senddata['username'] = $user_name . "-" . $lockdata['lock_name'];
         $senddata['mobile'] = $member["mobile"];

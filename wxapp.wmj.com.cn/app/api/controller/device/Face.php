@@ -45,6 +45,42 @@ class Face extends Base
         ]));
     }
 
+
+
+
+    public function sync()
+    {
+        $lock_ids = input("lock_ids");
+        $p_lock_id = input("p_lock_id");
+
+        $lockcard = Db::name("face")->where(["lock_id" => $p_lock_id])->whereNull("deleted_at")->select()->toArray();
+
+
+
+        foreach ($lock_ids as $lock_idsVo) {
+            if($lock_idsVo !=$p_lock_id){
+                foreach ($lockcard as $arrVo) {
+                    unset($arrVo["face_id"]);
+                    $arrVo["lock_id"] = $lock_idsVo;
+                    $arrVo["sync_status"] = 0;
+
+                    $lockcard = Db::name("face")->where(["lock_id"=>$lock_idsVo,"face_images"=> $arrVo["face_images"]])->whereNull("deleted_at")->find();
+                    if(!$lockcard){
+                        Db::name("face")->insert($arrVo);
+                    }
+
+
+                }
+            }
+
+
+        }
+
+
+
+        return json(Code::CodeOk(["msg" => "同步成功"]));
+
+    }
     public function add()
     {
 
@@ -86,8 +122,8 @@ class Face extends Base
 
             return json(Code::CodeErr(1000, $addres["err"]));
         }
-        if ($addres["res"]["data"]["info"]["stateCode"] == 203) {
-            $sCertificateNumber = $addres["res"]["data"]["info"]["existCertificateNumber"];
+        if ($addres["data"]["info"]["stateCode"] == 203) {
+            $sCertificateNumber = $addres["data"]["info"]["existCertificateNumber"];
         }
         $face = Db::name("face")->where(["lock_id" => $lock_id])->whereNull("deleted_at")->where(["sCertificateNumber" => $sCertificateNumber])->find();
         if (!$face) {

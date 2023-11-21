@@ -14,7 +14,11 @@ class Device
         switch ($type) {
             case "W72":
             case "W71";
+
                 $deviceType = "switch";
+                break;
+            case "W73";
+                $deviceType = "switchLock";
                 break;
             case "W70";
                 $deviceType = "horn";

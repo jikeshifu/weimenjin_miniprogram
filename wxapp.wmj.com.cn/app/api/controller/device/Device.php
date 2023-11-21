@@ -91,13 +91,19 @@ class Device extends Base
         $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
 
         $lock = Lock::Info($lockAuth["lock_id"]);
-
+        //判断设备是否停用
+        if (!$lock['status'] && !$lockAuth['auth_isadmin']) {
+            return json(Code::CodeErr(1000, "设备已停用", $lock['status']));
+        } //判断设备是否停用
+        if (!$lock['openbtn'] && !$lockAuth['auth_isadmin']) {
+            return json(Code::CodeErr(1000, "设备关闭小程序操作", $lock['status']));
+        }
         $latitude = input("latitude");
         $longitude = input("longitude");
         $uidInfo = MemberServer::Uid();
         $UMemberRes = MemberServer::UMember($uidInfo["uid"], $lock["user_id"]);
         if ($UMemberRes["err"]) {
-            return json(Code::CodeErr(1001, $UMemberRes['err'], $UMemberRes));
+            return json(Code::CodeErr(1000, $UMemberRes['err'], $UMemberRes));
         }
         //钥匙校验
         $VerifyRes = \app\module\lockAuthServer\LockAuth::Verify($lockauth_id);
@@ -152,10 +158,10 @@ class Device extends Base
         $lock_sn = input("lock_sn");
 
 
-        $lock = Lock::InfoWLockSn($lock_sn);
 
 
-        $result = \app\module\lockServer\Lock::OpenLock($lock);
+
+        $result = \app\module\lockServer\Lock::OpenLockTest($lock_sn);
 
 
         if ($result['state'] == 1) {
@@ -188,12 +194,15 @@ class Device extends Base
 
         $memberInfo = MemberServer::Info($data['member_id']);
         if ($lock['mobile_check'] && strlen($memberInfo['mobile']) < 10) {
-
             return json(Code::CodeErr(1001, "需要先绑定手机号", $memberInfo));
         }
 
         //查询是否有钥匙
         $lockauth = Db::name("lockauth")->where(["lock_id" => $lock_id, "member_id" => $data['member_id']])->whereNull("deleted_at")->find();
+        //判断设备是否停用
+        if (!$lock['status'] && !$lockauth['auth_isadmin']) {
+            return json(Code::CodeErr(1000, "设备已停用", $lock['status']));
+        }
         //如果需要申请钥匙
         if ($lock["applyauth"] == 1) {
 
@@ -212,24 +221,32 @@ class Device extends Base
             }
 
         }
-
-
-//
-//        elseif (!$lockauth) {
-//            return json(Code::CodeErr(1000, "您没有权限", $lockauth));
-//
-//        }
-
+        //创建和普通管理员用户关联的用户信息(umember)
         $UMemberRes = MemberServer::UMember($data['member_id'], $lock["user_id"]);
-        if ($UMemberRes["err"]) {
-            return json(Code::CodeErr(1001, $UMemberRes['err'], $UMemberRes));
+        //mlog("openinfo:" . $data['member_id'] . "_" . $lock["user_id"] . "_" . $UMemberRes["status"]);
+        if (!empty($UMemberRes["status"])&&$UMemberRes["status"] == 0) {
+            return json(Code::CodeErr(1000, "异常用户", $UMemberRes));
         }
-
-
+        if ($UMemberRes["status"] == 2) {
+            //查询管理员手机号
+            //先查询所有管理员ID
+            $mawhere['lock_id'] = $lock_id;
+            $mawhere['auth_isadmin'] = 1;
+            $mobiles = "";
+            $madataid = db()->name('lockauth')->where($mawhere)->select();
+            foreach ($madataid as $nvalue) {
+                $maphonedata = \xhadmin\db\Member::getInfo($nvalue['member_id']);
+                $mobiles = $mobiles . "," . $maphonedata['mobile'];
+            }
+            //mlog("mobiles:".$mobiles);
+            $prex = "【微门禁提示】";
+            db()->name('lock')->where('lock_id', $lock_id)->update(['status' => 0]);
+            $content = "有黑名单用户进入" . $lock['lock_name'] . ",该门已禁用,设备序列号为" . $lock['lock_sn'];
+            $smsdata = array("mobiles" => $mobiles, "content" => $prex . $content);
+            $result = sendymSms($smsdata);
+        }
         $latitude = input("latitude");
         $longitude = input("longitude");
-
-
         $result = \app\module\lockServer\Lock::OpenLock($lock, $latitude, $longitude);
 
         if ($result['state'] == 1) {
@@ -251,14 +268,14 @@ class Device extends Base
             $senddata['locksn'] = $lock['lock_sn'];
             $senddata['opentype'] = 1;
             $senddata['uniondata'] = \app\module\lockAuthServer\LockAuth::AdminList($lock_id);
-            wmjSendWechatMsg('wxappopsucnt', $senddata);
+            wmjSendWechatMsg('wxappopsucntNew', $senddata);
 
             return json(Code::CodeOk(["msg" => "开门成功", "data" => [
                 "successimg" => "https://wxapp.wmj.com.cn/" . $lock["successimg"],
                 "xcx_sound" => $lock["xcx_sound"],
             ]]));
         }
-        if ($result['state_msg'] == "失败,网络故障") {
+        if ($result['state_msg'] == "失败,网络故障" || $result['state_msg'] == "设备不在线") {
             return json(Code::CodeErr(1003, $result['state_msg'], $lock));
         }
         return json(Code::CodeErr(1000, $result['state_msg'], $result));
@@ -281,6 +298,66 @@ class Device extends Base
         }
         LockLog::add($member_id, $lock["lock_id"], 5, 1);
         return json(Code::CodeOk(["msg" => "开成功"]));
+
+    }
+
+    function open()
+    {
+        $lockauth_id = input("lockauth_id");
+        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+
+        $lock = Lock::Info($lockAuth["lock_id"]);
+        $OpenLock = HardwareCloud::LockSwitch()->Open($lock["lock_sn"]);
+
+        $UidRes = MemberServer::Uid();
+
+        $member_id = $UidRes["uid"];
+        if ($OpenLock["err"]) {
+            LockLog::add($member_id, $lock["lock_id"], 5, 0);
+            return json(Code::CodeErr(1000, ($OpenLock["err"])));
+        }
+        LockLog::add($member_id, $lock["lock_id"], 5, 1);
+        return json(Code::CodeOk(["msg" => "开成功"]));
+
+    }
+
+    function close()
+    {
+        $lockauth_id = input("lockauth_id");
+        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+
+        $lock = Lock::Info($lockAuth["lock_id"]);
+        $OpenLock = HardwareCloud::LockSwitch()->Close($lock["lock_sn"]);
+
+        $UidRes = MemberServer::Uid();
+
+        $member_id = $UidRes["uid"];
+        if ($OpenLock["err"]) {
+            LockLog::add($member_id, $lock["lock_id"], 5, 0);
+            return json(Code::CodeErr(1000, ($OpenLock["err"])));
+        }
+        LockLog::add($member_id, $lock["lock_id"], 5, 1);
+        return json(Code::CodeOk(["msg" => "关成功"]));
+
+    }
+
+    function pause()
+    {
+        $lockauth_id = input("lockauth_id");
+        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+
+        $lock = Lock::Info($lockAuth["lock_id"]);
+        $OpenLock = HardwareCloud::LockSwitch()->Pause($lock["lock_sn"]);
+
+        $UidRes = MemberServer::Uid();
+
+        $member_id = $UidRes["uid"];
+        if ($OpenLock["err"]) {
+            LockLog::add($member_id, $lock["lock_id"], 5, 0);
+            return json(Code::CodeErr(1000, ($OpenLock["err"])));
+        }
+        LockLog::add($member_id, $lock["lock_id"], 5, 1);
+        return json(Code::CodeOk(["msg" => "停成功"]));
 
     }
 
@@ -463,7 +540,7 @@ class Device extends Base
             "batterypower" => $lock["batterypower"],
             "rssi" => $lock["rssi"],
             "iccid" => $lock["iccid"],
-            "version" => $lock["version"],
+            "version" => $lock["firmware_version"] ? $lock["firmware_version"] : $lock["version"],
             "addcardmode" => $lock["addcardmode"],
         ];
         $info["addcardmode_status"] = 0;
@@ -481,6 +558,7 @@ class Device extends Base
             $info["qrServer_type"] = 1;
 
         }
+        mlog("infoV2:" . json_encode($info));
         return json(Code::CodeOk([
             "msg" => "获取成功",
             "data" => $info,
@@ -510,8 +588,8 @@ class Device extends Base
         $model = LockAuth::where(["member_id" => $member_id])->whereNull("deleted_at")->where(["auth_status" => 1]);
 
         if ($DeviceGroupInfo["type"] == 1) {
-            $model->where(function ($q)use($DeviceGroupInfo){
-                $q->whereOr(["device_group_id" => 0])  ;
+            $model->where(function ($q) use ($DeviceGroupInfo) {
+                $q->whereOr(["device_group_id" => 0]);
                 $q->whereOr(["device_group_id" => $DeviceGroupInfo["device_group_id"]]);
             });
 
@@ -534,13 +612,13 @@ class Device extends Base
 
             $vo["lock"] = \app\module\lockServer\Lock::Online($vo["lock"]);
 
-            if(mb_substr($vo["lock"]["lock_sn"],0,3)=="W71"){
+            if (mb_substr($vo["lock"]["lock_sn"], 0, 3) == "W71" || mb_substr($vo["lock"]["lock_sn"], 0, 3) == "W72") {
                 $Getdevinfo = HardwareCloud::AirSwitch()->Getdevinfo($vo["lock"]["lock_sn"]);
                 if (!$Getdevinfo["err"]) {
-                    $vo["lock"]["switch_state"]=$Getdevinfo["data"]["info"]["switch_state"];
+                    $vo["lock"]["switch_state"] = $Getdevinfo["data"]["info"]["switch_state"];
 
-                }else{
-                    $vo["lock"]["switch_state"]=0;
+                } else {
+                    $vo["lock"]["switch_state"] = 0;
                 }
 
             }
@@ -600,15 +678,12 @@ class Device extends Base
             }
 
 
-        }
-        elseif(mb_substr($lockdata["lock_sn"], 0, 3) == "W76")
-        {
+        } elseif (mb_substr($lockdata["lock_sn"], 0, 3) == "W76") {
             $Accesscontrolres = HardwareCloud::Accesscontrol()->Configaudio($lockdata["lock_sn"], $tts, $volume);
             if ($Accesscontrolres["err"]) {
                 return json(Code::CodeErr(1000, $Accesscontrolres["err"]));
             }
-        }
-        else {
+        } else {
 
             $stateresult = wmjHandle($lockdata['lock_sn'], 'lockstate');
             $postdata['sn'] = $lockdata['lock_sn'];
@@ -654,6 +729,40 @@ class Device extends Base
 
             $lock_ability = \app\module\device\server\Device::DeviceAbility($vo["lock"]["lock_sn"]);
             if ($lock_ability["card_status"]) {
+                $arr[] = [
+                    "lock_id" => $vo["lock_id"],
+                    "lock_name" => $vo["lock"]["lock_name"],
+                    "lock_sn" => $vo["lock"]["lock_sn"],
+                ];
+            }
+
+        }
+
+
+        return json(Code::CodeOk(["msg" => "获取成功", "data" => $arr,]));
+
+    }
+
+    function listFace()
+    {
+
+
+        $res = MemberServer::Uid();
+        $member_id = $res["uid"];
+
+
+        $model = LockAuth::where(["member_id" => $member_id])->whereNull("deleted_at")->where([
+            "auth_status" => 1,
+            "auth_isadmin" => 1,
+        ]);
+
+
+        $lockauth = $model->with("lock")->order("lockauth_id desc")->select()->toArray();
+        $arr = [];
+        foreach ($lockauth as $vo) {
+
+            $lock_ability = \app\module\device\server\Device::DeviceAbility($vo["lock"]["lock_sn"]);
+            if ($lock_ability["face_status"]) {
                 $arr[] = [
                     "lock_id" => $vo["lock_id"],
                     "lock_name" => $vo["lock"]["lock_name"],
@@ -776,9 +885,7 @@ class Device extends Base
                     return json(Code::CodeErr(1001, $res["err"]));
                 }
 
-            } 
-            elseif(mb_substr($lockdata['lock_sn'], 0, 3) == "W77")
-            {
+            } elseif (mb_substr($lockdata['lock_sn'], 0, 3) == "W77") {
                 $type = input("type");
                 $model = "passive";
                 switch ($type) {
@@ -793,8 +900,7 @@ class Device extends Base
                 if ($res["err"]) {
                     return json(Code::CodeErr(1001, $res["err"]));
                 }
-            }
-            else {
+            } else {
                 $stateresult = wmjHandle($lockdata['lock_sn'], 'lockstate');
                 if ($stateresult['online']) {
 
@@ -829,14 +935,21 @@ class Device extends Base
 
 
         $model = \app\module\model\LockLog::where([]);
-
+        $model->alias("log")->field("log.*");
         if ($lock_id) {
-            $model->where(["lock_id" => $lock_id]);
+            $model->where(["log.lock_id" => $lock_id]);
         } else {
-            $model->where(["member_id" => $member_id]);
+            $model->where(["log.member_id" => $member_id]);
         }
 //        $model->whereNull("mobile");
         $count = $model->count();
+
+        $search_key = input("search_key");
+        if ($search_key) {
+            $model->leftJoin("member m", "m.member_id = log.member_id");
+            $model->where("m.mobile","like","%{$search_key}%");
+        }
+
         $LockLog = $model->with(["lock", "memberInfo"])->order("locklog_id desc")->page($page, $limit)->select();
 
         foreach ($LockLog as &$vo) {
@@ -897,11 +1010,11 @@ class Device extends Base
         $device_group_id = input("device_group_id");
         $DeviceGroupInfo = \app\module\device\server\DeviceGroup::Info($device_group_id);
 
-        $model = LockAuth::where(["member_id" => $member_id])->where("auth_status","<>",0)->whereNull("deleted_at");
+        $model = LockAuth::where(["member_id" => $member_id])->where("auth_status", "<>", 0)->whereNull("deleted_at");
 
         if ($DeviceGroupInfo["type"] == 1) {
-            $model->where(function ($q)use($DeviceGroupInfo){
-                $q->whereOr(["device_group_id" => 0])  ;
+            $model->where(function ($q) use ($DeviceGroupInfo) {
+                $q->whereOr(["device_group_id" => 0]);
                 $q->whereOr(["device_group_id" => $DeviceGroupInfo["device_group_id"]]);
             });
         } else {
@@ -933,7 +1046,10 @@ class Device extends Base
         if ($lockauth["auth_member_id"] != 0) {
             return json(Code::CodeErr(1000, "没有权限"));
         }
-        Db::name("lockauth")->where(['lockauth_id' => $lockauth_id, "member_id" => $res["uid"]])->update(["member_id" => $member_id]);
+        Db::name("lockauth")->where(['lockauth_id' => $lockauth_id, "member_id" => $res["uid"]])->update([
+            "member_id" => $member_id,
+            "device_group_id"=>0
+        ]);
 
         return json(Code::CodeOk(["msg" => "转移成功",]));
     }
@@ -1016,7 +1132,7 @@ class Device extends Base
         $Uid = MemberServer::Uid();
 
 
-        $data = OrderServer::Add($Uid["uid"], $price, $product_id,$sim_sn);
+        $data = OrderServer::Add($Uid["uid"], $price, $product_id, $sim_sn);
 
 
         //查询用户信息

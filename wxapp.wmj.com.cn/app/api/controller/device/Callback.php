@@ -20,6 +20,7 @@ class Callback
 
 
         $info = input("info");
+//        mlog("Callback_input:".json_encode(input()));
         $device_sn = input("device_sn");
         $lock = Db::name("lock")->where(['lock_sn' => $device_sn])->whereNull("deleted_at")->find();
         Redis::Redis()->set("device_sn:{$cmd}:" . $device_sn, json_encode($info), 360);
@@ -49,6 +50,7 @@ class Callback
                     "model_number" => $info["model"],
                     "hardware_version" => $info["hw_ver"],
                     "firmware_version" => $info["sw_ver"],
+                    "rssi" => $info["rssi"],
                     "iccid" => $info["iccid"],
                     "imei" => $info["imei"],
                 ]);
@@ -56,14 +58,28 @@ class Callback
 
             case "notify";
                 //查询人脸
-                $face = Db::name("face")->where(["sCertificateNumber" =>$info["sCertificateNumber"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
-                LockLog::add($face["member_id"], $lock["lock_id"], 11,1, $face["face_name"]);
+                $face = Db::name("face")->where(["sCertificateNumber" => $info["sCertificateNumber"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
+                LockLog::add($face["member_id"], $lock["lock_id"], 11, 1, $face["face_name"]);
                 break;
             case "card_notify";
                 //查询卡
-                $lockcard = Db::name("lockcard")->where(["lockcard_sn" =>$info["card_id"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
-                LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1,$lockcard["lockcard_username"]);
+                $lockcard = Db::name("lockcard")->where(["lockcard_sn" => $info["card_id"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
+                LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1, $lockcard["lockcard_username"]);
                 break;
+            case "open_notify";
+                if ($info["type"]=="card") {
+                    //查询卡
+                    $lockcard = Db::name("lockcard")->where(["lockcard_sn" => $info["data"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
+                    LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1, $lockcard["lockcard_username"]);
+
+                }
+                break;
+                case "door_state_notify";
+                   Db::name("lock")->where(['lock_sn' => $device_sn])->whereNull("deleted_at")->update([
+                       "switch_state"=>$info["state"]
+                   ]);
+
+                    break;
             case "open":
             case "lock_open";
 

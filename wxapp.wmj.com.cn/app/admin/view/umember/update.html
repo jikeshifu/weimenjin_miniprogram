@@ -12,8 +12,8 @@
 						<div class="col-sm-9">
 							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
 							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="正常">
-							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="黑名单">
-							<input name="status" value="2" type="radio" {if condition="$info.status eq '2'"}checked{/if} title="可开门一次黑名单">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="黑名单(不让再开)">
+							<input name="status" value="2" type="radio" {if condition="$info.status eq '2'"}checked{/if} title="黑名单(禁用门禁通知管理员)">
 						</div>
 					</div>
 					<div class="form-group">
