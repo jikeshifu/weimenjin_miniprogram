@@ -2,7 +2,7 @@
 	<view class="big-box">
 		<view class="background"></view>
 		<view class="content">
-			<view class="top-box">
+			<view class="top-box" style="min-height: 400rpx;">
 
 				<view class="cell-item" @click="openTime('startTime')">
 					<view class="label">开始时间：</view>
@@ -48,9 +48,9 @@
 				</view>
 
 			</view>
-			<view class="bottom">
-				<view class="btn" v-if="!share_lockauth_id" @click="create">生成钥匙</view>
-				<button class="share-btn" hover-class="none" open-type="share" v-else>
+			<view class="bottom" style="position: relative;">
+		
+				<button class="share-btn" hover-class="none" open-type="share" >
 					<view class="btn">立即分享</view>
 				</button>
 			</view>
@@ -92,7 +92,7 @@
 				}
 			}
 		},
-		onShareAppMessage() {},
+
 		onShareTimeline() {},
 		onLoad(option) {
 			// let now = new Date()
@@ -111,7 +111,10 @@
 			this.formData.lockauth_id = option.lockauth_id ? option.lockauth_id : ''
 			
 		},
-		onShareAppMessage(res) {
+		async onShareAppMessage(res) {
+		
+		 await	this.create()
+			
 			return {
 				title: '点击领取钥匙',
 				path: '/pages/getLock/getLock?share_lockauth_id=' + this.share_lockauth_id,
@@ -156,6 +159,7 @@
 				}
 			},
 			openTime(type) {
+				console.log(type)
 				this.$refs.datetimePicker.open();
 				this.timeType = type
 			},

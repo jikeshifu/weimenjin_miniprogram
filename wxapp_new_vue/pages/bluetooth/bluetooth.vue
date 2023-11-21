@@ -57,12 +57,12 @@
 		onShareTimeline() {},
 		onLoad(option) {},
 		async onShow() {
-		 let bluetoothFormData=	uni.getStorageSync("bluetoothFormData")
+			let bluetoothFormData = uni.getStorageSync("bluetoothFormData")
 
-			if(bluetoothFormData){
-				  this.formData=  bluetoothFormData
+			if (bluetoothFormData) {
+				this.formData = bluetoothFormData
 			}
-            		//初始化蓝牙
+			//初始化蓝牙
 			let openBluetoothAdapter = await Ble.OpenBluetoothAdapter()
 			if (openBluetoothAdapter.err != null) {
 				console.log(openBluetoothAdapter)
@@ -145,8 +145,8 @@
 				//开启搜索
 				await bleServer.SearchDevice()
 				let GetBluetoothDevicesRes = await Ble.GetBluetoothDevices()
-				console.log("GetBluetoothDevicesRes:",GetBluetoothDevicesRes)
-				if(GetBluetoothDevicesRes.err !=null ) {
+				console.log("GetBluetoothDevicesRes:", GetBluetoothDevicesRes)
+				if (GetBluetoothDevicesRes.err != null) {
 					uni.showToast({
 						icon: "none",
 						title: GetBluetoothDevicesRes.err,
@@ -154,7 +154,7 @@
 					});
 					return
 				}
-				if( GetBluetoothDevicesRes.devices.length<1) {
+				if (GetBluetoothDevicesRes.devices.length < 1) {
 					uni.showToast({
 						icon: "none",
 						title: "没有发现设备请重试",
@@ -206,14 +206,14 @@
 
 
 
-			let _this =this
-			uni.scanCode({
-				success: (res) => {
-					_this.device_sn =res.result
-					// 二维码内容
-					console.log(res)
-				}
-			});
+				let _this = this
+				uni.scanCode({
+					success: (res) => {
+						_this.device_sn = res.result
+						// 二维码内容
+						console.log(res)
+					}
+				});
 			},
 			showToast(msg) {
 				uni.showToast({

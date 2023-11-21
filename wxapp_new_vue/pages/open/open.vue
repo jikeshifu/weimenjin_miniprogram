@@ -41,23 +41,24 @@
 		<privacy-popup ref="privacyComponent"></privacy-popup>
 		<!-- #endif -->
 	</view>
-	
+
 </template>
 
 <script>
-	
-		import PrivacyPopup from '@/components/privacy-popup/privacy-popup.vue';
+	import PrivacyPopup from '@/components/privacy-popup/privacy-popup.vue';
 	import device from '../../module/device/index.js'
 	import lockServer from '../../module/device/lock.js'
 	import ble from '../../module/ble/index.js'
-	
-	
+
+
 	import {
 		getQueryString
 	} from '../../libs/utils.js';
 	import {
 		qrOpenLock_api,
 		wxXcxMobile_api,
+		zfbXcxMobile_api,
+		zfb_edit_info,
 		applyAuth_api
 	} from '../../api/index.js';
 	export default {
@@ -79,8 +80,10 @@
 		onShareAppMessage() {},
 		onShareTimeline() {},
 		onLoad(option) {
-			console.log('option', option)
-
+			if (option.lock_id) {
+				this.lock_id = option.lock_id;
+			}
+			// #ifdef MP-WEIXIN
 			// 扫码带的参数
 			if (option.q) {
 				let scene = decodeURIComponent(option.q) // 使用decodeURIComponent解析  获取当前二维码的网址
@@ -89,6 +92,20 @@
 				console.log(paramobj)
 				this.lock_id = paramobj
 			}
+			// #endif
+
+			// #ifdef MP-ALIPAY
+			let qrcodeLockId = uni.getStorageSync("qrcodeLockId")
+			if (qrcodeLockId) {
+				this.lock_id = qrcodeLockId
+			}
+			// #endif
+
+
+			console.log('option', option)
+
+
+
 
 			// 从‘我的-绑定手机号进入’
 			if (option.type) {
@@ -103,9 +120,7 @@
 				return
 			}
 
-			// #ifdef MP-WEIXIN
 			this.getLocation()
-			// #endif
 		},
 		methods: {
 			async qrOpenLock() {
@@ -118,10 +133,10 @@
 					longitude: this.longitude
 				})
 				if (res.code === 0) {
-					if(res.data.xcx_sound==1){
-							await lockServer.OpenLockMp3()
+					if (res.data.xcx_sound == 1) {
+						await lockServer.OpenLockMp3()
 					}
-						
+
 					if (res.data.successimg) {
 						this.pageType = 'succeed'
 						this.successimg = res.data.successimg
@@ -132,18 +147,21 @@
 								url: '/pages/index/index'
 							})
 							clearTimeout(timer)
-						}, 1500)
+						}, 3000)
 					}
 
 				} else if (res.code === 1001) {
 					this.pageType = 'phone'
+					uni.hideLoading()
 				} else if (res.code === 1002) {
 					this.pageType = 'apply'
+					uni.hideLoading()
 				} else if (res.code === 1003) {
 					console.log("DeviceInfo：", res)
 
 					let DeviceInfo = res.data
-					if (DeviceInfo.lock_sn.indexOf('WMJ62') > -1) {
+						console.log("DeviceInfo：", DeviceInfo)
+					if (DeviceInfo.lock_sn.indexOf('WMJ62') > -1 || DeviceInfo.lock_sn.indexOf('W76') > -1) {
 						let OpenBluetoothAdapterRes = await ble.OpenBluetoothAdapter()
 
 						if (OpenBluetoothAdapterRes.err != null) {
@@ -151,7 +169,7 @@
 								uni.switchTab({
 									url: '/pages/index/index'
 								})
-							}, 1500)
+							}, 3000)
 							wx.showToast({
 								title: OpenBluetoothAdapterRes.err,
 								icon: "none",
@@ -161,13 +179,13 @@
 							return
 						}
 						await device.OpenLockBle(DeviceInfo.lock_sn, DeviceInfo.lock_id)
-						
-						
+
+
 						setTimeout(function() {
 							uni.switchTab({
 								url: '/pages/index/index'
 							})
-						}, 1500)
+						}, 3000)
 						return
 					} else {
 						uni.showToast({
@@ -176,16 +194,17 @@
 						})
 					}
 				} else {
-					
-			
+
+					this.showToast(res.msg)
 					let timer = setTimeout(() => {
 						uni.switchTab({
 							url: '/pages/index/index'
 						})
 						clearTimeout(timer)
-					}, 1500)
+					}, 3000)
 				}
 				this.showToast(res.msg)
+				uni.hideLoading()
 			},
 			// 申请钥匙
 			async onSubmit() {
@@ -211,7 +230,7 @@
 						})
 						clearTimeout(timer)
 					}, 1000)
-				}else if (res.code == 1001) {
+				} else if (res.code == 1001) {
 					this.qrOpenLock()
 				} else {
 					uni.hideLoading()
@@ -219,6 +238,39 @@
 				}
 			},
 			async getphonenumber(e) {
+				// #ifdef MP-ALIPAY
+				my.getPhoneNumber({
+					success: (res) => {
+						zfbXcxMobile_api(res.response).then(res1 => {
+							if (res1.code == 10000) {
+								uni.hideLoading()
+								zfb_edit_info({
+									mobile: res1.mobile
+								}).then(info => {
+
+								})
+								if (this.isQropen) {
+									this.qrOpenLock()
+								} else {
+									this.showToast('绑定成功')
+									let timer = setTimeout(() => {
+										uni.navigateBack({
+											delta: 1
+										})
+										clearTimeout(timer)
+									}, 1000)
+
+								}
+							} else {
+								this.showToast(res1.msg)
+								uni.hideLoading()
+							}
+						})
+
+					}
+				})
+				// #endif
+				// #ifdef MP-WEIXIN
 				uni.login({
 					provider: 'weixin',
 					success: async loginRes => {
@@ -259,8 +311,14 @@
 						});
 					}
 				});
+
+				// #endif
 			},
 			getLocation() {
+				// #ifdef MP-ALIPAY
+				this.getAddress();
+				return;
+				// #endif
 				let that = this;
 				uni.authorize({
 					scope: 'scope.userLocation',
@@ -302,9 +360,9 @@
 						this.longitude = res.longitude
 						this.qrOpenLock()
 					},
-					fail: err=> {
+					fail: err => {
 						console.log(err);
-							this.qrOpenLock()
+						this.qrOpenLock()
 					}
 				});
 			},

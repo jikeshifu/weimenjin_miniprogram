@@ -33,12 +33,12 @@
 				</view>
 			</view>
 			<view class="list">
-				<view :class="['item', item.status !== 1||item.lock.switch_state ? 'item-on' : '']"
-					v-for="(item, index) in dataList"
-					:key="index">
+				<view :class="['item', item.status !== 1 ||item.lock.switch_state ? 'item-on' : '']"
+					v-for="(item, index) in dataList" :key="index">
 					<view class="flex-box">
 						<view class="share">
-							<image src="../../static/fenxiang.png" v-if="item.status !== 1||item.lock.switch_state"></image>
+							<image src="../../static/fenxiang.png" @click="onShare(item)"
+								v-if="item.status !== 1 ||item.lock.switch_state"></image>
 							<block v-else>
 								<image src="../../static/fenxiang-on.png" @click="onShare(item)"
 									v-if="item.auth_shareability === 1 && item.lock.online == 1"></image>
@@ -46,7 +46,8 @@
 							</block>
 						</view>
 						<view class="site" @click="changeSite(index,item)">
-							<image src="../../static/shezhi.png" v-if="item.status !== 1 ||item.lock.switch_state"></image>
+							<image src="../../static/shezhi.png" v-if="item.status !== 1 ||item.lock.switch_state">
+							</image>
 							<block v-else>
 								<image src="../../static/shezhi-on.png" v-if="item.lock.online == 1"></image>
 								<image src="../../static/shezhi-hui.png" v-else></image>
@@ -62,38 +63,30 @@
 					</view>
 					<view class="indate" v-if="item.lock">{{ item.auth_endtime1 }}</view>
 					<view class="key">
-						<view class="btn btn-on" v-if="item.status !== 1">
-							<i class="iconfont icon-yuechi icon-default icon-on" v-if="item.device_type === 'lock'"></i>
-							<i class="iconfont icon-shandian icon-default icon-on"
+						<view class="btn btn-on" v-if="item.status !== 1 ||item.lock.switch_state">
+							<i class="iconfont icon-yuechi icon-default icon-on" @click="unlocking(item)" v-if="item.device_type === 'lock'"></i>
+							<i class="iconfont icon-yuechi icon-default icon-on"
+								v-if="item.device_type === 'switchLock'"></i>
+							<i class="iconfont icon-shandian icon-default icon-on" @click="onSwitch(item)"
 								v-if="item.device_type === 'switch'"></i>
 							<i class="iconfont icon-laba icon-default icon-on" v-if="item.device_type === 'horn'"></i>
 						</view>
 						<block v-else>
-							<block v-if="item.lock.online === 1">
-								<view class="btn" :class="{'btn-on':item.lock.switch_state}" @click="unlocking(item)"
-									v-if="item.device_type === 'lock'">
-									<i class="iconfont icon-yuechi icon-default" :class="{'icon-on':item.lock.switch_state}"></i>
-								</view>
-								<view class="btn" :class="{'btn-on':item.lock.switch_state}" @click="onSwitch(item)"
-									v-if="item.device_type === 'switch'">
-									<i class="iconfont icon-shandian icon-default" :class="{'icon-on':item.lock.switch_state}"></i>
-								</view>
-								<view class="btn" :class="{'btn-on':item.lock.switch_state}" @click="onPlay(item)"
-									v-if="item.device_type === 'horn'">
-									<i class="iconfont icon-laba icon-default" :class="{'icon-on':item.lock.switch_state}"></i>
-								</view>
-							</block>
-							<block v-else>
-								<view class="btn offline" @click="offline(item)" v-if="item.device_type === 'lock'">
+							<block>
+								<view class="btn" @click="unlocking(item)" v-if="item.device_type === 'lock'">
 									<i class="iconfont icon-yuechi icon-default"></i>
 								</view>
-								<view class="btn offline" @click="offline(item)" v-if="item.device_type === 'switch'">
+								<view class="btn" @click="onSwitch(item)" v-if="item.device_type === 'switch'">
 									<i class="iconfont icon-shandian icon-default"></i>
 								</view>
-								<view class="btn offline" @click="offline(item)" v-if="item.device_type === 'horn'">
+								<view class="btn" @click="onSwitchLock(item)" v-if="item.device_type === 'switchLock'">
+									<i class="iconfont icon-yuechi  icon-default"></i>
+								</view>
+								<view class="btn" @click="onPlay(item)" v-if="item.device_type === 'horn'">
 									<i class="iconfont icon-laba icon-default"></i>
 								</view>
 							</block>
+
 
 						</block>
 
@@ -165,7 +158,7 @@
 								@click="goDetail('/pages/faceList/faceList?lock_id=' + item.lock_id)"
 								v-if="item.lock_ability.face_status === 1">
 								<i class="iconfont icon-renlianshibie"></i>
-								<view class="text">人脸管理</view>
+								<view class="text">图片管理</view>
 							</view>
 
 							<view class="cell-item" @click="onDelete(item)">
@@ -221,7 +214,10 @@
 		turnOff_api,
 		delDevice_api,
 		loginQrCode_api,
-		playHorn_api
+		playHorn_api,
+		openApi,
+		closeApi,
+		pauseAapi,
 	} from "../../api/index.js";
 	import {
 		setToken,
@@ -261,6 +257,10 @@
 		onShareTimeline() {},
 		onLoad(option) {
 			console.log('option', option)
+
+			this.dataList = []
+			this.page = 1
+			this.getDeviceGroup()
 			if (option.q) {
 				let scene = decodeURIComponent(option.q) // 使用decodeURIComponent解析  获取当前二维码的网址
 				let paramobj = getQueryString(scene).key
@@ -268,31 +268,16 @@
 			}
 
 
-			this.dataList = []
-			this.page = 1
-			this.getDeviceGroup()
 
-			// #ifdef MP-WEIXIN
-			this.getLocation()
-			// #endif
-		},
-		onShareAppMessage(){
-			
-		},
-		onShareTimeline(){
-			
+
 		},
 		onShow() {
-			uni.getSystemInfo({
-				success(res) {
-					uni.setNavigationBarTitle({
-						title:res.appName
-					});
 
-				}
-			})
+
+
 			// #ifdef MP-WEIXIN
 			// 在设置 showPrivacyPopup = true 后使用 $nextTick
+			console.log("wx.getPrivacySetting", wx.getPrivacySetting)
 			if (wx.getPrivacySetting) {
 				wx.getPrivacySetting({
 					success: (res) => {
@@ -308,9 +293,15 @@
 					},
 				});
 			}
+
 			// #endif
+
 		},
 		onHide() {
+
+			this.latitude = ""
+			this.longitude = ""
+
 			// #ifdef MP-WEIXIN
 			ble.CloseBluetoothAdapter()
 			// #endif
@@ -322,7 +313,11 @@
 					key: key
 				})
 			},
-			unlocking(item) {
+			async unlocking(item) {
+				// #ifdef MP-WEIXIN
+				await this.getLocation()
+				// #endif
+
 				item.status = 2 // 2是开锁中的状态，改变钥匙按钮为灰色
 				uni.showLoading({
 					title: '响应中...',
@@ -330,9 +325,16 @@
 				})
 				this.openLock(item)
 				this.$forceUpdate()
+					item.status = 1
 			},
 			// 开锁
 			async openLock(item) {
+
+		
+			
+				// #ifdef MP-WEIXIN
+				await this.getLocation()
+				// #endif
 				let res = await openLock_api({
 					lockauth_id: item.lockauth_id,
 					longitude: this.longitude,
@@ -349,15 +351,23 @@
 						title: res.msg,
 					})
 				} else {
-					uni.showToast({
-						title: res.msg,
-						icon: 'none'
-					})
+					if (res.msg == "设备不在线") {
+						await this.offline(item)
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: 'none'
+						})
+					}
+
+
 				}
 				this.$forceUpdate()
 			},
 			// 开/关动作
 			onSwitch(item) {
+				console.log(item)
+
 				uni.showActionSheet({
 					itemList: ['开', '关'],
 					success: async (msg) => {
@@ -366,6 +376,7 @@
 							title: '加载中...',
 							mask: true
 						})
+
 						this.$forceUpdate()
 						if (msg.tapIndex === 0) {
 							let res = await turnOn_api({
@@ -374,9 +385,9 @@
 								latitude: this.latitude
 							})
 							item.status = 1
+							item.lock.switch_state = 1;
 							uni.hideLoading()
 							if (res.code === 0) {
-								item.lock.switch_state = !item.lock.switch_state;
 								uni.showToast({
 									title: res.msg,
 								})
@@ -388,15 +399,16 @@
 							}
 							this.$forceUpdate()
 						} else {
+
 							let res = await turnOff_api({
 								lockauth_id: item.lockauth_id,
 								longitude: this.longitude,
 								latitude: this.latitude
 							})
 							item.status = 1
+							item.lock.switch_state = 0
 							uni.hideLoading()
 							if (res.code === 0) {
-								item.lock.switch_state = !item.lock.switch_state;
 								uni.showToast({
 									title: res.msg,
 								})
@@ -410,6 +422,92 @@
 						}
 					},
 				});
+			},
+			onSwitchLock(item) {
+				console.log(item)
+				item.status = 2 // 2是开锁中的状态，改变钥匙按钮为灰色
+				this.$forceUpdate()
+
+				uni.showActionSheet({
+					itemList: ['开', '关', '停'],
+					success: async (msg) => {
+
+						uni.showLoading({
+							title: '加载中...',
+							mask: true
+						})
+
+
+						if (msg.tapIndex === 0) {
+							let res = await openApi({
+								lockauth_id: item.lockauth_id,
+								longitude: this.longitude,
+								latitude: this.latitude
+							})
+							item.status = 1
+							item.lock.switch_state = 1;
+							uni.hideLoading()
+							if (res.code === 0) {
+								uni.showToast({
+									title: res.msg,
+								})
+							} else {
+								uni.showToast({
+									title: res.msg,
+									icon: 'none'
+								})
+							}
+
+						} else if (msg.tapIndex === 1) {
+
+							let res = await closeApi({
+								lockauth_id: item.lockauth_id,
+								longitude: this.longitude,
+								latitude: this.latitude
+							})
+
+
+							if (res.code === 0) {
+								uni.showToast({
+									title: res.msg,
+								})
+							} else {
+								uni.showToast({
+									title: res.msg,
+									icon: 'none'
+								})
+							}
+
+						} else {
+
+							let res = await pauseAapi({
+								lockauth_id: item.lockauth_id,
+								longitude: this.longitude,
+								latitude: this.latitude
+							})
+
+
+							if (res.code === 0) {
+								uni.showToast({
+									title: res.msg,
+								})
+							} else {
+								uni.showToast({
+									title: res.msg,
+									icon: 'none'
+								})
+							}
+
+						}
+
+						item.status = 1
+						item.lock.switch_state = 0
+						uni.hideLoading()
+						console.log(123)
+						this.$forceUpdate()
+					},
+				});
+
 			},
 			// 播放
 			onPlay(item) {
@@ -545,8 +643,17 @@
 			},
 			async offline(DeviceInfo) {
 				console.log("DeviceInfo：", DeviceInfo)
-				if (DeviceInfo.lock.lock_sn.indexOf('WMJ62') > -1) {
-					ble.OpenBluetoothAdapter()
+			
+				if (DeviceInfo.lock.lock_sn.indexOf('WMJ62') > -1 || DeviceInfo.lock.lock_sn.indexOf('W76') > -1) {
+					let OpenBluetoothAdapterRes = await ble.OpenBluetoothAdapter()
+					console.log("OpenBluetoothAdapterRes：", OpenBluetoothAdapterRes)
+					if(OpenBluetoothAdapterRes.err){
+						uni.showToast({
+							title: OpenBluetoothAdapterRes.err,
+							icon: 'none',
+						})
+						return
+					}
 					await device.OpenLockBle(DeviceInfo.lock.lock_sn, DeviceInfo.lock.lock_id)
 					return
 				} else {
@@ -596,6 +703,10 @@
 				})
 			},
 			getLocation() {
+
+				if (this.latitude) {
+					return
+				}
 				let that = this;
 				uni.authorize({
 					scope: 'scope.userLocation',
@@ -611,7 +722,7 @@
 								if (msg.confirm) {
 									uni.openSetting({
 										success: v => {
-											// that.getAddress()
+											that.getAddress()
 										}
 									});
 								} else {

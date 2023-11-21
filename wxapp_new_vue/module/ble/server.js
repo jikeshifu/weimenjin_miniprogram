@@ -21,7 +21,7 @@ async function SearchDevice(timeOut = 4000) {
 		//开启监听
 		uni.onBluetoothDeviceFound(function(devices) {
 			console.log('new device list has founded')
-			console.dir(devices)
+			console.log(devices)
 			console.log(ble.ab2hex(devices.devices[0].advertisData))
 		})
 
@@ -51,8 +51,8 @@ async function SearchDevicewBleName(bleName, timeOut = 4000,services= ["0D38"]) 
 
 		let GetBluetoothDevicesRes = await ble.GetBluetoothDevices()
 		console.log("GetBluetoothDevicesRes:",GetBluetoothDevicesRes)
-		if(GetBluetoothDevicesRes.err !=null || GetBluetoothDevicesRes.devices.length<1){
-			res.err = "找不到设备"
+		if(GetBluetoothDevicesRes.err !=null ){
+			res.err =GetBluetoothDevicesRes.err
 			resolve(res)
 		}
 
@@ -81,7 +81,7 @@ async function SearchDevicewBleName(bleName, timeOut = 4000,services= ["0D38"]) 
 		//开启监听
 		uni.onBluetoothDeviceFound(function(devices) {
 			console.log('new device list has founded')
-			console.dir(devices)
+			console.log(devices)
 				console.log(devices.devices.localName, bleName )
 			if (devices.devices[0].localName == bleName || devices.devices[0].name == bleName) {
 
@@ -160,10 +160,18 @@ async function WriteBLECharacteristicValue(deviceId, serviceId, characteristicId
 		uni.onBLECharacteristicValueChange(function(res) {
 			console.log(
 				`characteristic ${res.characteristicId} has changed, now is ${res.value}`)
+
 			console.log(ble.ab2hex(res.value))
+
 			console.log(ble.ab2str(res.value))
 
 			res.data = ble.ab2str(res.value)
+
+
+			console.log("ble.ab2str(res.value)",res.data.replace(/[\u0000-\u001f\u007f-\uffff]/g, ''))
+			res.data = JSON.parse(res.data.replace(/[\u0000-\u001f\u007f-\uffff]/g, ''));
+
+			res.hexData = ble.ab2hex(res.value);
 			uni.hideLoading();
 			resolve(res)
 		})

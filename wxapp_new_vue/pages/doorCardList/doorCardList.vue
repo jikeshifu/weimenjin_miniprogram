@@ -139,14 +139,16 @@ export default {
 		},
 		operation() {
 			uni.showActionSheet({
-				itemList: ['添加门卡'],
+				itemList: ['添加门卡','同步数据'],
 				success: (res) => {
 					if (res.tapIndex === 0) {
 						uni.navigateTo({
 							url: '/pages/addCard/addCard?lock_id=' + this.lock_id
 						})
 					} else {
-						// 请求API，弹框展示请求数据
+						uni.navigateTo({
+							url: '/pages/synchroData/synchroData?lock_id=' + this.lock_id + '&type=card'
+						})
 					}
 				},
 			});

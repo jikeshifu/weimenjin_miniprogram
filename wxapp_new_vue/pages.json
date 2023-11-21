@@ -106,14 +106,14 @@
 		{
 			"path": "pages/faceList/faceList",
 			"style": {
-				"navigationBarTitleText": "人脸管理",
+				"navigationBarTitleText": "图片管理",
 				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/addFace/addFace",
 			"style": {
-				"navigationBarTitleText": "人脸"
+				"navigationBarTitleText": "图片"
 			}
 		},
 		{
@@ -231,6 +231,17 @@
 				"navigationBarTitleText": "续费记录",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path": "pages/synchroData/synchroData",
+			"style": {
+				"navigationBarTitleText": "同步数据"
+			}
+		}	,{
+			"path": "pages/member/account",
+			"style": {
+				"navigationBarTitleText": "账号管理"
+			}
 		}
 		
 	],
@@ -245,9 +256,11 @@
 		"selectedColor": "#21CF3E",
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
+
 		"list": [{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/shouye.png",
+		
 				"selectedIconPath": "static/shouye-on.png",
 				"text": "首页"
 			},

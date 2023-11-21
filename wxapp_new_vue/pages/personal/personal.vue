@@ -11,6 +11,10 @@
 				<view class="label">我的操作记录</view>
 				<image src="../../static/jiantouyou.png"></image>
 			</view>
+			<view class="cell-box" @click="goDetail('/pages/member/account')">
+				<view class="label">账号管理</view>
+				<image src="../../static/jiantouyou.png"></image>
+			</view>
 			<view class="cell-box" @click="goPage('/pages/addEquipment/addEquipment')">
 				<view class="label">添加设备</view>
 				<image src="../../static/jiantouyou.png"></image>
@@ -45,6 +49,10 @@
 
 			<view class="cell-box" @click="goDetail('/pages/sim/sim')">
 				<view class="label">sim卡查询</view>
+				<image src="../../static/jiantouyou.png"></image>
+			</view>
+			<view class="cell-box" @click="goDetail('/pages/open/open?user_id=1&lock_id=11&isscan=1')">
+				<view class="label">开门演示</view>
 				<image src="../../static/jiantouyou.png"></image>
 			</view>
 		</view>

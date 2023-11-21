@@ -15,7 +15,7 @@
 						<image :src="item.face_images | imgPath" class="user-img"></image>
 						<view class="user-info">
 							<view class="user-name">{{ item.face_name }}</view>
-							<view class="phone">人脸ID: {{ item.sCertificateNumber }}</view>
+							<view class="phone">图片ID: {{ item.sCertificateNumber }}</view>
 						</view>
 					</view>
 					<view class="right-box">
@@ -144,11 +144,15 @@
 			},
 			operation() {
 				uni.showActionSheet({
-					itemList: ['添加人脸'],
+					itemList: ['添加自拍图片', '同步数据'],
 					success: (res) => {
 						if (res.tapIndex === 0) {
 							uni.navigateTo({
 								url: '/pages/addFace/addFace?lock_id=' + this.lock_id
+							})
+						} else {
+							uni.navigateTo({
+								url: '/pages/synchroData/synchroData?lock_id=' + this.lock_id + '&type=face'
 							})
 						}
 					},

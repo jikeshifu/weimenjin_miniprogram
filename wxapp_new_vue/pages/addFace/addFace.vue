@@ -16,15 +16,13 @@
 				
 				<view class="updata-img" v-if="!isEdit">
 					<view class="img" @click="updataImg">
-						<image src="../../static/renlian.png" class="btn-icon" v-if="!formData.face_images"></image>
+						<image src="../../static/picture.png" class="btn-icon" v-if="!formData.face_images"></image>
 						<image :src="formData.face_images | imgPath" class="btn-icon" v-else></image>
 					</view>
 				</view>
-				
-<!-- 				<view class="cell-item">
-					<view class="label">备注：</view>
-					<input placeholder="请输入备注" placeholder-class="placeholder" />
-				</view> -->
+				<view class="cell-item">
+					<view class="label">请勿美颜</view>
+				</view>
 
 			</view>
 			<view class="bottom-btn" @click="onSubmit">立即提交</view>

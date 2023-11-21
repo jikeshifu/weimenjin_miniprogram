@@ -56,8 +56,6 @@
 				focusLink: ''
 			}
 		},
-		onShareAppMessage() {},
-		onShareTimeline() {},
 		onLoad(option) {},
 		onShow() {
 			let WifiData = uni.getStorageSync("WifiData")

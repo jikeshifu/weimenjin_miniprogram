@@ -77,6 +77,22 @@ export function openLockApiTest(params){
 export function turnOn_api(params){
 	return request.myRequest('/device.Device/start', params, 'POST');
 }
+
+// 开
+export function openApi(params){
+	return request.myRequest('/device.Device/open', params, 'POST');
+}
+
+// 关
+export function closeApi(params){
+	return request.myRequest('/device.Device/close', params, 'POST');
+}
+
+// 停
+export function pauseAapi(params){
+	return request.myRequest('/device.Device/pause', params, 'POST');
+}
+
 // 开动作测试
 export function turnOnApiTest(params){
 	return request.myRequest('/device.Device/startTest', params, 'POST');
@@ -110,6 +126,14 @@ export function qrOpenLock_api(params){
 	return request.myRequest('/device.Device/qrOpenLock', params, 'POST');
 }
 
+// 支付宝绑定手机号
+export function zfbXcxMobile_api(params){
+	return request.myRequest('/Member/getalipayphonenumber', params, 'POST');
+}
+// 支付宝修改手机号
+export function zfb_edit_info(params){
+	return request.myRequest('/Member/update', params, 'POST');
+}
 // 绑定手机号
 export function wxXcxMobile_api(params){
 	return request.myRequest('/member.Member/wxXcxMobile', params, 'POST');
@@ -317,5 +341,20 @@ export function orderList_api(params){
 // 切换分组
 export function switch_api(params){
 	return request.myRequest('/device.DeviceGroup/switch', params, 'POST');
+}
+
+// 同步数据-卡
+export function syncCard_api(params){
+	return request.myRequest('/device.Card/sync', params, 'POST');
+}
+
+// 人脸设备列表
+export function listFace_api(params){
+	return request.myRequest('/device.Device/listFace', params, 'POST');
+}
+
+// 同步数据-人脸
+export function syncFace_api(params){
+	return request.myRequest('/device.Face/sync', params, 'POST');
 }
 

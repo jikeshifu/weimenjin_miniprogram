@@ -1,7 +1,24 @@
 <script>
+	// #ifdef MP-ALIPAY
+	// 支付宝扫码带的参数
+	import {
+		getQueryString
+	} from './libs/utils.js';
+			// #endif
 export default {
-	onLaunch: function() {
+	onLaunch: function(option) {
+		// #ifdef MP-ALIPAY
+		// 支付宝扫码带的参数
+		let qrstr = option.query ? option.query.qrCode : "";
 		
+		if (qrstr) {
+	
+			let url = decodeURIComponent(qrstr) // 使用decodeURIComponent解析  获取当前二维码的网址
+			let lock_ids = getQueryString(url).lock_id
+			console.log("lock_ids",lock_ids)
+				uni.setStorageSync("qrcodeLockId",lock_ids)
+		}
+		// #endif
 	
 		
 	},
@@ -9,6 +26,7 @@ export default {
 		// console.log('App Show')
 	},
 	onHide: function() {
+			uni.removeStorageSync("qrcodeLockId")
 		// console.log('App Hide')
 	}
 };

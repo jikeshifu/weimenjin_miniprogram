@@ -82,48 +82,15 @@
 	margin-top: 30rpx;
 	margin-bottom: 100rpx;
 	.item {
-		margin-bottom: 8rpx;
+		margin-bottom: 20rpx;
 		background: linear-gradient(180deg, rgb(255, 255, 255), rgba(255, 255, 255, 0.6) 100%);
 		box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
 		border-radius: 24rpx;
-		height: 70rpx;
+		height: 90rpx;
 		display: flex;
 		align-items: center;
 		padding: 0 26px;
 		justify-content: space-between;
-		// .left-box {
-		// 	display: flex;
-		// 	align-items: center;
-		// 	flex-shrink: 0;
-		// 	margin-left: 30rpx;
-		// 	.user-img {
-		// 		width: 80rpx;
-		// 		height: 80rpx;
-		// 		border-radius: 50%;
-		// 		flex-shrink: 0;
-		// 	}
-		// 	.user-info {
-		// 		margin-left: 22rpx;
-		// 		.flex-box {
-		// 			.user-name {
-		// 				font-size: 28rpx;
-		// 				color: #21cf3e;
-		// 			}
-		// 			.tourist {
-		// 				color: #444444;
-		// 			}
-		// 			.phone {
-		// 				font-size: 28rpx;
-		// 				color: #999999;
-		// 				margin-top: 20rpx;
-		// 			}
-		// 		}
-		// 		.time {
-		// 			font-size: 24rpx;
-		// 			color: #999999;
-		// 			margin-top: 20rpx;
-		// 		}
-		// 	}
-		// }
+		font-size: 28rpx;
 	}
 }

@@ -67,6 +67,14 @@
 
 			},
 			handleAgreePrivacyAuthorization() {
+				this.showPrivacy = false;
+				if (typeof this.resolvePrivacyAuthorization === 'function') {
+					this.resolvePrivacyAuthorization({
+						buttonId: 'agree-btn',
+						event: 'agree',
+					});
+				}
+				return;
 				if (this.isRead) {
 					this.showPrivacy = false;
 					if (typeof this.resolvePrivacyAuthorization === 'function') {

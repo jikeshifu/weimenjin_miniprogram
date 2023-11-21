@@ -77,16 +77,16 @@ function ab2hex(buffer) {
 }
 // 字符串转ArrayBuffer
 function str2ab(str) {
-    var buf = new ArrayBuffer(str.length * 2); // 每个字符占用2个字节
-    var bufView = new Uint8Array(buf);// Uint8Array可换成其它
-    for (var i = 0, strLen = str.length; i < strLen; i++) {
-        bufView[i] = str.charCodeAt(i);
-    }
-    return buf;
+	var buf = new ArrayBuffer(str.length * 2); // 每个字符占用2个字节
+	var bufView = new Uint8Array(buf); // Uint8Array可换成其它
+	for (var i = 0, strLen = str.length; i < strLen; i++) {
+		bufView[i] = str.charCodeAt(i);
+	}
+	return buf;
 }
 
 function ab2str(arrayBuffer) {
-    return String.fromCharCode.apply(null, new Uint8Array(arrayBuffer));
+	return String.fromCharCode.apply(null, new Uint8Array(arrayBuffer));
 }
 //获取一发现的设备
 function GetBluetoothDevices(services = ["0D38"]) {
@@ -118,7 +118,7 @@ function GetBluetoothDevices(services = ["0D38"]) {
 
 //开启蓝牙搜索
 function StartBluetoothDevicesDiscovery(services = ["0D38"]) {
-	console.log("蓝牙开始搜索",services)
+	console.log("蓝牙开始搜索", services)
 	let res = {
 		"err": null,
 	}
@@ -151,7 +151,7 @@ function StopBluetoothDevicesDiscovery(services = ["0D38"]) {
 		uni.stopBluetoothDevicesDiscovery({
 
 			success(stopBluetoothDevicesDiscoveryRes) {
-				res.data =stopBluetoothDevicesDiscoveryRes
+				res.data = stopBluetoothDevicesDiscoveryRes
 				resolve(res)
 			},
 			fail(err) {
@@ -178,7 +178,7 @@ function CreateBLEConnection(deviceId) {
 		uni.createBLEConnection({
 			deviceId,
 			success(createBLEConnectionRes) {
-				res.data =createBLEConnectionRes
+				res.data = createBLEConnectionRes
 				resolve(res)
 			},
 			fail(err) {
@@ -202,8 +202,8 @@ function GetBLEDeviceServices(deviceId) {
 		uni.getBLEDeviceServices({
 			deviceId,
 			success(getBLEDeviceServicesRes) {
-					console.log("获取设备服务",getBLEDeviceServicesRes)
-				res.data =getBLEDeviceServicesRes
+				console.log("获取设备服务", getBLEDeviceServicesRes)
+				res.data = getBLEDeviceServicesRes
 				resolve(res)
 			},
 			fail(err) {
@@ -218,7 +218,7 @@ function GetBLEDeviceServices(deviceId) {
 
 
 //获取设备服务下特征值
-function GetBLEDeviceCharacteristics(deviceId,  serviceId) {
+function GetBLEDeviceCharacteristics(deviceId, serviceId) {
 	console.log("获取设备服务下特征值")
 	let res = {
 		"err": null,
@@ -228,8 +228,8 @@ function GetBLEDeviceCharacteristics(deviceId,  serviceId) {
 			deviceId,
 			serviceId,
 			success(getBLEDeviceServicesRes) {
-					console.log("获取设备服务下特征值",getBLEDeviceServicesRes)
-				res.data =getBLEDeviceServicesRes
+				console.log("获取设备服务下特征值", getBLEDeviceServicesRes)
+				res.data = getBLEDeviceServicesRes
 				resolve(res)
 			},
 			fail(err) {
@@ -245,24 +245,24 @@ function GetBLEDeviceCharacteristics(deviceId,  serviceId) {
 
 
 //订阅特征值
-function NotifyBLECharacteristicValueChange(deviceId,  serviceId,characteristicId) {
+function NotifyBLECharacteristicValueChange(deviceId, serviceId, characteristicId) {
 	console.log("订阅特征值")
 	let res = {
 		"err": null,
 	}
 	return new Promise((resolve, reject) => {
 		uni.notifyBLECharacteristicValueChange({
-			  state: true, // 启用 notify 功能
+			state: true, // 启用 notify 功能
 			deviceId,
 			serviceId,
 			characteristicId,
 			success(notifyBLECharacteristicValueChangeRes) {
-					console.log("订阅特征值",notifyBLECharacteristicValueChangeRes)
-				res.data =notifyBLECharacteristicValueChangeRes
+				console.log("订阅特征值", notifyBLECharacteristicValueChangeRes)
+				res.data = notifyBLECharacteristicValueChangeRes
 				resolve(res)
 			},
 			fail(err) {
-				console.log("订阅错误",err)
+				console.log("订阅错误", err)
 
 				res.err = err.errMsg
 				resolve(res)
@@ -274,34 +274,35 @@ function NotifyBLECharacteristicValueChange(deviceId,  serviceId,characteristicI
 }
 
 //写入数据
- function WriteBLECharacteristicValue(deviceId, serviceId, characteristicId, data) {
+function WriteBLECharacteristicValue(deviceId, serviceId, characteristicId, data) {
 	let res = {
 		"err": null,
 	}
-    return new Promise(function (resolve, reject) {
-		setTimeout(function(){
+	return new Promise(function(resolve, reject) {
+		setTimeout(function() {
 			uni.writeBLECharacteristicValue({
-			    // 这里的 deviceId 需要在 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
-			    deviceId,
-			    // 这里的 serviceId 需要在 getBLEDeviceServices 接口中获取
-			    serviceId,
-			    // 这里的 characteristicId 需要在 getBLEDeviceCharacteristics 接口中获取
-			    characteristicId,
-			    // 这里的value是ArrayBuffer类型
-			    value: str2ab(data),
-			    success(writeBLECharacteristicValueRes) {
-			       console.log("写入数据",writeBLECharacteristicValueRes)
-			       res.data =writeBLECharacteristicValueRes
-			       resolve(res)
-			    }, fail(err) {
-			      res.err = err.errMsg
-			      resolve(res)
-			    }
+				// 这里的 deviceId 需要在 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
+				deviceId,
+				// 这里的 serviceId 需要在 getBLEDeviceServices 接口中获取
+				serviceId,
+				// 这里的 characteristicId 需要在 getBLEDeviceCharacteristics 接口中获取
+				characteristicId,
+				// 这里的value是ArrayBuffer类型
+				value: str2ab(data),
+				success(writeBLECharacteristicValueRes) {
+					console.log("写入数据", writeBLECharacteristicValueRes)
+					res.data = writeBLECharacteristicValueRes
+					resolve(res)
+				},
+				fail(err) {
+					res.err = err.errMsg
+					resolve(res)
+				}
 			})
-		},500)
+		}, 500)
 
 
-    })
+	})
 
 
 }
