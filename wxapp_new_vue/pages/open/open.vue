@@ -132,7 +132,8 @@
 					latitude: this.latitude,
 					longitude: this.longitude
 				})
-				if (res.code === 0) {
+				if (res.code === 0) 
+				{
 					if (res.data.xcx_sound == 1) {
 						await lockServer.OpenLockMp3()
 					}
@@ -149,14 +150,18 @@
 							clearTimeout(timer)
 						}, 3000)
 					}
-
-				} else if (res.code === 1001) {
+					uni.hideLoading() 
+				} 
+				else if (res.code === 1001) 
+				{
 					this.pageType = 'phone'
 					uni.hideLoading()
-				} else if (res.code === 1002) {
+				} else if (res.code === 1002) 
+				{
 					this.pageType = 'apply'
 					uni.hideLoading()
-				} else if (res.code === 1003) {
+				} else if (res.code === 1003) 
+				{
 					console.log("DeviceInfo：", res)
 
 					let DeviceInfo = res.data
@@ -179,8 +184,6 @@
 							return
 						}
 						await device.OpenLockBle(DeviceInfo.lock_sn, DeviceInfo.lock_id)
-
-
 						setTimeout(function() {
 							uni.switchTab({
 								url: '/pages/index/index'
@@ -193,7 +196,8 @@
 							icon: 'none',
 						})
 					}
-				} else {
+				} 
+				else {
 
 					this.showToast(res.msg)
 					let timer = setTimeout(() => {
@@ -202,9 +206,11 @@
 						})
 						clearTimeout(timer)
 					}, 3000)
+					// this.showToast(res.msg)
+					setTimeout(() => {
+							uni.hideLoading() 
+					}, 3000)
 				}
-				this.showToast(res.msg)
-				uni.hideLoading()
 			},
 			// 申请钥匙
 			async onSubmit() {
@@ -374,7 +380,8 @@
 			showToast(msg) {
 				uni.showToast({
 					title: msg,
-					icon: 'none',
+					icon: 'error',
+					duration:4000,
 					mask: true
 				})
 			}

@@ -13,7 +13,7 @@
 	.content {
 		position: relative;
 		z-index: 10;
-		padding: 36rpx 30rpx 200rpx;
+		padding: 120rpx 30rpx 200rpx;
 		.top-box {
 			position: fixed;
 			top: 0;
@@ -25,9 +25,52 @@
 			width: 100%;
 			background-color: initial;
 			transition: background-color 0.6s;
+			
 		}
+		.cell-item {
+				display: flex;
+				float: left;
+				width: 243rpx;
+				margin-left: 10rpx;
+				align-items: center;
+				// justify-content: space-between;
+				height: 100rpx;
+				background: linear-gradient(180.00deg, rgb(255, 255, 255),rgba(255, 255, 255, 0.4) 100%);
+				box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+				border-radius:24rpx;
+				margin-top: 12rpx;
+				padding: 0 50rpx;
+				overflow: hidden;
+				.flex-box {
+					
+					display: flex;
+					align-items: center;
+					flex: 1;
+				}
+				image {
+					width: 30rpx;
+					height: 30rpx;
+					padding: 20rpx 0 20rpx 20rpx;
+					margin-left: 20rpx;
+				}
+				.label {
+					font-size: 28rpx;
+					flex-shrink: 0;
+				}
+				input {
+					font-size: 28rpx;
+					flex: 1;
+					margin-left: 30rpx;
+					height: 100%;
+				}
+				.text {
+					font-size: 28rpx;
+					color: #999999;
+				}
+			}
+		
 		.search-box {
-			margin: 36rpx 30rpx;
+			margin: 12rpx 30rpx;
 			height: 90rpx;
 			background: rgba(255, 255, 255, 0.7);
 			border: 1px solid rgb(255, 255, 255);

@@ -2,14 +2,32 @@
 	<view class="big-box">
 		<view class="background"></view>
 		<view class="content">
+			
+		
 			<view :class="['top-box', scrollTop > 10 ? 'top-box-active' : '']">
 				<view class="search-box">
 					<image src="../../static/sousuo.png"></image>
-					<input placeholder="请输入操作记录" placeholder-class="placeholder" class="search-input" confirm-type="search" @confirm="confirm"/>
+					<input placeholder="请输入手机号" placeholder-class="placeholder" class="search-input" confirm-type="search" @confirm="confirm"/>
 				</view>
+				
+				<view style="margin-left: 20rpx;height: 100rpx;"> 
+					<view class="cell-item" @click="openTime">
+						
+						<view class="text">
+							{{ formData.startTime ? formatDate(formData.startTime) : '请选择开始时间' }}</view>
+					</view>
+					<view class="cell-item" @click="openTime2">
+						
+						<view class="text">
+							{{ formData.endTime ? formatDate(formData.endTime) : '请选择结束时间' }}</view>
+					</view>
+						<uni-section :title="'日期时间用法：' + datetimesingle" type="line"></uni-section>
+	
+				</view>
+			
 			</view>
 			
-			<view class="list">
+			<view class="list" v-if="listStatus"> 
 				<view class="item" v-for="(item, index) in dataList" :key="index" @click="showMobile(item)">
 					<view class="left-box">
 						<image :src="item.headimgurl | imgPath" class="user-img" v-if="item.headimgurl"></image>
@@ -35,15 +53,29 @@
 				<uni-load-more :status="noMore" empty_text="暂无操作记录～"></uni-load-more>
 			</view>
 		</view>
+		<uv-datetime-picker ref="datetimePicker" :minDate="1640966400000"  v-model="formData.startTime" mode="datetime" @confirm="searchTime()" @close="listStatus=!listStatus">
+		</uv-datetime-picker>
+		<uv-datetime-picker ref="datetimePicker2" v-model="formData.endTime" mode="datetime" @confirm="searchTime()" @close="listStatus=!listStatus">
+		</uv-datetime-picker>
 	</view>
 </template>
 
 <script>
 import { record_api } from '@/api/index.js';	
 import { formatDate, imgPath } from '@/libs/filters.js'
+	import UvDatetimePicker from '@/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker.vue'
 export default {
+	components: {
+		UvDatetimePicker
+	},
 	data() {
 		return {
+			listStatus:true,
+			formData: {
+			
+				startTime: '',
+				endTime: '',
+			},
 			scrollTop: 0,
 			lock_id: '',
 			noMore: 'loading',
@@ -93,11 +125,73 @@ export default {
 				}
 			});
 		},
+		openTime() {
+			this.listStatus =false
+			this.$refs.datetimePicker.open();
+		},
+		openTime2() {
+			this.listStatus =false
+			this.$refs.datetimePicker2.open();
+		},
+		
+		
+		searchTime(e) {
+	
+		this.dataList = [];
+		this.page = 1;
+		setTimeout(()=>{
+			this.getList()
+		},100)
+		},
+		
+	
+		formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
+			var crtTime;
+			if (typeof date === 'number') {
+				if ((date + '').length !== 13) {
+					crtTime = new Date(date * 1000);
+				} else {
+					crtTime = new Date(date);
+				}
+			} else {
+				crtTime = new Date(date);
+			}
+			var o = {
+				'M+': crtTime.getMonth() + 1,
+				'd+': crtTime.getDate(),
+				'h+': crtTime.getHours(),
+				'm+': crtTime.getMinutes(),
+				's+': crtTime.getSeconds(),
+				'q+': Math.floor((crtTime.getMonth() + 3) / 3),
+				S: crtTime.getMilliseconds(),
+			};
+			if (/(y+)/.test(fmt)) {
+				fmt = fmt.replace(
+					RegExp.$1,
+					(crtTime.getFullYear() + '').substr(4 - RegExp.$1.length),
+				);
+			}
+			for (var k in o) {
+				if (new RegExp('(' + k + ')').test(fmt)) {
+					fmt = fmt.replace(
+						RegExp.$1,
+						RegExp.$1.length === 1 ?
+						o[k] :
+						('00' + o[k]).substr(('' + o[k]).length),
+					);
+				}
+			}
+			return fmt;
+		},
 		async getList() {
 			this.noMore = 'loading';
+			console.log("formData",this.formData)
 			let params = {
 				page: this.page,
 				limit: 10,
+				
+					startTime: this.formData.startTime/1000,
+					endTime: this.formData.endTime/1000,
 				lock_id: this.lock_id,
 				search_key: this.search_key
 			};
@@ -123,6 +217,7 @@ export default {
 			}
 		},
 		confirm(e) {
+			console.log("e",e)
 			this.search_key = e.detail.value
 			this.dataList = [];
 			this.page = 1;
