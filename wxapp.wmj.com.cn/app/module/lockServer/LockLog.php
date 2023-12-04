@@ -24,7 +24,7 @@ class LockLog
         "11" => '人脸开门',
     ];
 
-    static function add($member_id, $lock_id, $type, $status = 1,$user_name="")
+    static function add($member_id, $lock_id, $type, $status = 1,$user_name="",$user_id="")
     {
       $user= Db::name("user")->where(["member_id"=>$member_id])->find();
 
@@ -36,6 +36,7 @@ class LockLog
         $data['create_time'] = time();
         $data['status'] = $status;
         $data['user_name'] = $user_name;
+        $data['user_id'] = $user_id;
         Db::name("locklog")->insert($data);
     }
 }

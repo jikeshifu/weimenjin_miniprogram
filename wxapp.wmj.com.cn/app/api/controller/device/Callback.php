@@ -59,18 +59,18 @@ class Callback
             case "notify";
                 //查询人脸
                 $face = Db::name("face")->where(["sCertificateNumber" => $info["sCertificateNumber"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
-                LockLog::add($face["member_id"], $lock["lock_id"], 11, 1, $face["face_name"]);
+                LockLog::add($face["member_id"], $lock["lock_id"], 11, 1, $face["face_name"],$lock["user_id"]);
                 break;
             case "card_notify";
                 //查询卡
                 $lockcard = Db::name("lockcard")->where(["lockcard_sn" => $info["card_id"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
-                LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1, $lockcard["lockcard_username"]);
+                LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1, $lockcard["lockcard_username"],$lockcard["user_id"]);
                 break;
             case "open_notify";
                 if ($info["type"]=="card") {
                     //查询卡
                     $lockcard = Db::name("lockcard")->where(["lockcard_sn" => $info["data"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
-                    LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1, $lockcard["lockcard_username"]);
+                    LockLog::add($lock["member_id"], $lock["lock_id"], 4, 1, $lockcard["lockcard_username"],$lock["user_id"]);
 
                 }
                 break;
@@ -100,7 +100,7 @@ class Callback
                             $finger = Db::name("finger")->where(["fp_id" => (int)mb_substr($info["open_id"], 0, 2), "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
 
                         }
-                        LockLog::add($lock["member_id"], $lock["lock_id"], 7, 1, $finger["finger_name"]);
+                        LockLog::add($lock["member_id"], $lock["lock_id"], 7, 1, $finger["finger_name"],$lock["user_id"]);
                         break;
                 }
 

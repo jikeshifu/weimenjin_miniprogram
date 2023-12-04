@@ -274,11 +274,8 @@ class Lock extends Admin
             try {
 
                 if ($reslookdata) {
-                    if ($reslookdata['lock_type'] == 7) {
-                        $result = wmjgwHandle($reslookdata['lock_sn'], 'ctrlgwl');
-                    } else {
-                        $result = wmjHandle($reslookdata['lock_sn'], 'openlock');
-                    }
+                    $result = \app\module\lockServer\Lock::OpenLock($reslookdata);
+
                     $data['user_id'] = $reslookdata['user_id'];
                     $data['lock_id'] = $lock_id;
                     $data['type'] = 3;

@@ -135,7 +135,8 @@ class LockLog extends Common {
 	function add(){
 	    $lock_id=input("lock_id");
 	    $status=input("status");
-	    \app\module\lockServer\LockLog::add($this->_data["uid"],$lock_id,8,$status);
+        $LockData =   \app\module\lockServer\Lock::Info($lock_id);
+	    \app\module\lockServer\LockLog::add($this->_data["uid"],$lock_id,8,$status,$LockData["user_id"]);
         return json(['status'=>$this->successCode,'data'=>1]);
     }
 

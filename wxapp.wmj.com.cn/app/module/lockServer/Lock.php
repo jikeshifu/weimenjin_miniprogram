@@ -28,15 +28,15 @@ class Lock
         $key = "lockInfo:" . $lock_id;
         $Redis = Redis::Redis();
 
-       $data = $Redis->get($key);
-       if($data){
-           return  json_decode($data,true);
-       }
-       $lock= Db::name("lock")->where(["lock_id" => $lock_id])->whereNull("deleted_at")->find();
-       //mlog("LockInfo_data:".json_encode($lock));
-       if($lock){
-           $Redis->set($key,json_encode($lock),5);
-       }
+        $data = $Redis->get($key);
+        if ($data) {
+            return json_decode($data, true);
+        }
+        $lock = Db::name("lock")->where(["lock_id" => $lock_id])->whereNull("deleted_at")->find();
+        //mlog("LockInfo_data:".json_encode($lock));
+        if ($lock) {
+            $Redis->set($key, json_encode($lock), 5);
+        }
 
         return $lock;
     }
@@ -47,12 +47,13 @@ class Lock
         return Db::name("lock")->where(["lock_sn" => $lock_sn])->whereNull("deleted_at")->find();
     }
 
-    static function CacheClear($lock_id){
+    static function CacheClear($lock_id)
+    {
         $lockInfo = self::Info($lock_id);
 
         $Redis = Redis::Redis();
 
-        $Redis->del("lockInfo:".$lock_id);
+        $Redis->del("lockInfo:" . $lock_id);
 
         $key = "Online:" . $lockInfo["lock_sn"];
         $list = $Redis->keys($key . "*");
@@ -65,17 +66,14 @@ class Lock
     }
 
 
-
-
     static function Edit($lock_id, $data = [])
     {
-
 
 
         self::CacheClear($lock_id);
         Db::name("lock")->where(["lock_id" => $lock_id])->update($data);
 
-        return ;
+        return;
     }
 
     static function Logout($lock_sn)
@@ -124,8 +122,8 @@ class Lock
      */
     static function CardAdd($lockInfo, $cardsn, $endtime)
     {
-        if(!$endtime){
-            $endtime ="2862831776";
+        if (!$endtime) {
+            $endtime = "2862831776";
         }
         if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
             $CardAdd = HardwareCloud::WifiLock()->CardAdd($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], time(), $endtime);
@@ -156,25 +154,26 @@ class Lock
     }
 
 //卡管理
-   static function wmjAddCard($wmjsn, $type, $data=[])
+    static function wmjAddCard($wmjsn, $type, $data = [])
     {
-        $resconfig=\app\admin\db\Config::loadList();
+        $resconfig = \app\admin\db\Config::loadList();
 
-        $data['appid']=$resconfig['wmjappid'];
-        $data['appsecret']=$resconfig['wmjappsecret'];
+        $data['appid'] = $resconfig['wmjappid'];
+        $data['appsecret'] = $resconfig['wmjappsecret'];
 
-        $url = 'https://www.wmj.com.cn/platformapi/'.$type.'.html';
+        $url = 'https://www.wmj.com.cn/platformapi/' . $type . '.html';
         $result = self::wmjCardHttpPost($url, http_build_query($data));
         return $result;
     }
 
 
-   static function wmjCardHttpPost($url, $str) {
+    static function wmjCardHttpPost($url, $str)
+    {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -182,12 +181,13 @@ class Lock
                 'Content-Type: application/x-www-form-urlencoded',
                 'Content-Length: ' . strlen($str))
         );
-        $res = curl_exec ($curl);
+        $res = curl_exec($curl);
         curl_close($curl);
         $res = trim($res, "\xEF\xBB\xBF");
         $res = json_decode($res, true);
         return $res;
     }
+
     /**
      * @param $lockInfo
      * @return mixed
@@ -220,7 +220,7 @@ class Lock
             ]);
         }
 
-        if( $result['state_msg'] == "当前卡未注册过"){
+        if ($result['state_msg'] == "当前卡未注册过") {
             $result['state'] = 1;
             $result['state_code'] = 200;
             $result['state_msg'] = "删除卡成功";
@@ -283,11 +283,10 @@ class Lock
         }
 
 
-
-
         return $result;
 
     }
+
     /**
      * @param $lockInfo
      * @return mixed
@@ -297,7 +296,6 @@ class Lock
     {
 
         //计算距离
-
 
 
         if (mb_substr($lock_sn, 0, 3) == "W89" || mb_substr($lock_sn, 0, 3) == "W82" || mb_substr($lock_sn, 0, 3) == "W76" || mb_substr($lock_sn, 0, 3) == "W77") {
@@ -317,17 +315,16 @@ class Lock
 
         } else {
 
-                wmjgwHandle($lock_sn, 'ctrlgwl');
-                $result = wmjHandle($lock_sn, 'openlock');
+            wmjgwHandle($lock_sn, 'ctrlgwl');
+            $result = wmjHandle($lock_sn, 'openlock');
 
         }
-
-
 
 
         return $result;
 
     }
+
     static $Yjy = [
         "W8",
         "W8",
@@ -385,7 +382,7 @@ class Lock
         $lock_id = LockService::add($data);
         $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $data['user_id'] . "&lock_id=" . $lock_id;
 
-        HardwareCloud::App()->QrCodeSet($data["lock_sn"],$qrcodeurl);
+        HardwareCloud::App()->QrCodeSet($data["lock_sn"], $qrcodeurl);
         $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
 
         LockService::update(["lock_id" => $lock_id], $data);
@@ -430,5 +427,48 @@ class Lock
             imagepng($img, $qrcode_file);//输出图片，输出png使用imagepng方法，输出gif使用imagegif方法
         }
         return 'https://' . $_SERVER['HTTP_HOST'] . '/qrdata/qrcode/' . $file;
+    }
+
+    /**
+     * @param $lock_id
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * 开门时间
+     *
+     */
+    public static function OpenLockTimes($lock_id)
+    {
+
+        $res["err"] = null;
+        $lockauthtimes = db()->name('locktimes')->where(["lock_id" => $lock_id])->select();
+        $lockatcount = count($lockauthtimes);
+        if ($lockatcount > 0) {
+            $isauthopen = 0;
+            foreach ($lockauthtimes as $value) {
+                if (date('N') >= $value['startweek'] && date("N") <= $value['endweek']) {
+                    $nowtime = intval(date("Hi"));
+
+                    $startth = str_pad($value['starthour'], 2, '0', STR_PAD_LEFT) . str_pad($value['startminute'], 2, '0', STR_PAD_LEFT);
+                    $endth = str_pad($value['endhour'], 2, '0', STR_PAD_LEFT) . str_pad($value['endminute'], 2, '0', STR_PAD_LEFT);
+
+                    if ($nowtime >= $startth && $nowtime <= $endth) {
+                        $isauthopen = 1;
+                        break;
+                    } else {
+                        $isauthopen = 0;
+                    }
+                } else {
+                    $isauthopen = 0;
+                }
+            }
+            if (!$isauthopen) {
+
+                $res["err"] = "不在可开门时段";
+                return $res;
+            }
+        }
+        return $res;
     }
 }

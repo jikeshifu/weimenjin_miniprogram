@@ -1,9 +1,9 @@
-<?php 
+<?php
 /*
  module:		卡管理
  create_time:	2021-01-19 18:59:23
- author:		
- contact:		
+ author:
+ contact:
 */
 
 namespace app\admin\controller;
@@ -34,7 +34,7 @@ class LockCard extends Admin {
 				unset($data['lockcard_id']);
 				$data['lockcard_endtime'] = strtotime($data['lockcard_endtime']);
 				LockCardDb::editWhere($where,$data);
-				
+
 			} catch (\Exception $e) {
 				$this->error($e->getMessage());
 			}
@@ -54,7 +54,7 @@ class LockCard extends Admin {
 		$where['lockcard_remark'] = ['like',$this->request->param('lockcard_remark', '', 'serach_in')];
 		$where['lockcard_id'] = ['in',$this->request->param('lockcard_id', '', 'serach_in')];
         //mlog("card_lockcard_id:".json_encode($where['lockcard_id']));
-        if (empty($where['lockcard_id'][1])) 
+        if (empty($where['lockcard_id'][1]))
 			{
 			  $this->error('请选择需要导出的卡');
 			  exit();
@@ -82,15 +82,15 @@ class LockCard extends Admin {
 		    $lock_id=$this->request->param('lock_id', '', 'serach_in');
 		    //mlog("card_isAjax:".$lock_id);
 		    $lockdata=\xhadmin\db\Lock::getInfo($lock_id);
-		    if (substr($lockdata['lock_sn'], 0, 5) != 'WMJ62') 
+		    if (substr($lockdata['lock_sn'], 0, 5) != 'WMJ62' && substr($lockdata['lock_sn'], 0, 3) != 'W76')
 			{
-			   return json(['status'=>'00','msg'=>'4001:该设备不支持刷卡功能']);     
+			   return json(['status'=>'00','msg'=>'4001:该设备不支持刷卡功能']);
 			}
 			return $this->display('index');
 
 		}else
 		{
-		    
+
 			$limit  = $this->request->post('limit', 0, 'intval');
 			$offset = $this->request->post('offset', 0, 'intval');
 			$page   = floor($offset / $limit) +1 ;
@@ -114,7 +114,7 @@ class LockCard extends Admin {
 	    	{   $postdata['sn']=$lockdata['lock_sn'];
                 $result=wmjManageHandle($lockdata['lock_sn'],'readcard',$postdata);
                 //mlog("getopenlogbylockid-readcard:".json_encode($result));
-                    foreach ($result['data'] as $value) 
+                    foreach ($result['data'] as $value)
                     {
                         //判断当前锁是否已经有此卡
                         $readwhere = [];
@@ -137,14 +137,14 @@ class LockCard extends Admin {
                         {
                             //mlog("getopenlogbylockid-readcard-have:".json_encode($value));
                         }
-                        
+
                     }
 		    }
 			try{
-			    
-			    if (substr($lockdata['lock_sn'], 0, 5) == 'WMJ62') 
+
+			    if (substr($lockdata['lock_sn'], 0, 5) == 'WMJ62')
 			    {
-			        
+
 			        $res = LockCardService::pageList(formatWhere($where),$limit,$field,$orderby);
 				    $list = $res['list'];
 				    $data['rows']  = $list;
@@ -160,7 +160,7 @@ class LockCard extends Admin {
 				exit($e->getMessage());
 			}
 
-			
+
 		}
 	}
 
@@ -192,12 +192,13 @@ class LockCard extends Admin {
 			    $postdata['sn']=$lockdata['lock_sn'];
 			    $postdata['cardsn']=$data['lockcard_sn'];
 			    $postdata['endtime']=strtotime($data['lockcard_endtime']);
-			    if ($lockdata['lock_sn']) 
+			    if ($lockdata['lock_sn'])
 			    {
 			        //mlog("card_data:".json_encode($postdata));
-			        $result=wmjCardHandle($lockdata['lock_sn'],'addcard',$postdata);
-			        
-			        if ($result['state']) 
+                    $result = \app\module\lockServer\Lock::CardAdd($lockdata, $data['lockcard_sn'], $data['lockcard_endtime']);
+
+
+			        if ($result['state'])
 			        {
 			            LockCardService::add($data);
 			        }
@@ -206,7 +207,7 @@ class LockCard extends Admin {
 				        return json(['status'=>'00','msg'=>$result['state_msg']]);
 				    }
 			    }
-			    
+
 			} catch (\Exception $e) {
 				$this->error($e->getMessage());
 			}
@@ -234,11 +235,11 @@ class LockCard extends Admin {
 			    $postdata['sn']=$lockdata['lock_sn'];
 			    $postdata['cardsn']=$data['lockcard_sn'];
 			    $postdata['endtime']=strtotime($data['lockcard_endtime']);
-			    if ($lockdata['lock_sn']) 
+			    if ($lockdata['lock_sn'])
 			    {
 			        //mlog("card_data:".json_encode($postdata));
 			        $result=wmjCardHandle($lockdata['lock_sn'],'addcard',$postdata);
-			        if ($result['state']) 
+			        if ($result['state'])
 			        {
 			            LockCardService::update($data);
 			        }
@@ -246,10 +247,10 @@ class LockCard extends Admin {
 				    {
 				        return json(['status'=>'00','msg'=>$result['state_msg']]);
 				    }
-				   
+
 			    }
-			    
-				
+
+
 			} catch (\Exception $e) {
 				$this->error($e->getMessage());
 			}
@@ -270,12 +271,12 @@ class LockCard extends Admin {
                 $lockcarddata=LockCardDb::getInfo($delcardarr[$index]);
                 //查询锁信息
 			    $lockdata=\xhadmin\db\Lock::getInfo($lockcarddata['lock_id']);
-			    if ($lockdata['lock_sn']) 
+			    if ($lockdata['lock_sn'])
 			    {
 			        $postdata['sn']=$lockdata['lock_sn'];
 			        $postdata['cardsn']=$lockcarddata['lockcard_sn'];
 			        $result=wmjCardHandle($lockdata['lock_sn'],'delcard',$postdata);
-			        if ($result['state']) 
+			        if ($result['state'])
 			        {
 			            LockCardService::delete(['lockcard_id'=>$delcardarr[$index]]);
 			        }
@@ -283,10 +284,10 @@ class LockCard extends Admin {
 				    {
 				        return json(['status'=>'00','msg'=>$result['state_msg']]);
 				    }
-                    
+
 			    }
             }
-			
+
 		}catch(\Exception $e){
 			$this->error($e->getMessage());
 		}

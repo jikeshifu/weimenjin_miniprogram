@@ -98,6 +98,17 @@ class Device extends Base
         if (!$lock['openbtn'] && !$lockAuth['auth_isadmin']) {
             return json(Code::CodeErr(1000, "设备关闭小程序操作", $lock['status']));
         }
+
+        if (!$lockAuth['auth_isadmin'] || $lockAuth["lock_id"] == 2706) {
+
+            //判断时间段
+            $OpenLockTimesErr = Lock::OpenLockTimes($lockAuth["lock_id"]);
+
+            if ($OpenLockTimesErr["err"]) {
+                return json(Code::CodeErr(1000, $OpenLockTimesErr["err"], $lock['status']));
+            }
+        }
+
         $latitude = input("latitude");
         $longitude = input("longitude");
         $uidInfo = MemberServer::Uid();
@@ -158,9 +169,6 @@ class Device extends Base
         $lock_sn = input("lock_sn");
 
 
-
-
-
         $result = \app\module\lockServer\Lock::OpenLockTest($lock_sn);
 
 
@@ -203,6 +211,14 @@ class Device extends Base
         if (!$lock['status'] && !$lockauth['auth_isadmin']) {
             return json(Code::CodeErr(1000, "设备已停用", $lock['status']));
         }
+
+        if (!$lockauth['auth_isadmin']) {
+            //判断时间段
+            $OpenLockTimesErr = Lock::OpenLockTimes($lock["lock_id"]);
+            if ($OpenLockTimesErr["err"]) {
+                return json(Code::CodeErr(1000, $OpenLockTimesErr["err"], $lock['status']));
+            }
+        }
         //如果需要申请钥匙
         if ($lock["applyauth"] == 1) {
 
@@ -224,7 +240,7 @@ class Device extends Base
         //创建和普通管理员用户关联的用户信息(umember)
         $UMemberRes = MemberServer::UMember($data['member_id'], $lock["user_id"]);
         //mlog("openinfo:" . $data['member_id'] . "_" . $lock["user_id"] . "_" . $UMemberRes["status"]);
-        if (!empty($UMemberRes["status"])&&$UMemberRes["status"] == 0) {
+        if (!empty($UMemberRes["status"]) && $UMemberRes["status"] == 0) {
             return json(Code::CodeErr(1000, "异常用户", $UMemberRes));
         }
         if ($UMemberRes["status"] == 2) {
@@ -942,14 +958,24 @@ class Device extends Base
             $model->where(["log.member_id" => $member_id]);
         }
 //        $model->whereNull("mobile");
-        $count = $model->count();
+
 
         $search_key = input("search_key");
         if ($search_key) {
             $model->leftJoin("member m", "m.member_id = log.member_id");
-            $model->where("m.mobile","like","%{$search_key}%");
+            $model->where("m.mobile", "like", "%{$search_key}%");
         }
+        $startTime = input("startTime");
+        if ($startTime) {
 
+            $model->where("log.create_time", ">", $startTime);
+        }
+        $endTime = input("endTime");
+        if ($endTime) {
+
+            $model->where("log.create_time", "<", $endTime);
+        }
+        $count = $model->count();
         $LockLog = $model->with(["lock", "memberInfo"])->order("locklog_id desc")->page($page, $limit)->select();
 
         foreach ($LockLog as &$vo) {
@@ -1048,7 +1074,7 @@ class Device extends Base
         }
         Db::name("lockauth")->where(['lockauth_id' => $lockauth_id, "member_id" => $res["uid"]])->update([
             "member_id" => $member_id,
-            "device_group_id"=>0
+            "device_group_id" => 0
         ]);
 
         return json(Code::CodeOk(["msg" => "转移成功",]));
