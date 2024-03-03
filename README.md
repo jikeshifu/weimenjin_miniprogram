@@ -4,7 +4,7 @@
 # 最新Vue版本代码开放
 ![输入图片说明](images/11.jpg)
 ![输入图片说明](images/995fdbe7123927c020125a2f8f87f0f.jpg)
-![输入图片说明](images/9bbf8c53938116f527ef0a3aa379708.png)
+![输入图片说明](images/demoqrcode.png)
 ![输入图片说明](images/%E5%B9%BB%E7%81%AF%E7%89%877.PNG)
 ![输入图片说明](images/%E5%B9%BB%E7%81%AF%E7%89%878.PNG)
 ![输入图片说明](images/%E5%B9%BB%E7%81%AF%E7%89%879.PNG)
