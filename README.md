@@ -1,7 +1,7 @@
 # 微门禁小程序项目
 # 下载请给个star，star是攻城狮生发的动力
 ![输入图片说明](images/cxy.jpg)
-# 最新Vue版本代码开放
+# 因比较忙无法频繁更新开源库，需要最新功能的请联系我们获取最新版本。
 ![输入图片说明](images/11.jpg)
 ![输入图片说明](images/995fdbe7123927c020125a2f8f87f0f.jpg)
 ![输入图片说明](images/demoqrcode.png)
