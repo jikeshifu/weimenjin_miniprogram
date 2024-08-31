@@ -1254,44 +1254,39 @@ CREATE TABLE `cd_menu`  (
 -- ----------------------------
 -- Records of cd_menu
 -- ----------------------------
-INSERT INTO `cd_menu` VALUES (12, 0, 'Sys', '系统管理', '', '', 1, 1, 7, 0, 0, '', 'fa fa-gears', '', 1, NULL);
-INSERT INTO `cd_menu` VALUES (17, 12, '', '后台首页', '', '', 1, 1, 2, 0, 1, '/admin/Index/main.html', 'fa fa-home', '', 1, 0);
+INSERT INTO `cd_menu` VALUES (12, 0, 'Sys', '系统管理', '', '', 0, 1, 793, 0, 0, '', 'fa fa-gears', '', 1, NULL);
+INSERT INTO `cd_menu` VALUES (17, 12, '', '后台首页', '', '', 0, 1, 2, 0, 1, '/admin/Index/main.html', 'fa fa-home', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (18, 12, 'User', '用户管理', 'user_id', 'user', 1, 1, 4, 1, 0, '', 'fa fa-user-secret', '', 1, 0);
-INSERT INTO `cd_menu` VALUES (19, 12, 'Group', '分组管理', 'group_id', 'group', 1, 1, 5, 1, 0, '', 'fa fa-user', '', 1, NULL);
-INSERT INTO `cd_menu` VALUES (21, 12, '', '菜单管理', '', '', 1, 0, 3, 0, 1, '/admin/Menu/index?app_id=1', '', '', 1, NULL);
+INSERT INTO `cd_menu` VALUES (19, 12, 'Group', '分组管理', 'group_id', 'group', 1, 0, 5, 1, 0, '', 'fa fa-user', '', 1, NULL);
+INSERT INTO `cd_menu` VALUES (21, 12, '', '菜单管理', '', '', 0, 0, 3, 0, 1, '/admin/Menu/index?app_id=1', '', '', 1, NULL);
 INSERT INTO `cd_menu` VALUES (41, 12, 'Config', '系统配置', '', '', 1, 1, 7, 0, 0, '', 'glyphicon glyphicon-cog', '基本设置|上传配置|门禁配置|隐私政策|服务协议', 1, 0);
 INSERT INTO `cd_menu` VALUES (52, 12, 'Log', '登录日志', 'log_id', 'log', 1, 1, 6, 1, 0, '', 'glyphicon glyphicon-log-in', '', 1, NULL);
-INSERT INTO `cd_menu` VALUES (80, 12, 'Application', '应用管理', '', '', 1, 1, 1, 0, 0, '', '', '', 1, NULL);
+INSERT INTO `cd_menu` VALUES (80, 12, 'Application', '应用管理', '', '', 0, 0, 1, 0, 0, '', '', '', 1, NULL);
 INSERT INTO `cd_menu` VALUES (524, 12, '', '修改密码', '', '', 0, 1, 8, 0, NULL, '/admin/Base/password', '', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (525, 12, '', '数据备份', '', '', 0, 1, 9, 0, NULL, '/admin/Backup/index', '', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (793, 0, 'Member', '会员管理', 'member_id', 'member', 1, 1, 793, 1, NULL, '', 'fa fa-users', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (794, 0, 'Member', '会员管理', 'member_id', 'member', 1, 1, 797, 0, NULL, '', '', '', 179, 0);
 INSERT INTO `cd_menu` VALUES (797, 0, 'Health', '健康登记', 'health_id', 'health', 1, NULL, 798, 1, NULL, NULL, NULL, NULL, 179, NULL);
-INSERT INTO `cd_menu` VALUES (803, 808, 'Lock', '门锁列表', 'lock_id', 'lock', 1, 1, 803, 1, NULL, '', 'fa fa-list', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (802, 817, 'Health', '健康登记', 'health_id', 'health', 1, 1, 798, 0, NULL, '', 'fa fa-file-text', '', 1, 0);
+INSERT INTO `cd_menu` VALUES (803, 808, 'Lock', '门锁列表', 'lock_id', 'lock', 1, 1, 803, 1, NULL, '', 'fa fa-list', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (804, 817, 'Regpoint', '登记点管理', 'regpoint_id', 'regpoint', 1, 1, 804, 1, NULL, '', 'fa fa-dot-circle-o', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (805, 0, 'Regpoint', '登记点管理', 'regpoint_id', 'regpoint', 1, 1, 804, 0, NULL, '', '', '', 179, 0);
 INSERT INTO `cd_menu` VALUES (806, 0, 'User', '用户管理', 'user_id', 'user', 1, 1, 4, 0, 0, '', 'fa fa-user-secret', '', 179, 0);
 INSERT INTO `cd_menu` VALUES (807, 808, 'LockType', '门锁类型', 'locktype_id', 'locktype', 1, 1, 812, 1, NULL, '', 'fa fa-wrench', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (808, 0, '', '门锁管理', '', '', 0, 1, 809, 1, NULL, '', 'fa fa-unlock', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (809, 808, 'LockAuth', '钥匙管理', 'lockauth_id', 'lockauth', 1, 1, 807, 1, NULL, '', 'fa fa-key', '', 1, 0);
+INSERT INTO `cd_menu` VALUES (812, 808, 'LockLog', '开门记录', 'locklog_id', 'locklog', 1, 1, 809, 1, NULL, '', 'fa fa-list-alt', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (813, 0, 'Lock', '门锁列表', 'lock_id', 'lock', 1, 1, 803, 0, NULL, '', '', '', 179, 0);
 INSERT INTO `cd_menu` VALUES (814, 0, 'LockAuth', '钥匙管理', 'lockauth_id', 'lockauth', 1, 1, 807, 0, NULL, '', '', '', 179, 0);
-INSERT INTO `cd_menu` VALUES (812, 808, 'LockLog', '开门记录', 'locklog_id', 'locklog', 1, 1, 809, 1, NULL, '', 'fa fa-list-alt', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (815, 0, 'LockLog', '日志管理', 'locklog_id', 'locklog', 1, 1, 817, 0, NULL, '', '', '', 179, 0);
-INSERT INTO `cd_menu` VALUES (816, 0, 'Config', '系统配置', '', '', 1, 1, 793, 0, 0, '', 'glyphicon glyphicon-cog', '基本设置|上传配置|微门禁配置', 179, 0);
-INSERT INTO `cd_menu` VALUES (817, 0, '', '健康登记', '', '', 1, 1, 818, 0, NULL, '', 'fa fa-heartbeat', '', 1, 0);
+INSERT INTO `cd_menu` VALUES (816, 0, 'Config', '系统配置', '', '', 1, 1, 7, 0, 0, '', 'glyphicon glyphicon-cog', '基本设置|上传配置|微门禁配置', 179, 0);
+INSERT INTO `cd_menu` VALUES (817, 0, '', '健康登记', '', '', 0, 0, 818, 0, NULL, '', 'fa fa-heartbeat', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (818, 808, 'Locktimes', '开门时段', 'locktimes_id', 'locktimes', 1, 0, 818, 1, NULL, '', '', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (819, 0, 'Locktimes', '开门时段', 'locktimes_id', 'locktimes', 1, 0, 824, 0, NULL, '', '', '', 179, 0);
 INSERT INTO `cd_menu` VALUES (824, 808, 'LockCard', '卡管理', 'lockcard_id', 'lockcard', 1, 0, 824, 1, NULL, '', '', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (825, 0, 'LockCard', '卡管理', 'lockcard_id', 'lockcard', 1, 0, 826, 0, NULL, '', '', '', 179, 0);
 INSERT INTO `cd_menu` VALUES (826, 0, 'Umember', '用户管理', 'umember_id', 'umember', 1, 1, 808, 1, NULL, '', 'fa fa-user', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (827, 0, 'Wservice', '服务管理', 'wservice_id', 'wservice', 1, 1, 827, 1, NULL, '', 'fa fa-share-alt', '', 1, 0);
-INSERT INTO `cd_menu` VALUES (828, 0, 'Wservice', '服务管理', 'wservice_id', 'wservice', 1, 1, 827, 0, NULL, '', 'fa fa-share-alt', '', 179, 0);
-INSERT INTO `cd_menu` VALUES (829, 0, '', '状态数据', '', '', 0, 1, 829, 0, NULL, '', '', '', 1, 0);
-INSERT INTO `cd_menu` VALUES (830, 829, 'DoorStatus', '门状态数据', 'doorstatus_id', 'doorstatus', 1, 1, 830, 1, NULL, '', '', '', 1, 0);
-INSERT INTO `cd_menu` VALUES (831, 0, 'DoorStatus', '门状态数据', 'doorstatus_id', 'doorstatus', 1, 1, 830, 0, NULL, '', '', '', 179, 0);
-INSERT INTO `cd_menu` VALUES (832, 0, 'DoorStatus', '门状态数据', 'doorstatus_id', 'doorstatus', 1, 1, 830, 0, NULL, '', '', '', 181, 0);
 
 -- ----------------------------
 -- Table structure for cd_on_line_record
