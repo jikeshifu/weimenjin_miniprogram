@@ -8,6 +8,9 @@ use app\module\code\Code;
 use app\module\member\memberServer\MemberServer;
 use app\module\redis\Redis;
 use app\module\user\userServer\UserServer;
+use app\module\adlog\AdlogServer;
+use app\module\lockAuthServer\LockAuth;
+use xhadmin\db\LockAuth as LockAuthDb;
 use think\facade\Db;
 
 class Member
@@ -22,12 +25,15 @@ class Member
             return json(Code::CodeErr(1000, $wxUserRes["err"], $wxUserRes));
         }
 
-//        if ($wxUserRes["res"]["openid"] == "oEHaL5ZaiZabEBwJfAkDlTwuyRl0") {
-//            $wxUserRes["res"]["openid"] = "oEHaL5ZDm9e0PexYt1PrCuWoNv0E";
-//
-//        }
-
         $memberInfo = MemberServer::InfoWOpenid($wxUserRes["res"]["openid"]);
+        //查询是否有演示钥匙，没有就加一个，演示钥匙默认id为2
+        $resconfig = \app\admin\db\Config::loadList();
+        if ($resconfig["autodtkey"]) {
+            $lockauthres = LockAuthDb::getWhereInfo(['lock_id' => $resconfig["autodtkeylockid"], 'member_id' => $memberInfo['member_id']], 'lockauth_id');
+            if (!$lockauthres) {
+                LockAuth::Addtestauth($resconfig["autodtkeylockid"], $memberInfo['member_id'], 1, 0);
+            }
+        }
         if (isset($wxUserRes["res"]["unionid"]) && !$memberInfo["unionid"]) {
             MemberServer::Edit($memberInfo["member_id"], ['unionid' => $wxUserRes["res"]["unionid"]]);
         }
@@ -119,8 +125,30 @@ class Member
         return json(Code::CodeErr(1000, "扫描登录失败"));
 
     }
-
-
+    //登记广告日志
+    function addadlog()
+    {
+        $res = MemberServer::Uid();
+        $member_id = $res["uid"];
+        $adlog_page = input("adlog_page");
+        $adlog_type = input("adlog_type");
+        $adlog_adtime = input("adlog_adtime");
+        $adlog_result = input("adlog_result");
+        $adlog_msg = input("adlog_msg");
+        $adlog_points = input("adlog_points");
+        AdlogServer::Add($member_id, $adlog_page,$adlog_type,$adlog_adtime,$adlog_result, $adlog_msg,$adlog_points);
+        return json(Code::CodeOk(["msg" => "登记成功"])); 
+    }
+    //获取积分
+    function getpoints()
+    {
+        $res = MemberServer::Uid();
+        $member_id = $res["uid"];
+        $points=AdlogServer::GetPoints($member_id);
+        $countshow=AdlogServer::GetCountShow();
+        $countcomplete=AdlogServer::GetComplete();
+        return json(Code::CodeOk(["msg" => "获取成功","points"=>$points,"countshow"=>$countshow,"countcomplete"=>$countcomplete])); 
+    }
     function account()
     {
         $res = MemberServer::Uid();

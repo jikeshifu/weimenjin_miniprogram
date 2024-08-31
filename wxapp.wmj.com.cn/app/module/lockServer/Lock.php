@@ -46,7 +46,26 @@ class Lock
 
         return Db::name("lock")->where(["lock_sn" => $lock_sn])->whereNull("deleted_at")->find();
     }
+    static function LockPower($lock_sn)
+    {
 
+        return Db::name("power")
+        ->where(["device_sn" => $lock_sn])
+        ->order('created_at', 'desc') // 根据创建时间降序排列
+        ->limit(100) // 限制结果为最近的100条记录
+        ->select();
+
+    }
+    static function OnOffline($lock_sn)
+    {
+
+        return Db::name("on_line_record")
+        ->where(["device_sn" => $lock_sn])
+        ->order('on_line_time', 'desc') // 根据创建时间降序排列
+        ->limit(100) // 限制结果为最近的100条记录
+        ->select();
+
+    }
     static function CacheClear($lock_id)
     {
         $lockInfo = self::Info($lock_id);
@@ -118,6 +137,41 @@ class Lock
     /**
      * @param $lockInfo
      * @return mixed
+     * 在线
+     */
+    static function DeviceInfo($lockInfo, $bw = "")
+    {
+        if (in_array(mb_substr($lockInfo["lock_sn"], 0, 2), self::$Yjy)) {
+            $devInfo = HardwareCloud::App()->getDeviceInfo($lockInfo["lock_sn"]);
+            $lockInfo['online'] = $devInfo['on_line'];
+            $lockInfo['rssi'] = $devInfo['rssi'];
+            $lockInfo['imei'] = $devInfo['imei'];
+            $lockInfo['iccid'] = $devInfo['iccid'];
+            $lockInfo['version'] = $devInfo['sw_ver'];
+            $lockInfo['on_line_time'] = $devInfo['on_line_time'];
+            $lockInfo['off_line_time'] = $devInfo['off_line_time'];
+            $lockInfo['reason'] = $devInfo['reason'];
+        } else {
+            if ($lockInfo['lock_type'] == 7) {
+                $result = wmjgwHandle($lockInfo['lock_sn'], 'getlplockstate');
+                $lockInfo['online'] = $result['online'];
+            } else {
+                $result = wmjHandle($lockInfo['lock_sn'], 'lockstate');
+                //mlog("online" . json_encode($result));
+                $lockInfo['online'] = $result['online'];
+                $lockInfo['rssi'] = $result['rssi'];
+                $lockInfo['imei'] = $result['imei'];
+                $lockInfo['iccid'] = $result['iccid'];
+                $lockInfo['version'] = $result['version'];
+                $lockInfo['type'] = $result['type'];
+                $lockInfo['lockstatus'] = $result['lockstatus'];
+            }
+        }
+        return $lockInfo;
+    }
+    /**
+     * @param $lockInfo
+     * @return mixed
      * 添加卡
      */
     static function CardAdd($lockInfo, $cardsn, $endtime)
@@ -126,7 +180,42 @@ class Lock
             $endtime = "2862831776";
         }
         if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
-            $CardAdd = HardwareCloud::WifiLock()->CardAdd($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], time(), $endtime);
+            $CardAdd = HardwareCloud::WifiLock()->CardAdd($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], 0, $endtime);
+            $result["data"] = $CardAdd;
+            if ($CardAdd["err"]) {
+                $result['state'] = 0;
+                $result['state_code'] = 2003;
+                $result['state_msg'] = $CardAdd["err"];
+            } else {
+                $result['state'] = 1;
+                $result['state_code'] = 200;
+                $result['state_msg'] = "添加卡成功";
+            }
+
+        } else {
+            $result = self::wmjAddCard($lockInfo['lock_sn'], 'addcard', [
+                "sn" => $lockInfo['lock_sn'],
+                "cardsn" => $cardsn,
+                "endtime" => $endtime,
+
+            ]);
+        }
+        return $result;
+
+    }
+
+/**
+     * @param $lockInfo
+     * @return mixed
+     * 编辑卡
+     */
+    static function CardEdit($lockInfo, $cardsn, $endtime)
+    {
+        if (!$endtime) {
+            $endtime = "2862831776";
+        }
+        if (mb_substr($lockInfo["lock_sn"], 0, 3) == "W89" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W76" || mb_substr($lockInfo["lock_sn"], 0, 3) == "W77") {
+            $CardAdd = HardwareCloud::WifiLock()->CardEdit($lockInfo["lock_sn"], $cardsn, $lockInfo["device_cid"], 0, $endtime);
             $result["data"] = $CardAdd;
             if ($CardAdd["err"]) {
                 $result['state'] = 0;
@@ -279,6 +368,7 @@ class Lock
                 $result = wmjgwHandle($lockInfo["lock_sn"], 'ctrlgwl');
             } else {
                 $result = wmjHandle($lockInfo["lock_sn"], 'openlock');
+                //mlog("OpenLock:".$result);
             }
         }
 
@@ -383,11 +473,15 @@ class Lock
         $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $data['user_id'] . "&lock_id=" . $lock_id;
 
         HardwareCloud::App()->QrCodeSet($data["lock_sn"], $qrcodeurl);
+        
         $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
 
         LockService::update(["lock_id" => $lock_id], $data);
         //添加钥匙
         LockAuth::Add($lock_id, $data['member_id'], $data['user_id'], $device_group_id);
+        //重启设备
+        usleep(1000);
+        HardwareCloud::App()->Restart($data["lock_sn"]);
         return ["err" => null, "lock_id" => $lock_id];
 
     }

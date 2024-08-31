@@ -18,9 +18,7 @@ class server
         if ($res["code"] != 0 && $res["code"] != 1005) {
             return ["err" => $res["msg"]];
         }
-
-
-        return ["err" => null];
+        return ["err" => null,msg=>$res["msg"]];
     }
   /**
      * @param $device_sn
@@ -35,7 +33,7 @@ class server
                 "info"=>[
                     "qrcode_data"=>$qrcode_data,
                     "qrcode"=>$qrcode_data,
-                    "mode"=>"both",
+                    "mode"=>"passive",
                     "update_time"=>10,
                 ],
             ]
@@ -64,6 +62,18 @@ class server
     }
     /**
      * @param $device_sn
+     * 获取设备信息
+     */
+    public function getDeviceInfo($device_sn)
+    {
+        $res = self::Request("getDeviceInfo", ["device_sn" => $device_sn]);
+        if ($res["code"] != 0) {
+            return 0;
+        }
+        return $res["data"];
+    }
+    /**
+     * @param $device_sn
      * 设置二维码
      */
     public function QrSet($device_sn,$qr,$mode ="passive")
@@ -87,6 +97,35 @@ class server
         }
         if ($res["data"]["info"]["err_code"] != 0 ) {
             return ["err" =>"删除失败".$res["data"]["info"]["err_code"]];
+        }
+
+        if ($res["data"]["info"]["code"] != 0) {
+            return ["err" =>$res["data"]["info"]["msg"],"msg"=>$res];
+        }
+
+        return ["err" => null];
+    }
+    /**
+     * @param $device_sn
+     * 重启设备
+     */
+    public function Restart($device_sn)
+    {
+        $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+
+                "cmd_type" => "restart",
+                "info" => [
+                ],
+            ]
+        ]);
+
+        if ( $res["code"] != 0) {
+            return ["err" => $res["msg"]];
+        }
+        if ($res["data"]["info"]["err_code"] != 0 ) {
+            return ["err" =>"重启失败".$res["data"]["info"]["err_code"]];
         }
 
         if ($res["data"]["info"]["code"] != 0) {
@@ -125,7 +164,55 @@ class server
         }
         return ["err" => null];
     }
+    /*开门函数*/
+    static function GetDevInfo($device_sn,$ttscontent="门已打开",$volume=5)
+    {
 
+        $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "cmd_type" => "getdevinfo"
+            ]
+        ]);
+        if ($res["code"] != 0) {
+            return ["err" => $res["msg"]];
+        }
+        if ($res["data"]["info"]["code"] !=0) {
+            return ["err" =>"获取结果".$res["data"]["info"]["err_code"],'data'=>$res];
+        }
+        return ["err" => null,"data"=>$res["data"]];
+    }
+    /**
+     * @param $device_sn
+     * 设置发卡模式
+     */
+    public function NoNcModeSet($device_sn,$state =0)
+    {
+        $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+
+                "cmd_type" => "set_nonc",
+                "data" => [
+                    "type" =>$state,
+                ],
+                "info" => [
+                    "type" =>$state,
+                ],
+            ]
+        ]);
+
+        if ( $res["code"] != 0) {
+            return ["err" => $res["msg"]];
+        }
+        if ($res["data"]["info"]["err_code"] != 0 ) {
+            return ["err" =>"删除失败".$res["data"]["info"]["err_code"]];
+        }
+        if ($res["data"]["info"]["code"] != 0) {
+            return ["err" =>$res["data"]["info"]["msg"],"msg"=>$res];
+        }
+        return ["err" => null];
+    }
     /**
      * @param $path
      * @param array $data

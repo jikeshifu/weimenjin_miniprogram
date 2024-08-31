@@ -104,20 +104,17 @@
                                 <div class="card card-login card-hidden">
                                     <div class="card-header text-center" data-background-color="rose">
                                         <h4 class="card-title">{:config('xhadmin.site_title')}</h4>
-                                        <h8 class="card-title">登陆</h8>
                                         <div class="social-line">
-
                                         </div>
                                     </div>
                                     <p class="category text-center">
                                         <a href="/admin/Login/index">账号密码登录</a>
                                     </p>
                                     <div id="myQrcode" style="margin-top:30px;text-align: center">
-
-
 									</div>
-
-
+                                    <p class="category text-center">
+                                        直接用微信扫码即可注册并登录
+                                    </p>
                                 </div>
                         </div>
                     </div>
@@ -142,8 +139,9 @@
 </body>
 
 <script type="text/javascript">
-
-   $('#myQrcode').qrcode({ text: "https://wxapp.wmj.com.cn/qrCodeLogin?key={$cs}" });
+    var currentDomain = window.location.hostname; // 获取当前站点的域名
+    var qrCodeText = "https://" + currentDomain + "/qrCodeLogin?key={$cs}"; // 动态构建域名
+   $('#myQrcode').qrcode({ text: qrCodeText });
 
     $().ready(function() {
         demo.checkFullPageBackgroundImage();

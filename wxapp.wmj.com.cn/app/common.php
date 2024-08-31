@@ -37,7 +37,7 @@ function random($length=10, $type='letter', $convert=0)
     $code = '';
     $strlen = strlen($string) -1;
     for($i = 0; $i < $length; $i++){
-        $code .= $string{mt_rand(0, $strlen)};
+        $code .= $string[mt_rand(0, $strlen)];
     }
     if(!empty($convert)){
         $code = ($convert > 0)? strtoupper($code) : strtolower($code);
@@ -244,14 +244,17 @@ function checkData($data,$err_status=true){
 }
 
 //html代码输入
-function html_in($str){
-    $str=htmlspecialchars($str);
-	$str=strip_tags($str);
-    if(!get_magic_quotes_gpc()) {
-        $str = addslashes($str);
-    }
+function html_in($str) {
+    // 转义 HTML 特殊字符
+    $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+    
+    // 移除 HTML 和 PHP 标签
+    $str = strip_tags($str);
+    
+    // 添加反斜杠以转义字符串
+    $str = addslashes($str);
 
-   return $str;
+    return $str;
 }
 
 
@@ -412,7 +415,7 @@ if (!function_exists('db')) {
 
 function mlog($txt,$filename='log.txt') {
     $txt = date('Y/m/d H:i:s').": {$txt}\r\n";
-    file_put_contents('./'.date('Y-m-d').$filename, $txt, FILE_APPEND); //追加内容
+    file_put_contents('./log/'.date('Y-m-d').$filename, $txt, FILE_APPEND); //追加内容
 }
 /**
      * curl请求指定url(POST请求)

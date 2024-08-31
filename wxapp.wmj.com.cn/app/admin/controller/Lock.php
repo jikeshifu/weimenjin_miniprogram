@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 
 use app\module\code\Code;
+use app\module\hardwareCloud\HardwareCloud;
 use app\module\user\userServer\UserServer;
 use xhadmin\service\admin\LockService;
 use xhadmin\db\Lock as LockDb;
@@ -40,6 +41,11 @@ class Lock extends Admin
     {
         $postField = 'lock_id,mobile_check,applyauth,applyauth_check,status,hitshowminiad,openbtn,qrshowminiad,opsucnt';
         $data = $this->request->only(explode(',', $postField), 'post', null);
+        $lockdata = LockDb::getInfo($data['lock_id']);
+        if ($data['status']==1 && mb_substr($lockdata['lock_sn'],0,4)=="W763")
+        {
+            HardwareCloud::Accesscontrol()::SetEs($lockdata['lock_sn'],1);
+        }
         if (!$data['lock_id']) $this->error('参数错误');
         try {
             LockDb::edit($data);
@@ -107,6 +113,7 @@ class Lock extends Admin
             $postField = 'lock_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,online,qrshowminiad,hitshowminiad,lock_qrcode,create_time,openbtn,successimg,successadimg,openadurl,adnum,opsucnt';
             $data = $this->request->only(explode(',', $postField), 'post', null);
             try {
+
                 //mlog("updatelock_data:".json_encode($data));
                 //删除之前生成的二维码
                 $arr = parse_url($data['lock_qrcode']);
@@ -121,6 +128,46 @@ class Lock extends Admin
                 //mlog("updatelock_lock_qrcode_basename:" . json_encode($urlarr['basename']));
 
                 $lockdata = LockDb::getInfo($data['lock_id']);
+                //查询一下序列号发生变化没，如果变化就走替换序列号
+                if ($lockdata['lock_sn'] != $data['lock_sn'])
+                {   //判断提交上来的序列号是不是V1
+                    if (mb_substr($data['lock_sn'],0,3)=="WMJ")
+                    {   //判断原序列号是不是V1
+                        if (mb_substr($lockdata['lock_sn'],0,3)=="WMJ")
+                        {
+                            //走V1解绑接口解绑原序列号
+                            $wmjapiresult = wmjHandle($lockdata['lock_sn'], 'dellock');
+                            //走V1注册新序列号接口
+                            $wmjapiresult = wmjHandle($data['lock_sn'], 'postlock');
+                        }
+                        else
+                        {
+                            //走V2解绑接口
+                            \app\module\lockServer\Lock::Logout($lockdata['lock_sn']);
+                            //走V1注册新序列号接口
+                            $wmjapiresult = wmjHandle($data['lock_sn'], 'postlock');
+                        }
+                    }
+                    else
+                    {
+                        //提交上来的序列号是V2
+                        //判断原序列号是不是V1
+                        if (mb_substr($lockdata['lock_sn'],0,3)=="WMJ")
+                        {
+                            //走V1解绑接口
+                            $wmjapiresult = wmjHandle($lockdata['lock_sn'], 'dellock');
+                            //走V2注册新序列号接口
+                            $Register = HardwareCloud::App()->Register($data["lock_sn"]);
+                        }
+                        else
+                        {
+                            //走V2解绑接口
+                            \app\module\lockServer\Lock::Logout($lockdata['lock_sn']);
+                            //走V2注册新序列号接口
+                            $Register = HardwareCloud::App()->Register($data["lock_sn"]);
+                        }
+                    }
+                }
                 $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $lockdata['user_id'] . "&lock_id=" . $data['lock_id'];
                 //mlog("updatelock_data_user_id:".json_encode($lockdata['user_id']));
                 $data['lock_qrcode'] = $this->createmarkqrcode($qrcodeurl, $data['lock_name']);
@@ -235,7 +282,7 @@ class Lock extends Admin
             $postField = 'user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,lock_qrcode,location_check,hitshowminiad,qrshowminiad,successimg,openbtn,successadimg,openadurl,adnum,opsucnt,create_time';
             $data = $this->request->only(explode(',', $postField), 'post', null);
             try {
-           $admin =session('admin');
+                $admin =session('admin');
                 $data["user_id"] =$admin["user_id"];
                 $lockmap['lock_sn'] = $data['lock_sn'];
                 //根据锁sn拿到锁信息,根据会员id拿到会员信息，根据会员id和锁id拿到钥匙信息
@@ -295,8 +342,66 @@ class Lock extends Admin
             }
         }
     }
-    /*end*/
+    /*开门*/
 
+    function deviceinfo()
+    {
+        if (!$this->request->isPost()) {
+            $lock_id = $this->request->get('lock_id', '', 'intval');
+            if (!$lock_id) $this->error('lock_id不能为空');
+            //根据锁id拿到锁信息
+            $reslookdata = LockDb::getInfo($lock_id);
+            //mlog("opendoor_reslookdata:" . json_encode($reslookdata));
+            try {
+
+                if ($reslookdata) {
+                    $result = HardwareCloud::Accesscontrol()::GetInfo($reslookdata["lock_sn"]);
+                    if ($result['code']==0) {
+                        return json($result);
+                    } else {
+                        return json($result);
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+        }
+    }
+    /*end*/
+    /*开门*/
+
+    function regdoor()
+    {
+        if (!$this->request->isPost()) {
+            $lock_id = $this->request->get('lock_id', '', 'intval');
+            if (!$lock_id) $this->error('lock_id不能为空');
+            //根据锁id拿到锁信息
+            $reslookdata = LockDb::getInfo($lock_id);
+            //mlog("opendoor_reslookdata:" . json_encode($reslookdata));
+            try {
+
+                if ($reslookdata) {
+                    if (mb_substr($reslookdata['lock_sn'],0,2)=="W7")
+                    {
+                        $result = HardwareCloud::App()->Register($reslookdata["lock_sn"]);
+                        print_r($result);
+                        return json(['status' => '00', 'msg' => $result['msg']]);
+                    }
+                    else
+                    {
+                        $result = wmjHandle($reslookdata['lock_sn'], 'postlock');
+                        return json(['status' => '00', 'msg' => $result['state_msg']]);
+                    }
+
+
+
+                }
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+        }
+    }
+    /*end*/
     /*start*/
     function creatqrcode()
     {

@@ -49,7 +49,7 @@ class DoorStatus extends Admin {
 
 			try{
 				$sql = 'select a.*,b.lock_name from cd_doorstatus as a inner join cd_lock as b  where a.doorstatus_sn=b.lock_sn';
-				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
+				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_doorstatus');
 				$list = $res['list'];
 			}catch(\Exception $e){
 				exit($e->getMessage());

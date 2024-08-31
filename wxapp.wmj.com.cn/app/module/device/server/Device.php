@@ -136,17 +136,38 @@ class Device
         ];
         switch ($type) {
             case "W76":
-                $res["audioConfig_status"] = 1;
-                $res["card_status"] = 1;
-                $res["pwd_status"] = 1;
+				$new_type = mb_substr($lock_sn, 0, 4);
+				switch ($new_type) {
+						case "W761":
+                                $res["card_status"] = 0;
+                                break;
+						case "W762":
+								$res["card_status"] = 0;
+								break;
+                        case "W764":
+                                $res["audioConfig_status"] = 1;
+                                $res["card_status"] = 0;
+                                break;
+						case "W765":
+								$res["audioConfig_status"] = 1;
+								$res["card_status"] = 1;
+								break;
+						case "W766":
+								$res["audioConfig_status"] = 1;
+								$res["card_status"] = 1;
+								$res["pwd_status"] = 1;
+								break;
+						default:
+								$res["audioConfig_status"] = 0;
+								$res["card_status"] = 0;
+								$res["pwd_status"] = 0;
+				}
                 break;
             case "W77":
                 $res["face_status"] = 1;
                 $res["card_status"] = 1;
                 break;
             case "W71":
-                $res["realTime_status"] = 1;
-                break;
             case "W72":
                 $res["realTime_status"] = 1;
                 break;

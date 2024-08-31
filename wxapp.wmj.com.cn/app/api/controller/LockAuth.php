@@ -102,7 +102,7 @@ class LockAuth extends Common
                 $sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name from cd_lockauth as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id  and a.deleted_at IS NULL and a.lock_id=c.lock_id';
             }
 
-            $res = \xhadmin\CommonService::loadList($sql, formatWhere($where), $limit, $orderby);
+            $res = \xhadmin\CommonService::loadList($sql, formatWhere($where), $limit, $orderby,'cd_lockauth');
         } catch (\Exception $e) {
             return json(['status' => $this->errorCode, 'msg' => $e->getMessage()]);
         }

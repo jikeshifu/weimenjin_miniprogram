@@ -87,7 +87,7 @@ class Login extends Admin
     public function out()
     {
         session('admin', null);
-        $this->success('退出登录成功！', url('admin/Login/index'));
+        $this->success('退出登录成功！', url('admin/Login/indexQrCode'));
     }
 
 }

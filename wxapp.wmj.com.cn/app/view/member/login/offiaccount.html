@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+
+    <title>绑定用户成功</title>
+    <link rel="stylesheet" href="/weui-gh-pages/weui.css"/>
+    <link rel="stylesheet" href="/weui-gh-pages/example.css"/>
+</head>
+<body ontouchstart>
+<div class="container" id="container">
+    <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">绑定用户成功</h2>
+            <p class="weui_msg_desc">可接收小程序开门通知</p>
+        </div>
+        <div class="weui_opr_area">
+            <p class="weui_btn_area">
+                <a href="javascript:;" id="js_close" class="weui_btn weui_btn_primary">关闭</a>
+
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script src="/weui-gh-pages/zepto.min.js"></script>
+<script src="/weui-gh-pages/router.min.js"></script>
+<script src="/weui-gh-pages/example.js"></script>
+<script src="/js/jquery.min.js"></script>
+<style>
+    .home{
+        display:none;
+    }
+</style>
+<script>
+
+
+    $("#js_close").click(function () {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+        document.addEventListener('WeixinJSBridgeReady', function () {
+            WeixinJSBridge.call('closeWindow');
+        }, false);
+        WeixinJSBridge.call('closeWindow');
+    })
+</script>
+</body>
+</html>

@@ -54,7 +54,8 @@ class airSwitch
         }
 
         return ["err" => null,"data"=>$res["data"]];
-    }  /**
+    }
+    /**
  * @param $device_sn
  * 获取信息
  */
@@ -65,7 +66,6 @@ class airSwitch
             "device_sn" => $device_sn,
             "data" => [
                 "cmd_type" => "getdevinfo",
-
             ]
         ]);
         if ($res["code"] != 0) {

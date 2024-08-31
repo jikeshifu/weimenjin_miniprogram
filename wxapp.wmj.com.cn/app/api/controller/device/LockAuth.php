@@ -37,7 +37,7 @@ class LockAuth
             $q->whereOr(function ($q1){
                 $q1->whereNull("auth_member_id");
             });
-        });
+        })->order("create_time", "desc");
         $LockAuthModel->where(["lock_id" => $lockAuth["lock_id"],])->whereNotNull('member_id');
         if ($search_key) {
 
@@ -50,9 +50,6 @@ class LockAuth
             }
 
         }
-
-
-
         $auth_status = input("auth_status");
         $LockAuthModel->where(["auth_status" => $auth_status]);
 
@@ -63,10 +60,10 @@ class LockAuth
         foreach ($list as $vo) {
             $list1[] = [
                 "lockauth_id" => $vo["lockauth_id"],
-                "aremark" => $vo["aremark"],
+                "aremark" => ($vo["aremark"] === null || $vo["aremark"] === '') ? '无备注' : $vo["aremark"],
                 "mobile" => $vo["memberInfo"]["mobile"],
                 "headimgurl" => $vo["memberInfo"]["headimgurl"],
-                "nickname" => $vo["memberInfo"]["nickname"],
+                "nickname" => $vo["memberInfo"]["realname"] ?? $vo["memberInfo"]["nickname"],
                 "auth_status" => $vo["auth_status"],
                 "auth_starttime" => $vo["auth_starttime"],
                 "auth_endtime" => $vo["auth_endtime"],
@@ -223,9 +220,10 @@ class LockAuth
         $data["lock_id"] = $lockAuth["lock_id"];
         $data["auth_sharelimit"] = input("auth_sharelimit");
         $data["auth_openlimit"] = input("auth_openlimit");
-        $data["auth_starttime"] = input("auth_starttime");
-        $data["auth_endtime"] = input("auth_endtime");
+        $data["auth_starttime"] = input("startTime");
+        $data["auth_endtime"] = input("endTime");
         $data["auth_shareability"] = input("auth_shareability");
+        $data["auth_isadmin"] = input("auth_isadmin")?input("auth_isadmin"):0;
         $data["aremark"] = input("remark");
         $data["auth_status"] = input("auth_status");
 

@@ -45,8 +45,8 @@ class Pwd
 
 
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
-        if (strlen($pwd)<8){
-            return json(Code::CodeErr(1001,"密码不能小于8位"));
+        if (strlen($pwd)<4){
+            return json(Code::CodeErr(1001,"密码不能小于4位"));
         }
 
        $addres= HardwareCloud::WifiLock()->PwdAdd($lock["lock_sn"], $pwd, $lock["device_cid"], 0, $end_time);
@@ -87,12 +87,23 @@ class Pwd
         $lock_id = input("lock_id");
         $pwd_id = input("pwd_id");
         $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
-        $pwd = Db::name("pwd")->where(["pwd_id" => $pwd_id])->find();
-        $addres= HardwareCloud::WifiLock()->PwdDel($lock["lock_sn"], $pwd["pwd"], $lock["device_cid"]);
-        if($addres["err"]){
-            return json(Code::CodeErr(1000,$addres["err"],[$lock,$addres,$pwd]));
+        if($pwd_id)
+        {
+            $pwd = Db::name("pwd")->where(["pwd_id" => $pwd_id])->find();
+            $addres= HardwareCloud::WifiLock()->PwdDel($lock["lock_sn"], $pwd["pwd"], $lock["device_cid"]);
+            if($addres["err"]){
+                return json(Code::CodeErr(1000,$addres["err"],[$lock,$addres,$pwd]));
+            }
+            Db::name("pwd")->where(["pwd_id" => $pwd_id])->update(["deleted_at"=>date("Y-m-d H:i:s")]);
         }
-        Db::name("pwd")->where(["pwd_id" => $pwd_id])->update(["deleted_at"=>date("Y-m-d H:i:s")]);
+        else
+        {
+            $delres= HardwareCloud::WifiLock()->PwdDelAll($lock["lock_sn"], $lock["device_cid"]);
+            if($delres["err"]){
+                return json(Code::CodeErr(1000,$delres["err"],[$lock,$delres]));
+            }
+            Db::name("pwd")->where(["lock_id" => $lock_id])->update(["deleted_at"=>date("Y-m-d H:i:s")]);
+        }
         return json(Code::CodeOk([]));
     }
 }

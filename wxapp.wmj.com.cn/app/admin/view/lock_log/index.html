@@ -23,17 +23,25 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">姓名</button>
-									</div>
-									<input type="text" class="form-control" id="realname" placeholder="姓名" />
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="input-group">
-									<div class="input-group-btn">
 										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
 									</div>
 									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开门时间开始</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="开始时间" class="form-control" id="create_time_start">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开门时间结束</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="结束时间" class="form-control" id="create_time_end">
 								</div>
 							</div>
 							<!-- search end -->
@@ -79,6 +87,7 @@
  			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
  			{title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.typeFormatter},
+ 			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '开门时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
  			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
  		];
@@ -141,8 +150,9 @@
 		var queryData = {};
 		queryData['user_id'] = $("#user_id").val();
 		queryData['lock_name'] = $("#lock_name").val();
-		queryData['realname'] = $("#realname").val();
 		queryData['mobile'] = $("#mobile").val();
+		queryData['create_time_start'] = $("#create_time_start").val();
+		queryData['create_time_end'] = $("#create_time_end").val();
 		return queryData;
 	}
 
@@ -261,5 +271,7 @@
 		table.setQueryParams(CodeGoods.formParams());
 		CodeGoods.table = table.init();
 	});
+	laydate.render({elem: '#create_time_start',type: 'datetime'});
+	laydate.render({elem: '#create_time_end',type: 'datetime'});
 </script>
 {/block}

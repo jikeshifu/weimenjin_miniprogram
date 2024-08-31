@@ -46,12 +46,9 @@ class CardAdd extends Command
 
                 if ($result["state"] == 1) {
                     $updata["sync_status"] = 1;
-
-
                 } else {
                     $updata["remark"] = $result['state_msg'];
                 }
-
                 if ($updata) {
                     Db::name("lockcard")->where(["lockcard_id" => $vo["lockcard_id"]])->update($updata);
                 }

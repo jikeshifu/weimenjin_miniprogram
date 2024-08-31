@@ -33,7 +33,7 @@ class LockAuth
 
         $authdata['lock_id'] = $lock_id;
         $authdata['member_id'] = $member_id;
-        $authdata['auth_member_id'] = 35;
+        $authdata['auth_member_id'] = 1;
         $authdata['auth_shareability'] = 0;
         $authdata['auth_sharelimit'] = 0;
         $authdata['auth_openlimit'] = 0;
@@ -105,6 +105,10 @@ class LockAuth
 
             if ($lockAuth["auth_endtime"] && $lockAuth["auth_endtime"] < time()) {
                 $err = "钥匙已过期";
+
+            }
+            if ($lockAuth["auth_starttime"] && $lockAuth["auth_starttime"] > time()) {
+                $err = "未到可开时间";
 
             }
         }

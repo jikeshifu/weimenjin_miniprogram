@@ -100,7 +100,7 @@ class LockCard extends Common {
 
 		try{
 			$sql = 'select t.*,c.nickname,c.mobile,c.headimgurl from (select a.*,b.auth_status,b.auth_starttime,b.auth_endtime,b.member_id from cd_lockcard as a left join cd_lockauth as b on a.lockauth_id=b.lockauth_id where a.lockcard_username like \'%'.$keyword.'%\' or a.lockcard_sn like \'%'.$keyword.'%\' or a.lockcard_remark like \'%'.$keyword.'%\') as t left join cd_member as c on t.member_id=c.member_id where t.lock_id = '.$lock_id;
-			$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
+			$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_lockcard');
 		}catch(\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}
@@ -358,11 +358,12 @@ class LockCard extends Common {
         $lockcarddata=db()->table('cd_lockcard')->where(['batchstatus'=>1])->find();
         //mlog("lockcarddata:".json_encode($lockcarddata));
         //用设备ID查出锁信息
-		$lockdata=\xhadmin\db\Lock::getInfo($lockcarddata['lock_id']);
+		// $lockdata=\xhadmin\db\Lock::getInfo($lockcarddata['lock_id']);
+		$lockdata=\xhadmin\db\Lock::getInfo(1174);
 		//查询设备是否在线
-		$result = wmjHandle($lockdata['lock_sn'], 'lockstate');
+		//$result = wmjHandle($lockdata['lock_sn'], 'lockstate');
 		//查出这个锁下面要更新的卡
-		$senddata=db()->table('cd_lockcard')->where(['batchstatus'=>1,'lock_id'=>$lockcarddata['lock_id']])->select();
+		$senddata=db()->table('cd_lockcard')->where(['batchstatus'=>1,'lock_id'=>1174])->select();
 			try {
 			    foreach ($senddata as $sendv)
 			    {

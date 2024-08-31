@@ -117,7 +117,6 @@ class wifiLock
                         "end_time" => (int)$endTime,
                     ],   "info" => [
                         "card_id" =>$card_sn,
-
                         "card_type" => 0,
                         "user_id" => 0,
                         "start_time" => (int)$start_time,
@@ -145,6 +144,59 @@ class wifiLock
 
         return ["err" => null,"res"=>$res];
     }
+
+    /**
+     * @param $device_sn
+     * 添加卡
+     */
+    public function CardEdit($device_sn,$card_sn,$device_cid,$start_time,$endTime)
+    {
+        $res="";
+        try{
+
+            $res = server::Request("send", [
+                "device_sn" => $device_sn,
+                "data" => [
+                    "device_cid"=>$device_cid,
+                    "cmd_type" => "card_edit",
+                    "data" => [
+                        "card_id" =>$card_sn,
+
+                        "card_type" => 0,
+                        "user_id" => 0,
+                        "start_time" => (int)$start_time,
+                        "end_time" => (int)$endTime,
+                    ],   "info" => [
+                        "card_id" =>$card_sn,
+
+                        "card_type" => 0,
+                        "user_id" => 0,
+                        "start_time" => (int)$start_time,
+                        "end_time" => (int)$endTime,
+                    ],
+                ]
+            ]);
+
+            if ($res["code"] != 0) {
+                return ["err" => $res["msg"]];
+            }
+
+            if ($res["data"]["info"]["err_code"] != 0 || $res["data"]["info"]["code"] !=0) {
+                if($res["data"]["info"]["code"] !=17){
+                    return ["err" =>"编辑失败".$res["data"]["info"]["err_code"].$res["data"]["info"]["msg"]];
+                }
+
+            }
+        }catch(\Exception $e){
+           print_r($e->getMessage());
+           print_r($res);
+
+        }
+
+
+        return ["err" => null,"res"=>$res];
+    }
+
     /**
      * @param $device_sn
      * 删除卡
@@ -201,7 +253,7 @@ class wifiLock
                 "data" => [
 
                     "start_time" => (int)$start_time,
-                    "end_time" => (int)$endTime,
+                    // "end_time" => (int)$endTime,
                 ],
             ]
         ]);
@@ -211,7 +263,6 @@ class wifiLock
         if ($res["code"] != 0) {
             return ["err" => $res["msg"]];
         }
-        print_r($res);
         if ($res["data"]["info"]["err_code"] != 0  || $res["data"]["info"]["code"] != 0) {
             return ["err" =>"添加失败".$res["data"]["info"]["err_code"]];
         }
@@ -235,7 +286,7 @@ class wifiLock
 
                     "fp_id" => $fp_id,
                     "start_time" => (int)$start_time,
-                    "end_time" => (int)$endTime,
+                    // "end_time" => (int)$endTime,
                 ],
             ]
         ]);
@@ -267,6 +318,31 @@ class wifiLock
                     "fp_id" =>$fp_id,
 
                 ],
+            ]
+        ]);
+
+        if ( $res["code"] != 0) {
+            return ["err" => $res["msg"],"res"=>$res];
+        }
+        if ($res["data"]["info"]["err_code"] != 0 &&$res["data"]["info"]["err_code"] != 18 ) {
+            return ["err" =>"删除失败".$res["data"]["info"]["err_code"],"res"=>$res];
+        }
+
+        return ["err" => null];
+    }
+    /**
+     * @param $device_sn
+     * 清空指纹
+     */
+    public function FingerClear($device_sn,$device_cid)
+    {
+
+        $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "device_cid"=>$device_cid,
+                "cmd_type" => "fp_clr",
+                "data" => [],
             ]
         ]);
 
@@ -352,33 +428,53 @@ class wifiLock
     }
     /**
      * @param $device_sn
+     * 清空密码
+     */
+    public function PwdDelAll($device_sn,$device_cid)
+    {
+
+        $res = server::Request("send", [
+            "device_sn" => $device_sn,
+            "data" => [
+                "device_cid"=>$device_cid,
+                "cmd_type" => "pwd_clr",
+                "data" => [], 
+                "info" => [],
+            ]
+        ]);
+
+        if ( $res["code"] != 0) {
+            return ["err" => $res["msg"]];
+        }
+        if ($res["data"]["info"]["err_code"] != 0 && $res["data"]["info"]["code"] != 0) {
+            return ["err" =>"清空失败".$res["data"]["info"]["err_code"]];
+        }
+
+        return ["err" => null];
+    }
+    /**
+     * @param $device_sn
      * 临时密码
      */
     public function PasswordTemporary($device_sn,$device_cid,$admin_pw)
     {
+        $resconfig = \app\admin\db\Config::loadList();
 
         $data =[
             "device_sn" => $device_sn,
             "data" => [
-                "device_cid"=>$device_cid,
-                "admin_pw" => $admin_pw,
+                "device_cid"=>$resconfig["devicecid"],
+                "admin_pw" => $resconfig["adminpw"],
             ]
         ];
-
         if(mb_substr($device_sn,0,3)=="W76"){
             $res = server::Request("TPassword", $data);
         }else{
             $res = server::Request("wifiLock/temporaryPassword", $data);
         }
-
-
-
-
         if ($res["code"] != 0) {
             return ["err" => $res["msg"]];
         }
-
-
         return ["err" => null,"pwd"=>$res["data"]["pwd"],"data"=>$data];
     }
 

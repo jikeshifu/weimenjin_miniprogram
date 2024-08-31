@@ -60,15 +60,46 @@ class LockLog extends Admin {
 		if(session('admin.role') <> 1){
 			$where['a.user_id'] = session('admin.user_id');
 		}
-		$where['a.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
-		$where['a.realname'] = $this->request->param('realname', '', 'serach_in');
-		$where['a.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
-		$where['a.locklog_id'] = ['in',$this->request->param('locklog_id', '', 'serach_in')];
+		$locklog_id = $this->request->param('locklog_id', '', 'serach_in');
+			$orderby = 'locklog_id desc ';
+			$limit = 10000;
+			$list = [];
 
-		$orderby = '';
+			if (empty($locklog_id)){
+				$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
+				$where['b.realname'] = $this->request->param('realname', '', 'serach_in');
+				$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
+				$where['b.remark'] = ['like',$this->request->param('remark', '', 'serach_in')];
+				$create_time_start = $this->request->param('create_time_start', '', 'serach_in');
+				$create_time_end = $this->request->param('create_time_end', '', 'serach_in');
+				$where['a.create_time'] = ['between',[strtotime($create_time_start),strtotime($create_time_end)]];
+
+				try{
+						$sql = 'select a.locklog_id,a.member_id,a.lock_id,a.status,a.type,a.create_time,a.user_id,a.lremark,a.cardsn,a.user_name,b.headimgurl,b.nickname,b.realname,b.remark,b.mobile,c.lock_name from cd_locklog as a FORCE INDEX(idx_locklog_id) inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+						$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_locklog');
+						$list = $res['list'];
+				}catch(\Exception $e){
+						exit($e->getMessage());
+				}
+		}else{
+				$where['a.lock_name'] = ['like',''];
+				$where['a.realname'] = '';
+				$where['a.mobile'] = ['like',''];
+				$where['a.locklog_id'] = ['in',$this->request->param('locklog_id', '', 'serach_in')];
+
+					try{
+							$sql = 'select a.*,b.headimgurl,b.nickname,b.mobile,c.lock_name from cd_locklog as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+							$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_locklog');
+							$list = $res['list'];
+					}catch(\Exception $e){
+							exit($e->getMessage());
+					}
+
+		}
 
 		try {
-			$res = LockLogService::dumpData(formatWhere($where),$orderby);
+				$filename = date('YmdHis');
+				LockLogService::dumpData($list,$filename);
 		} catch (\Exception $e) {
 			$this->error($e->getMessage());
 		}
@@ -106,8 +137,8 @@ class LockLog extends Admin {
 			$orderby = ($sort && $order) ? $sort.' '.$order : 'locklog_id desc';
 
 			try{
-				$sql = 'select a.*,b.headimgurl,b.nickname,b.realname,b.remark,b.mobile,c.lock_name from cd_locklog as a FORCE INDEX(idx_locklog_id) inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
-				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
+				$sql = 'select a.*,b.headimgurl,b.realname,b.remark,b.nickname,b.mobile,c.lock_name from cd_locklog  as a  inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id';
+				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_locklog');
 				$list = $res['list'];
 			}catch(\Exception $e){
 				exit($e->getMessage());

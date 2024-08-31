@@ -113,8 +113,8 @@ class Umember extends Admin {
 			$orderby = ($sort && $order) ? $sort.' '.$order : 'umember_id desc';
 
 			try{
-				$sql = 'select a.*,b.headimgurl,b.nickname,b.realname,b.remark,b.mobile from cd_umember as a inner join cd_member as b  where a.member_id=b.member_id';
-				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
+				$sql = 'select a.*,b.headimgurl,b.nickname,b.realname,b.remark,b.member_type,b.mobile from cd_umember as a inner join cd_member as b  where a.member_id=b.member_id';
+				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_umember');
 				$list = $res['list'];
 			}catch(\Exception $e){
 				exit($e->getMessage());
@@ -136,12 +136,13 @@ class Umember extends Admin {
 			if(!$umember_id) $this->error('参数错误');
 			try{
 			    $memberid = db()->name('umember')->where(['umember_id'=>$umember_id])->column('member_id');
-			    $memberinfo = db()->name('member')->where(['member_id'=>$memberid[0]])->column('realname,remark');
+			    $memberinfo = db()->name('member')->where(['member_id'=>$memberid[0]])->column('realname,remark,mobile');
 			    $viewdata=checkData(UmemberDb::getInfo($umember_id));
 			 //   mlog("viewdata".json_encode($viewdata));
 			 //   mlog("viewdata_meminfo".json_encode($memberinfo));
 			    $viewdata['realname'] = $memberinfo[0]['realname'];
 			    $viewdata['remark'] = $memberinfo[0]['remark'];
+			    $viewdata['mobile'] = $memberinfo[0]['mobile'];
 			 //   mlog("viewdata1".json_encode($viewdata));
 				$this->view->assign('info',$viewdata);
 
@@ -150,7 +151,7 @@ class Umember extends Admin {
 				$this->error($e->getMessage());
 			}
 		}else{
-			$postField = 'umember_id,status,realname,remark';
+			$postField = 'umember_id,status,realname,remark,mobile';
 			$data = $this->request->only(explode(',',$postField),'post',null);
 			try {
 				UmemberService::update($data);
@@ -158,6 +159,7 @@ class Umember extends Admin {
 				$emwhere['member_id']= $member[0];
 				$emfield['realname']=$data['realname'];
 				$emfield['remark']=$data['remark'];
+				$emfield['mobile']=$data['mobile'];
 				$emember = \xhadmin\db\Member::editWhere($emwhere,$emfield);
 			} catch (\Exception $e) {
 				$this->error($e->getMessage());

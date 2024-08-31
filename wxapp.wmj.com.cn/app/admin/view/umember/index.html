@@ -31,6 +31,14 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">类型</button>
+									</div>
+									<input type="text" class="form-control" id="member_type" placeholder="类型" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
 										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
 									</div>
 									<input type="text" class="form-control" id="mobile" placeholder="手机号" />
@@ -104,6 +112,7 @@
  			{title: '编号', field: 'umember_id', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
  			{title: '呢称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '类型', field: 'member_type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.member_typeFormatter},
  			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
  			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
  			{title: '会员ID', field: 'member_id', visible: false, align: 'center', valign: 'middle',sortable: true},
@@ -150,7 +159,22 @@
 			}
 		}
 	}
-
+	CodeGoods.member_typeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-primary">微信用户</span>';
+				break;
+				case '2':
+					return '<span class="label label-success">支付宝用户</span>';
+				break;
+				case '3':
+					return '<span class="label label-success">抖音用户</span>';
+				break;
+			}
+		}
+	}
 	CodeGoods.ucreate_timeFormatter = function(value,row,index) {
 		if(value){
 			return formatDateTime(value,'Y-m-d H:i:s');	

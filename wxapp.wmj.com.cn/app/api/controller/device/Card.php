@@ -75,32 +75,20 @@ class Card
     {
         $lock_ids = input("lock_ids");
         $p_lock_id = input("p_lock_id");
-
         $lockcard = Db::name("lockcard")->where(["lock_id" => $p_lock_id])->whereNull("deleted_at")->select()->toArray();
-
-
-
         foreach ($lock_ids as $lock_idsVo) {
             if($lock_idsVo !=$p_lock_id){
                 foreach ($lockcard as $arrVo) {
                     unset($arrVo["lockcard_id"]);
                     $arrVo["lock_id"] = $lock_idsVo;
                     $arrVo["sync_status"] = 0;
-
                    $lockcard = Db::name("lockcard")->where(["lock_id"=>$lock_idsVo,"lockcard_sn"=> $arrVo["lockcard_sn"]])->whereNull("deleted_at")->find();
                   if(!$lockcard){
                       Db::name("lockcard")->insert($arrVo);
                   }
-
-
                 }
             }
-
-
         }
-
-
-
         return json(Code::CodeOk(["msg" => "同步成功"]));
 
     }
@@ -117,7 +105,7 @@ class Card
 
         $data["lockcard_sn"] = input("lockcard_sn");
         $lockdata = Lock::Info($lock_id);
-        $result = \app\module\lockServer\Lock::CardAdd($lockdata, $data['lockcard_sn'], $data['lockcard_endtime']);
+        $result = \app\module\lockServer\Lock::CardEdit($lockdata, $data['lockcard_sn'], $data['lockcard_endtime']);
         if ($result["state"] == 0) {
 //            [state] => 0
 //    [state_code] => 2002

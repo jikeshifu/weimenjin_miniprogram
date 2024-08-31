@@ -18,7 +18,6 @@ use xhadmin\db\Member as MemberDb;
 use xhadmin\db\LockAuth as LockAuthDb;
 use think\facade\Cache;
 use think\facade\Log;
-
 class Member extends Common
 {
 
@@ -200,21 +199,99 @@ class Member extends Common
         //如果用户信息已经存在 则返回用户信息 并且生成token 将用户ID写入token
         if ($memberInfo) {
             $ret = ['status' => $this->successCode, 'data' => $memberInfo, 'token' => $this->setToken($memberInfo['member_id'])];
-            // //查询是否有演示钥匙，没有就加一个
-            // $lockauthres = LockAuthDb::getWhereInfo(['lock_id' => 11,'member_id' => $memberInfo['member_id']],'lockauth_id');
-            // if(!$lockauthres)
-            // {
-            //     LockAuth::Addtestauth(11, $memberInfo['member_id'], 1, 0);
-            // }
+            // //查询是否有演示钥匙，没有就加一个，演示钥匙默认id为2
+            $resconfig = \app\admin\db\Config::loadList();
+            if ($resconfig["autodtkey"])
+            {
+                $lockauthres = LockAuthDb::getWhereInfo(['lock_id' => $resconfig["autodtkeylockid"],'member_id' => $memberInfo['member_id']],'lockauth_id');
+                if(!$lockauthres)
+                {
+                    LockAuth::Addtestauth($resconfig["autodtkeylockid"], $memberInfo['member_id'], 1, 0);
+                }
+            }
             return json($ret);
         } else {
-            //$data['username']		= $userInfo['user_name'];		//用户名;
-            //$data['headimgurl']		= $userInfo['avatar'];	//用户头像
-            //$data['sex']			= $userInfo['gender'];		//用户性别;
             $data['ali_user_id'] = $userInfo['user_id'];        //用户openid
             $data['openid'] = $userInfo['user_id'];        //用户openid
             $data['status'] = 1;
             $data['member_type'] = 2;
+            $data['create_time'] = time();
+            $ret = MemberDb::createData($data);    //创建用户 并且返回用户id
+            if ($ret) {
+                $data['member_id'] = $ret;
+                $res = ['status' => $this->successCode, 'data' => $data, 'token' => $this->setToken($ret)];
+                return json($res);
+            }
+            return json($memberInfo);
+        }
+    }
+    /*end*/
+/*start*/
+    /**
+     * @api {post} /Member/alipaylogin 05、支付宝小程序登录
+     * @apiGroup Member
+     * @apiVersion 1.0.0
+     * @apiDescription  支付宝小程序登录
+     * @apiParam (输入参数：) {string}            code 小程序传入
+     * @apiParam (失败返回参数：) {object}        array 返回结果集
+     * @apiParam (失败返回参数：) {string}        array.status 返回错误码 201
+     * @apiParam (失败返回参数：) {string}        array.msg 返回错误消息
+     * @apiParam (成功返回参数：) {string}        array 返回结果集
+     * @apiParam (成功返回参数：) {string}        array.status 返回错误码 200
+     * @apiParam (成功返回参数：) {string}        array.msg 返回成功消息
+     * @apiSuccessExample {json} 01 成功示例
+     * {"status":"200","msg":"操作成功"}
+     * @apiErrorExample {json} 02 失败示例
+     * {"status":"201","msg":"操作失败"}
+     */
+    function toutiaoauth()
+    {
+        $resconfig = \app\admin\db\Config::loadList();
+        $appId = $resconfig["dyappid"]; // 抖音小程序的AppID
+        $appSecret = $resconfig["dyappsecret"]; // 抖音小程序的AppSecret
+        $code = $this->request->param('code');
+        if (!$code) {
+            return json(['error' => 'No code provided'], 400);
+        }
+        mlog("toutiaoauth_code:".$code);
+        $url = "https://developer.toutiao.com/api/apps/jscode2session?appid={$appId}&secret={$appSecret}&code={$code}";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        $output = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return json(['error' => curl_error($ch)], 500);
+        }
+        curl_close($ch);
+        $data = json_decode($output, true);
+        if (isset($data['errcode'])) {
+            // 错误处理
+            return json(['error' => $data['errmsg']], 400);
+        }
+        $openid = $data['openid'];
+        mlog("toutiaoauth_openid:".$openid);
+        $session_key = $data['session_key'];
+        //查询抖音用户是否存在
+        $memberInfo = MemberDb::getWhereInfo(['tt_user_id' => $openid], 'member_id,nickname,headimgurl,mobile,sex,ali_user_id,status,create_time'); 
+        //如果用户信息已经存在 则返回用户信息 并且生成token 将用户ID写入token
+        //mlog("toutiaoauth_memberInfo:".json_encode($memberInfo));
+        if ($memberInfo) {
+            $ret = ['status' => $this->successCode, 'data' => $memberInfo, 'token' => $this->setToken($memberInfo['member_id'])];
+            //查询是否有演示钥匙，没有就加一个，演示钥匙默认id为2
+            $lockauthres = LockAuthDb::getWhereInfo(['lock_id' => 2,'member_id' => $memberInfo['member_id']],'lockauth_id');
+            if(!$lockauthres)
+            {
+                LockAuth::Addtestauth(2, $memberInfo['member_id'], 1, 0);
+            }
+            return json($ret);
+        } else {
+            $data['tt_user_id'] = $openid;        //用户openid
+            $data['openid'] = $openid;        //用户openid
+            $data['status'] = 1;
+            $data['member_type'] = 3;
             $data['create_time'] = time();
             $ret = MemberDb::createData($data);    //创建用户 并且返回用户id
             if ($ret) {
@@ -228,7 +305,6 @@ class Member extends Common
         }
     }
     /*end*/
-
 
     /*start*/
     /**

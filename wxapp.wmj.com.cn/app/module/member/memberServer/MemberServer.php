@@ -48,7 +48,7 @@ class MemberServer
     {
         $member = Db::name("member")->where(["openid" => $openid])->order("member_id desc")->find();
         if (!$member) {
-            self::Add(["openid" => $openid]);
+            self::Add(["openid" => $openid,"member_type" => 1,"status" => 1]);
             $member = Db::name("member")->where(["openid" => $openid])->find();
 
         }

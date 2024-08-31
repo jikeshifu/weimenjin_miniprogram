@@ -13,15 +13,20 @@ error_reporting(0);
 /*start*/
 function wmjHandle($wmjsn, $type)
 {
-	//mlog("wmjHandle:".$wmjsn);
-	$resconfig=\app\admin\db\Config::loadList();
-	//mlog("api_wmjHandle_config:".json_encode($resconfig));
+    //mlog("wmjHandle:".$wmjsn);
+    $resconfig=\app\admin\db\Config::loadList();
+    //mlog("api_wmjHandle_config:".json_encode($resconfig));
     $value_s = $resconfig['wmjaeskey'] ? aesEncrypt($wmjsn, $resconfig['wmjaeskey']) : $wmjsn;
     $appid = 'appid='.$resconfig['wmjappid'];
     $appsecret = 'appsecret='.$resconfig['wmjappsecret'];
     $url = 'https://www.wmj.com.cn/api/'.$type.'.html?'.$appid.'&'.$appsecret;
-    //mlog("wmjHandle_url:".$url);
+    if (mb_substr($wmjsn, 0, 3) == "W66")
+    {
+        $url = 'https://www.wmj.com.cn/faceapi/'.$type.'.html?'.$appid.'&'.$appsecret;
+    }
+    //mlog("wmjHandle_apiurl:".$url);
     $result = wmjHttpPost($url, $value_s);
+    //mlog("wmjHandle_result:".$result);
     return $result;
 }
 //发公众号模板消息
@@ -34,7 +39,7 @@ function wmjSendWechatMsg($type,$data)
 //卡管理
 function wmjManageHandle($wmjsn, $type, $str)
 {
-	$resconfig=\app\admin\db\Config::loadList();
+    $resconfig=\app\admin\db\Config::loadList();
     $data=$str;
     $data['appid']=$resconfig['wmjappid'];
     $data['appsecret']=$resconfig['wmjappsecret'];
@@ -67,24 +72,25 @@ function sendymSms($arr)
     if (!isset($arr['mobiles'])) {
         return false;
     }
-    $urlarr = ['www.btom.cn:8080','bjmtn.b2m.cn','shmtn.b2m.cn','bjksmtn.b2m.cn','gzmtn.b2m.cn:8080'];
-    $appid = 'EUCP-EMY-SMS1-23EYV'; // 亿美APPid
-    $secretkey = '4FC6015807E792CE'; // 秘钥
-    $content = '';/* 短信内容请以商务约定的为准，如果已经在通道端绑定了签名，则无需在这里添加签名 */
-    $timestamp = date("YmdHis");
-    $sign = md5($appid.$secretkey.$timestamp);
-    // $sign = signmd5($appid,$secretkey,$timestamp);
-    // 如果您的系统环境不是UTF-8，需要转码到UTF-8。如下：从gb2312转到了UTF-8
-    // $content = mb_convert_encoding( $content,"UTF-8","gb2312");
-    // 另外，如果包含特殊字符，需要对内容进行urlencode
-    $data = [];
-    $data['appId'] = $appid;
-    $data['timestamp'] = $timestamp;
-    $data['sign'] = $sign;
-    $data = array_merge($data,$arr);
-    $urlk = mt_rand(0,3);
-    $url = $urlarr[$urlk].'/simpleinter/sendSMS';
-    $sendres = curl_request($url,'get',$data);
+
+    // 获取配置信息
+    $resconfig = \app\admin\db\Config::loadList();
+    $appid = $resconfig['sms_appid']; // APPid
+    $secretkey = $resconfig['sms_appsecret']; // 秘钥
+
+    // 准备POST请求的数据
+    $postData = [
+        "appid" => $appid,
+        "appsecret" => $secretkey,
+        "sms_header" => "【微门禁提示】", // 固定短信头部
+        "phone_number" => $arr['mobiles'], // 接收短信的手机号
+        "sms_content" => $arr['content'] // 短信内容
+    ];
+    mlog("sendymSms:".json_encode($postData));
+    // 发送POST请求到目标URL
+    $url = 'https://wxapp.wmj.com.cn/webapi/SmsApi/sendSms';
+    $sendres = curl_request($url, 'post', json_encode($postData), ['Content-Type: application/json']);
+    mlog("sendymSmssendres:".json_encode($sendres));
     return $sendres;
 }
 //task
@@ -110,8 +116,8 @@ function wmjCardHttpPost($url, $str) {
     curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/x-www-form-urlencoded',
-        'Content-Length: ' . strlen($str))
+            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Length: ' . strlen($str))
     );
     $res = curl_exec ($curl);
     curl_close($curl);
@@ -167,8 +173,8 @@ function wmjHttpPost($url, $str) {
     curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($str))
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($str))
     );
     $res = curl_exec ($curl);
     curl_close($curl);

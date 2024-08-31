@@ -100,8 +100,18 @@ class Finger
         if($addres["err"]){
             return json(Code::CodeErr(1000,$addres["err"],$addres));
         }
-
         Db::name("finger")->where(["finger_id" => $finger_id])->update(["deleted_at"=>date("Y-m-d H:i:s")]);
+        return json(Code::CodeOk([]));
+    }
+    public function clearFinger()
+    {
+        $lock_id = input("lock_id");
+        $lock = Db::name("lock")->where(["lock_id" => $lock_id])->find();
+        $addres= HardwareCloud::WifiLock()->FingerClear($lock["lock_sn"], $lock["device_cid"]);
+        if($addres["err"]){
+            return json(Code::CodeErr(1000,$addres["err"],$addres));
+        }
+        Db::name("finger")->where(["lock_id" => $lock_id])->update(["deleted_at"=>date("Y-m-d H:i:s")]);
         return json(Code::CodeOk([]));
     }
 }

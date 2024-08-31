@@ -35,7 +35,7 @@ class Log extends Admin {
 
 			try{
 				$sql = 'select a.*,b.name as group_name,c.name as nickname from cd_log as a inner join cd_group as b inner join cd_user as c on a.user_id = c.user_id and c.group_id= b.group_id';
-				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby);
+				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_log');
 				$list = $res['list'];
 			}catch(\Exception $e){
 				exit($e->getMessage());

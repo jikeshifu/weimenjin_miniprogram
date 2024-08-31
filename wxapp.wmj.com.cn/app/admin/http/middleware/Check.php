@@ -35,7 +35,7 @@ class Check
 		$url =  "/{$app}/{$controller}/{$action}";
 		if(session('admin.role') <> 1 && !in_array($url,config('my.nocheck')) && $action !== 'startImport' && $action !== 'getExtends'){
 			if(!in_array($url,session('admin.nodes'))){
-				exit('你没权限访问');
+				exit('你没权限访问1');
 			}
 		}
 
