@@ -1,4 +1,5 @@
 
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -7,12 +8,12 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_access`;
 CREATE TABLE `cd_access`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分组ID',
-  `purviewval` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分组对应权限值',
-  `group_id` tinyint(4) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `group_id`(`group_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 3048 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分组ID',
+                              `purviewval` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分组对应权限值',
+                              `group_id` tinyint(4) NULL DEFAULT NULL,
+                              PRIMARY KEY (`id`) USING BTREE,
+                              INDEX `group_id`(`group_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 3048 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_access
@@ -153,43 +154,43 @@ INSERT INTO `cd_access` VALUES (3047, '/admin/DoorStatus/updateExt', 7);
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_action`;
 CREATE TABLE `cd_action`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `menu_id` int(9) NOT NULL COMMENT '模块ID',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '动作名称',
-  `action_name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '动作名称',
-  `type` tinyint(4) NOT NULL,
-  `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'icon图标',
-  `pagesize` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '20' COMMENT '每页显示数据条数',
-  `is_view` tinyint(4) NULL DEFAULT 0 COMMENT '是否按钮',
-  `button_status` tinyint(4) NULL DEFAULT NULL COMMENT '按钮是否显示列表',
-  `sql_query` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'sql数据源',
-  `block_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '注释',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '打开页面尺寸',
-  `fields` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '操作的字段',
-  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `lable_color` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '按钮背景色',
-  `relate_table` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关联表',
-  `relate_field` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关联字段',
-  `list_field` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '查询的字段',
-  `bs_icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '按钮图标',
-  `sortid` mediumint(9) NULL DEFAULT 0 COMMENT '排序',
-  `orderby` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置排序',
-  `default_orderby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '默认排序',
-  `tree_config` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `jump` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '按钮跳转地址',
-  `is_controller_create` tinyint(4) NULL DEFAULT 1 COMMENT '是否生成控制其方法',
-  `is_service_create` tinyint(4) NULL DEFAULT NULL COMMENT '是否生成服务层方法',
-  `is_view_create` tinyint(4) NULL DEFAULT NULL COMMENT '视图生成',
-  `cache_time` mediumint(9) NULL DEFAULT NULL COMMENT '缓存时间',
-  `log_status` tinyint(4) NULL DEFAULT NULL COMMENT '是否生成日志',
-  `api_auth` tinyint(4) NULL DEFAULT NULL COMMENT '接口是否鉴权',
-  `sms_auth` tinyint(4) NULL DEFAULT NULL COMMENT '短信验证',
-  `request_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求类型 get 或者 post',
-  `captcha_auth` tinyint(4) NULL DEFAULT NULL COMMENT '图片验证码验证',
-  `do_condition` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作条件',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `menu_id`(`menu_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 2915 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                              `id` int(11) NOT NULL AUTO_INCREMENT,
+                              `menu_id` int(11) NOT NULL COMMENT '模块ID',
+                              `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '动作名称',
+                              `action_name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '动作名称',
+                              `type` tinyint(4) NOT NULL,
+                              `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'icon图标',
+                              `pagesize` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '20' COMMENT '每页显示数据条数',
+                              `is_view` tinyint(4) NULL DEFAULT 0 COMMENT '是否按钮',
+                              `button_status` tinyint(4) NULL DEFAULT NULL COMMENT '按钮是否显示列表',
+                              `sql_query` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'sql数据源',
+                              `block_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '注释',
+                              `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '打开页面尺寸',
+                              `fields` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '操作的字段',
+                              `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                              `lable_color` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '按钮背景色',
+                              `relate_table` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关联表',
+                              `relate_field` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关联字段',
+                              `list_field` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '查询的字段',
+                              `bs_icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '按钮图标',
+                              `sortid` mediumint(9) NULL DEFAULT 0 COMMENT '排序',
+                              `orderby` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置排序',
+                              `default_orderby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '默认排序',
+                              `tree_config` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                              `jump` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '按钮跳转地址',
+                              `is_controller_create` tinyint(4) NULL DEFAULT 1 COMMENT '是否生成控制其方法',
+                              `is_service_create` tinyint(4) NULL DEFAULT NULL COMMENT '是否生成服务层方法',
+                              `is_view_create` tinyint(4) NULL DEFAULT NULL COMMENT '视图生成',
+                              `cache_time` mediumint(9) NULL DEFAULT NULL COMMENT '缓存时间',
+                              `log_status` tinyint(4) NULL DEFAULT NULL COMMENT '是否生成日志',
+                              `api_auth` tinyint(4) NULL DEFAULT NULL COMMENT '接口是否鉴权',
+                              `sms_auth` tinyint(4) NULL DEFAULT NULL COMMENT '短信验证',
+                              `request_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求类型 get 或者 post',
+                              `captcha_auth` tinyint(4) NULL DEFAULT NULL COMMENT '图片验证码验证',
+                              `do_condition` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作条件',
+                              PRIMARY KEY (`id`) USING BTREE,
+                              INDEX `menu_id`(`menu_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 2915 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_action
@@ -340,21 +341,38 @@ INSERT INTO `cd_action` VALUES (2913, 831, '添加', 'add', 3, NULL, '20', 1, 0,
 INSERT INTO `cd_action` VALUES (2914, 832, '首页数据列表', 'index', 1, NULL, '20', 0, 0, 'select a.*,b.lock_name from cd_doorstatus as a inner join cd_lock as b  where a.doorstatus_sn=b.lock_sn', '门状态数据', '', '', NULL, 'primary', '', '', '', '', 1, NULL, '', '', '', 0, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, '');
 
 -- ----------------------------
+-- Table structure for cd_adlog
+-- ----------------------------
+DROP TABLE IF EXISTS `cd_adlog`;
+CREATE TABLE `cd_adlog`  (
+                             `adlog_id` int(10) NOT NULL AUTO_INCREMENT COMMENT '广告日志id',
+                             `member_id` int(10) NULL DEFAULT NULL COMMENT '加载广告的用户id',
+                             `adlog_page` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '广告页面',
+                             `adlog_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '广告类型',
+                             `adlog_adtime` int(10) NULL DEFAULT NULL COMMENT '广告时长',
+                             `adlog_result` tinyint(6) NULL DEFAULT NULL COMMENT '广告观看结果',
+                             `adlog_msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '消息',
+                             `adlog_createtime` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                             `adlog_points` int(10) NULL DEFAULT 0 COMMENT '积分',
+                             PRIMARY KEY (`adlog_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+
+-- ----------------------------
 -- Table structure for cd_application
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_application`;
 CREATE TABLE `cd_application`  (
-  `app_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `app_dir` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` tinyint(4) NULL DEFAULT NULL,
-  `app_type` tinyint(4) NULL DEFAULT NULL,
-  `login_table` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `login_fields` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `domain` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pk` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录表主键',
-  PRIMARY KEY (`app_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 182 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                                   `app_id` int(11) NOT NULL AUTO_INCREMENT,
+                                   `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                   `app_dir` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                   `status` tinyint(4) NULL DEFAULT NULL,
+                                   `app_type` tinyint(4) NULL DEFAULT NULL,
+                                   `login_table` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                   `login_fields` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                   `domain` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                   `pk` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录表主键',
+                                   PRIMARY KEY (`app_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 182 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_application
@@ -368,10 +386,10 @@ INSERT INTO `cd_application` VALUES (181, 'minilock', 'minilock', 1, 2, '', '', 
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_config`;
 CREATE TABLE `cd_config`  (
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `data` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`name`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                              `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                              `data` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                              PRIMARY KEY (`name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_config
@@ -379,7 +397,7 @@ CREATE TABLE `cd_config`  (
 INSERT INTO `cd_config` VALUES ('adminpw', '012345');
 INSERT INTO `cd_config` VALUES ('autodtkey', '1');
 INSERT INTO `cd_config` VALUES ('autodtkeylockid', '2');
-INSERT INTO `cd_config` VALUES ('copyright', 'XICP备20016999号-3');
+INSERT INTO `cd_config` VALUES ('copyright', 'XICP备202411999号');
 INSERT INTO `cd_config` VALUES ('default_themes', '');
 INSERT INTO `cd_config` VALUES ('description', '微门禁小程序管理平台');
 INSERT INTO `cd_config` VALUES ('devicecid', '88888888888888888888');
@@ -395,10 +413,10 @@ INSERT INTO `cd_config` VALUES ('gzhtempleteid1', '');
 INSERT INTO `cd_config` VALUES ('gzhtempleteid2', '');
 INSERT INTO `cd_config` VALUES ('images_size', '10M');
 INSERT INTO `cd_config` VALUES ('keyword', '');
-INSERT INTO `cd_config` VALUES ('privacypolicy', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;amp;lt;p&amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;隐私政策&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;贵州智云信通科技有限公司（以下简称&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;本公司&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;，产品“微门禁”）在此郑重承诺，尊重和保护您的个人隐私，在使用微门禁相关产品前，请务必仔细阅读并理解本政策，在同意的情况下使用相关产品或服务。您一旦访问本公司旗下产品微门禁公众号及小程序等应用平台，则表明您已同意本《隐私政策》的内容。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;一、个人信息定义&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;个人信息是指您的任何标识性信息，包括：姓名、性别、身份证件号码、地址、健康状况、定位信息、电话号码、工作单位等。通常情况下，您无须提供您的个人信息即可，访问本网站。但为了提高服务质量，本公司可能需要您提供一些个人信息，以使本公司更好地了解您的需求来为您服务，同时，本公司有权采取措施验证您提供的个人信息的真实性。如果您提供了有关他人的个人信息，则表明您已取得了他人的正式许可。本公司承诺，除非出于您自己的意愿，本公司不会将您的个人信息提供给本公司之外的任何第三方。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;二、个人信息的收集目的&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁需要您提供个人信息的目的是确保您有权开启所需要的门禁系统，门禁所属单位对您进行验证审核并开放使用权限，提供安全便捷的开门服务，我们会征求您的同意，以便根据您的请求向您提供服务或执行事务，包括：接收有关本公司的产品和服务的信息、注册参加活、购买或注册本公司的产品、客户满意度调查、法律强制性规定等。另外，为抗击新冠肺炎疫情需要，我们提供的健康登记系统，将采集您的健康相关信息，为抗击疫情提供基础信息技术服务。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;3、 个人信息的使用&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;您提供的个人信息将仅在本公司内部使用，使用您的个人信息只是为了更好地了解您的需要并为您提供更好的服务或执行事务，同时本公司可能会使用您的个人信息与您联系以便向您提供服务。为抗击新冠肺炎疫情需要，我们开发了健康登记系统平台，健康相关信息由相应申请使用单位掌握，请知悉。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;4、 个人信息的安全&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;本公司承诺，保护您个人信息的安全性，同时，本公司已采取现有的可靠的安全措施保护您的个人信息免于未经授权的访问、使用或泄露。这些安全措施包括向云服务提供商备份数据和对用户密码加密');
-INSERT INTO `cd_config` VALUES ('serviceagreement', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;amp;lt;p&amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁用户服务协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;一、服务条款&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;您在使用微门禁服务前，应当仔细阅读《微门禁用户服务协议》（以下简称&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;本协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;或&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;用户协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;）的全部内容，您在用户注册页面点击&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;同意以下协议并注册&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;按钮后，即视为您已阅读、理解并同意本协议的全部内容。敬请注意，一旦您注册（登录）成功，本协议即在您与微门禁之间产生法律效力，成为对双方均具有约束力的法律文件。您应遵守以下协议的各项条款。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;二、目的&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;本协议是约定您使用微门禁提供的服务时，微门禁与您的权利、义务、服务条款等基本事宜为目的。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;三、遵守法律及法律效力&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;在您完成在线注册成功后，您就已与微门禁缔结了本协议，且本协议自您注册（登录）成功之日起产生法律效力。 您同意遵守《中华人民共和国保密法》、《计算机信息系统国际联网保密管理规定》、《中华人民共和国计算机信息系统安全保护条例》、《计算机信息网络国际联网安全保护管理办法》、《中华人民共和国计算机信息网络国际联网管理暂行规定》及其实施办法等相关法律法规的任何及所有的规定，并对您以任何方式使用服务的任何行为及其结果承担全部责任。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;在任何情况下，如果微门禁合理地认为您的任何行为，包括但不限于您的任何言论和其他违反或可能违反上述法律法规规定的任何行为，微门禁可在不经任何事先通知的情况下终止向您提供服务。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁有权利修改更新本协议的有关条款，一旦条款内容发生变动，微门禁将会在相关的页面提示修改内容。在更改此用户服务协议时，微门禁将说明更改内容的执行日期，变更理由等。且应同现行的使用服务协议一起，在更改内容发生效力前7日内向您公告。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;请仔细阅读用户协议更改内容，如因个人原因未能获知变更内容所带来的损害，微门禁一概不予负责。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;am');
-INSERT INTO `cd_config` VALUES ('site_logo', '/uploads/admin/202404/6619fe2216100.png');
-INSERT INTO `cd_config` VALUES ('site_title', '门囿小程序管理平台');
+INSERT INTO `cd_config` VALUES ('privacypolicy', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;amp;lt;p&amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;隐私政策&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;贵州智云信通科技有限公司（以下简称&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;本公司&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;，产品“微门禁”）在此郑重承诺，尊重和保护您的个人隐私，在使用微门禁相关产品前，请务必仔细阅读并理解本政策，在同意的情况下使用相关产品或服务。您一旦访问本公司旗下产品微门禁公众号及小程序等应用平台，则表明您已同意本《隐私政策》的内容。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;一、个人信息定义&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;个人信息是指您的任何标识性信息，包括：姓名、性别、身份证件号码、地址、健康状况、定位信息、电话号码、工作单位等。通常情况下，您无须提供您的个人信息即可，访问本网站。但为了提高服务质量，本公司可能需要您提供一些个人信息，以使本公司更好地了解您的需求来为您服务，同时，本公司有权采取措施验证您提供的个人信息的真实性。如果您提供了有关他人的个人信息，则表明您已取得了他人的正式许可。本公司承诺，除非出于您自己的意愿，本公司不会将您的个人信息提供给本公司之外的任何第三方。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;二、个人信息的收集目的&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁需要您提供个人信息的目的是确保您有权开启所需要的门禁系统，门禁所属单位对您进行验证审核并开放使用权限，提供安全便捷的开门服务，我们会征求您的同意，以便根据您的请求向您提供服务或执行事务，包括：接收有关本公司的产品和服务的信息、注册参加活、购买或注册本公司的产品、客户满意度调查、法律强制性规定等。另外，为抗击新冠肺炎疫情需要，我们提供的健康登记系统，将采集您的健康相关信息，为抗击疫情提供基础信息技术服务。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;a');
+INSERT INTO `cd_config` VALUES ('serviceagreement', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;amp;lt;p&amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁用户服务协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;一、服务条款&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;您在使用微门禁服务前，应当仔细阅读《微门禁用户服务协议》（以下简称&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;本协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;或&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;用户协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;）的全部内容，您在用户注册页面点击&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;同意以下协议并注册&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;按钮后，即视为您已阅读、理解并同意本协议的全部内容。敬请注意，一旦您注册（登录）成功，本协议即在您与微门禁之间产生法律效力，成为对双方均具有约束力的法律文件。您应遵守以下协议的各项条款。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;二、目的&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;本协议是约定您使用微门禁提供的服务时，微门禁与您的权利、义务、服务条款等基本事宜为目的。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;三、遵守法律及法律效力&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;在您完成在线注册成功后，您就已与微门禁缔结了本协议，');
+INSERT INTO `cd_config` VALUES ('site_logo', '/uploads/admin/202408/66d31861e5782.jpg');
+INSERT INTO `cd_config` VALUES ('site_title', '微门禁管理平台');
 INSERT INTO `cd_config` VALUES ('sms_appid', 'wmjapp_xxxxxxxxxxxxx');
 INSERT INTO `cd_config` VALUES ('sms_appsecret', 'xxxxxxxxxxxxxxxxxxxxxxx');
 INSERT INTO `cd_config` VALUES ('wmjaeskey', '');
@@ -409,41 +427,39 @@ INSERT INTO `cd_config` VALUES ('wxpaykey', '');
 INSERT INTO `cd_config` VALUES ('wxpaykey_path', '');
 INSERT INTO `cd_config` VALUES ('wxpaymchid', '');
 INSERT INTO `cd_config` VALUES ('wxpayminiappid', '');
-INSERT INTO `cd_config` VALUES ('yjy_appid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-INSERT INTO `cd_config` VALUES ('yjy_appsecret', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+INSERT INTO `cd_config` VALUES ('yjy_appid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+INSERT INTO `cd_config` VALUES ('yjy_appsecret', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 
 -- ----------------------------
 -- Table structure for cd_device_group
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_device_group`;
 CREATE TABLE `cd_device_group`  (
-  `device_group_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '设备分组·',
-  `device_group_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `created_at` bigint(255) NULL DEFAULT NULL,
-  `updated_at` bigint(20) NULL DEFAULT 0,
-  `deleted_at` datetime NULL DEFAULT NULL,
-  `member_id` bigint(20) NULL DEFAULT NULL,
-  `type` int(255) NULL DEFAULT 0,
-  PRIMARY KEY (`device_group_id`) USING BTREE,
-  INDEX `idx_member_id`(`member_id`) USING BTREE
+                                    `device_group_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '设备分组·',
+                                    `device_group_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                    `created_at` bigint(20) NULL DEFAULT NULL,
+                                    `updated_at` bigint(20) NULL DEFAULT 0,
+                                    `deleted_at` datetime NULL DEFAULT NULL,
+                                    `member_id` bigint(20) NULL DEFAULT NULL,
+                                    `type` int(11) NULL DEFAULT 0,
+                                    PRIMARY KEY (`device_group_id`) USING BTREE,
+                                    INDEX `idx_member_id`(`member_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
--- ----------------------------
--- Records of cd_device_group
--- ----------------------------
+
 
 -- ----------------------------
 -- Table structure for cd_doorstatus
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_doorstatus`;
 CREATE TABLE `cd_doorstatus`  (
-  `doorstatus_id` int(11) NOT NULL AUTO_INCREMENT,
-  `doorstatus_sn` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '序列号',
-  `doorstatus_action` smallint(6) NULL DEFAULT NULL COMMENT '状态',
-  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理用户',
-  `doorstatus_time` int(11) NULL DEFAULT NULL COMMENT '时间',
-  PRIMARY KEY (`doorstatus_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                  `doorstatus_id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `doorstatus_sn` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '序列号',
+                                  `doorstatus_action` smallint(6) NULL DEFAULT NULL COMMENT '状态',
+                                  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理用户',
+                                  `doorstatus_time` int(11) NULL DEFAULT NULL COMMENT '时间',
+                                  PRIMARY KEY (`doorstatus_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_doorstatus
@@ -454,11 +470,11 @@ CREATE TABLE `cd_doorstatus`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_electricity`;
 CREATE TABLE `cd_electricity`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `electricity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `created_at` bigint(20) NULL DEFAULT NULL,
-  `device_sn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                                   `electricity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                   `created_at` bigint(20) NULL DEFAULT NULL,
+                                   `device_sn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
@@ -470,20 +486,20 @@ CREATE TABLE `cd_electricity`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_ext_health`;
 CREATE TABLE `cd_ext_health`  (
-  `health_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `mobile` char(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '手机号',
-  `first_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '第一居住地址',
-  `second_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '第二居住地址',
-  `job` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '工作或学习单位',
-  `yiqu` tinyint(4) UNSIGNED NOT NULL DEFAULT 2 COMMENT '30日内是否来自疫区:1是,默认2否',
-  `register_type` tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '登记类型:默认1村居,2乡镇社区,3区县,4交通运输',
-  `health` tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '健康状况默认1健康,2异常,3其他',
-  `manyou` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '漫游地截图',
-  `txz` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '通行证截图',
-  `ctime` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
-  `utime` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间',
-  PRIMARY KEY (`health_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                  `health_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                                  `mobile` char(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '手机号',
+                                  `first_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '第一居住地址',
+                                  `second_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '第二居住地址',
+                                  `job` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '工作或学习单位',
+                                  `yiqu` tinyint(3) UNSIGNED NOT NULL DEFAULT 2 COMMENT '30日内是否来自疫区:1是,默认2否',
+                                  `register_type` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '登记类型:默认1村居,2乡镇社区,3区县,4交通运输',
+                                  `health` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '健康状况默认1健康,2异常,3其他',
+                                  `manyou` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '漫游地截图',
+                                  `txz` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '通行证截图',
+                                  `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+                                  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间',
+                                  PRIMARY KEY (`health_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_ext_health
@@ -494,16 +510,19 @@ CREATE TABLE `cd_ext_health`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_face`;
 CREATE TABLE `cd_face`  (
-  `face_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `face_name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸备注',
-  `face_images` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸图片地址',
-  `created_at` int(255) NULL DEFAULT NULL COMMENT '添加时间',
-  `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '所属设备',
-  `end_time` bigint(11) NULL DEFAULT NULL,
-  `member_id` bigint(11) NULL DEFAULT NULL,
-  `sCertificateNumber` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`face_id`) USING BTREE
+                            `face_id` bigint(20) NOT NULL AUTO_INCREMENT,
+                            `face_name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸备注',
+                            `face_images` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸图片地址',
+                            `created_at` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+                            `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
+                            `lock_id` int(11) NULL DEFAULT NULL COMMENT '所属设备',
+                            `end_time` bigint(20) NULL DEFAULT NULL,
+                            `member_id` bigint(20) NULL DEFAULT NULL,
+                            `sCertificateNumber` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `sync_status` tinyint(4) NULL DEFAULT 1,
+                            `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `sync_time` bigint(20) NULL DEFAULT 0,
+                            PRIMARY KEY (`face_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
@@ -515,32 +534,32 @@ CREATE TABLE `cd_face`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_field`;
 CREATE TABLE `cd_field`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `menu_id` int(9) NOT NULL COMMENT '模块ID',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '字段名称',
-  `field` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `type` tinyint(4) NOT NULL COMMENT '表单类型1输入框 2下拉框 3单选框 4多选框 5上传图片 6编辑器 7时间',
-  `list_show` tinyint(4) NULL DEFAULT NULL COMMENT '列表显示',
-  `search_show` tinyint(4) NULL DEFAULT NULL COMMENT '搜索显示',
-  `search_type` tinyint(4) NULL DEFAULT NULL COMMENT '1精确匹配 2模糊搜索',
-  `config` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '下拉框或者单选框配置',
-  `is_post` tinyint(4) NULL DEFAULT NULL COMMENT '是否前台录入',
-  `is_field` tinyint(4) NULL DEFAULT NULL,
-  `align` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表格显示位置',
-  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '提示信息',
-  `message` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '错误提示',
-  `validate` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '验证方式',
-  `rule` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '验证规则',
-  `sortid` mediumint(9) NULL DEFAULT 0 COMMENT '排序号',
-  `sql` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段配置数据源sql',
-  `tab_menu_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属选项卡名称',
-  `default_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `datatype` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段数据类型',
-  `length` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段长度',
-  `indexdata` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '索引',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `menu_id`(`menu_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 3593 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                             `id` int(11) NOT NULL AUTO_INCREMENT,
+                             `menu_id` int(11) NOT NULL COMMENT '模块ID',
+                             `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '字段名称',
+                             `field` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                             `type` tinyint(4) NOT NULL COMMENT '表单类型1输入框 2下拉框 3单选框 4多选框 5上传图片 6编辑器 7时间',
+                             `list_show` tinyint(4) NULL DEFAULT NULL COMMENT '列表显示',
+                             `search_show` tinyint(4) NULL DEFAULT NULL COMMENT '搜索显示',
+                             `search_type` tinyint(4) NULL DEFAULT NULL COMMENT '1精确匹配 2模糊搜索',
+                             `config` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '下拉框或者单选框配置',
+                             `is_post` tinyint(4) NULL DEFAULT NULL COMMENT '是否前台录入',
+                             `is_field` tinyint(4) NULL DEFAULT NULL,
+                             `align` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表格显示位置',
+                             `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '提示信息',
+                             `message` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '错误提示',
+                             `validate` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '验证方式',
+                             `rule` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '验证规则',
+                             `sortid` mediumint(9) NULL DEFAULT 0 COMMENT '排序号',
+                             `sql` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段配置数据源sql',
+                             `tab_menu_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属选项卡名称',
+                             `default_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                             `datatype` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段数据类型',
+                             `length` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段长度',
+                             `indexdata` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '索引',
+                             PRIMARY KEY (`id`) USING BTREE,
+                             INDEX `menu_id`(`menu_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 3593 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_field
@@ -879,12 +898,12 @@ INSERT INTO `cd_field` VALUES (3592, 832, '时间', 'doorstatus_time', 12, 1, 1,
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_file`;
 CREATE TABLE `cd_file`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `filepath` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片路径',
-  `hash` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件hash值',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 86 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `filepath` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片路径',
+                            `hash` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件hash值',
+                            `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                            PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_file
@@ -895,14 +914,14 @@ CREATE TABLE `cd_file`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_finger`;
 CREATE TABLE `cd_finger`  (
-  `finger_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `fp_id` int(8) NULL DEFAULT NULL COMMENT '指纹id',
-  `finger_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '指纹名称',
-  `created_at` bigint(255) NULL DEFAULT NULL COMMENT '添加时间',
-  `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '所属设备',
-  `end_time` bigint(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`finger_id`) USING BTREE
+                              `finger_id` bigint(20) NOT NULL AUTO_INCREMENT,
+                              `fp_id` int(11) NULL DEFAULT NULL COMMENT '指纹id',
+                              `finger_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '指纹名称',
+                              `created_at` bigint(20) NULL DEFAULT NULL COMMENT '添加时间',
+                              `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
+                              `lock_id` int(11) NULL DEFAULT NULL COMMENT '所属设备',
+                              `end_time` bigint(20) NULL DEFAULT NULL,
+                              PRIMARY KEY (`finger_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
@@ -914,12 +933,12 @@ CREATE TABLE `cd_finger`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_group`;
 CREATE TABLE `cd_group`  (
-  `group_id` int(5) NOT NULL AUTO_INCREMENT,
-  `name` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分组名称',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态 10正常 0禁用',
-  `role` tinyint(4) NULL DEFAULT NULL COMMENT '角色类别 1超级管理员 2普通管理员',
-  PRIMARY KEY (`group_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                             `group_id` int(11) NOT NULL AUTO_INCREMENT,
+                             `name` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分组名称',
+                             `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态 10正常 0禁用',
+                             `role` tinyint(4) NULL DEFAULT NULL COMMENT '角色类别 1超级管理员 2普通管理员',
+                             PRIMARY KEY (`group_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_group
@@ -930,31 +949,47 @@ INSERT INTO `cd_group` VALUES (7, '用户管理员', 10, 2);
 INSERT INTO `cd_group` VALUES (8, '开发管理员', 10, 1);
 
 -- ----------------------------
+-- Table structure for cd_gzh_member
+-- ----------------------------
+DROP TABLE IF EXISTS `cd_gzh_member`;
+CREATE TABLE `cd_gzh_member`  (
+                                  `gzh_member_id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `openid` char(28) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                  `unionid` char(28) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                  `created_at` int(10) NULL DEFAULT NULL,
+                                  PRIMARY KEY (`gzh_member_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+
+-- ----------------------------
+-- Records of cd_gzh_member
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for cd_health
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_health`;
 CREATE TABLE `cd_health`  (
-  `health_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `first_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '居住地址',
-  `second_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第二居住地址',
-  `job` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工作或学习单位',
-  `yiqu` smallint(6) NULL DEFAULT NULL COMMENT '是否来自疫区',
-  `register_type` smallint(6) NULL DEFAULT NULL COMMENT '登记类型',
-  `health` smallint(6) NULL DEFAULT NULL COMMENT '健康状况',
-  `manyou` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '漫游地截图',
-  `txz` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证明图片',
-  `ctime` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `position` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '定位地址',
-  `lat` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-  `lng` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属用户',
-  `openid` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'openid',
-  `regpoint_id` int(11) NULL DEFAULT NULL COMMENT '登记点ID',
-  PRIMARY KEY (`health_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                              `health_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+                              `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+                              `first_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '居住地址',
+                              `second_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第二居住地址',
+                              `job` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工作或学习单位',
+                              `yiqu` smallint(6) NULL DEFAULT NULL COMMENT '是否来自疫区',
+                              `register_type` smallint(6) NULL DEFAULT NULL COMMENT '登记类型',
+                              `health` smallint(6) NULL DEFAULT NULL COMMENT '健康状况',
+                              `manyou` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '漫游地截图',
+                              `txz` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证明图片',
+                              `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+                              `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                              `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+                              `position` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '定位地址',
+                              `lat` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
+                              `lng` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
+                              `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属用户',
+                              `openid` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'openid',
+                              `regpoint_id` int(11) NULL DEFAULT NULL COMMENT '登记点ID',
+                              PRIMARY KEY (`health_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_health
@@ -965,108 +1000,117 @@ CREATE TABLE `cd_health`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_lock`;
 CREATE TABLE `cd_lock`  (
-  `lock_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `lock_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '锁名称',
-  `lock_sn` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '序列号',
-  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ID',
-  `mobile_check` tinyint(4) NULL DEFAULT NULL COMMENT '需绑手机',
-  `applyauth` tinyint(4) NULL DEFAULT NULL COMMENT '领取钥匙',
-  `applyauth_check` tinyint(4) NULL DEFAULT NULL COMMENT '审核钥匙',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '启用/禁用',
-  `lock_type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
-  `location` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '位置',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
-  `lock_qrcode` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二维码',
-  `online` smallint(6) NULL DEFAULT NULL COMMENT '在线状态',
-  `member_id` int(11) NULL DEFAULT NULL COMMENT '会员id',
-  `successimg` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '成功提示图片',
-  `successadimg` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '成功广告',
-  `location_check` int(11) NULL DEFAULT NULL COMMENT '开门距离(米)',
-  `hitshowminiad` tinyint(1) NULL DEFAULT NULL COMMENT '点击开门广告',
-  `qrshowminiad` tinyint(1) NULL DEFAULT NULL COMMENT '扫码开门广告',
-  `volume` int(11) NULL DEFAULT NULL COMMENT '音量',
-  `openttscontent` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '语音内容',
-  `addcardmode` int(11) NULL DEFAULT 2 COMMENT '进出发卡模式',
-  `openadurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '开门成功外链',
-  `adnum` smallint(6) NULL DEFAULT NULL COMMENT '成功弹层方式',
-  `openbtn` tinyint(4) NULL DEFAULT 1 COMMENT '开门按钮',
-  `opsucnt` tinyint(4) NULL DEFAULT NULL COMMENT '开门通知',
-  `device_cid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备cid',
-  `admin_pwd` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '激活的管理密码',
-  `hw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `sw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `wifi_rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `on_line_time` int(11) NULL DEFAULT NULL,
-  `model_number` varchar(101) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `hardware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `firmware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `iccid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `imei` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `batterypower` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `deleted_at` datetime NULL DEFAULT NULL,
-  `rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `xcx_sound` tinyint(1) NULL DEFAULT 1,
-  PRIMARY KEY (`lock_id`) USING BTREE,
-  UNIQUE INDEX `lock_id`(`lock_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                            `lock_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                            `lock_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '锁名称',
+                            `lock_sn` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '序列号',
+                            `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ID',
+                            `mobile_check` tinyint(4) NULL DEFAULT NULL COMMENT '需绑手机',
+                            `applyauth` tinyint(4) NULL DEFAULT NULL COMMENT '领取钥匙',
+                            `applyauth_check` tinyint(4) NULL DEFAULT NULL COMMENT '审核钥匙',
+                            `status` tinyint(4) NULL DEFAULT NULL COMMENT '启用/禁用',
+                            `lock_type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
+                            `location` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '位置',
+                            `create_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+                            `lock_qrcode` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二维码',
+                            `online` smallint(6) NULL DEFAULT NULL COMMENT '在线状态',
+                            `member_id` int(11) NULL DEFAULT NULL COMMENT '会员id',
+                            `successimg` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '成功提示图片',
+                            `successadimg` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '成功广告',
+                            `location_check` int(11) NULL DEFAULT NULL COMMENT '开门距离(米)',
+                            `hitshowminiad` tinyint(1) NULL DEFAULT NULL COMMENT '点击开门广告',
+                            `qrshowminiad` tinyint(1) NULL DEFAULT NULL COMMENT '扫码开门广告',
+                            `volume` int(11) NULL DEFAULT NULL COMMENT '音量',
+                            `openttscontent` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '语音内容',
+                            `addcardmode` int(11) NULL DEFAULT 2 COMMENT '进出发卡模式',
+                            `noncmode` int(11) NULL DEFAULT 1 COMMENT '常开常闭模式',
+                            `openadurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '开门成功外链',
+                            `adnum` smallint(6) NULL DEFAULT NULL COMMENT '成功弹层方式',
+                            `openbtn` tinyint(4) NULL DEFAULT 1 COMMENT '开门按钮',
+                            `opsucnt` tinyint(4) NULL DEFAULT NULL COMMENT '开门通知',
+                            `device_cid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备cid',
+                            `admin_pwd` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '激活的管理密码',
+                            `hw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `sw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `wifi_rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `on_line_time` int(11) NULL DEFAULT NULL,
+                            `model_number` varchar(101) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `hardware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `firmware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `iccid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `imei` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `batterypower` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `deleted_at` datetime NULL DEFAULT NULL,
+                            `rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `xcx_sound` tinyint(1) NULL DEFAULT 1,
+                            `switch_state` tinyint(4) NULL DEFAULT 0,
+                            `notice_status` tinyint(1) NULL DEFAULT 0,
+                            `xcx_app_id` varchar(56) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '小程序appid',
+                            PRIMARY KEY (`lock_id`) USING BTREE,
+                            UNIQUE INDEX `lock_id`(`lock_id`) USING BTREE,
+                            INDEX `idx_lock_name`(`lock_name`) USING BTREE,
+                            INDEX `member_id`(`member_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_lock
 -- ----------------------------
-
 -- ----------------------------
 -- Table structure for cd_lockauth
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_lockauth`;
 CREATE TABLE `cd_lockauth`  (
-  `lockauth_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '锁ID',
-  `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
-  `auth_member_id` int(11) NULL DEFAULT NULL COMMENT '分享人ID',
-  `auth_endtime` int(11) NULL DEFAULT NULL COMMENT '有效期结束时间',
-  `auth_shareability` tinyint(4) NULL DEFAULT NULL COMMENT '分享权限',
-  `aremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `auth_starttime` int(11) NULL DEFAULT NULL COMMENT '有效期起始时间',
-  `auth_sharelimit` int(11) NULL DEFAULT NULL COMMENT '可分享钥匙数',
-  `auth_openlimit` int(11) NULL DEFAULT 0 COMMENT '可开次数',
-  `auth_isadmin` smallint(6) NULL DEFAULT 0 COMMENT '是否管理员',
-  `auth_status` smallint(6) NULL DEFAULT 0 COMMENT '审核状态',
-  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员ID',
-  `arealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `auth_opentimes` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '可开时段',
-  `auth_tmp` smallint(6) NULL DEFAULT NULL COMMENT '领取标志',
-  `auth_openused` int(11) NULL DEFAULT NULL COMMENT '已开次数',
-  `device_group_id` bigint(20) NULL DEFAULT 0 COMMENT '分组id默认未分组',
-  `deleted_at` datetime NULL DEFAULT NULL,
-  `updated_at` bigint(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`lockauth_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                `lockauth_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                                `lock_id` int(11) NULL DEFAULT NULL COMMENT '锁ID',
+                                `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
+                                `auth_member_id` int(11) NULL DEFAULT NULL COMMENT '分享人ID',
+                                `auth_endtime` int(11) NULL DEFAULT NULL COMMENT '有效期结束时间',
+                                `auth_shareability` tinyint(4) NULL DEFAULT NULL COMMENT '分享权限',
+                                `aremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                `remark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                                `auth_starttime` int(11) NULL DEFAULT NULL COMMENT '有效期起始时间',
+                                `auth_sharelimit` int(11) NULL DEFAULT NULL COMMENT '可分享钥匙数',
+                                `auth_openlimit` int(11) NULL DEFAULT NULL COMMENT '可开次数',
+                                `auth_isadmin` smallint(6) NULL DEFAULT 0 COMMENT '是否管理员',
+                                `auth_status` smallint(6) NULL DEFAULT 0 COMMENT '审核状态',
+                                `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员ID',
+                                `arealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+                                `realname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+                                `auth_opentimes` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '可开时段',
+                                `auth_tmp` smallint(6) NULL DEFAULT NULL COMMENT '领取标志',
+                                `auth_openused` int(11) NULL DEFAULT NULL COMMENT '已开次数',
+                                `device_group_id` bigint(20) NULL DEFAULT 0 COMMENT '分组id默认未分组',
+                                `deleted_at` datetime NULL DEFAULT NULL,
+                                `updated_at` bigint(20) NULL DEFAULT NULL,
+                                `auth_sort` int(11) NULL DEFAULT 0 COMMENT '钥匙排序',
+                                PRIMARY KEY (`lockauth_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
--- ----------------------------
--- Records of cd_lockauth
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for cd_lockcard
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_lockcard`;
 CREATE TABLE `cd_lockcard`  (
-  `lockcard_id` int(11) NOT NULL AUTO_INCREMENT,
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '锁ID',
-  `user_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员ID',
-  `lockcard_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '卡序列号',
-  `lockcard_endtime` int(11) NULL DEFAULT NULL COMMENT '过期时间',
-  `lockcard_username` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '持有人',
-  `lockcard_remark` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `lockcard_createtime` int(11) NULL DEFAULT NULL COMMENT '发卡时间',
-  `lockauth_id` int(11) NULL DEFAULT NULL COMMENT '钥匙ID',
-  `batchstatus` smallint(6) NULL DEFAULT NULL COMMENT '发卡状态',
-  `deleted_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`lockcard_id`) USING BTREE,
-  INDEX `lkcdsn`(`lockcard_sn`) USING BTREE,
-  INDEX `lockcard_sn`(`lockcard_sn`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                `lockcard_id` int(11) NOT NULL AUTO_INCREMENT,
+                                `lock_id` int(11) NULL DEFAULT NULL COMMENT '锁ID',
+                                `user_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员ID',
+                                `lockcard_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '卡序列号',
+                                `lockcard_endtime` int(11) NULL DEFAULT NULL COMMENT '过期时间',
+                                `lockcard_username` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '持有人',
+                                `lockcard_remark` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                `lockcard_createtime` int(11) NULL DEFAULT NULL COMMENT '发卡时间',
+                                `lockauth_id` int(11) NULL DEFAULT NULL COMMENT '钥匙ID',
+                                `batchstatus` smallint(6) NULL DEFAULT NULL COMMENT '发卡状态',
+                                `deleted_at` datetime NULL DEFAULT NULL,
+                                `sync_status` tinyint(1) NULL DEFAULT 1,
+                                `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                `sync_time` bigint(20) NULL DEFAULT 0,
+                                PRIMARY KEY (`lockcard_id`) USING BTREE,
+                                INDEX `lkcdsn`(`lockcard_sn`) USING BTREE,
+                                INDEX `lockcard_sn`(`lockcard_sn`) USING BTREE,
+                                INDEX `idx_lock_id`(`lock_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_lockcard
@@ -1077,47 +1121,47 @@ CREATE TABLE `cd_lockcard`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_locklog`;
 CREATE TABLE `cd_locklog`  (
-  `locklog_id` int(11) NOT NULL AUTO_INCREMENT,
-  `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '锁ID',
-  `status` smallint(6) NULL DEFAULT NULL COMMENT '状态',
-  `type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '开门时间',
-  `user_id` bigint(10) NULL DEFAULT NULL COMMENT '管理员ID',
-  `lremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备注',
-  `cardsn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人',
-  `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`locklog_id`) USING BTREE,
-  UNIQUE INDEX `idx_locklog_id`(`locklog_id`) USING BTREE,
-  INDEX `cdsn`(`cardsn`) USING BTREE,
-  INDEX `lock_id`(`lock_id`) USING BTREE,
-  INDEX `member_id`(`member_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                               `locklog_id` int(11) NOT NULL AUTO_INCREMENT,
+                               `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
+                               `lock_id` int(11) NULL DEFAULT NULL COMMENT '锁ID',
+                               `status` smallint(6) NULL DEFAULT NULL COMMENT '状态',
+                               `type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
+                               `create_time` int(11) NULL DEFAULT NULL COMMENT '开门时间',
+                               `user_id` bigint(20) NULL DEFAULT NULL COMMENT '管理员ID',
+                               `lremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                               `cardsn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+                               `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人',
+                               `mobile_bak` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               PRIMARY KEY (`locklog_id`) USING BTREE,
+                               UNIQUE INDEX `locklog_id`(`locklog_id`) USING BTREE,
+                               INDEX `idx_cdsn`(`cardsn`) USING BTREE,
+                               INDEX `idx_lock_id`(`lock_id`) USING BTREE,
+                               INDEX `idx_member_id`(`member_id`) USING BTREE,
+                               INDEX `idx_user_id`(`user_id`) USING BTREE,
+                               INDEX `creattime`(`create_time`) USING BTREE,
+                               INDEX `idx_member_lock`(`member_id`, `lock_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
--- ----------------------------
--- Records of cd_locklog
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for cd_locktimes
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_locktimes`;
 CREATE TABLE `cd_locktimes`  (
-  `locktimes_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员ID',
-  `lock_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '锁ID',
-  `startweek` smallint(6) NULL DEFAULT NULL COMMENT '周开始',
-  `starthour` smallint(6) NULL DEFAULT NULL COMMENT '小时开始',
-  `startminute` smallint(6) NULL DEFAULT NULL COMMENT '分钟开始',
-  `endweek` smallint(6) NULL DEFAULT NULL COMMENT '周结束',
-  `endhour` smallint(6) NULL DEFAULT NULL COMMENT '小时结束',
-  `endminute` smallint(6) NULL DEFAULT NULL COMMENT '分钟结束',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `locktimesname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '时段名称',
-  `type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
-  PRIMARY KEY (`locktimes_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                 `locktimes_id` int(11) NOT NULL AUTO_INCREMENT,
+                                 `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员ID',
+                                 `lock_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '锁ID',
+                                 `startweek` smallint(6) NULL DEFAULT NULL COMMENT '周开始',
+                                 `starthour` smallint(6) NULL DEFAULT NULL COMMENT '小时开始',
+                                 `startminute` smallint(6) NULL DEFAULT NULL COMMENT '分钟开始',
+                                 `endweek` smallint(6) NULL DEFAULT NULL COMMENT '周结束',
+                                 `endhour` smallint(6) NULL DEFAULT NULL COMMENT '小时结束',
+                                 `endminute` smallint(6) NULL DEFAULT NULL COMMENT '分钟结束',
+                                 `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                                 `locktimesname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '时段名称',
+                                 `type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
+                                 PRIMARY KEY (`locktimes_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_locktimes
@@ -1128,10 +1172,10 @@ CREATE TABLE `cd_locktimes`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_locktype`;
 CREATE TABLE `cd_locktype`  (
-  `locktype_id` int(11) NOT NULL AUTO_INCREMENT,
-  `locktype_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  PRIMARY KEY (`locktype_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                `locktype_id` int(11) NOT NULL AUTO_INCREMENT,
+                                `locktype_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                PRIMARY KEY (`locktype_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_locktype
@@ -1158,27 +1202,24 @@ INSERT INTO `cd_locktype` VALUES (16, '指纹4');
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_log`;
 CREATE TABLE `cd_log`  (
-  `log_id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
-  `username` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `event` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `ip` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `time` int(10) NULL DEFAULT NULL,
-  PRIMARY KEY (`log_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4626 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                           `log_id` int(11) NOT NULL AUTO_INCREMENT,
+                           `user_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
+                           `username` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                           `event` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                           `ip` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                           `time` int(11) NULL DEFAULT NULL,
+                           PRIMARY KEY (`log_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
--- ----------------------------
--- Records of cd_log
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for cd_log_ts
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_log_ts`;
 CREATE TABLE `cd_log_ts`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `info` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                              `id` int(11) NOT NULL AUTO_INCREMENT,
+                              `info` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
@@ -1190,66 +1231,66 @@ CREATE TABLE `cd_log_ts`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_member`;
 CREATE TABLE `cd_member`  (
-  `member_id` int(11) NOT NULL AUTO_INCREMENT,
-  `nickname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '呢称',
-  `headimgurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '头像',
-  `openid` char(28) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT 'openid',
-  `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号',
-  `username` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '注册时间',
-  `sex` smallint(6) NULL DEFAULT 0 COMMENT '性别',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
-  `user_id` int(10) NULL DEFAULT NULL COMMENT '所属用户',
-  `ali_user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付宝用户id',
-  `member_type` smallint(6) NULL DEFAULT NULL COMMENT '会员类型',
-  `member_ps` smallint(6) NULL DEFAULT NULL COMMENT '同意政策和协议',
-  `unionid` char(28) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT 'unionid',
-  `realname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `remark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `sCertificateNumber` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸faceid',
-  `level` tinyint(255) NULL DEFAULT 3 COMMENT '级别',
-  `wx_model` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备型号',
-  `wx_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信版本',
-  `wx_platform` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作系统及版本',
-  `wx_system` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端平台',
-  `SDKVersion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端基础库版本',
-  `bluetoothEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '蓝牙的系统开关',
-  `locationEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地理位置的系统开关',
-  PRIMARY KEY (`member_id`) USING BTREE,
-  INDEX `idx_unionid`(`unionid`) USING BTREE,
-  UNIQUE INDEX `uix_openid`(`openid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of cd_member
--- ----------------------------
+                              `member_id` int(11) NOT NULL AUTO_INCREMENT,
+                              `nickname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '呢称',
+                              `headimgurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '头像',
+                              `openid` char(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT 'openid',
+                              `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号',
+                              `username` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户名',
+                              `password` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码',
+                              `create_time` int(11) NULL DEFAULT NULL COMMENT '注册时间',
+                              `sex` smallint(6) NULL DEFAULT 0 COMMENT '性别',
+                              `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
+                              `user_id` int(11) NULL DEFAULT NULL COMMENT '所属用户',
+                              `ali_user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付宝用户id',
+                              `member_type` smallint(6) NULL DEFAULT NULL COMMENT '会员类型',
+                              `member_ps` smallint(6) NULL DEFAULT NULL COMMENT '同意政策和协议',
+                              `unionid` char(28) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT 'unionid',
+                              `realname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+                              `remark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                              `sCertificateNumber` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸faceid',
+                              `level` tinyint(4) NULL DEFAULT 0 COMMENT '级别',
+                              `wx_model` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备型号',
+                              `wx_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信版本',
+                              `wx_platform` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作系统及版本',
+                              `wx_system` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端平台',
+                              `SDKVersion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端基础库版本',
+                              `bluetoothEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '蓝牙的系统开关',
+                              `locationEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地理位置的系统开关',
+                              `tt_user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                              `gzh_openid` char(28) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '公众号openid',
+                              PRIMARY KEY (`member_id`) USING BTREE,
+                              UNIQUE INDEX `member_id`(`member_id`) USING BTREE,
+                              UNIQUE INDEX `openid`(`openid`) USING BTREE,
+                              INDEX `unionid`(`unionid`) USING BTREE,
+                              INDEX `mobile`(`mobile`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Table structure for cd_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_menu`;
 CREATE TABLE `cd_menu`  (
-  `menu_id` int(11) NOT NULL AUTO_INCREMENT,
-  `pid` mediumint(9) NULL DEFAULT 0 COMMENT '父级id',
-  `controller_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名称',
-  `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块标题',
-  `pk_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '主键名',
-  `table_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块数据库表',
-  `is_create` tinyint(4) NULL DEFAULT NULL COMMENT '是否允许生成模块',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '0隐藏 10显示',
-  `sortid` mediumint(9) NULL DEFAULT 0 COMMENT '排序号',
-  `table_status` tinyint(4) NULL DEFAULT NULL COMMENT '是否生成数据库表',
-  `is_url` tinyint(4) NULL DEFAULT NULL COMMENT '是否只是url链接',
-  `url` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `menu_icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'icon字体图标',
-  `tab_menu` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'tab选项卡菜单配置',
-  `app_id` int(11) NULL DEFAULT NULL COMMENT '所属模块',
-  `is_submit` tinyint(4) NULL DEFAULT NULL COMMENT '是否允许投稿',
-  PRIMARY KEY (`menu_id`) USING BTREE,
-  INDEX `controller_name`(`controller_name`) USING BTREE,
-  INDEX `module_id`(`app_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 833 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                            `menu_id` int(11) NOT NULL AUTO_INCREMENT,
+                            `pid` mediumint(9) NULL DEFAULT 0 COMMENT '父级id',
+                            `controller_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名称',
+                            `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块标题',
+                            `pk_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '主键名',
+                            `table_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块数据库表',
+                            `is_create` tinyint(4) NULL DEFAULT NULL COMMENT '是否允许生成模块',
+                            `status` tinyint(4) NULL DEFAULT NULL COMMENT '0隐藏 10显示',
+                            `sortid` mediumint(9) NULL DEFAULT 0 COMMENT '排序号',
+                            `table_status` tinyint(4) NULL DEFAULT NULL COMMENT '是否生成数据库表',
+                            `is_url` tinyint(4) NULL DEFAULT NULL COMMENT '是否只是url链接',
+                            `url` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            `menu_icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'icon字体图标',
+                            `tab_menu` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'tab选项卡菜单配置',
+                            `app_id` int(11) NULL DEFAULT NULL COMMENT '所属模块',
+                            `is_submit` tinyint(4) NULL DEFAULT NULL COMMENT '是否允许投稿',
+                            PRIMARY KEY (`menu_id`) USING BTREE,
+                            INDEX `controller_name`(`controller_name`) USING BTREE,
+                            INDEX `module_id`(`app_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 833 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_menu
@@ -1293,15 +1334,54 @@ INSERT INTO `cd_menu` VALUES (827, 0, 'Wservice', '服务管理', 'wservice_id',
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_on_line_record`;
 CREATE TABLE `cd_on_line_record`  (
-  `on_line_id` int(11) NOT NULL AUTO_INCREMENT,
-  `cmd` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `on_line_time` bigint(20) NULL DEFAULT NULL,
-  `device_sn` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`on_line_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = COMPACT;
+                                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                                      `device_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                      `on_line_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                      `cmd` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                                      PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_on_line_record
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for cd_order
+-- ----------------------------
+DROP TABLE IF EXISTS `cd_order`;
+CREATE TABLE `cd_order`  (
+                             `order_id` bigint(20) NOT NULL AUTO_INCREMENT,
+                             `order_sn` char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                             `created_at` datetime NULL DEFAULT NULL,
+                             `pay_time` datetime NULL DEFAULT NULL,
+                             `pay_status` int(11) NULL DEFAULT 0,
+                             `pay_price` bigint(20) NULL DEFAULT NULL,
+                             `product_id` int(11) NULL DEFAULT NULL,
+                             `member_id` bigint(20) NULL DEFAULT NULL,
+                             `sim_sn` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                             `order_status` tinyint(4) NULL DEFAULT 0 COMMENT '0未续费1续费',
+                             `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                             PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+
+-- ----------------------------
+-- Records of cd_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for cd_power
+-- ----------------------------
+DROP TABLE IF EXISTS `cd_power`;
+CREATE TABLE `cd_power`  (
+                             `id` int(11) NOT NULL AUTO_INCREMENT,
+                             `device_sn` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                             `batterypower` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                             `created_at` int(11) NULL DEFAULT NULL,
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+
+-- ----------------------------
+-- Records of cd_power
 -- ----------------------------
 
 -- ----------------------------
@@ -1309,14 +1389,14 @@ CREATE TABLE `cd_on_line_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_pwd`;
 CREATE TABLE `cd_pwd`  (
-  `pwd_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `pwd` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `pwd_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码名称',
-  `created_at` int(255) NULL DEFAULT NULL COMMENT '添加时间',
-  `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '所属设备',
-  `end_time` bigint(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`pwd_id`) USING BTREE
+                           `pwd_id` bigint(20) NOT NULL AUTO_INCREMENT,
+                           `pwd` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+                           `pwd_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码名称',
+                           `created_at` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+                           `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
+                           `lock_id` int(11) NULL DEFAULT NULL COMMENT '所属设备',
+                           `end_time` bigint(20) NULL DEFAULT NULL,
+                           PRIMARY KEY (`pwd_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
@@ -1328,16 +1408,16 @@ CREATE TABLE `cd_pwd`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_regpoint`;
 CREATE TABLE `cd_regpoint`  (
-  `regpoint_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `member_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会员ID',
-  `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ID',
-  `regpointname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `regpointurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '注册点url',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `regpointqrcode` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登记点二维码',
-  `lock_id` int(11) NULL DEFAULT NULL COMMENT '门ID',
-  PRIMARY KEY (`regpoint_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                `regpoint_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                                `member_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会员ID',
+                                `user_id` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ID',
+                                `regpointname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                `regpointurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '注册点url',
+                                `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                                `regpointqrcode` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登记点二维码',
+                                `lock_id` int(11) NULL DEFAULT NULL COMMENT '门ID',
+                                PRIMARY KEY (`regpoint_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_regpoint
@@ -1348,380 +1428,70 @@ CREATE TABLE `cd_regpoint`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_umember`;
 CREATE TABLE `cd_umember`  (
-  `umember_id` int(11) NOT NULL AUTO_INCREMENT,
-  `member_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
-  `user_id` bigint(10) NULL DEFAULT NULL COMMENT '管理员ID',
-  `status` smallint(6) NULL DEFAULT NULL COMMENT '状态',
-  `ucreate_time` int(11) NULL DEFAULT NULL COMMENT '注册时间',
-  `urealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `authlocks` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权锁',
-  `uremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`umember_id`) USING BTREE,
-  INDEX `idx_member_id_user_id`(`member_id`, `user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of cd_umember
--- ----------------------------
+                               `umember_id` int(11) NOT NULL AUTO_INCREMENT,
+                               `member_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
+                               `user_id` bigint(20) NULL DEFAULT NULL COMMENT '管理员ID',
+                               `status` smallint(6) NULL DEFAULT NULL COMMENT '状态',
+                               `ucreate_time` int(11) NULL DEFAULT NULL COMMENT '注册时间',
+                               `urealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+                               `authlocks` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权锁',
+                               `uremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                               PRIMARY KEY (`umember_id`) USING BTREE,
+                               INDEX `idx_member_id_user_id`(`member_id`, `user_id`) USING BTREE,
+                               INDEX `idx_user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Table structure for cd_user
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_user`;
 CREATE TABLE `cd_user`  (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `name` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `user` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录用户名',
-  `pwd` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录密码',
-  `group_id` tinyint(4) NULL DEFAULT NULL COMMENT '所属分组ID',
-  `type` tinyint(4) NULL DEFAULT NULL COMMENT '账户类型 1超级管理员 2普通管理员',
-  `note` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '10正常 0禁用',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '添加时间',
-  `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
-  PRIMARY KEY (`user_id`) USING BTREE,
-  UNIQUE INDEX `member_id`(`member_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1374 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                            `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                            `name` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+                            `user` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录用户名',
+                            `pwd` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录密码',
+                            `group_id` tinyint(4) NULL DEFAULT NULL COMMENT '所属分组ID',
+                            `type` tinyint(4) NULL DEFAULT NULL COMMENT '账户类型 1超级管理员 2普通管理员',
+                            `note` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                            `status` tinyint(4) NULL DEFAULT NULL COMMENT '10正常 0禁用',
+                            `create_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+                            `member_id` int(11) NULL DEFAULT NULL COMMENT '会员ID',
+                            PRIMARY KEY (`user_id`) USING BTREE,
+                            UNIQUE INDEX `member_id`(`member_id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_user
 -- ----------------------------
-INSERT INTO `cd_user` VALUES (1, '极客师傅', 'admin', '305afeb46a6aa7bca43880dcb29d634d', 1, 1, '超级管理员', 1, 1548558919, 35);
-
+INSERT INTO `cd_user` VALUES (1, '极客师傅', 'admin', '305afeb46a6aa7bca43880dcb29d634d', 1, 1, '超级管理员', 1, 1548558919, 1);
 -- ----------------------------
 -- Table structure for cd_wservice
 -- ----------------------------
 DROP TABLE IF EXISTS `cd_wservice`;
 CREATE TABLE `cd_wservice`  (
-  `wservice_id` int(11) NOT NULL AUTO_INCREMENT,
-  `wservice_type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
-  `wservice_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `wservice_appid` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'appid',
-  `wservice_url` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'url',
-  `wservice_icon` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `wservice_sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `wservice_status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
-  PRIMARY KEY (`wservice_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+                                `wservice_id` int(11) NOT NULL AUTO_INCREMENT,
+                                `wservice_type` smallint(6) NULL DEFAULT NULL COMMENT '类型',
+                                `wservice_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                `wservice_appid` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'appid',
+                                `wservice_url` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'url',
+                                `wservice_icon` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
+                                `wservice_sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+                                `wservice_status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
+                                PRIMARY KEY (`wservice_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of cd_wservice
 -- ----------------------------
-INSERT INTO `cd_wservice` VALUES (1, 2, '社区商店', 'wx51f303bf1367a448', '/pages/index/index', 'https://wxapp.wmj.com.cn/uploads/admin/202101/5ff9590cbd766.png', 5, 0);
-INSERT INTO `cd_wservice` VALUES (2, 1, '开门记录', '', '/pages/logs/logs', 'https://wxapp.wmj.com.cn/uploads/admin/202101/5ff95acbeeecb.png', 4, 0);
-INSERT INTO `cd_wservice` VALUES (3, 3, '使用帮助', '', 'https://doc.wmj.com.cn/1/page/39', 'https://wxapp.wmj.com.cn/uploads/admin/202101/600323a441bb6.png', 1, 1);
-INSERT INTO `cd_wservice` VALUES (4, 2, '社区维修', 'wx51f303bf1367a448', 'pages/index/index', 'https://wxapp.wmj.com.cn/uploads/admin/202101/5ff965f300000.png', 2, 0);
-INSERT INTO `cd_wservice` VALUES (5, 2, '共享会议室', '', '', 'https://wxapp.wmj.com.cn/uploads/admin/202101/5ff9662b85802.png', 3, 0);
-
-
-
-
--- ----------------------------
--- 检查更新字段
--- ----------------------------
-SET FOREIGN_KEY_CHECKS=0;
-
--- 检查并添加 `auth_sort` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'auth_sort') THEN
-    ALTER TABLE `cd_lockauth` ADD COLUMN `auth_sort` int NULL DEFAULT 0 COMMENT '钥匙排序' AFTER `updated_at`;
-END IF;
-
--- 检查并添加 `noncmode` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'noncmode') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `noncmode` int NULL DEFAULT 1 COMMENT '常开常闭模式' AFTER `addcardmode`;
-END IF;
-
--- 检查并添加 `device_cid` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'device_cid') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `device_cid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备cid' AFTER `opsucnt`;
-END IF;
-
--- 检查并添加 `admin_pwd` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'admin_pwd') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `admin_pwd` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '激活的管理密码' AFTER `device_cid`;
-END IF;
-
--- 检查并添加 `hw_ver` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'hw_ver') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `hw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `admin_pwd`;
-END IF;
-
--- 检查并添加 `sw_ver` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'sw_ver') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `sw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `hw_ver`;
-END IF;
-
--- 检查并添加 `wifi_rssi` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'wifi_rssi') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `wifi_rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `sw_ver`;
-END IF;
-
--- 检查并添加 `on_line_time` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'on_line_time') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `on_line_time` int NULL DEFAULT NULL AFTER `wifi_rssi`;
-END IF;
-
--- 检查并添加 `model_number` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'model_number') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `model_number` varchar(101) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `on_line_time`;
-END IF;
-
--- 检查并添加 `hardware_version` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'hardware_version') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `hardware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `model_number`;
-END IF;
-
--- 检查并添加 `firmware_version` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'firmware_version') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `firmware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `hardware_version`;
-END IF;
-
--- 检查并添加 `iccid` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'iccid') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `iccid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `firmware_version`;
-END IF;
-
--- 检查并添加 `imei` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'imei') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `imei` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `iccid`;
-END IF;
-
--- 检查并添加 `batterypower` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'batterypower') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `batterypower` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `imei`;
-END IF;
-
--- 检查并添加 `rssi` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'rssi') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `deleted_at`;
-END IF;
-
--- 检查并添加 `xcx_sound` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'xcx_sound') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `xcx_sound` tinyint(1) NULL DEFAULT 1 AFTER `rssi`;
-END IF;
-
--- 检查并添加 `switch_state` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'switch_state') THEN
-    ALTER TABLE `cd_lock` ADD COLUMN `switch_state` tinyint NULL DEFAULT 0 AFTER `xcx_sound`;
-END IF;
-
--- 检查并添加唯一索引 `lock_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lock' AND index_name='lock_id') THEN
-    ALTER TABLE `cd_lock` ADD UNIQUE INDEX `lock_id`(`lock_id`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_lock_name`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lock' AND index_name='idx_lock_name') THEN
-    ALTER TABLE `cd_lock` ADD INDEX `idx_lock_name`(`lock_name`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `member_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lock' AND index_name='member_id') THEN
-    ALTER TABLE `cd_lock` ADD INDEX `member_id`(`member_id`) USING BTREE;
-END IF;
-
--- 检查并添加 `aremark` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'aremark') THEN
-    ALTER TABLE `cd_lockauth` ADD COLUMN `aremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `auth_shareability`;
-END IF;
-
--- 检查并添加 `arealname` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'arealname') THEN
-    ALTER TABLE `cd_lockauth` ADD COLUMN `arealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名' AFTER `user_id`;
-END IF;
-
--- 检查并添加 `device_group_id` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'device_group_id') THEN
-    ALTER TABLE `cd_lockauth` ADD COLUMN `device_group_id` bigint NULL DEFAULT 0 COMMENT '分组id默认未分组' AFTER `auth_openused`;
-END IF;
-
--- 检查并添加 `updated_at` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'updated_at') THEN
-    ALTER TABLE `cd_lockauth` ADD COLUMN `updated_at` bigint NULL DEFAULT NULL AFTER `deleted_at`;
-END IF;
-
--- 检查并添加 `deleted_at` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'deleted_at') THEN
-    ALTER TABLE `cd_lockcard` ADD COLUMN `deleted_at` datetime NULL DEFAULT NULL AFTER `batchstatus`;
-END IF;
-
--- 检查并添加 `sync_status` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'sync_status') THEN
-    ALTER TABLE `cd_lockcard` ADD COLUMN `sync_status` tinyint(1) NULL DEFAULT 1 AFTER `deleted_at`;
-END IF;
-
--- 检查并添加 `remark` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'remark') THEN
-    ALTER TABLE `cd_lockcard` ADD COLUMN `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `sync_status`;
-END IF;
-
--- 检查并添加 `sync_time` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'sync_time') THEN
-    ALTER TABLE `cd_lockcard` ADD COLUMN `sync_time` bigint NULL DEFAULT 0 AFTER `remark`;
-END IF;
-
--- 检查并添加索引 `lockcard_sn`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lockcard' AND index_name='lockcard_sn') THEN
-    ALTER TABLE `cd_lockcard` ADD INDEX `lockcard_sn`(`lockcard_sn`) USING BTREE;
-END IF;
-
--- 检查并添加 `lremark` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_locklog' AND COLUMN_NAME = 'lremark') THEN
-    ALTER TABLE `cd_locklog` ADD COLUMN `lremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `user_id`;
-END IF;
-
--- 检查并添加 `user_name` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_locklog' AND COLUMN_NAME = 'user_name') THEN
-    ALTER TABLE `cd_locklog` ADD COLUMN `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人' AFTER `cardsn`;
-END IF;
-
--- 检查并添加 `mobile_bak` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_locklog' AND COLUMN_NAME = 'mobile_bak') THEN
-    ALTER TABLE `cd_locklog` ADD COLUMN `mobile_bak` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `user_name`;
-END IF;
-
--- 检查并添加唯一索引 `locklog_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='locklog_id') THEN
-    ALTER TABLE `cd_locklog` ADD UNIQUE INDEX `locklog_id`(`locklog_id`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_cdsn`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_cdsn') THEN
-    ALTER TABLE `cd_locklog` ADD INDEX `idx_cdsn`(`cardsn`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_lock_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_lock_id') THEN
-    ALTER TABLE `cd_locklog` ADD INDEX `idx_lock_id`(`lock_id`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_member_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_member_id') THEN
-    ALTER TABLE `cd_locklog` ADD INDEX `idx_member_id`(`member_id`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_user_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_user_id') THEN
-    ALTER TABLE `cd_locklog` ADD INDEX `idx_user_id`(`user_id`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `creattime`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='creattime') THEN
-    ALTER TABLE `cd_locklog` ADD INDEX `creattime`(`create_time`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_member_lock`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_member_lock') THEN
-    ALTER TABLE `cd_locklog` ADD INDEX `idx_member_lock`(`member_id`, `lock_id`) USING BTREE;
-END IF;
-
--- 检查并添加 `realname` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'realname') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `realname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名' AFTER `unionid`;
-END IF;
-
--- 检查并添加 `remark` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'remark') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `remark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `realname`;
-END IF;
-
--- 检查并添加 `sCertificateNumber` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'sCertificateNumber') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `sCertificateNumber` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸faceid' AFTER `remark`;
-END IF;
-
--- 检查并添加 `level` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'level') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `level` tinyint NULL DEFAULT 0 COMMENT '级别' AFTER `sCertificateNumber`;
-END IF;
-
--- 检查并添加 `wx_model` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_model') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `wx_model` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备型号' AFTER `level`;
-END IF;
-
--- 检查并添加 `wx_version` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_version') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `wx_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信版本' AFTER `wx_model`;
-END IF;
-
--- 检查并添加 `wx_platform` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_platform') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `wx_platform` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作系统及版本' AFTER `wx_version`;
-END IF;
-
--- 检查并添加 `wx_system` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_system') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `wx_system` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端平台' AFTER `wx_platform`;
-END IF;
-
--- 检查并添加 `SDKVersion` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'SDKVersion') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `SDKVersion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端基础库版本' AFTER `wx_system`;
-END IF;
-
--- 检查并添加 `bluetoothEnabled` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'bluetoothEnabled') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `bluetoothEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '蓝牙的系统开关' AFTER `SDKVersion`;
-END IF;
-
--- 检查并添加 `locationEnabled` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'locationEnabled') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `locationEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地理位置的系统开关' AFTER `bluetoothEnabled`;
-END IF;
-
--- 检查并添加 `tt_user_id` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'tt_user_id') THEN
-    ALTER TABLE `cd_member` ADD COLUMN `tt_user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `locationEnabled`;
-END IF;
-
--- 检查并添加唯一索引 `member_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='member_id') THEN
-    ALTER TABLE `cd_member` ADD UNIQUE INDEX `member_id`(`member_id`) USING BTREE;
-END IF;
-
--- 检查并添加唯一索引 `openid`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='openid') THEN
-    ALTER TABLE `cd_member` ADD UNIQUE INDEX `openid`(`openid`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `unionid`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='unionid') THEN
-    ALTER TABLE `cd_member` ADD INDEX `unionid`(`unionid`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `mobile`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='mobile') THEN
-    ALTER TABLE `cd_member` ADD INDEX `mobile`(`mobile`) USING BTREE;
-END IF;
-
--- 检查并添加 `urealname` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_umember' AND COLUMN_NAME = 'urealname') THEN
-    ALTER TABLE `cd_umember` ADD COLUMN `urealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名' AFTER `ucreate_time`;
-END IF;
-
--- 检查并添加 `authlocks` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_umember' AND COLUMN_NAME = 'authlocks') THEN
-    ALTER TABLE `cd_umember` ADD COLUMN `authlocks` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权锁' AFTER `urealname`;
-END IF;
-
--- 检查并添加 `uremark` 字段
-IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_umember' AND COLUMN_NAME = 'uremark') THEN
-    ALTER TABLE `cd_umember` ADD COLUMN `uremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `authlocks`;
-END IF;
-
--- 检查并添加索引 `idx_member_id_user_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_umember' AND index_name='idx_member_id_user_id') THEN
-    ALTER TABLE `cd_umember` ADD INDEX `idx_member_id_user_id`(`member_id`, `user_id`) USING BTREE;
-END IF;
-
--- 检查并添加索引 `idx_user_id`
-IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_umember' AND index_name='idx_user_id') THEN
-    ALTER TABLE `cd_umember` ADD INDEX `idx_user_id`(`user_id`) USING BTREE;
-END IF;
-
-SET FOREIGN_KEY_CHECKS=1;
-
+INSERT INTO `cd_wservice` VALUES (1, 1, '门锁配网', '', '/pages/wifi/wifi', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c19ada76a05.png', 5, 1);
+INSERT INTO `cd_wservice` VALUES (2, 1, '空开配网', '', '/pages/bluetooth/bluetooth', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c19a47e2c1c.png', 4, 1);
+INSERT INTO `cd_wservice` VALUES (3, 3, '使用帮助', '', 'https://doc.wmj.com.cn/1/page/39', 'https://wxapp.wmj.com.cn/uploads/admin/202101/600323a441bb6.png', 1, 0);
+INSERT INTO `cd_wservice` VALUES (4, 1, '喇叭配网', '', '/pages/bluetooth/bluetooth', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c199be21f9c.png', 2, 1);
+INSERT INTO `cd_wservice` VALUES (5, 1, '流量续费', '', '/pages/sim/sim', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c199ff0017e.png', 14, 1);
+INSERT INTO `cd_wservice` VALUES (6, 1, '开门演示', '', '/pages/open/open?user_id=1&amp;lock_id=2&amp;isscan=1', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c198ed5124f.png', 16, 1);
+INSERT INTO `cd_wservice` VALUES (7, 1, '添加设备', '', '/pages/addEquipment/addEquipment', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c19b692174b.png', 0, 1);
+INSERT INTO `cd_wservice` VALUES (8, 1, '热点配网', '', '/pages/hotspot/hotspot', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c19c311419c.png', 15, 1);
+INSERT INTO `cd_wservice` VALUES (9, 3, '门禁配网', '', 'https://doc.wmj.com.cn/1/page/181', 'https://wxapp.wmj.com.cn/uploads/admin/202402/65c1a5a7908d8.png', 0, 0);
+INSERT INTO `cd_wservice` VALUES (10, 1, '状态查询', '', '/pages/status/status', 'https://wxapp.wmj.com.cn/uploads/admin/202404/662391f2acabb.png', 16, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
