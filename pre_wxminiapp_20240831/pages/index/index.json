@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "智诚微门禁",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "privacy-popup": "/components/privacy-popup/privacy-popup"
+  }
+}

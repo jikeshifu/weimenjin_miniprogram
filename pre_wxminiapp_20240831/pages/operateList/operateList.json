@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "操作记录",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "uv-datetime-picker": "/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "发卡",
+  "usingComponents": {
+    "uv-datetime-picker": "/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker"
+  }
+}

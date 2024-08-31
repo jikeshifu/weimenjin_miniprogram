@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "uv-picker": "/uni_modules/uv-picker/components/uv-picker/uv-picker"
+  },
+  "component": true
+}

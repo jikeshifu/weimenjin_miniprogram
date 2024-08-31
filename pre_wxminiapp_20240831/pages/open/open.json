@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "登记页",
+  "usingComponents": {
+    "privacy-popup": "/components/privacy-popup/privacy-popup"
+  }
+}

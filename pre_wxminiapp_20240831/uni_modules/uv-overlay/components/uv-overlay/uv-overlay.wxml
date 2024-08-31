@@ -1,0 +1,1 @@
+<uv-transition vue-id="d9912a8c-1" show="{{show}}" mode="fade" custom-class="uv-overlay" duration="{{duration}}" custom-style="{{overlayStyle}}" data-event-opts="{{[['^click',[['clickHandler']]],['^touchmove',[['clear',['$event']]]]]}}" bind:click="__e" catch:touchmove="__e" class="data-v-19c9b517" bind:__l="__l" vue-slots="{{['default']}}"><slot></slot></uv-transition>

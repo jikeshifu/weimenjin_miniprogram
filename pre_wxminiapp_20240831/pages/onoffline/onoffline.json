@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "联网记录",
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "uv-datetime-picker": "/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker"
+  }
+}
