@@ -56,9 +56,9 @@
 对于新手，强烈建议使用宝塔面板。
 
 1. 基于ThinkPHP6.0开发，用Nginx，站点伪静态设置为ThinkPHP。
-2. PHP 7.2+
-3. MySQL 5.5+
-4. 修改数据库连接：在根目录下 `.env` 文件，数据库脚本为 `weimenjin_miniprogram_db.sql`
+2. PHP 7.4
+3. MySQL 5.6.5
+4. 修改数据库连接：在根目录下 `.env` 文件，数据库脚本为 `miniprogram.sql`
 5. 后台超级管理员：`admin`，默认密码：`wmj123456`
 6. 运行目录为 `public`
 
