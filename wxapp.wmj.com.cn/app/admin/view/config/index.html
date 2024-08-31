@@ -92,8 +92,9 @@
                             <div class="col-sm-7">
                                 <!-- form start -->
                                 <div class="form-group">
-                                    <label class="control-label">V1版本硬件从<a href="https://www.wmj.com.cn/open/apilogin"
-                                                                            target="_blank">https://www.wmj.com.cn/open/apilogin</a>注册获取,</label>
+                                    <label class="control-label">V1版本硬件从<a
+                                            href="https://www.wmj.com.cn/open/apilogin"
+                                            target="_blank">https://www.wmj.com.cn/open/apilogin</a>注册获取,</label>
                                     <label class="control-label">序列号前缀为:WMJ16/18/19/26/62。</label>
                                 </div>
                                 <div class="form-group">
@@ -134,7 +135,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">短信接口配置<a href="https://wxapp.wmj.com.cn/"
-                                                                            target="_blank">https://wxapp.wmj.com.cn/</a>注册获取,每条4分钱。</label>
+                                                                                target="_blank">https://wxapp.wmj.com.cn/</a>注册获取,每条4分钱。</label>
                                 </div>
 
                                 <div class="form-group">
@@ -150,6 +151,144 @@
                                         <input type="text" id="sms_appsecret" value="{$info.sms_appsecret}"
                                                name="sms_appsecret" class="form-control"
                                                placeholder="请输入sms_appsecret">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">演示钥匙配置</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">是否开启：</label>
+                                    <div class="col-sm-9">
+                                        <input name="autodtkey" value="1" type="radio" {if condition="$info.autodtkey eq 1"}checked{/if} title="是">是
+                                        <input name="autodtkey" value="0" type="radio" {if condition="$info.autodtkey eq 0"}checked{/if} title="否">否
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">演示门锁ID：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="autodtkeylockid" value="{$info.autodtkeylockid}"
+                                               name="autodtkeylockid" class="form-control"
+                                               placeholder="请输入演示钥匙id">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">临时密码加密秘钥</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">加密密码：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="adminpw" value="{$info.adminpw}" name="adminpw"
+                                               class="form-control" placeholder="请输入加密密码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">加密密钥：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="devicecid" value="{$info.devicecid}"
+                                               name="devicecid" class="form-control"
+                                               placeholder="请输入加密秘钥">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">抖音小程序配置</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">appid：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="dyappid" value="{$info.dyappid}" name="dyappid"
+                                               class="form-control" placeholder="请输入抖音小程序appid">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">appsecret：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="dyappsecret" value="{$info.dyappsecret}"
+                                               name="dyappsecret" class="form-control"
+                                               placeholder="请输入抖音小程序appsecret">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">公众号发送消息配置</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">公众号appid：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="gzhappid" value="{$info.gzhappid}" name="gzhappid"
+                                               class="form-control" placeholder="请输入公众号appid">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">公众号appsecret：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="gzhappsecret" value="{$info.gzhappsecret}"
+                                               name="gzhappsecret" class="form-control"
+                                               placeholder="请输入公众号appsecret">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">通知拉起的小程序appid：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="gzhminiappid" value="{$info.gzhminiappid}"
+                                               name="gzhminiappid" class="form-control"
+                                               placeholder="请输入公众号拉起的小程序appid">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">模板消息ID1：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="gzhtempleteid1" value="{$info.gzhtempleteid1}"
+                                               name="gzhtempleteid1" class="form-control"
+                                               placeholder="请输入公众号模板消息ID1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">模板消息ID2：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="gzhtempleteid2" value="{$info.gzhtempleteid2}"
+                                               name="gzhtempleteid2" class="form-control"
+                                               placeholder="请输入公众号模板消息ID2">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">微信支付配置(比较敏感，没有退款和发红包等证书可不配置)</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">绑定的小程序appid：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="wxpayminiappid" value="{$info.wxpayminiappid}" name="wxpayminiappid"
+                                               class="form-control" placeholder="请输入绑定的小程序的appid">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">商户mchid：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="wxpaymchid" value="{$info.wxpaymchid}"
+                                               name="wxpaymchid" class="form-control"
+                                               placeholder="请输入公众号商户mchid">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">商户秘钥：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="wxpaykey" value="{$info.wxpaykey}"
+                                               name="wxpaykey" class="form-control"
+                                               placeholder="请输入商户秘钥">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">cert_path：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="wxpaycert_path" value="{$info.wxpaycert_path}"
+                                               name="wxpaycert_path" class="form-control"
+                                               placeholder="请输入cert_path绝对路径">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">key_path：</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="wxpaykey_path" value="{$info.wxpaykey_path}"
+                                               name="wxpaykey_path" class="form-control"
+                                               placeholder="请输入key_path绝对路径">
                                     </div>
                                 </div>
                                 <!-- form end -->
