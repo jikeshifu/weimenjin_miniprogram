@@ -42,10 +42,21 @@
 		onShareAppMessage() {},
 		onShareTimeline() {},
 		onLoad(option) {
-			this.lock_id = option.lock_id ? option.lock_id : ''
-			this.finger_id = option.finger_id ? option.finger_id : ''
-			this.finger_name = option.finger_name ? option.finger_name : ''
-			this.end_time = option.end_time ? this.formatDate(Number(option.end_time)) : ''
+		    this.lock_id = option.lock_id ? option.lock_id : '';
+		    this.finger_id = option.finger_id ? option.finger_id : '';
+		    this.finger_name = option.finger_name ? option.finger_name : '';
+		
+		    // 如果有提供end_time，使用提供的值，否则设置默认值为当前时间加3年
+		    if (option.end_time) {
+		        this.end_time = this.formatDate(Number(option.end_time));
+		    } else {
+		        let currentDate = new Date(); // 获取当前日期
+		        currentDate.setFullYear(currentDate.getFullYear() + 1); // 当前年份加3
+		        this.end_time = this.formatDate(currentDate.getTime()); // 格式化日期并设置为默认的过期时间
+		    }
+		
+		    // 设置dateTimeValue为end_time的时间戳，用于日期选择器的默认值
+		    this.dateTimeValue = new Date(this.end_time).getTime();
 		},
 		methods: {
 			async submit() {

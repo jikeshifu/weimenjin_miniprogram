@@ -1,6 +1,6 @@
 {
     "name" : "微门禁",
-    "appid" : "__UNI__1EEBBBD",
+    "appid" : "__UNI__1F4A553",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -75,15 +75,15 @@
             "sdkConfigs" : {
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "",
-                        "appsecret" : "",
-                        "UniversalLinks" : ""
+                        "appid" : "wxee9b920eca6c7535",
+                        "appsecret" : "8fe86d6352a6b27b9a66ad9ac1ad7a99",
+                        "UniversalLinks" : "https://ysdwnkj.com/ulink/"
                     }
                 },
                 "payment" : {
                     "weixin" : {
-                        "appid" : "",
-                        "UniversalLinks" : ""
+                        "appid" : "wxee9b920eca6c7535",
+                        "UniversalLinks" : "https://ysdwnkj.com/ulink/"
                     },
                     "alipay" : {}
                 },
@@ -123,21 +123,21 @@
             },
             "splashscreen" : {
                 "android" : {
-                    "hdpi" : "",
-                    "xhdpi" : "",
-                    "xxhdpi" : ""
+                    "hdpi" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/安卓高分屏.png",
+                    "xhdpi" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/安卓720高分屏.png",
+                    "xxhdpi" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/安卓1080高分屏.png"
                 },
                 "ios" : {
                     "iphone" : {
-                        "iphonex" : "",
-                        "retina55" : "",
-                        "retina47" : "",
-                        "retina40" : "",
-                        "retina35" : ""
+                        "iphonex" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhoneX.png",
+                        "retina55" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone6 plus.png",
+                        "retina47" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone6.png",
+                        "retina40" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone5.png",
+                        "retina35" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone4.png"
                     },
                     "ipad" : {
-                        "portrait7" : "",
-                        "portrait-retina7" : ""
+                        "portrait7" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/ipad.png",
+                        "portrait-retina7" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/ipad 高分屏ios7.png"
                     }
                 }
             }
@@ -154,23 +154,30 @@
             "postcss" : true
         },
         "usingComponents" : true,
+        "libVersion" : "2.8.1",
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "小程序将获取您的位置信，否则部分功能不可用"
             }
         },
         "requiredPrivateInfos" : [ "getLocation" ],
-		"__usePrivacyCheck__": true
+        "lazyCodeLoading" : "requiredComponents"
     },
     "mp-alipay" : {
-        "appid" : "2021001152652253",
-        "usingComponents" : true
+        "usingComponents" : true,
+        "appid" : "2021001152652253"
     },
     "mp-baidu" : {
         "usingComponents" : true
     },
     "mp-toutiao" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "appid" : "ttddf2ab4f42c0840301",
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "小程序将获取您的位置信，否则部分功能不可用"
+            }
+        }
     },
     "uniStatistics" : {
         "enable" : false
@@ -184,7 +191,7 @@
     },
     "h5" : {
         "title" : "微门禁",
-        "domain" : "",
+        "domain" : "http://m.meiyaya.yuethink.net/",
         "template" : "",
         "router" : {
             "base" : ""

@@ -118,15 +118,11 @@
 					return
 				}
 				let bleDataS = WriteBLECharacteristicValueRes.data
-				let data = bleDataS.substring(bleDataS.indexOf('{'), bleDataS.lastIndexOf('}') + 1);
-
-				console.log("data:", data)
-				let dataObj = JSON.parse(data)
+				let data = bleDataS.state
 				Ble.OpenBluetoothAdapter()
-				if (dataObj.state === 1) {
+				if (data === 1) {
 					uni.showToast({
 						title: "配置成功",
-
 						mask: true, // 是否显示透明蒙层，防止触摸穿透
 						duration: 2000
 					});
@@ -135,7 +131,6 @@
 					uni.showToast({
 						title: "配置失败",
 						icon: 'none',
-
 					});
 				}
 			},

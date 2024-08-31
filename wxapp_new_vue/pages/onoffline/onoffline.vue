@@ -5,11 +5,6 @@
 			
 		
 			<view :class="['top-box', scrollTop > 10 ? 'top-box-active' : '']">
-				<view class="search-box">
-					<image src="../../static/sousuo.png"></image>
-					<input placeholder="请输入手机号" placeholder-class="placeholder" class="search-input" confirm-type="search" @confirm="confirm"/>
-				</view>
-				
 				<view style="margin-left: 20rpx;height: 100rpx;"> 
 					<view class="cell-item" @click="openTime">
 						
@@ -29,34 +24,22 @@
 			
 			<view class="list" v-if="listStatus"> 
 				<view class="item" v-for="(item, index) in dataList" :key="index" @click="showMobile(item)">
-				    <view class="left-box">
-				        <!-- 密码开门 -->
-				        <image v-if="item.type === 12" src="../../static/password.png" class="user-img"></image>
-				        <!-- 刷卡开门 -->
-				        <image v-else-if="item.type === 4" src="../../static/card.png" class="user-img"></image>
-				        <!-- 指纹开门 -->
-				        <image v-else-if="item.type === 7" src="../../static/fingerprint.png" class="user-img"></image>
-				        <!-- 其他情况时，根据是否有头像地址显示用户头像或默认头像 -->
-				        <image v-else-if="item.headimgurl" :src="item.headimgurl | imgPath" class="user-img"></image>
-				        <!-- 无头像地址时显示默认头像 -->
-				        <image v-else src="../../static/moren.png" class="user-img"></image>
-				
-				        <view class="user-info">
-				            <view class="flex-box">
-				                <view class="user-name" v-if="item.user_name">{{ item.user_name }}</view>
-				                <view class="user-name tourist" v-else>游客</view>
-				            </view>
-				            <!-- 当不是密码、刷卡或指纹开门时显示手机号 -->
-				            <view class="phone" v-if="item.type !== 12 && item.type !== 4 && item.type !== 7">{{ item.mobile }}</view>
-				            <view class="time">{{ item.create_time }}</view>
-				        </view>
-				    </view>
-				    <view class="right-box">
-				        <view class="equipment-name">
-				            <view class="text" v-if="item.lock">{{ item.lock.lock_name }}</view>
-				        </view>
-				        <view class="status">{{ item.type_name ? item.type_name : '操作' }}{{ item.status === 1 ? '成功' : '失败' }}</view>
-				    </view>
+					<view class="left-box">
+						<image src="../../static/online.png" class="user-img" v-if="item.cmd=='OnLine'"></image>
+						<image src="../../static/offline.png" class="user-img" v-else></image>
+						<view class="user-info">
+							<view class="flex-box">
+								<view class="user-name tourist">{{ item.cmd }}</view>
+							</view>
+							<view class="time">{{ formatDate(parseInt(item.on_line_time, 10)) }}</view>
+						</view>
+					</view>
+					<view class="right-box">
+						<view class="equipment-name">
+							<view class="text" v-if="item.cmd=='OnLine'" style="color: green;">设备上线</view>
+							<view class="text" v-if="item.cmd=='OffLine'">设备离线</view>
+						</view>
+					</view>
 				</view>
 				<uni-load-more :status="noMore" empty_text="暂无操作记录～"></uni-load-more>
 			</view>
@@ -69,7 +52,7 @@
 </template>
 
 <script>
-import { record_api } from '@/api/index.js';	
+import { onoffline_api } from '@/api/index.js';	
 import { formatDate, imgPath } from '@/libs/filters.js'
 	import UvDatetimePicker from '@/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker.vue'
 export default {
@@ -77,17 +60,15 @@ export default {
 		UvDatetimePicker
 	},
 	data() {
-		const now = new Date(); // 当前时间
-		const oneWeekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000); // 一周前
 		return {
 			listStatus:true,
 			formData: {
 			
-				startTime: oneWeekAgo.getTime(),
-				endTime: now.getTime(),
+				startTime: '',
+				endTime: '',
 			},
 			scrollTop: 0,
-			lock_id: '',
+			lock_sn: '',
 			noMore: 'loading',
 			page: 1,
 			dataList: [],
@@ -104,7 +85,7 @@ export default {
 	onShareAppMessage() {},
 	onShareTimeline() {},
 	onLoad(option) {
-		this.lock_id = option.lock_id ? option.lock_id : ''
+		this.lock_sn = option.lock_sn ? option.lock_sn : ''
 	},
 	onShow() {
 		this.dataList = []
@@ -153,8 +134,6 @@ export default {
 			this.getList()
 		},100)
 		},
-		
-	
 		formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
 			var crtTime;
 			if (typeof date === 'number') {
@@ -202,10 +181,10 @@ export default {
 				
 					startTime: this.formData.startTime/1000,
 					endTime: this.formData.endTime/1000,
-				lock_id: this.lock_id,
+				lock_sn: this.lock_sn,
 				search_key: this.search_key
 			};
-			let res = await record_api(params);
+			let res = await onoffline_api(params);
 			this.groupInfo = res.data.info
 		
 			if (this.page !== 1 && !res.data.length) {
@@ -253,5 +232,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import './operateList.scss';	
+@import './onoffline.scss';	
 </style>

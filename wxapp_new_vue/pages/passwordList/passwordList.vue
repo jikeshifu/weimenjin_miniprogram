@@ -137,6 +137,34 @@ export default {
 			})
 
 		},
+		async clearAllPasswords() {
+		    uni.showModal({
+		        title: '确认',
+		        content: '确定要清空所有密码吗?',
+		        success: async (res) => {
+		            if (res.confirm) {
+		                uni.showLoading({
+		                    title: '清空中...',
+		                    mask: true
+		                });
+		                let response = await delPwd_api({ lock_id: this.lock_id });  // 假设使用同一个API，但是以某种方式标识清空所有
+		                if (response.code === 0) {
+		                    this.dataList = [];  // 清空本地密码列表
+		                    uni.showToast({
+		                        title: '所有密码已清空',
+		                        icon: 'none',
+		                    });
+		                } else {
+		                    uni.showToast({
+		                        title: response.msg,
+		                        icon: 'none'
+		                    });
+		                }
+		                uni.hideLoading();
+		            }
+		        }
+		    });
+		},
 		async getList() {
 			this.noMore = 'loading';
 			let params = {
@@ -169,39 +197,41 @@ export default {
 			}
 		},
 		operation() {
-			uni.showActionSheet({
-				itemList: ['添加密码', '离线密码'],
-				success: async (res) => {
-					if (res.tapIndex === 0) {
-						uni.navigateTo({
-							url: '/pages/addPassword/addPassword?lock_id=' + this.lock_id
-						})
-					} else {
-						let res = await temporaryPassword_api({ lock_id: this.lock_id })
-						if (res.code === 0) {
-							uni.showModal({
-								title: '提示',
-								content: '临时密码：' + res.data.pwd,
-								showCancel: false,
-								confirmText: '复制密码',
-								confirmColor: '#6a7692',
-								success: function (msg) {
-									if (msg.confirm) {
-										uni.setClipboardData({
-											data: res.data.pwd,
-											success: function () {
-												uni.showToast({
-													title: '临时密码复制成功'
-												})
-											}
-										});
-									}
-								}
-							});
-						}
-					}
-				},
-			});
+		    uni.showActionSheet({
+		        itemList: ['添加固定密码', '获取临时密码', '清空所有密码'],  // 添加新的操作选项
+		        success: async (res) => {
+		            if (res.tapIndex === 0) {
+		                uni.navigateTo({
+		                    url: '/pages/addPassword/addPassword?lock_id=' + this.lock_id
+		                })
+		            } else if (res.tapIndex === 1) {
+		                let res = await temporaryPassword_api({ lock_id: this.lock_id })
+		                if (res.code === 0) {
+		                    uni.showModal({
+		                        title: '提示',
+		                        content: '临时密码：' + res.data.pwd,
+		                        showCancel: false,
+		                        confirmText: '复制密码',
+		                        confirmColor: '#6a7692',
+		                        success: function (msg) {
+		                            if (msg.confirm) {
+		                                uni.setClipboardData({
+		                                    data: res.data.pwd,
+		                                    success: function () {
+		                                        uni.showToast({
+		                                            title: '临时密码复制成功'
+		                                        })
+		                                    }
+		                                });
+		                            }
+		                        }
+		                    });
+		                }
+		            } else {
+		                this.clearAllPasswords();  // 调用清空密码方法
+		            }
+		        },
+		    });
 		}
 	},
 	onReachBottom() {

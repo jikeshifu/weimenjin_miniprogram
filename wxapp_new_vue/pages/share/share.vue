@@ -36,7 +36,10 @@
 					<view class="label">分享权限：</view>
 					<switch color="#21CF3E" style="transform:scale(0.7)" @change="changeAllow" />
 				</view>
-
+				<view class="cell-item">
+					<view class="label">设为管理员：</view>
+					<switch color="#21CF3E" style="transform:scale(0.7)" @change="changeAdmin" />
+				</view>
 				<view class="cell-item">
 					<view class="label">审核状态：</view>
 					<switch checked color="#21CF3E" style="transform:scale(0.7)" @change="changeStatus" />
@@ -80,6 +83,7 @@
 					auth_sharelimit: '0',
 					auth_openlimit: '0',
 					auth_shareability: '0',
+					auth_isadmin: '0',
 					auth_status: '1',
 					remark: ''
 				},
@@ -137,7 +141,7 @@
 				let res = await shareAuth_api(this.formData) 
 				if (res.code === 0) {
 					uni.hideLoading()
-					this.showToast('生成钥匙成功!')
+					this.showToast('分享到聊天窗口!')
 					this.share_lockauth_id = res.data.share_lockauth_id
 				} else {
 					uni.hideLoading()
@@ -149,6 +153,13 @@
 					this.formData.auth_shareability = '1'
 				} else {
 					this.formData.auth_shareability = '0'
+				}
+			},
+			changeAdmin(e) {
+				if (e.detail.value) {
+					this.formData.auth_isadmin = '1'
+				} else {
+					this.formData.auth_isadmin = '0'
 				}
 			},
 			changeStatus(e) {

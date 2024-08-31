@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页",
+				"navigationBarTitleText": "微门禁",
 				"enablePullDownRefresh": true
 			}
 		},
@@ -51,6 +51,24 @@
 			"path": "pages/sim/sim",
 			"style": {
 				"navigationBarTitleText": "物联SIM卡查询"
+			}
+		},
+		{
+			"path": "pages/status/status",
+			"style": {
+				"navigationBarTitleText": "状态查询"
+			}
+		},
+		{
+			"path": "pages/power/power",
+			"style": {
+				"navigationBarTitleText": "电量信息"
+			}
+		},
+		{
+			"path": "pages/onoffline/onoffline",
+			"style": {
+				"navigationBarTitleText": "联网记录"
 			}
 		},
 		{
@@ -125,7 +143,7 @@
 		{
 			"path": "pages/share/share",
 			"style": {
-				"navigationBarTitleText": "生成钥匙"
+				"navigationBarTitleText": "分享钥匙"
 			}
 		},
 		{
@@ -241,6 +259,13 @@
 			"path": "pages/member/account",
 			"style": {
 				"navigationBarTitleText": "账号管理"
+			}
+		},
+		{
+			"path" : "pages/authinfo/authinfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
 		

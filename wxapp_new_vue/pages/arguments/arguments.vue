@@ -12,7 +12,7 @@
 					<switch checked color="#21CF3E" :checked="formData.status ? true : false" style="transform:scale(0.7)" @change="changeUse" />
 				</view>
 				<view class="cell-item">
-					<view class="label">采集手机号:</view>
+					<view class="label">登记手机号:</view>
 					<switch color="#21CF3E" :checked="formData.mobile_check ? true : false" style="transform:scale(0.7)" @change="changePhone" />
 				</view>
 				<view class="cell-item">
@@ -20,23 +20,28 @@
 					<switch color="#21CF3E" :checked="formData.applyauth ? true : false" style="transform:scale(0.7)" @change="changeApply" />
 				</view>
 				<view class="cell-item">
-					<view class="label">审核登记:</view>
+					<view class="label">登记需要审核:</view>
 					<switch checked color="#21CF3E" :checked="formData.applyauth_check ? true : false" style="transform:scale(0.7)" @change="changeCheck" />
 				</view>
 				<view class="cell-item">
-					<view class="label">小程序声音:</view>
+					<view class="label">小程序开门成功语音:</view>
 					<switch checked color="#21CF3E" :checked="formData.xcx_sound ? true : false" style="transform:scale(0.7)" @change="changeXcxSound" />
+				</view>
+				<view class="cell-item">
+					<view class="label">开门通知管理员(公众号模板消息):</view>
+					<switch checked color="#21CF3E" :checked="formData.opsucnt ? true : false" style="transform:scale(0.7)" @change="changeopsucnt" />
 				</view>
 				<view class="cell-item">
 					<view class="label">限距(米):</view>
 					<input placeholder="请输入开门距离" type="number" placeholder-class="placeholder" v-model="formData.location_check" />
 				</view>
-
-
-
+				<view class="cell-item">
+					<view class="label">激励广告开关:</view>
+					<switch color="#21CF3E" :checked="formData.advertising_enabled ? true : false" style="transform:scale(0.7)" @change="changeAd" />
+				</view>
 			</view>
 			<view class="bottom" @click="onsubmit">
-				<view class="btn" >提交</view>
+				<view class="btn">提交</view>
 			</view>
 		</view>
 	</view>
@@ -71,9 +76,9 @@
 				let res = await configSet_api(this.formData)
 				if (res.code === 0) {
 					this.showToast('修改成功')
-				uni.reLaunch({
-					url: '/pages/index/index'
-				});
+					uni.reLaunch({
+						url: '/pages/index/index'
+					});
 				} else {
 					this.showToast(res.msg)
 				}
@@ -87,58 +92,43 @@
 						lock_name: item.lock_name,
 						mobile_check: item.mobile_check,
 						applyauth: item.applyauth,
-						xcx_sound:item.xcx_sound,
+						xcx_sound: item.xcx_sound,
+						opsucnt: item.opsucnt,
 						applyauth_check: item.applyauth_check,
 						location_check: item.location_check ? item.location_check : 0,
-						status: item.status
+						status: item.status,
+						advertising_enabled: item.qrshowminiad // 新增字段
 					}
 				} else {
 					this.showToast(res.msg)
 				}
 			},
 			changePhone(e) {
-				if(e.detail.value) {
-					this.formData.mobile_check = 1
-				} else {
-					this.formData.mobile_check = 0
-				}
+				this.formData.mobile_check = e.detail.value ? 1 : 0;
 			},
 			changeApply(e) {
-				if(e.detail.value) {
-					this.formData.applyauth = 1
-				} else {
-					this.formData.applyauth = 0
-				}
+				this.formData.applyauth = e.detail.value ? 1 : 0;
 			},
 			changeCheck(e) {
-				if(e.detail.value) {
-					this.formData.applyauth_check = 1
-				} else {
-					this.formData.applyauth_check = 0
-				}
+				this.formData.applyauth_check = e.detail.value ? 1 : 0;
 			},
-			
-			
-			
-			changeXcxSound(e){
-				if(e.detail.value) {
-					this.formData.xcx_sound = 1
-				} else {
-					this.formData.xcx_sound = 0
-				}
+			changeXcxSound(e) {
+				this.formData.xcx_sound = e.detail.value ? 1 : 0;
+			},
+			changeopsucnt(e) {
+				this.formData.opsucnt = e.detail.value ? 1 : 0;
 			},
 			changeUse(e) {
-				if(e.detail.value) {
-					this.formData.status = 1
-				} else {
-					this.formData.status = 0
-				}
+				this.formData.status = e.detail.value ? 1 : 0;
+			},
+			changeAd(e) {
+				this.formData.advertising_enabled = e.detail.value ? 1 : 0;
 			},
 			showToast(msg) {
 				uni.showToast({
 					title: msg,
 					icon: 'none',
-					mask:true
+					mask: true
 				})
 			}
 		}

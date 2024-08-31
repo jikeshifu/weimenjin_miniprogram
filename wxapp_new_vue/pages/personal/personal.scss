@@ -17,7 +17,7 @@
 		padding-bottom: 200rpx;
 		width: 100%;
 		.user-box {
-			padding-top: 72rpx;
+			padding-top: 22rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -29,13 +29,13 @@
 				border-radius: 50%;
 			}
 			.user-name {
-				margin-top: 32rpx;
+				margin-top: 12rpx;
 				font-size: 32rpx;
 				color: #444444;
 			}
 		}
 		.renew {
-			margin: 36rpx 30rpx 44rpx;
+			margin: 16rpx 30rpx 24rpx;
 			height: 90rpx;
 			background: rgb(33, 207, 62);
 			box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.3);
@@ -48,8 +48,8 @@
 			color: #fff;
 		}
 		.cell-box {
-			margin: 0 30rpx 24rpx;
-			height: 140rpx;
+			margin: 0 30rpx 14rpx;
+			height: 90rpx;
 			background: linear-gradient(180.00deg, rgb(255, 255, 255),rgba(255, 255, 255, 0) 100%);
 			box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
 			border-radius:24rpx;

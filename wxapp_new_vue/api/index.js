@@ -43,12 +43,22 @@ export function simInfo(params){
 export function deviceList_api(params){
 	return request.myRequest('/device.Device/list', params, 'POST');
 }
-
+// 首页获取设备
+export function deviceStatusBySerial_api(params){
+	return request.myRequest('/device.Device/getDeviceStatus', params, 'POST');
+}
+// 获取设备状态
+export function deviceStatus_api(params){
+	return request.myRequest('/device.Device/getStatus', params, 'POST');
+}
 // 指纹列表
 export function fingerList_api(params){
 	return request.myRequest('/device.Finger/list', params, 'POST');
 }
-
+//清空指纹
+export function clearFinger_api(params){
+	return request.myRequest('/device.Finger/clearFinger', params, 'POST');
+}
 // 添加指纹
 export function addFinger_api(params){
 	return request.myRequest('/device.Finger/add', params, 'POST');
@@ -130,6 +140,11 @@ export function qrOpenLock_api(params){
 export function zfbXcxMobile_api(params){
 	return request.myRequest('/Member/getalipayphonenumber', params, 'POST');
 }
+// 头条绑定手机号
+export function toutiaoXcxMobile_api(params){
+	console.log("toutiaoXcxMobile_api")
+	return request.myRequest('/Member/gettoutiaophonenumber', params, 'POST');
+}
 // 支付宝修改手机号
 export function zfb_edit_info(params){
 	return request.myRequest('/Member/update', params, 'POST');
@@ -138,7 +153,14 @@ export function zfb_edit_info(params){
 export function wxXcxMobile_api(params){
 	return request.myRequest('/member.Member/wxXcxMobile', params, 'POST');
 }
-
+// 添加广告日志
+export function adlog_api(params){
+	return request.myRequest('/member.Member/addadlog', params, 'POST');
+}
+// 获取积分
+export function adlog_getpointsapi(params){
+	return request.myRequest('/member.Member/getpoints', params, 'POST');
+}
 // 获取用户信息
 export function userInfo_api(params){
 	return request.myRequest('/member.Member/info', params, 'POST');
@@ -153,14 +175,22 @@ export function applyAuth_api(params){
 export function equipmentInfo_api(params){
 	return request.myRequest('/device.Device/infoV2', params, 'POST');
 }
+// 重启设备
+export function restartDevice_api(params){
+	return request.myRequest('/device.Device/restartDevice', params, 'POST');
+}
 // 设置二维码
 export function SaveQr(params){
 	return request.myRequest('/device.Device/qrSave', params, 'POST');
 }
 
-// 设置二维码
+// 设置进出发卡模式
 export function DevAddCard(params){
 	return request.myRequest('/device.Device/devAddCard', params, 'POST');
+}
+//设置进出常开常闭模式
+export function DevNoNc(params){
+	return request.myRequest('/device.Device/devNoNc', params, 'POST');
 }
 // 门卡列表
 export function cardList_api(params){
@@ -211,7 +241,14 @@ export function editFace_api(params){
 export function record_api(params){
 	return request.myRequest('/device.Device/record', params, 'POST');
 }
-
+// 电量记录
+export function power_api(params){
+	return request.myRequest('/device.Device/power', params, 'POST');
+}
+// 上下线记录
+export function onoffline_api(params){
+	return request.myRequest('/device.Device/onoffline', params, 'POST');
+}
 // 钥匙管理-钥匙列表
 export function LockAuthList_api(params){
 	return request.myRequest('/device.LockAuth/list', params, 'POST');
@@ -251,10 +288,17 @@ export function temporaryPassword_api(params){
 export function config_api(params){
 	return request.myRequest('/device.Device/config', params, 'POST');
 }
-
+// 获取参数
+export function authconfig_api(params){
+	return request.myRequest('/device.Device/authconfig', params, 'POST');
+}
 // 编辑参数
 export function configSet_api(params){
 	return request.myRequest('/device.Device/configSet', params, 'POST');
+}
+// 编辑参数
+export function authconfigSet_api(params){
+	return request.myRequest('/device.Device/authconfigSet', params, 'POST');
 }
 
 // 转移权限
@@ -358,3 +402,7 @@ export function syncFace_api(params){
 	return request.myRequest('/device.Face/sync', params, 'POST');
 }
 
+// 服务列表
+export function wmjservice_api(params){
+	return request.myRequest('/Wservice/index', params, 'POST');
+}

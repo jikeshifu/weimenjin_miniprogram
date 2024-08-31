@@ -12,7 +12,11 @@
 					<view class="label">联系电话</view>
 					<view class="value">{{ formData.mobile }}</view>
 				</view>
-
+				<view class="cell-item">
+					<view class="label">通过审核：</view>
+					<switch color="#21CF3E" :checked="formData.auth_status ? true : false" style="transform:scale(0.7)"
+						@change="changeStatus" />
+				</view>
 				<view class="cell-item" @click="openTime('startTime')">
 					<view class="label">开始时间：</view>
 					<view class="flex-box">
@@ -52,11 +56,7 @@
 						v-model="formData.auth_openlimit" />
 				</view>
 
-				<view class="cell-item">
-					<view class="label">通过审核：</view>
-					<switch color="#21CF3E" :checked="formData.auth_status ? true : false" style="transform:scale(0.7)"
-						@change="changeStatus" />
-				</view>
+				
 
 				<view class="cell-item">
 					<view class="label">备注</view>

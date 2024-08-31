@@ -29,10 +29,10 @@
 
 			</view>
 
-			<view class="bottom-btn" @click="goPage('/pages/addFingerprint/addFingerprint?lock_id=' + lock_id)">
-				<view class="btn">添加指纹</view>
+			<view class="bottom-btn" >
+				<view class="btn" @click="goPage('/pages/addFingerprint/addFingerprint?lock_id=' + lock_id)">添加指纹</view>
+				<view class="btn" @click="clearFingerprints">清空指纹</view>
 			</view>
-
 		</view>
 	</view>
 </template>
@@ -40,6 +40,7 @@
 <script>
 	import {
 		fingerList_api,
+		clearFinger_api,
 		delFinger_api
 	} from '../../api/index.js';
 	export default {
@@ -107,6 +108,37 @@
 				uni.navigateTo({
 					url: url
 				})
+			},
+			async clearFingerprints() {
+			    uni.showModal({
+			        title: '提示',
+			        content: '确定要清空所有指纹吗?',
+			        success: async (msg) => {
+			            if (msg.confirm) {
+			                uni.showLoading({
+			                    title: '清空中...',
+			                    mask: true
+			                });
+			                let res = await clearFinger_api({
+			                    lock_id: this.lock_id
+			                });
+			                if (res.code === 0) {
+			                    uni.showToast({
+			                        title: '清空成功！',
+			                        icon: 'none',
+			                    });
+			                    this.dataList = [];
+			                    this.getList(); // 重新获取列表显示无指纹数据～
+			                } else {
+			                    uni.showToast({
+			                        title: res.msg,
+			                        icon: 'none',
+			                        mask: true
+			                    });
+			                }
+			            }
+			        }
+			    });
 			},
 			onDelete(finger_id) {
 				uni.showModal({

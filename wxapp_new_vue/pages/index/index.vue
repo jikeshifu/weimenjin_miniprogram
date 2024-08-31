@@ -33,15 +33,15 @@
 				</view>
 			</view>
 			<view class="list">
-				<view :class="['item', item.status !== 1 ||item.lock.switch_state ? 'item-on' : '']"
-					v-for="(item, index) in dataList" :key="index">
+				<view v-for="(item, index) in dataList" :key="index"
+					:class="['item', item.loading ? 'loading' : '', item.status !== 1 || item.lock.switch_state ? 'item-on' : '']">
 					<view class="flex-box">
 						<view class="share">
 							<image src="../../static/fenxiang.png" @click="onShare(item)"
 								v-if="item.status !== 1 ||item.lock.switch_state"></image>
 							<block v-else>
 								<image src="../../static/fenxiang-on.png" @click="onShare(item)"
-									v-if="item.auth_shareability === 1 && item.lock.online == 1"></image>
+									v-if="item.lock.online == 1"></image>
 								<image src="../../static/fenxiang-hui.png" @click="onShare(item)" v-else></image>
 							</block>
 						</view>
@@ -52,7 +52,6 @@
 								<image src="../../static/shezhi-on.png" v-if="item.lock.online == 1"></image>
 								<image src="../../static/shezhi-hui.png" v-else></image>
 							</block>
-
 							<image src="../../static/sanjiao.png" class="position-icon" v-if="set_index == index">
 							</image>
 						</view>
@@ -61,10 +60,13 @@
 					<view class="name">
 						<view class="text" v-if="item.lock">{{ item.lock.lock_name }}</view>
 					</view>
+					<view class="indate" v-if="item.lock">{{ item.auth_starttime1 }}</view>
 					<view class="indate" v-if="item.lock">{{ item.auth_endtime1 }}</view>
+
 					<view class="key">
 						<view class="btn btn-on" v-if="item.status !== 1 ||item.lock.switch_state">
-							<i class="iconfont icon-yuechi icon-default icon-on" @click="unlocking(item)" v-if="item.device_type === 'lock'"></i>
+							<i class="iconfont icon-yuechi icon-default icon-on" @click="unlocking(item,index)"
+								v-if="item.device_type === 'lock'"></i>
 							<i class="iconfont icon-yuechi icon-default icon-on"
 								v-if="item.device_type === 'switchLock'"></i>
 							<i class="iconfont icon-shandian icon-default icon-on" @click="onSwitch(item)"
@@ -73,7 +75,7 @@
 						</view>
 						<block v-else>
 							<block>
-								<view class="btn" @click="unlocking(item)" v-if="item.device_type === 'lock'">
+								<view class="btn" @click="unlocking(item,index)" v-if="item.device_type === 'lock'">
 									<i class="iconfont icon-yuechi icon-default"></i>
 								</view>
 								<view class="btn" @click="onSwitch(item)" v-if="item.device_type === 'switch'">
@@ -86,11 +88,9 @@
 									<i class="iconfont icon-laba icon-default"></i>
 								</view>
 							</block>
-
-
 						</block>
-
 					</view>
+					<view class="indate" v-if="item.lock">{{ item.auth_limit }}</view>
 					<view class="pop-up-box" v-if="set_index === index"
 						:style="{ left: set_index % 2 == 0 ? '20rpx' : 'initial', right: set_index % 2 == 0 ? 'initial' : '20rpx'}">
 						<view class="cell-list">
@@ -139,8 +139,6 @@
 									<i class="iconfont icon-menjin"></i>
 									<view class="text">门卡管理</view>
 								</view>
-
-
 								<view class="cell-item"
 									@click="goDetail('/pages/audioConfig/audioConfig?lock_id=' + item.lock_id)"
 									v-if="item.lock_ability.audioConfig_status === 1">
@@ -152,7 +150,6 @@
 									<i class="iconfont icon-a-zhuanyi2"></i>
 									<view class="text">转移权限</view>
 								</view>
-
 							</block>
 							<view class="cell-item"
 								@click="goDetail('/pages/faceList/faceList?lock_id=' + item.lock_id)"
@@ -160,7 +157,11 @@
 								<i class="iconfont icon-renlianshibie"></i>
 								<view class="text">图片管理</view>
 							</view>
-
+							<view class="cell-item"
+								@click="goDetail('/pages/authinfo/authinfo?lockauth_id=' + item.lockauth_id)">
+								<i class="iconfont icon-yuechi"></i>
+								<view class="text">钥匙排序</view>
+							</view>
 							<view class="cell-item" @click="onDelete(item)">
 								<i class="iconfont icon-shanchu"></i>
 								<view class="text" style="color: #FF0000;">删&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除
@@ -172,31 +173,60 @@
 			</view>
 			<view class="site-mask" v-if="showMask" @click="clickMask"></view>
 			<uni-load-more :status="noMore" empty_text="暂无数据～" style="margin-top: 40rpx;"></uni-load-more>
-
 		</view>
-
-		<view type="center" class="horn-popup" @touchmove.stop.prevent v-if="showHornBox" @click="showHornBox = false">
-			<view class="cell-box">
-				<view class="content-box" @click.stop>
-					<view class="cell-item">
-						<view class="label">内容：</view>
-						<input placeholder="请输入播放内容" placeholder-class="placeholder" v-model="tts" />
-					</view>
-					<view class="cell-item">
-						<view class="label">音量：</view>
-						<input placeholder="请输入播放音量" type="number" placeholder-class="placeholder" v-model="volume" />
-					</view>
-					<view class="born-btn" @click.stop="playhorn">立即播放</view>
-				</view>
-			</view>
+		<view class="horn-popup" @touchmove.stop.prevent v-if="showHornBox" @click="showHornBox = false">
+		    <view class="cell-box">
+		        <view class="content-box" @click.stop>
+		            <view class="cell-item" >
+		                <view class="label">内容：</view>
+						<scroll-view style="max-height: 200rpx;" scroll-y="true">
+		                <textarea 
+		                    placeholder="请输入播放内容" 
+		                    placeholder-class="placeholder" 
+		                    v-model="tts"
+		                />
+						</scroll-view>
+		            </view>
+		            <view class="cell-item">
+		                <view class="label">音量：</view>
+		                <input 
+		                    placeholder="请输入播放音量" 
+		                    type="number" 
+		                    placeholder-class="placeholder" 
+		                    v-model="volume"
+		                />
+		            </view>
+		            <view class="cell-item">
+		                <view class="label">循环播放：</view>
+		                <switch v-model="isLoopEnabled" :checked="isLoopEnabled" @change="toggleLoop"></switch>
+		            </view>
+		            <view class="cell-item" v-if="isLoopEnabled">
+		                <view class="label">间隔时长（秒）：</view>
+		                <input 
+		                    type="number" 
+		                    placeholder="设置间隔时长" 
+		                    placeholder-class="placeholder"
+		                    v-model="loopInterval"
+		                />
+		            </view>
+		            <view class="born-btn" @click.stop="playhorn">立即播放</view>
+		            <view class="born-btn" @click.stop="stophorn">停止播放</view>
+		        </view>
+		    </view>
 		</view>
-
 		<!-- 隐私协议 -->
-
 		<!-- #ifdef MP-WEIXIN -->
 		<privacy-popup ref="privacyComponent"></privacy-popup>
 		<!-- #endif -->
-
+		<block v-if="pageType === 'phone'">
+			<view class="bindPhoneModal">
+				<view class="bindPhone">
+					<button type="primary" class="btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber"
+						hover-class="none">绑定手机号</button>
+					<view class="btn cancel-btn" @click="cbindbutton">取消</view>
+				</view>
+			</view>
+		</block>
 	</view>
 </template>
 
@@ -216,7 +246,13 @@
 		loginQrCode_api,
 		playHorn_api,
 		openApi,
+		adlog_api,
 		closeApi,
+		wxXcxMobile_api,
+		zfbXcxMobile_api,
+		toutiaoXcxMobile_api,
+		zfb_edit_info,
+		deviceStatusBySerial_api,
 		pauseAapi,
 	} from "../../api/index.js";
 	import {
@@ -249,15 +285,20 @@
 				hornItem: {},
 				longitude: '',
 				latitude: '',
+				pageType: '',
+				isLoopEnabled: false, // 循环播放开关
+				loopInterval: 30, // 循环间隔时长，默认5秒
 				showPrivacyPopup: false,
+				isLogin: false,
+				videoAd: null,
+				adShowCount: 0, // 初始化广告显示计数器
 			}
 		},
 		// 小程序显示分享
 		onShareAppMessage() {},
 		onShareTimeline() {},
 		onLoad(option) {
-			console.log('option', option)
-
+			//console.log('option', option)
 			this.dataList = []
 			this.page = 1
 			this.getDeviceGroup()
@@ -266,22 +307,32 @@
 				let paramobj = getQueryString(scene).key
 				this.loginQrCode(paramobj)
 			}
-
-
-
-
+			if (option.type) {
+				this.pageType = option.type
+				this.isQropen = false
+			}
+			if (this.pageType === 'phone') {
+				uni.setNavigationBarTitle({
+					title: '绑定手机号'
+				})
+				return
+			}
+			// 抖音小程序登录
+			// #ifdef MP-TOUTIAO
+			tt.checkSession({
+				success: () => {
+					this.isLogin = true
+				},
+			});
+			// #endif
 		},
 		onShow() {
-
-
-
 			// #ifdef MP-WEIXIN
 			// 在设置 showPrivacyPopup = true 后使用 $nextTick
-			console.log("wx.getPrivacySetting", wx.getPrivacySetting)
+			//console.log("wx.getPrivacySetting", wx.getPrivacySetting)
 			if (wx.getPrivacySetting) {
 				wx.getPrivacySetting({
 					success: (res) => {
-						console.log('打印', res)
 						if (res.needAuthorization) {
 							this.showPrivacyPopup = true;
 							this.$nextTick(() => {
@@ -293,7 +344,21 @@
 					},
 				});
 			}
-
+			let lastDate = wx.getStorageSync('lastUseDate');
+			let today = new Date().toLocaleDateString('zh-CN', {
+				timeZone: 'Asia/Shanghai',
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
+			}).replace(/\//g, '-'); // 获取当前日期，格式为 YYYY-MM-DD
+			console.log("today", today)
+			if (lastDate !== today) {
+				this.adShowCount = 0; // 如果不是同一天，则重置广告显示计数器
+				wx.setStorageSync('adShowCount', this.adShowCount); // 更新本地存储中的计数
+			} else {
+				this.adShowCount = wx.getStorageSync('adShowCount') || 0; // 如果是同一天，从本地存储恢复计数
+			}
+			wx.setStorageSync('lastUseDate', today); // 更新存储的日期
 			// #endif
 
 		},
@@ -306,6 +371,38 @@
 			ble.CloseBluetoothAdapter()
 			// #endif
 		},
+		mounted() {
+			// 如果本地存储中有值，则使用该值，否则使用默认值
+			this.tts = wx.getStorageSync('tts') !== '' ? wx.getStorageSync('tts') : '我是一个灵动声甜的云喇叭';
+			this.volume = wx.getStorageSync('volume') !== '' ? wx.getStorageSync('volume') : 5;
+			// 对于布尔值需要特别处理
+			this.isLoopEnabled = (wx.getStorageSync('isLoopEnabled') !== '') ? wx.getStorageSync('isLoopEnabled') :
+			true; // 默认为 true
+			this.loopInterval = wx.getStorageSync('loopInterval') !== '' ? wx.getStorageSync('loopInterval') : 30;
+			// #ifdef MP-WEIXIN
+			this.initVideoAd();
+			// #endif
+		},
+		watch: {
+			tts(newVal) {
+				wx.setStorageSync('tts', newVal);
+			},
+			volume(newVal) {
+				wx.setStorageSync('volume', newVal);
+			},
+			isLoopEnabled(newVal) {
+				wx.setStorageSync('isLoopEnabled', newVal);
+			},
+			loopInterval(newVal) {
+				wx.setStorageSync('loopInterval', newVal);
+			},
+			dataList(newVal) {
+				if (newVal && newVal.length > 0) {
+					this.fetchDeviceStatusBySerial();
+				}
+			}
+			// 其他监听...
+		},
 		methods: {
 			// 小程序扫码登录
 			async loginQrCode(key) {
@@ -313,9 +410,41 @@
 					key: key
 				})
 			},
-			async unlocking(item) {
+			showToast(msg) {
+				uni.showToast({
+					title: msg,
+					icon: 'error',
+					duration: 4000,
+					mask: true
+				})
+			},
+			cbindbutton() {
+				this.pageType = ''
+			},
+			itemClass(item) {
+				// 假设状态信息中有一个名为 'switch_state' 的字段
+				console.log("switch_state");
+				return 'fixed-class-name'; // 测试用固定类名
+			},
+			async fetchDeviceStatusBySerial() {
+				//console.log("for");
+				for (let item of this.dataList) {
+					let params = {
+						deviceSn: item.lock.lock_sn
+					};
+					let response = await deviceStatusBySerial_api(params); // 使用序列号请求状态
+					//console.log(response);
+					item.lock.switch_state = response.switch_state;
+					item.statusInfo = response;
+				}
+				//console.log(this.dataList);
+			},
+
+			async unlocking(item, index) {
 				// #ifdef MP-WEIXIN
-				await this.getLocation()
+				if (item.lock.location_check === 1) {
+					await this.getLocation()
+				}
 				// #endif
 
 				item.status = 2 // 2是开锁中的状态，改变钥匙按钮为灰色
@@ -323,17 +452,17 @@
 					title: '响应中...',
 					mask: true
 				})
-				this.openLock(item)
+				this.openLock(item, index)
 				this.$forceUpdate()
-					item.status = 1
+				item.status = 1
 			},
 			// 开锁
-			async openLock(item) {
-
-		
-			
+			async openLock(item, index) {
+				console.log("openLockitem", index)
 				// #ifdef MP-WEIXIN
-				await this.getLocation()
+				if (item.lock.location_check === 1) {
+					await this.getLocation()
+				}
 				// #endif
 				let res = await openLock_api({
 					lockauth_id: item.lockauth_id,
@@ -343,13 +472,25 @@
 				item.status = 1
 				uni.hideLoading()
 				if (res.code === 0) {
+					await this.refreshDeviceList(index);
 					if (res.data.xcx_sound == 1) {
 						await lockServer.OpenLockMp3()
 					}
 
 					uni.showToast({
 						title: res.msg,
+						duration: 5000
 					})
+					// #ifdef MP-WEIXIN
+					if (item.lock.qrshowminiad === 1 && this.adShowCount < 2) {
+						console.log("showAd")
+						this.showAd()
+					}
+					// #endif
+				} else if (res.code === 1001) {
+					console.log("bindphone")
+					this.pageType = 'phone'
+					uni.hideLoading()
 				} else {
 					if (res.msg == "设备不在线") {
 						await this.offline(item)
@@ -364,10 +505,15 @@
 				}
 				this.$forceUpdate()
 			},
+			toggleLoop(event) {
+				this.isLoopEnabled = event.mp.detail.value;
+				// 保存新状态到本地存储
+				wx.setStorageSync('isLoopEnabled', this.isLoopEnabled.toString());
+				// console.log("循环播放开关状态变为：", this.isLoopEnabled);
+			},
 			// 开/关动作
 			onSwitch(item) {
-				console.log(item)
-
+				//console.log(item)
 				uni.showActionSheet({
 					itemList: ['开', '关'],
 					success: async (msg) => {
@@ -424,7 +570,7 @@
 				});
 			},
 			onSwitchLock(item) {
-				console.log(item)
+				//console.log(item)
 				item.status = 2 // 2是开锁中的状态，改变钥匙按钮为灰色
 				this.$forceUpdate()
 
@@ -503,7 +649,7 @@
 						item.status = 1
 						item.lock.switch_state = 0
 						uni.hideLoading()
-						console.log(123)
+						//console.log(123)
 						this.$forceUpdate()
 					},
 				});
@@ -511,25 +657,14 @@
 			},
 			// 播放
 			onPlay(item) {
+				this.tts = item.lock.openttscontent || '请输入播放内容';
 				this.showHornBox = true
 				this.hornItem = item
+				this.isLoopEnabled = wx.getStorageSync('isLoopEnabled')
+				console.log(item)
 			},
 			// 立即播放
 			async playhorn() {
-				if (!this.tts) {
-					uni.showToast({
-						title: '请输入播放内容',
-						icon: 'none',
-					})
-					return
-				}
-				if (!this.volume) {
-					uni.showToast({
-						title: '请输入播放音量',
-						icon: 'none',
-					})
-					return
-				}
 				this.hornItem.status = 2
 				this.$forceUpdate()
 				uni.showLoading({
@@ -540,8 +675,11 @@
 					lockauth_id: this.hornItem.lockauth_id,
 					volume: this.volume,
 					tts: this.tts,
+					stopplay: false,
 					longitude: this.longitude,
-					latitude: this.latitude
+					latitude: this.latitude,
+					isLoopEnabled: this.isLoopEnabled,
+					loopInterval: this.loopInterval
 				})
 				if (res.code === 0) {
 					this.hornItem.status = 1
@@ -551,7 +689,38 @@
 						title: '播放成功',
 						icon: 'none',
 					})
-					this.tts = ''
+
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'none',
+					})
+				}
+			},
+			// 立即播放
+			async stophorn() {
+				this.hornItem.status = 2
+				this.$forceUpdate()
+				uni.showLoading({
+					title: '加载中...',
+					mask: true
+				})
+				let res = await playHorn_api({
+					lockauth_id: this.hornItem.lockauth_id,
+					volume: this.volume,
+					tts: this.tts,
+					stopplay: true,
+					isLoopEnabled: this.isLoopEnabled,
+					loopInterval: this.loopInterval
+				})
+				if (res.code === 0) {
+					this.hornItem.status = 1
+					this.$forceUpdate();
+					this.showHornBox = false
+					uni.showToast({
+						title: '操作成功',
+						icon: 'none',
+					})
 
 				} else {
 					uni.showToast({
@@ -571,17 +740,49 @@
 				this.set_index = -1
 			},
 			login() {
+				// 微信小程序登录
+				// #ifdef MP-WEIXIN
 				uni.login({
 					provider: 'weixin',
 					success: async (loginRes) => {
 						let res = await wechatoauth_api({
 							code: loginRes.code
-						})
+						});
 						if (res.code === 0) {
-							setToken(res.data.token)
+							setToken(res.data.token);
 						}
 					}
-				})
+				});
+				// #endif
+
+				// 支付宝小程序登录
+				// #ifdef MP-ALIPAY
+				uni.login({
+					scopes: 'auth_base',
+					success: async (loginRes) => {
+						let res = await alipayoauth_api({
+							code: loginRes.authCode
+						});
+						if (res.code === 0) {
+							setToken(res.data.token);
+						}
+					}
+				});
+				// #endif
+
+				// 抖音小程序登录
+				// #ifdef MP-TOUTIAO
+				uni.login({
+					success: async (loginRes) => {
+						let res = await toutiaoauth_api({
+							code: loginRes.code
+						});
+						if (res.code === 0) {
+							setToken(res.data.token);
+						}
+					}
+				});
+				// #endif
 			},
 			async getDeviceGroup() {
 				let res = await getDeviceGroup_api()
@@ -621,6 +822,28 @@
 					})
 				}
 			},
+			async refreshDeviceList(index) {
+				let lparams = {
+					page: this.page,
+					limit: 10,
+					device_group_id: this.grouping_index
+				};
+				let res = await deviceList_api(lparams);
+
+				if (res.code === 0 && res.data && res.data[index] && res.data[index].auth_openlimit) {
+					//console.log("this.dataList：", this.dataList[index].auth_limit)
+					//console.log("res.data：", res.data)
+					this.dataList[index].auth_limit = res.data[index].auth_limit
+					//this.dataList = res.data; // 假设返回的整个设备列表直接赋给dataList
+					//this.$forceUpdate(); // 强制Vue更新视图
+				} else {
+					uni.showToast({
+						title: '刷新数据失败',
+						icon: 'none',
+					});
+				}
+
+			},
 			changeGrouping(item) {
 				this.grouping_index = item.device_group_id;
 				this.device_group_name = item.device_group_name;
@@ -642,12 +865,12 @@
 				this.showMask = true
 			},
 			async offline(DeviceInfo) {
-				console.log("DeviceInfo：", DeviceInfo)
-			
+				//console.log("DeviceInfo：", DeviceInfo)
+
 				if (DeviceInfo.lock.lock_sn.indexOf('WMJ62') > -1 || DeviceInfo.lock.lock_sn.indexOf('W76') > -1) {
 					let OpenBluetoothAdapterRes = await ble.OpenBluetoothAdapter()
-					console.log("OpenBluetoothAdapterRes：", OpenBluetoothAdapterRes)
-					if(OpenBluetoothAdapterRes.err){
+					//console.log("OpenBluetoothAdapterRes：", OpenBluetoothAdapterRes)
+					if (OpenBluetoothAdapterRes.err) {
 						uni.showToast({
 							title: OpenBluetoothAdapterRes.err,
 							icon: 'none',
@@ -702,6 +925,110 @@
 					url: '/pages/share/share?lockauth_id=' + item.lockauth_id
 				})
 			},
+			async getphonenumber(e) {
+				// #ifdef MP-TOUTIAO
+				if (this.isLogin) {
+					if (e.detail.errMsg.slice(-2) === "ok") {
+						// 处理加密手机号数据
+						console.log("获取手机号的加密数据成功: ", e);
+						tt.showToast({
+							title: "success",
+						});
+						// 这里添加发送加密数据到后端的代码
+					} else {
+						console.log("获取手机号的加密数据失败: ", e);
+						tt.showToast({
+							title: "获取手机号失败",
+							icon: "none",
+						});
+					}
+				} else {
+					tt.showToast({
+						title: "请先登录",
+						icon: "none",
+					});
+				}
+				// #endif
+				// #ifdef MP-ALIPAY
+				my.getPhoneNumber({
+					success: (res) => {
+						zfbXcxMobile_api(res.response).then(res1 => {
+							if (res1.code == 10000) {
+								uni.hideLoading()
+								zfb_edit_info({
+									mobile: res1.mobile
+								}).then(info => {
+
+								})
+								if (this.isQropen) {
+									this.qrOpenLock()
+								} else {
+									this.showToast('绑定成功')
+									let timer = setTimeout(() => {
+										uni.navigateBack({
+											delta: 1,
+										})
+										this.pageType = ''
+										clearTimeout(timer)
+									}, 1000)
+
+								}
+							} else {
+								this.showToast(res1.msg)
+								uni.hideLoading()
+							}
+						})
+
+					}
+				})
+				// #endif
+				// #ifdef MP-WEIXIN
+				uni.login({
+					provider: 'weixin',
+					success: async loginRes => {
+						//console.log('e', e)
+						//console.log('loginRes', loginRes)
+						if (e.detail.iv && e.detail.encryptedData) {
+							uni.showLoading({
+								title: '加载中...',
+								mask: true
+							})
+							let res = await wxXcxMobile_api({
+								code: e.detail.code
+							});
+							if (res.code === 0) {
+								uni.hideLoading()
+								if (this.isQropen) {
+									this.qrOpenLock()
+								} else {
+									this.showToast('绑定成功')
+									let timer = setTimeout(() => {
+										uni.navigateBack({
+											delta: 1,
+
+										})
+										this.pageType = ''
+										clearTimeout(timer)
+									}, 1000)
+
+								}
+							} else {
+								this.showToast(res.msg)
+								uni.hideLoading()
+							}
+						}
+					},
+					fail: err => {
+						uni.showToast({
+							title: '错误信息：' + err,
+							icon: 'none'
+						});
+					}
+				});
+
+				// #endif
+
+			},
 			getLocation() {
 
 				if (this.latitude) {
@@ -726,7 +1053,7 @@
 										}
 									});
 								} else {
-									console.log('取消');
+									//console.log('取消');
 									return false;
 								}
 							},
@@ -742,7 +1069,7 @@
 				uni.getLocation({
 					type: 'gcj02',
 					success: res => {
-						console.log('地址', res)
+						//console.log('地址', res)
 						this.latitude = res.latitude
 						this.longitude = res.longitude
 						uni.setStorageSync('location', {
@@ -751,7 +1078,7 @@
 						})
 					},
 					fail: function(err) {
-						console.log(err);
+						//console.log(err);
 					}
 				});
 			},
@@ -785,7 +1112,93 @@
 					}
 				})
 
-			}
+			},
+			// #ifdef MP-WEIXIN
+			initVideoAd() {
+				if (wx.createRewardedVideoAd) {
+					// 创建激励视频广告实例
+					this.videoAd = wx.createRewardedVideoAd({
+						adUnitId: 'adunit-02222114b9baeb78',
+					});
+
+					// 广告加载成功
+					this.videoAd.onLoad(() => {
+						console.log('广告加载成功');
+						//this.adLog('index', 'load',30, true, '广告加载成功'); // 记录广告加载成功
+					});
+
+					// 广告加载失败
+					this.videoAd.onError((err) => {
+						console.error('激励视频广告加载失败', err);
+						this.adLog('index', 'error', 30, false, `广告加载失败: ${err.message}`, 0); // 记录广告加载失败
+					});
+
+					// 用户关闭广告
+					this.videoAd.onClose((res) => {
+						// 处理用户看完广告和关闭广告的逻辑
+						if (res && res.isEnded) {
+							// 用户完整观看广告
+							console.log('用户完整观看广告');
+							this.adLog('index', 'close', 30, true, '用户完整观看广告', 1); // 记录用户完整观看广告
+						} else {
+							// 用户提前关闭广告
+							console.log('用户提前关闭广告');
+							this.adLog('index', 'close', 30, false, '用户提前关闭广告', 0); // 记录用户提前关闭广告
+						}
+					});
+				}
+			},
+			showAd() {
+				// 展示激励视频广告
+				if (this.videoAd) {
+					this.videoAd.show().then(() => {
+						// 广告展示成功，记录成功日志
+						console.log('激励视频广告展示成功');
+						this.adShowCount += 1; // 增加广告显示次数
+						this.adLog('index', 'show', 30, true, '激励视频广告展示成功', 0); // 请替换'member_id'与实际的会员ID或其他标识符
+						wx.setStorageSync('adShowCount', this.adShowCount); // 将计数保存到本地存储
+					}).catch((err) => {
+						// 展示失败，尝试重新加载广告
+						console.error('激励视频广告加载失败，尝试重新加载', err);
+						this.adLog('index', 'load_fail', 30, false, '激励视频广告加载失败，尝试重新加载',
+						0); // 记录加载失败的日志，替换'member_id'
+						this.videoAd.load().then(() => {
+							this.videoAd.show().then(() => {
+								// 重新加载后广告展示成功，记录成功日志
+								console.log('激励视频广告重新加载后展示成功');
+								this.adLog('index', 'reload_show', 30, true, '激励视频广告重新加载后展示成功',
+								0); // 请替换'member_id'
+							}).catch(err => {
+								// 重新加载后依然失败，记录失败日志
+								console.error('激励视频广告重新加载后展示失败', err);
+								this.adLog('index', 'reload_fail', 30, false, '激励视频广告重新加载后展示失败',
+								0); // 请替换'member_id'
+							});
+						}).catch(err => {
+							// 重新加载失败，记录失败日志
+							console.error('激励视频广告重新加载失败', err);
+							this.adLog('index', 'reload_fail', 30, false, '激励视频广告重新加载失败',
+							0); // 请替换'member_id'
+						});
+					});
+				}
+			},
+			adLog(adlog_page, adlog_type, adlog_adtime, adlog_result, adlog_msg, adlog_points) {
+				// 调用 adlog_api 接口
+				adlog_api({
+					adlog_page: adlog_page,
+					adlog_type: adlog_type,
+					adlog_adtime: adlog_adtime,
+					adlog_result: adlog_result,
+					adlog_msg: adlog_msg,
+					adlog_points: adlog_points,
+				}).then(res => {
+					console.log('广告日志记录成功', res);
+				}).catch(err => {
+					console.error('广告日志记录失败', err);
+				});
+			},
+			// #endif
 		},
 		onReachBottom() {
 			if (this.noMore === 'noMore' || this.noMore === 'nodata') {

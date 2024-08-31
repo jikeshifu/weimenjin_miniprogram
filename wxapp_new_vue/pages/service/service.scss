@@ -13,25 +13,33 @@
 		left: 0;
 	}
 	.content {
-		position: relative;
-		z-index: 10;
 		display: flex;
-		align-items: center;
+		flex-wrap: wrap;
+		justify-content: flex-start;
 	}
 	.cell-box {
-		padding: 36rpx 40rpx;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		.iconfont {
-			font-size: 70rpx;
-			color: #21CF3E;
-		}
-		.text {
-			font-size: 28rpx;
-			margin-top: 6rpx;
-			color: #888;
-		}
+	    width: 25%;
+	    box-sizing: border-box;
+	    padding: 25rpx 29rpx;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center; /* 水平居中 */
+	    justify-content: flex-start;
+	
+	    .iconfont {
+	      font-size: 70rpx;
+	      color: #21CF3E;
+	    }
+	
+	    .text {
+	      font-size: 28rpx;
+	      margin-top: 6rpx;
+	      color: #888;
+	    }
+	  }
 	}
+.icon-image {
+  width: 48px;
+  height: 48px;
+  object-fit: contain; /* 确保图像不会失真 */
 }

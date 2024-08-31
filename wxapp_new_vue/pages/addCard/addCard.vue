@@ -70,19 +70,34 @@
 		onShareAppMessage() {},
 		onShareTimeline() {},
 		onLoad(option) {
-			this.formData.lock_id = option.lock_id
-			if (option.item) {
-				this.isEdit = true
-				let item = JSON.parse(decodeURIComponent(option.item));
-				this.formData = {
-					lock_id: item.lock_id,
-					lockcard_username: item.lockcard_username,
-					lockcard_sn: item.lockcard_sn,
-					lockcard_endtime: item.lockcard_endtime,
-					lockcard_remark: item.lockcard_remark,
-					lockcard_id: item.lockcard_id
-				}
-			}
+		    this.formData.lock_id = option.lock_id;
+		    if (option.item) {
+		        this.isEdit = true;
+		        let item = JSON.parse(decodeURIComponent(option.item));
+		        this.formData = {
+		            lock_id: item.lock_id,
+		            lockcard_username: item.lockcard_username,
+		            lockcard_sn: item.lockcard_sn,
+		            lockcard_endtime: item.lockcard_endtime,
+		            lockcard_remark: item.lockcard_remark,
+		            lockcard_id: item.lockcard_id
+		        };
+		        // 使用编辑项的过期时间初始化dateTimeValue
+		        this.dateTimeValue = item.lockcard_endtime * 1000; // 转换为毫秒
+		    } else {
+		        // 添加操作，设置过期时间为2年后
+		        const twoYearsLater = new Date();
+		        twoYearsLater.setFullYear(twoYearsLater.getFullYear() + 2);
+		        const twoYearsLaterTimestamp = Math.trunc(twoYearsLater.getTime() / 1000);
+		        this.formData.lockcard_endtime = twoYearsLaterTimestamp;
+		        this.dateTimeValue = twoYearsLater.getTime(); // 不需要转换，直接使用毫秒
+		    }
+		},
+		confirm(e) {
+		    // 用户选择的新日期时间戳（秒）
+		    this.formData.lockcard_endtime = Math.trunc(e.value / 1000);
+		    // 同步更新dateTimeValue，以保证与用户选择的日期一致
+		    this.dateTimeValue = e.value;
 		},
 		methods: {
 			async onSubmit() {

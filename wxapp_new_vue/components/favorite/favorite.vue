@@ -123,7 +123,7 @@ export default {
 				var obj = this.list[i].options[0];
 				if (obj.id == index) {
 					obj.check = !obj.check;
-					console.log(this.num)
+					//console.log(this.num)
 					if (obj.check == false) {
 						//如果有条数据没选择，就取消全选
 						this.flag = false;

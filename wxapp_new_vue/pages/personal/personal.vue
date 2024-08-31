@@ -3,16 +3,19 @@
 		<view class="background"></view>
 		<view class="content" :style="{ position:  showAuthorizationModal ? 'fixed' : 'relative', top: showAuthorizationModal ? scrollTop : ''  }">
 			<view class="user-box">
-				<image :src="userInfo.headimgurl | imgPath" class="user-img"></image>
-				<view class="user-name">{{ userInfo.nickname }}</view>
+			  <image :src="userInfo.headimgurl | imgPath" class="user-img"></image>
+			  <view class="user-name">{{ userInfo.nickname }}{{ userInfo.nickname ? ',' : '' }}<span class="points"> 积分:{{ points }}</span>
+			  <!-- 当日统计信息的条件渲染 -->
+			  <span v-if="userInfo.member_id === 1" class="daily-stats"> 当日统计: {{ countshow }},{{ countcomplete }} </span>
+			  </view>
 			</view>
-			<view class="renew" @click="showAuthorizationModal = true">更新</view>
+			<view class="renew" @click="showAuthorizationModal = true">更新头像和昵称</view>
 			<view class="cell-box" @click="goPage('/pages/operateList/operateList')">
 				<view class="label">我的操作记录</view>
 				<image src="../../static/jiantouyou.png"></image>
 			</view>
 			<view class="cell-box" @click="goDetail('/pages/member/account')">
-				<view class="label">账号管理</view>
+				<view class="label">后台账号</view>
 				<image src="../../static/jiantouyou.png"></image>
 			</view>
 			<view class="cell-box" @click="goPage('/pages/addEquipment/addEquipment')">
@@ -51,8 +54,12 @@
 				<view class="label">sim卡查询</view>
 				<image src="../../static/jiantouyou.png"></image>
 			</view>
-			<view class="cell-box" @click="goDetail('/pages/open/open?user_id=1&lock_id=2317&isscan=1')">
+			<view class="cell-box" @click="goDetail('/pages/open/open?user_id=1&lock_id=2&isscan=1')">
 				<view class="label">开门演示</view>
+				<image src="../../static/jiantouyou.png"></image>
+			</view>
+			<view class="cell-box" @click="clearCacheAndReload">
+				<view class="label">清除缓存</view>
 				<image src="../../static/jiantouyou.png"></image>
 			</view>
 		</view>
@@ -65,6 +72,7 @@
 	import TnuiWxUserInfo from '@/components/uni-dateformat/components/uni-dateformat/uni-dateformat.vue';
 	import {
 		userInfo_api,
+		adlog_getpointsapi,
 		editMember_api
 	} from '../../api/index.js'
 	import { imgPath } from '@/libs/filters.js'
@@ -76,6 +84,9 @@
 			return {
 				showAuthorizationModal: false,
 				userInfo: {},
+				points: 0,
+				countshow: 0,
+				countcomplete: 0,
 				scrollTop: ''
 			}
 		},
@@ -88,13 +99,18 @@
 		onShareAppMessage() {},
 		onShareTimeline() {},
 		onShow() {
-			this.getUserInfo()
+			this.getUserInfo();
+			this.loadPoints();
 		},
+		mounted() {
+		        this.loadPoints(); // 组件挂载后加载积分
+		    },
 		methods: {
 			async getUserInfo() {
 				let res = await userInfo_api()
 				if (res.code === 0) {
 					this.userInfo = res.data
+					console.log("userInfo",this.userInfo)
 				}
 			},
 			goPage(url) {
@@ -102,8 +118,33 @@
 					url: url
 				})
 			},
+			clearCacheAndReload() {
+					uni.clearStorageSync(); // Clears all data in the local storage
+					uni.showToast({
+						title: '缓存清除成功',
+						icon: 'success',
+						duration: 2000,
+						complete: () => {
+							setTimeout(() => {
+								uni.reLaunch({
+									url: '/pages/index/index' // Adjust this URL to your main page or the page you want to reload
+								});
+							}, 2000); // Wait for the toast to finish before reloading
+						}
+					});
+				},
+			async loadPoints() {
+			            try {
+			                let response = await adlog_getpointsapi()
+			                this.points = response.points; // 更新积分
+							this.countshow = response.countshow; // 更新积分
+							this.countcomplete = response.countcomplete; // 更新积分
+			            } catch (error) {
+			                console.error('加载积分失败', error);
+			            }
+			        },
 			async updatedUserInfoEvent(info) {
-				console.log(info)
+				//console.log(info)
 				// editMember_api
 				uni.showLoading({
 					title: '加载中...',

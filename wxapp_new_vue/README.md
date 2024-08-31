@@ -1,2 +1,4 @@
-#微门禁小程序最新vue版本源代码，基于uni-app
+#wmj-xcx
 
+	url = https://e.coding.net/zyxt/weimenjin/wmj_xcx_new.git
+	url = https://e.coding.net/hyqyt/zhiyunxintong/wmj-xcx.git

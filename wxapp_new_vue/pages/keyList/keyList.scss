@@ -109,17 +109,30 @@
 					border-radius: 50%;
 				}
 				.user-info {
-					margin-left: 22rpx;
-					.user-name {
-						font-size: 28rpx;
-						color: #21CF3E;
-						font-weight: 500;
+				    display: flex;
+				    flex-wrap: wrap; // 允许内容换行以适应两列布局
+				    margin-left: 22rpx;
+				    .info-row {
+				        display: flex;
+				        flex-direction: column; // 使info-row的内容垂直排列
+				    }
+					.info-row:first-child {
+					        
+					    }
+					
+					.info-row:last-child {
+						width: 40%; // 第二列占40%
 					}
-					.phone {
-						margin-top: 10rpx;
-						font-size: 28rpx;
-						color: #999999;
-					}
+				    .user-name, .user-starttime, .user-endtime, .phone {
+				        font-size: 28rpx;
+				    }
+				    .user-name {
+				        color: #21CF3E;
+				        font-weight: 500;
+				    }
+				    .phone {
+				        color: #999999;
+				    }
 				}
 			}
 			.right-box {

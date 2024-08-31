@@ -4,7 +4,9 @@
 		<view class="content">
 			<view :class="['top-box', scrollTop > 10 ? 'top-box-active' : '']">
 				<view class="tab-list">
-					<view :class="['tab-item', tabIndex === index ? 'tab-item-on' : '']" v-for="(item, index) in tabList" :key="index" @click="clickTab(index)">{{ item }}</view>
+				    <view :class="['tab-item', tabIndex === index ? 'tab-item-on' : '']" v-for="(item, index) in tabList" :key="index" @click="clickTab(index)">
+				        {{ item.name }} <template v-if="item.count">{{ `(${item.count})` }}</template>
+				    </view>
 				</view>
 				<view class="search-box">
 					<image src="../../static/sousuo.png"></image>
@@ -17,9 +19,15 @@
 						<image :src="item.headimgurl | imgPath" class="user-img" v-if="item.headimgurl"></image>
 						<image src="../../static/moren.png" class="user-img" v-else></image>
 						<view class="user-info">
-							<view class="user-name">{{ item.nickname }}({{item.aremark}})</view>
-							<view class="phone" v-if="item.mobile">{{ item.mobile.replace(/^(.{3})(?:\d+)(.{4})$/,"$1****$2") }}</view>
+						    <view class="info-row">
+						        <view class="user-name">{{ item.nickname }}({{item.aremark}})</view>
+								<view class="phone" v-if="item.mobile">{{ item.mobile.replace(/^(.{3})(?:\d+)(.{4})$/,"$1****$2") }}</view>
+						    </view>
+						    <view class="info-row">
+						        <view class="user-starttime">{{ formatTimestamp(item.auth_endtime) }}</view>
+						    </view>
 						</view>
+
 					</view>
 					<view class="right-box">
 						<!-- <view class="add-btn" @click="goPage('/pages/addCard/addCard')">添加卡</view> -->
@@ -39,7 +47,10 @@ import { imgPath } from '@/libs/filters.js'
 export default {
 	data() {
 		return {
-			tabList: ['待审核', '已通过'],
+			tabList: [
+			            { name: '待审核', count: 0 },
+			            { name: '已通过', count: 0 }
+			        ],
 			tabIndex: 0,
 			scrollTop: 0,
 			lockauth_id: '',
@@ -77,7 +88,11 @@ export default {
 			};
 			let res = await LockAuthList_api(params);
 			this.groupInfo = res.data.info
-		
+			if(this.tabIndex === 0) { // 待审核
+			        this.tabList[0].count = res.count;
+			    } else if(this.tabIndex === 1) { // 已通过
+			        this.tabList[1].count = res.count;
+			    }
 			if (this.page !== 1 && !res.data.length) {
 				this.noMore = 'noMore';
 				return;
@@ -109,7 +124,21 @@ export default {
 			uni.navigateTo({
 				url: url
 			})
-		}
+		},
+		formatTimestamp(timestamp) {
+		        // 检查时间戳是否为空、为0或其他非法值
+		        if (!timestamp || timestamp === 0) {
+		            return ''; // 返回空字符串或者你想要的占位符
+		        }
+		        const date = new Date(timestamp * 1000); // 确保时间戳是以毫秒为单位
+		        const year = date.getFullYear();
+		        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+		        const day = ('0' + date.getDate()).slice(-2);
+		        const hours = ('0' + date.getHours()).slice(-2);
+		        const minutes = ('0' + date.getMinutes()).slice(-2);
+		        const seconds = ('0' + date.getSeconds()).slice(-2);
+		        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+		    }
 	},
 	onReachBottom() {
 		if (this.noMore === 'noMore' || this.noMore === 'nodata') {

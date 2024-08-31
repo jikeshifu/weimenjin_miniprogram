@@ -14,17 +14,18 @@
 				</view>
 
 			</view>
-			<view class="bottom-box">
-				<view class="bottom-btn" @click="hotspotSet()">生成热点名称</view>
-			</view>
-
 			<view class="explain">
 				<view class="text">热点名称:{{hotspot}}</view>
-				<view class="text">1.填入路由器的信号名称和密码</view>
-				<view class="text">2.请将生成的内容设置为热点名称并开启热点</view>
-				<view class="text">3.设备进入配网模式</view>
-				<view class="text">4.重启设备即可配置成功</view>
-				<view class="text">注：iPhone的热点名称在设置-通用-关于本机-名称</view>
+			</view>
+			<view class="bottom-box">
+				<view class="bottom-btn" @click="hotspotSet()">生成热点名称</view>
+				<view class="bottom-btn" v-if="hotspot" @click="copyHotspot()">复制热点名称</view>
+			</view>
+			<view class="explain">
+				<view class="text">1.复制生成的热点名称设置为手机热点并开启</view>
+				<view class="text">2.重启设备即可配置成功</view>
+				<view class="text">注：iPhone的热点名称在设置-通用-关于本机-名称,</view>
+				<view class="text">W89型号的WiFi锁需进入配网模式。</view>
 			</view>
 		</view>
 
@@ -92,7 +93,30 @@
 					}
 				})
 			},
-
+			// 新增复制热点名称到剪贴板的方法
+			copyHotspot() {
+				if (this.hotspot) {
+					wx.setClipboardData({
+						data: this.hotspot,
+						success(res) {
+							wx.showToast({
+								title: "复制成功",
+								icon: 'none',
+								mask: true, // 防止触摸穿透
+								duration: 2000
+							});
+						},
+						fail() {
+							wx.showToast({
+								title: "复制失败",
+								icon: 'none',
+								mask: true,
+								duration: 2000
+							});
+						}
+					});
+				}
+			},
 		}
 	}
 </script>

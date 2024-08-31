@@ -13,7 +13,12 @@
 				<view class="item" v-for="(item, index) in dataList" :key="index">
 					<view class="left-box">
 						<view class="user-info">
-							<view class="user-name">{{ item.lockcard_username }}</view>
+							<view class="user-name">
+							  <template v-if="item.lockcard_username || item.lockcard_remark">
+							    {{ item.lockcard_username }}<template v-if="item.lockcard_remark"> ({{ item.lockcard_remark }})</template>
+							  </template>
+							  <template v-else>未实名</template>
+							</view>
 							<view class="phone">卡号：{{ item.lockcard_sn }}</view>
 						</view>
 					</view>

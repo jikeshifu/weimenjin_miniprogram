@@ -1,10 +1,23 @@
 <template>
 	<view class="big-box">
-		<web-view src="https://doc.wmj.com.cn/1/page/19"></web-view>
+		<web-view :src="url"></web-view>
 	</view>
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				url: '',
+			}
+		},
+		onLoad(option) {
+			this.url= option.url
+		},
+		methods: {
+
+		},
+	}
 </script>
 
 <style scoped>

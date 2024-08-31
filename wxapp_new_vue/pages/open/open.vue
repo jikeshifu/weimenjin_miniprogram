@@ -21,7 +21,7 @@
 			<block v-if="pageType === 'phone'">
 				<view class="bindPhone">
 					<button type="primary" class="btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber"
-						hover-class="none">绑定手机号</button>
+						hover-class="none" >绑定手机号</button>
 				</view>
 			</block>
 
@@ -59,6 +59,7 @@
 		wxXcxMobile_api,
 		zfbXcxMobile_api,
 		zfb_edit_info,
+		adlog_api,
 		applyAuth_api
 	} from '../../api/index.js';
 	export default {
@@ -74,7 +75,10 @@
 				aremark: '',
 				successimg: '',
 				latitude: '',
-				longitude: ''
+				longitude: '',
+				isLogin:false,
+				videoAd: null,
+				adShowCount: 0, // 初始化广告显示计数器
 			}
 		},
 		onShareAppMessage() {},
@@ -88,8 +92,8 @@
 			if (option.q) {
 				let scene = decodeURIComponent(option.q) // 使用decodeURIComponent解析  获取当前二维码的网址
 				let paramobj = getQueryString(scene).lock_id
-				console.log(getQueryString(scene))
-				console.log(paramobj)
+				//console.log(getQueryString(scene))
+				//console.log(paramobj)
 				this.lock_id = paramobj
 			}
 			// #endif
@@ -102,11 +106,7 @@
 			// #endif
 
 
-			console.log('option', option)
-
-
-
-
+			//console.log('option', option)
 			// 从‘我的-绑定手机号进入’
 			if (option.type) {
 				this.pageType = option.type
@@ -119,8 +119,30 @@
 				})
 				return
 			}
-
+			// 抖音小程序登录
+			// #ifdef MP-TOUTIAO
+			tt.checkSession({
+			      success: () => {
+			      this.isLogin = true
+			      },
+			    });
+			// #endif
 			this.getLocation()
+		},
+		mounted() {
+		// 如果本地存储中有值，则使用该值，否则使用默认值
+		// #ifdef MP-WEIXIN
+		this.initVideoAd();
+		let lastDate = wx.getStorageSync('lastUseDate');
+		let today = new Date().toLocaleDateString('zh-CN', {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit'}).replace(/\//g, '-');  // 获取当前日期，格式为 YYYY-MM-DD
+		if (lastDate !== today) {
+		    this.adShowCount = 0; // 如果不是同一天，则重置广告显示计数器
+		    wx.setStorageSync('adShowCount', this.adShowCount); // 更新本地存储中的计数
+		  } else {
+		    this.adShowCount = wx.getStorageSync('adShowCount') || 0; // 如果是同一天，从本地存储恢复计数
+		  }
+		wx.setStorageSync('lastUseDate', today); // 更新存储的日期
+		// #endif
 		},
 		methods: {
 			async qrOpenLock() {
@@ -132,26 +154,29 @@
 					latitude: this.latitude,
 					longitude: this.longitude
 				})
-				if (res.code === 0) 
-				{
-					if (res.data.xcx_sound == 1) {
-						await lockServer.OpenLockMp3()
-					}
-
-					if (res.data.successimg) {
-						this.pageType = 'succeed'
-						this.successimg = res.data.successimg
-					} else {
-						this.showToast(res.msg)
-						let timer = setTimeout(() => {
-							uni.switchTab({
-								url: '/pages/index/index'
-							})
-							clearTimeout(timer)
-						}, 3000)
-					}
-					uni.hideLoading() 
-				} 
+				uni.hideLoading()
+				if (res.code === 0) {
+				  if (res.data.xcx_sound == 1) {
+				    await lockServer.OpenLockMp3()
+				    console.log("OpenLockMp3：")
+				  }
+				  if (res.data.successimg) {
+				    this.pageType = 'succeed'
+				    this.successimg = res.data.successimg
+				  }
+				  uni.showToast({
+				    title: res.msg,
+				    duration: 8000
+				  })
+				  // #ifdef MP-WEIXIN
+				  console.log("res.data：",res.data)
+				if (res.data.qrshowminiad === 1 && this.adShowCount < 2) {
+					setTimeout(() => {
+						this.showAd()
+					}, 2000) // 延迟2秒执行showAd
+				}
+				// #endif
+				}
 				else if (res.code === 1001) 
 				{
 					this.pageType = 'phone'
@@ -160,12 +185,16 @@
 				{
 					this.pageType = 'apply'
 					uni.hideLoading()
+				}  else if (res.code === 1004) 
+				{
+					this.pageType = 'toutiao'
+					uni.hideLoading()
 				} else if (res.code === 1003) 
 				{
-					console.log("DeviceInfo：", res)
+					//console.log("DeviceInfo：", res)
 
 					let DeviceInfo = res.data
-						console.log("DeviceInfo：", DeviceInfo)
+						//console.log("DeviceInfo：", DeviceInfo)
 					if (DeviceInfo.lock_sn.indexOf('WMJ62') > -1 || DeviceInfo.lock_sn.indexOf('W76') > -1) {
 						let OpenBluetoothAdapterRes = await ble.OpenBluetoothAdapter()
 
@@ -244,6 +273,29 @@
 				}
 			},
 			async getphonenumber(e) {
+				// #ifdef MP-TOUTIAO
+				if (this.isLogin) {
+				      if (e.detail.errMsg.slice(-2) === "ok") {
+				        // 处理加密手机号数据
+				        console.log("获取手机号的加密数据成功: ", e);
+				        tt.showToast({
+				          title: "success",
+				        });
+				        // 这里添加发送加密数据到后端的代码
+				      } else {
+				        console.log("获取手机号的加密数据失败: ", e);
+				        tt.showToast({
+				          title: "获取手机号失败",
+				          icon: "none",
+				        });
+				      }
+				    } else {
+				      tt.showToast({
+				        title: "请先登录",
+				        icon: "none",
+				      });
+				    }
+				// #endif
 				// #ifdef MP-ALIPAY
 				my.getPhoneNumber({
 					success: (res) => {
@@ -280,8 +332,8 @@
 				uni.login({
 					provider: 'weixin',
 					success: async loginRes => {
-						console.log('e', e)
-						console.log('loginRes', loginRes)
+						//console.log('e', e)
+						//console.log('loginRes', loginRes)
 						if (e.detail.iv && e.detail.encryptedData) {
 							uni.showLoading({
 								title: '加载中...',
@@ -321,42 +373,63 @@
 				// #endif
 			},
 			getLocation() {
-				// #ifdef MP-ALIPAY
-				this.getAddress();
-				return;
-				// #endif
-				let that = this;
-				uni.authorize({
-					scope: 'scope.userLocation',
-					success() {
-						that.getAddress()
-					},
-					fail() {
-						uni.showModal({
-							content: '设备需要获取您的位置，是否去打开？',
-							confirmText: '确认',
-							cancelText: '取消',
-							success: msg => {
-								if (msg.confirm) {
-									uni.openSetting({
-										success: v => {
-											that.getAddress()
-										}
-									});
-								} else {
-									uni.switchTab({
-										url: '/pages/index/index'
-									})
-									return false;
-								}
-							},
-							fail: err => {}
-						});
-						return false;
-					}
-				});
-			},
-
+			    let that = this;
+			
+			    // 支付宝小程序
+			    //#ifdef MP-ALIPAY
+			    this.getAddress(); // 假设getAddress是获取地理位置信息的方法
+			    return;
+			    //#endif
+			
+			    // 微信和抖音小程序通用授权逻辑
+			    const getAuth = (platform) => {
+			      const showModal = (content) => {
+			        uni.showModal({
+			          title: '需要授权', // 抖音小程序需要显示标题
+			          content: content,
+			          confirmText: '确认',
+			          cancelText: '取消',
+			          success: (res) => {
+			            if (res.confirm) {
+			              uni.openSetting({
+			                success: (settingData) => {
+			                  if (platform === 'MP-WEIXIN' && settingData.authSetting['scope.userLocation']) {
+			                    that.getAddress();
+			                  } else if (platform === 'MP-TOUTIAO' && settingData.authSetting['scope.userLocation']) {
+			                    that.getAddress();
+			                  }
+			                }
+			              });
+			            } else {
+			              uni.switchTab({
+			                url: '/pages/index/index'
+			              });
+			            }
+			          }
+			        });
+			      };
+					that.getAddress();
+			      // uni.authorize({
+			      //   scope: 'scope.userLocation',
+			      //   success() {
+			      //     that.getAddress();
+			      //   },
+			      //   fail() {
+			      //     showModal('设备需要获取您的位置，是否去打开？');
+			      //   }
+			      // });
+			    };
+			
+			    // 微信小程序
+			    //#ifdef MP-WEIXIN
+			    getAuth('MP-WEIXIN');
+			    //#endif
+			
+			    // 抖音小程序
+			    //#ifdef MP-TOUTIAO
+			    getAuth('MP-TOUTIAO');
+			    //#endif
+			  },
 			// 获取位置信息
 			getAddress() {
 				uni.getLocation({
@@ -367,7 +440,7 @@
 						this.qrOpenLock()
 					},
 					fail: err => {
-						console.log(err);
+						//console.log(err);
 						this.qrOpenLock()
 					}
 				});
@@ -384,7 +457,89 @@
 					duration:4000,
 					mask: true
 				})
-			}
+			},
+			// #ifdef MP-WEIXIN
+			initVideoAd() {
+			  if (wx.createRewardedVideoAd) {
+			    // 创建激励视频广告实例
+			    this.videoAd = wx.createRewardedVideoAd({
+			      adUnitId: 'adunit-02222114b9baeb78',
+			    });
+			
+			    // 广告加载成功
+			    this.videoAd.onLoad(() => {
+			      console.log('广告加载成功');
+			      //this.adLog('qropen', 'load',30, true, '广告加载成功'); // 记录广告加载成功
+			    });
+			
+			    // 广告加载失败
+			    this.videoAd.onError((err) => {
+			      console.error('激励视频广告加载失败', err);
+			      this.adLog('qropen', 'error', 30, false, `广告加载失败: ${err.message}`,0); // 记录广告加载失败
+			    });
+				
+			    // 用户关闭广告
+			    this.videoAd.onClose((res) => {
+			      // 处理用户看完广告和关闭广告的逻辑
+			      if (res && res.isEnded) {
+			        // 用户完整观看广告
+			        console.log('用户完整观看广告');
+			        this.adLog('qropen', 'close', 30,true, '用户完整观看广告',1); // 记录用户完整观看广告
+			      } else {
+			        // 用户提前关闭广告
+			        console.log('用户提前关闭广告');
+			        this.adLog('qropen', 'close',30, false, '用户提前关闭广告',0); // 记录用户提前关闭广告
+			      }
+			    });
+			  }
+			},
+			showAd() {
+			  // 展示激励视频广告
+			  if (this.videoAd) {
+			    this.videoAd.show().then(() => {
+			      // 广告展示成功，记录成功日志
+			      console.log('激励视频广告展示成功');
+			      this.adLog('qropen', 'show',30, true, '激励视频广告展示成功',0); // 请替换'member_id'与实际的会员ID或其他标识符
+				  this.adShowCount += 1; // 增加广告显示次数
+				  wx.setStorageSync('adShowCount', this.adShowCount); // 将计数保存到本地存储
+			    }).catch((err) => {
+			      // 展示失败，尝试重新加载广告
+			      console.error('激励视频广告加载失败，尝试重新加载', err);
+			      this.adLog('qropen', 'load_fail',30, false, '激励视频广告加载失败，尝试重新加载',0); // 记录加载失败的日志，替换'member_id'
+			      this.videoAd.load().then(() => {
+			        this.videoAd.show().then(() => {
+			          // 重新加载后广告展示成功，记录成功日志
+			          console.log('激励视频广告重新加载后展示成功');
+			          this.adLog('qropen', 'reload_show',30, true, '激励视频广告重新加载后展示成功',0); // 请替换'member_id'
+			        }).catch(err => {
+			          // 重新加载后依然失败，记录失败日志
+			          console.error('激励视频广告重新加载后展示失败', err);
+			          this.adLog('qropen', 'reload_fail',30, false, '激励视频广告重新加载后展示失败',0); // 请替换'member_id'
+			        });
+			      }).catch(err => {
+			        // 重新加载失败，记录失败日志
+			        console.error('激励视频广告重新加载失败', err);
+			        this.adLog('qropen', 'reload_fail',30, false, '激励视频广告重新加载失败',0); // 请替换'member_id'
+			      });
+			    });
+			  }
+			},
+			adLog(adlog_page, adlog_type, adlog_adtime, adlog_result, adlog_msg,adlog_points) {
+			  // 调用 adlog_api 接口
+			  adlog_api({
+				adlog_page: adlog_page,
+			    adlog_type: adlog_type,
+				adlog_adtime: adlog_adtime,
+			    adlog_result: adlog_result,
+			    adlog_msg: adlog_msg,
+				adlog_points:adlog_points,
+			  }).then(res => {
+			    console.log('广告日志记录成功', res);
+			  }).catch(err => {
+			    console.error('广告日志记录失败', err);
+			  });
+			},
+			// #endif
 		}
 	}
 </script>

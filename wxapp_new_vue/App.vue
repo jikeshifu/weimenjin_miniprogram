@@ -10,17 +10,91 @@ export default {
 		// #ifdef MP-ALIPAY
 		// 支付宝扫码带的参数
 		let qrstr = option.query ? option.query.qrCode : "";
-		
 		if (qrstr) {
 	
 			let url = decodeURIComponent(qrstr) // 使用decodeURIComponent解析  获取当前二维码的网址
 			let lock_ids = getQueryString(url).lock_id
-			console.log("lock_ids",lock_ids)
-				uni.setStorageSync("qrcodeLockId",lock_ids)
+			//console.log("lock_ids",lock_ids)
+			uni.setStorageSync("qrcodeLockId",lock_ids)
 		}
 		// #endif
-	
+		// #ifdef MP-WEIXIN
+		  const updateManager = wx.getUpdateManager();
+		  updateManager.onCheckForUpdate(function(res) {
+		    if (res.hasUpdate) {
+		      updateManager.onUpdateReady(function() {
+		        wx.showModal({
+		          title: '更新提示',
+		          content: '新版本已经准备好，是否重启应用？',
+		          success: function(res) {
+		            if (res.confirm) {
+		              wx.clearStorageSync();
+		              updateManager.applyUpdate();
+		            }
+		          }
+		        })
+		      });
 		
+		      updateManager.onUpdateFailed(function() {
+		        wx.showModal({
+		          title: '更新失败',
+		          content: '新版本下载失败，请检查网络设置并重试',
+		        })
+		      });
+		    }
+		  });
+		  // #endif
+		  // #ifdef MP-ALIPAY
+		  const updateManager = my.getUpdateManager();
+		  updateManager.onCheckForUpdate(function(res) {
+		    // 在支付宝小程序中，不需要手动检查更新，这里仅作为示例
+		  });
+		  updateManager.onUpdateReady(function() {
+		    my.confirm({
+		      title: '更新提示',
+		      content: '新版本已经准备好，是否重启应用？',
+		      success: (res) => {
+		        if (res.confirm) {
+		          my.clearStorageSync();
+		          updateManager.applyUpdate();
+		        }
+		      }
+		    });
+		  });
+		  updateManager.onUpdateFailed(function() {
+		    // 新版本下载失败
+		    my.alert({
+		      title: '更新失败',
+		      content: '新版本下载失败，请检查网络设置并重试',
+		    });
+		  });
+		  // #endif
+		// #ifdef MP-TOUTIAO
+		const updateManager = tt.getUpdateManager();
+		updateManager.onCheckForUpdate(function(res) {
+		  if (res.hasUpdate) {
+		    updateManager.onUpdateReady(function() {
+		      tt.showModal({
+		        title: '更新提示',
+		        content: '新版本已经准备好，是否重启应用？',
+		        success: function(res) {
+		          if (res.confirm) {
+		            tt.clearStorageSync();
+		            updateManager.applyUpdate();
+		          }
+		        }
+		      })
+		    });
+		
+		    updateManager.onUpdateFailed(function() {
+		      tt.showModal({
+		        title: '更新失败',
+		        content: '新版本下载失败，请检查网络设置并重试',
+		      })
+		    });
+		  }
+		});
+		// #endif
 	},
 	onShow: function() {
 		// console.log('App Show')
