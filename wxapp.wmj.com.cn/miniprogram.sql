@@ -376,23 +376,41 @@ CREATE TABLE `cd_config`  (
 -- ----------------------------
 -- Records of cd_config
 -- ----------------------------
-INSERT INTO `cd_config` VALUES ('copyright', '黔ICP备12003086号-3');
+INSERT INTO `cd_config` VALUES ('adminpw', '012345');
+INSERT INTO `cd_config` VALUES ('autodtkey', '1');
+INSERT INTO `cd_config` VALUES ('autodtkeylockid', '2');
+INSERT INTO `cd_config` VALUES ('copyright', 'XICP备20016999号-3');
 INSERT INTO `cd_config` VALUES ('default_themes', '');
 INSERT INTO `cd_config` VALUES ('description', '微门禁小程序管理平台');
+INSERT INTO `cd_config` VALUES ('devicecid', '88888888888888888888');
 INSERT INTO `cd_config` VALUES ('domain', '');
+INSERT INTO `cd_config` VALUES ('dyappid', '');
+INSERT INTO `cd_config` VALUES ('dyappsecret', '');
 INSERT INTO `cd_config` VALUES ('file_size', '100');
 INSERT INTO `cd_config` VALUES ('file_type', 'gif,png,jpg,jpeg,doc,docx,xls,xlsx,csv,pdf,rar,zip,txt,mp4,flv');
+INSERT INTO `cd_config` VALUES ('gzhappid', '');
+INSERT INTO `cd_config` VALUES ('gzhappsecret', '');
+INSERT INTO `cd_config` VALUES ('gzhminiappid', '');
+INSERT INTO `cd_config` VALUES ('gzhtempleteid1', '');
+INSERT INTO `cd_config` VALUES ('gzhtempleteid2', '');
 INSERT INTO `cd_config` VALUES ('images_size', '10M');
 INSERT INTO `cd_config` VALUES ('keyword', '');
-INSERT INTO `cd_config` VALUES ('privacypolicy', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;隐私政策&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;贵州智云信通科技有限公司（以下简称&amp;amp;amp;amp;quot;本公司&amp;amp;amp;amp;quot;，产品“微门禁”）在此郑重承诺，尊重和保护您的个人隐私，在使用微门禁相关产品前，请务必仔细阅读并理解本政策，在同意的情况下使用相关产品或服务。您一旦访问本公司旗下产品微门禁公众号及小程序等应用平台，则表明您已同意本《隐私政策》的内容。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;一、个人信息定义&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;个人信息是指您的任何标识性信息，包括：姓名、性别、身份证件号码、地址、健康状况、定位信息、电话号码、工作单位等。通常情况下，您无须提供您的个人信息即可，访问本网站。但为了提高服务质量，本公司可能需要您提供一些个人信息，以使本公司更好地了解您的需求来为您服务，同时，本公司有权采取措施验证您提供的个人信息的真实性。如果您提供了有关他人的个人信息，则表明您已取得了他人的正式许可。本公司承诺，除非出于您自己的意愿，本公司不会将您的个人信息提供给本公司之外的任何第三方。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;二、个人信息的收集目的&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;微门禁需要您提供个人信息的目的是确保您有权开启所需要的门禁系统，门禁所属单位对您进行验证审核并开放使用权限，提供安全便捷的开门服务，我们会征求您的同意，以便根据您的请求向您提供服务或执行事务，包括：接收有关本公司的产品和服务的信息、注册参加活、购买或注册本公司的产品、客户满意度调查、法律强制性规定等。另外，为抗击新冠肺炎疫情需要，我们提供的健康登记系统，将采集您的健康相关信息，为抗击疫情提供基础信息技术服务。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;3、 个人信息的使用&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;您提供的个人信息将仅在本公司内部使用，使用您的个人信息只是为了更好地了解您的需要并为您提供更好的服务或执行事务，同时本公司可能会使用您的个人信息与您联系以便向您提供服务。为抗击新冠肺炎疫情需要，我们开发了健康登记系统平台，健康相关信息由相应申请使用单位掌握，请知悉。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;4、 个人信息的安全&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;本公司承诺，保护您个人信息的安全性，同时，本公司已采取现有的可靠的安全措施保护您的个人信息免于未经授权的访问、使用或泄露。这些安全措施包括向云服务提供商备份数据和对用户密码加密。尽管有这些安全措施，但本公司不保证这些信息的绝对安全。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;5、 未成年人保护&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;未满十八岁的未成年人可在父母或监护人指导使用我们的服务。我们建议未成年人的父母或监护人阅读本《隐私政策》，并建议未成年人在提交的个人信息之前寻求父母或监护人的同意和指导。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;6、 关于Cookie&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;当您访问微门禁微信公众号、微信小程序、支付宝小程序及Web管理站点时，本公司可能会以&amp;amp;amp;amp;quot;Cookie&amp;amp;amp;amp;quot;的形式将某些信息存入您的手机或计算机，&amp;amp;amp;amp;quot;Cookie&amp;amp;amp;amp;quot;是网页服务器放置在您的计算机上的一个小的文本文件，&amp;amp;amp;amp;quot;Cookie&amp;amp;amp;amp;quot;不能用于运行程序，也不会将病毒传播到您的计算机上。使用&amp;amp;amp;amp;quot;Cookie&amp;amp;amp;amp;quot;的目的是为您提供一项节省时间的简便功能，但并不表示本公司可自动获悉有关您的任何个人信息。本网站可能还会使用session技术或其他技术以便能更好地调整本网站，从而提供优质服务。您可以选择接受或拒绝&amp;amp;amp;amp;quot;Cookie&amp;amp;amp;amp;quot;。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;7、 其他站点的链接&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;微门禁各平台及网站可能包含与其他站点的链接，但都是只读服务。本公司不对其他站点内容突变造成的《隐私政策》或内容负责。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;8、 法律性公开&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;根据法律强制性规定，安防法规条款等约束，微门禁应用平台及网站可能需要公开您的个人信息而无须获得您的预先同意并对此不负任何责任。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;9、 本《隐私政策》的修改&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;本《隐私政策》的修改权和解释权属于本公司。本公司可能适时修订本《隐私政策》的条款并予以公布，修订的内容自公布之日起生效，若您继续使用我们的服务，即表示同意受经修订的本《隐私政策》的约束。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;10、 纠纷解决&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;本《隐私政策》或有关使用微门禁应用平台及网站的任何行为受中华人民共和国法律管辖，如双方发生争议先协商解决，协商不成的，则交由本公司法定地址所在地的人民法院作出裁决。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;11、 联系方式&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;如果您有任何疑问和建议，可以通过微门禁应用平台及网站上的联系方式与本公司联系，本公司将尽最大的努力去解决。&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;lt;br/&amp;amp;amp;gt;&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;贵州智云信通科技有限公司&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;二零二零年三月&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;lt;br/&amp;amp;amp;gt;&amp;amp;amp;lt;/p&amp;amp;amp;gt;&amp;amp;lt;/p&amp;amp;gt;&amp;lt;/p&amp;gt;&lt;/p&gt;');
-INSERT INTO `cd_config` VALUES ('serviceagreement', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁用户服务协议&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;一、服务条款&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;您在使用微门禁服务前，应当仔细阅读《微门禁用户服务协议》（以下简称&amp;amp;amp;quot;本协议&amp;amp;amp;quot;或&amp;amp;amp;quot;用户协议&amp;amp;amp;quot;）的全部内容，您在用户注册页面点击&amp;amp;amp;quot;同意以下协议并注册&amp;amp;amp;quot;按钮后，即视为您已阅读、理解并同意本协议的全部内容。敬请注意，一旦您注册（登录）成功，本协议即在您与微门禁之间产生法律效力，成为对双方均具有约束力的法律文件。您应遵守以下协议的各项条款。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;二、目的&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;本协议是约定您使用微门禁提供的服务时，微门禁与您的权利、义务、服务条款等基本事宜为目的。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;三、遵守法律及法律效力&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;在您完成在线注册成功后，您就已与微门禁缔结了本协议，且本协议自您注册（登录）成功之日起产生法律效力。 您同意遵守《中华人民共和国保密法》、《计算机信息系统国际联网保密管理规定》、《中华人民共和国计算机信息系统安全保护条例》、《计算机信息网络国际联网安全保护管理办法》、《中华人民共和国计算机信息网络国际联网管理暂行规定》及其实施办法等相关法律法规的任何及所有的规定，并对您以任何方式使用服务的任何行为及其结果承担全部责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;在任何情况下，如果微门禁合理地认为您的任何行为，包括但不限于您的任何言论和其他违反或可能违反上述法律法规规定的任何行为，微门禁可在不经任何事先通知的情况下终止向您提供服务。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁有权利修改更新本协议的有关条款，一旦条款内容发生变动，微门禁将会在相关的页面提示修改内容。在更改此用户服务协议时，微门禁将说明更改内容的执行日期，变更理由等。且应同现行的使用服务协议一起，在更改内容发生效力前7日内向您公告。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;请仔细阅读用户协议更改内容，如因个人原因未能获知变更内容所带来的损害，微门禁一概不予负责。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;如果不同意微门禁对服务条款所做的修改，用户有权停止使用网络服务。如果用户继续使用网络服务，则视为用户接受变更后的用户协议。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;四、服务内容&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁服务的具体内容由微门禁根据实际情况提供，微门禁保留随时变更、中断或终止部分或全部微门禁服务的权利。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;五、您的义务&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;用户在申请使用微门禁服务时，必须向微门禁提供准确的个人资料，如个人资料有任何变动，必须及时更新。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;用户注册成功后，微门禁将给予每个用户一个用户帐号及相应的密码，该用户帐号和密码由用户负责保管；用户应当对以其用户帐号进行的所有活动和事件负法律责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;用户在使用微门禁网络服务过程中，必须遵循以下原则：&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;遵守中国有关的法律和法规；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;不得为任何非法目的而使用网络服务系统；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;遵守所有与网络服务有关的网络协议、规定和程序&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;不得利用微门禁服务系统传输任何危害社会，侵蚀道德风尚，宣传不法宗教组织等内容；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;不得利用微门禁服务系统进行任何可能对互联网的正常运转造成不利影响的行为；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;不得利用微门禁服务系统上传、传输任何非法、有害、胁迫、滥用、骚扰、侵害、中伤、粗俗、猥亵、诽谤、侵害他人隐私、辱骂性的、恐吓性的、庸俗淫秽的及有害或种族歧视的或道德上令人不快的包括其他任何非法的信息资料；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;不得利用微门禁服务系统进行任何不利于微门禁的行为；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;如发现任何非法使用用户帐号或帐号出现安全漏洞的情况，应立即通知微门禁。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;六、微门禁的权利及义务&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁除特殊情况外（例如：协助公安等相关部门调查破案等），致力于努力保护您的个人资料不被外漏，且不得在未经本人的同意下向第三者提供您的个人资料。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁根据提供服务的过程，经营上的变化，有权变更所提供服务的内容。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁在提供服务过程中，应及时解决您提出的不满事宜，如在解决过程中确有难处，可以采取公开通知方式或向您发送电子邮件寻求解决办法。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁在下列情况下有权未经通知，直接删除您上载的内容：&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;有损于微门禁，您或第三者名誉的内容；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;利用微门禁服务系统上载、张贴或传送任何非法、有害、胁迫、滥用、骚扰、侵害、中伤、粗俗、猥亵、诽谤、侵害他人隐私、辱骂性的、恐吓性的、庸俗淫秽的及有害或种族歧视的或道德上令人不快的包括其他任何非法的内容；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;侵害微门禁或第三者的版权，著作权等内容；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;存在与微门禁提供的服务无关的内容；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;无故盗用他人的ID(固有用户名)，姓名上传、传播任何内容及恶意更改，伪造他人上载内容。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;七、知识产权声明&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁所有的产品、技术、程序、页面（包括但不限于页面设计及内容）以及资料内容（包括但不限于本站所刊载的图片、视频）均属于知识产权，仅供用户交流、学习、研究和欣赏，未经授权，任何人不得擅自使用，否则，将依法追究法律责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁用户上传的资料内容（包括但不限于图片、视频、点评等），应保证为原创或已得到充分授权，并具有准确性、真实性、正当性、合法性，且不含任何侵犯第三人权益的内容，因抄袭、转载、侵权等行为所产生的纠纷由用户自行解决，微门禁不承担任何法律责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;八、免责声明&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;任何人因使用微门禁而可能遭致的意外及其造成的损失（包括因使用微门禁可能链接的第三方网站内容而感染电脑病毒），我们对此概不负责，亦不承担任何法律责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;微门禁禁止制作、复制、发布、传播等具有反动、色情、暴力、淫秽等内容的信息，一经发现，立即删除。若您因此触犯法律，我们对此不承担任何法律责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;您自行上传或通过网络收集的资源，我们仅提供一个展示、交流的平台，不对其内容的准确性、真实性、正当性、合法性负责，也不承担任何法律责任。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;任何单位或个人认为通过微门禁展示的内容可能涉嫌侵犯其著作权，应该及时向我们提出书面权利通知，并提供身份证明、权属证明及详细侵权情况证明。我们收到上述法律文件后，将会依法尽快处理。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;九、服务变更、中断或终止&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;如因系统维护或升级的需要而需暂停微门禁服务，微门禁将尽可能事先进行通告。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;如发生下列任何一种情形，微门禁有权随时中断或终止向用户提供本协议项下的微门禁服务而无需通知用户：&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;用户提供的个人资料不真实；&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;用户违反本用户协议中规定的使用规则。&amp;amp;lt;/p&amp;amp;gt;&amp;amp;lt;p&amp;amp;gt;在用户违反本协议时，微门禁同时保留在不事先通知用户的情况下随时中断或终止部分或全部微门禁服务的权利，对于所有服务的中断或终止而造');
-INSERT INTO `cd_config` VALUES ('site_logo', '/uploads/admin/202004/5e90014472f46.jpg');
-INSERT INTO `cd_config` VALUES ('site_title', '门禁小程序管理平台');
+INSERT INTO `cd_config` VALUES ('privacypolicy', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;amp;lt;p&amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;隐私政策&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;贵州智云信通科技有限公司（以下简称&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;本公司&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;，产品“微门禁”）在此郑重承诺，尊重和保护您的个人隐私，在使用微门禁相关产品前，请务必仔细阅读并理解本政策，在同意的情况下使用相关产品或服务。您一旦访问本公司旗下产品微门禁公众号及小程序等应用平台，则表明您已同意本《隐私政策》的内容。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;一、个人信息定义&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;个人信息是指您的任何标识性信息，包括：姓名、性别、身份证件号码、地址、健康状况、定位信息、电话号码、工作单位等。通常情况下，您无须提供您的个人信息即可，访问本网站。但为了提高服务质量，本公司可能需要您提供一些个人信息，以使本公司更好地了解您的需求来为您服务，同时，本公司有权采取措施验证您提供的个人信息的真实性。如果您提供了有关他人的个人信息，则表明您已取得了他人的正式许可。本公司承诺，除非出于您自己的意愿，本公司不会将您的个人信息提供给本公司之外的任何第三方。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;二、个人信息的收集目的&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁需要您提供个人信息的目的是确保您有权开启所需要的门禁系统，门禁所属单位对您进行验证审核并开放使用权限，提供安全便捷的开门服务，我们会征求您的同意，以便根据您的请求向您提供服务或执行事务，包括：接收有关本公司的产品和服务的信息、注册参加活、购买或注册本公司的产品、客户满意度调查、法律强制性规定等。另外，为抗击新冠肺炎疫情需要，我们提供的健康登记系统，将采集您的健康相关信息，为抗击疫情提供基础信息技术服务。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;3、 个人信息的使用&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;您提供的个人信息将仅在本公司内部使用，使用您的个人信息只是为了更好地了解您的需要并为您提供更好的服务或执行事务，同时本公司可能会使用您的个人信息与您联系以便向您提供服务。为抗击新冠肺炎疫情需要，我们开发了健康登记系统平台，健康相关信息由相应申请使用单位掌握，请知悉。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;4、 个人信息的安全&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;本公司承诺，保护您个人信息的安全性，同时，本公司已采取现有的可靠的安全措施保护您的个人信息免于未经授权的访问、使用或泄露。这些安全措施包括向云服务提供商备份数据和对用户密码加密');
+INSERT INTO `cd_config` VALUES ('serviceagreement', '&lt;p&gt;&amp;lt;p&amp;gt;&amp;amp;lt;p&amp;amp;gt;&amp;amp;amp;lt;p&amp;amp;amp;gt;&amp;amp;amp;amp;lt;p&amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁用户服务协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;一、服务条款&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;您在使用微门禁服务前，应当仔细阅读《微门禁用户服务协议》（以下简称&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;本协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;或&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;用户协议&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;）的全部内容，您在用户注册页面点击&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;同意以下协议并注册&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;quot;按钮后，即视为您已阅读、理解并同意本协议的全部内容。敬请注意，一旦您注册（登录）成功，本协议即在您与微门禁之间产生法律效力，成为对双方均具有约束力的法律文件。您应遵守以下协议的各项条款。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;二、目的&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;本协议是约定您使用微门禁提供的服务时，微门禁与您的权利、义务、服务条款等基本事宜为目的。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;三、遵守法律及法律效力&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;在您完成在线注册成功后，您就已与微门禁缔结了本协议，且本协议自您注册（登录）成功之日起产生法律效力。 您同意遵守《中华人民共和国保密法》、《计算机信息系统国际联网保密管理规定》、《中华人民共和国计算机信息系统安全保护条例》、《计算机信息网络国际联网安全保护管理办法》、《中华人民共和国计算机信息网络国际联网管理暂行规定》及其实施办法等相关法律法规的任何及所有的规定，并对您以任何方式使用服务的任何行为及其结果承担全部责任。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;在任何情况下，如果微门禁合理地认为您的任何行为，包括但不限于您的任何言论和其他违反或可能违反上述法律法规规定的任何行为，微门禁可在不经任何事先通知的情况下终止向您提供服务。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;微门禁有权利修改更新本协议的有关条款，一旦条款内容发生变动，微门禁将会在相关的页面提示修改内容。在更改此用户服务协议时，微门禁将说明更改内容的执行日期，变更理由等。且应同现行的使用服务协议一起，在更改内容发生效力前7日内向您公告。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;请仔细阅读用户协议更改内容，如因个人原因未能获知变更内容所带来的损害，微门禁一概不予负责。&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;/p&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;gt;&amp;amp;am');
+INSERT INTO `cd_config` VALUES ('site_logo', '/uploads/admin/202404/6619fe2216100.png');
+INSERT INTO `cd_config` VALUES ('site_title', '门囿小程序管理平台');
+INSERT INTO `cd_config` VALUES ('sms_appid', 'wmjapp_xxxxxxxxxxxxx');
+INSERT INTO `cd_config` VALUES ('sms_appsecret', 'xxxxxxxxxxxxxxxxxxxxxxx');
 INSERT INTO `cd_config` VALUES ('wmjaeskey', '');
-INSERT INTO `cd_config` VALUES ('wmjappid', 'wmj_a1111111111111');
-INSERT INTO `cd_config` VALUES ('wmjappsecret', '8ixcuzRnCTVOqUx752');
-INSERT INTO `cd_config` VALUES ('yjy_appid', '1111111111111111111111111');
-INSERT INTO `cd_config` VALUES ('yjy_appsecret', '11111111111111111111111111');
+INSERT INTO `cd_config` VALUES ('wmjappid', 'wmj_xxxxxxxxxxxxxxxx');
+INSERT INTO `cd_config` VALUES ('wmjappsecret', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+INSERT INTO `cd_config` VALUES ('wxpaycert_path', '');
+INSERT INTO `cd_config` VALUES ('wxpaykey', '');
+INSERT INTO `cd_config` VALUES ('wxpaykey_path', '');
+INSERT INTO `cd_config` VALUES ('wxpaymchid', '');
+INSERT INTO `cd_config` VALUES ('wxpayminiappid', '');
+INSERT INTO `cd_config` VALUES ('yjy_appid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+INSERT INTO `cd_config` VALUES ('yjy_appsecret', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 
 -- ----------------------------
 -- Table structure for cd_device_group
@@ -1399,5 +1417,316 @@ INSERT INTO `cd_wservice` VALUES (2, 1, '开门记录', '', '/pages/logs/logs', 
 INSERT INTO `cd_wservice` VALUES (3, 3, '使用帮助', '', 'https://doc.wmj.com.cn/1/page/39', 'https://wxapp.wmj.com.cn/uploads/admin/202101/600323a441bb6.png', 1, 1);
 INSERT INTO `cd_wservice` VALUES (4, 2, '社区维修', 'wx51f303bf1367a448', 'pages/index/index', 'https://wxapp.wmj.com.cn/uploads/admin/202101/5ff965f300000.png', 2, 0);
 INSERT INTO `cd_wservice` VALUES (5, 2, '共享会议室', '', '', 'https://wxapp.wmj.com.cn/uploads/admin/202101/5ff9662b85802.png', 3, 0);
+
+
+
+
+-- ----------------------------
+-- 检查更新字段
+-- ----------------------------
+SET FOREIGN_KEY_CHECKS=0;
+
+-- 检查并添加 `auth_sort` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'auth_sort') THEN
+    ALTER TABLE `cd_lockauth` ADD COLUMN `auth_sort` int NULL DEFAULT 0 COMMENT '钥匙排序' AFTER `updated_at`;
+END IF;
+
+-- 检查并添加 `noncmode` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'noncmode') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `noncmode` int NULL DEFAULT 1 COMMENT '常开常闭模式' AFTER `addcardmode`;
+END IF;
+
+-- 检查并添加 `device_cid` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'device_cid') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `device_cid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备cid' AFTER `opsucnt`;
+END IF;
+
+-- 检查并添加 `admin_pwd` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'admin_pwd') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `admin_pwd` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '激活的管理密码' AFTER `device_cid`;
+END IF;
+
+-- 检查并添加 `hw_ver` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'hw_ver') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `hw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `admin_pwd`;
+END IF;
+
+-- 检查并添加 `sw_ver` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'sw_ver') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `sw_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `hw_ver`;
+END IF;
+
+-- 检查并添加 `wifi_rssi` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'wifi_rssi') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `wifi_rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `sw_ver`;
+END IF;
+
+-- 检查并添加 `on_line_time` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'on_line_time') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `on_line_time` int NULL DEFAULT NULL AFTER `wifi_rssi`;
+END IF;
+
+-- 检查并添加 `model_number` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'model_number') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `model_number` varchar(101) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `on_line_time`;
+END IF;
+
+-- 检查并添加 `hardware_version` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'hardware_version') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `hardware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `model_number`;
+END IF;
+
+-- 检查并添加 `firmware_version` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'firmware_version') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `firmware_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `hardware_version`;
+END IF;
+
+-- 检查并添加 `iccid` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'iccid') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `iccid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `firmware_version`;
+END IF;
+
+-- 检查并添加 `imei` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'imei') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `imei` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `iccid`;
+END IF;
+
+-- 检查并添加 `batterypower` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'batterypower') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `batterypower` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `imei`;
+END IF;
+
+-- 检查并添加 `rssi` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'rssi') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `rssi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `deleted_at`;
+END IF;
+
+-- 检查并添加 `xcx_sound` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'xcx_sound') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `xcx_sound` tinyint(1) NULL DEFAULT 1 AFTER `rssi`;
+END IF;
+
+-- 检查并添加 `switch_state` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lock' AND COLUMN_NAME = 'switch_state') THEN
+    ALTER TABLE `cd_lock` ADD COLUMN `switch_state` tinyint NULL DEFAULT 0 AFTER `xcx_sound`;
+END IF;
+
+-- 检查并添加唯一索引 `lock_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lock' AND index_name='lock_id') THEN
+    ALTER TABLE `cd_lock` ADD UNIQUE INDEX `lock_id`(`lock_id`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_lock_name`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lock' AND index_name='idx_lock_name') THEN
+    ALTER TABLE `cd_lock` ADD INDEX `idx_lock_name`(`lock_name`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `member_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lock' AND index_name='member_id') THEN
+    ALTER TABLE `cd_lock` ADD INDEX `member_id`(`member_id`) USING BTREE;
+END IF;
+
+-- 检查并添加 `aremark` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'aremark') THEN
+    ALTER TABLE `cd_lockauth` ADD COLUMN `aremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `auth_shareability`;
+END IF;
+
+-- 检查并添加 `arealname` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'arealname') THEN
+    ALTER TABLE `cd_lockauth` ADD COLUMN `arealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名' AFTER `user_id`;
+END IF;
+
+-- 检查并添加 `device_group_id` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'device_group_id') THEN
+    ALTER TABLE `cd_lockauth` ADD COLUMN `device_group_id` bigint NULL DEFAULT 0 COMMENT '分组id默认未分组' AFTER `auth_openused`;
+END IF;
+
+-- 检查并添加 `updated_at` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockauth' AND COLUMN_NAME = 'updated_at') THEN
+    ALTER TABLE `cd_lockauth` ADD COLUMN `updated_at` bigint NULL DEFAULT NULL AFTER `deleted_at`;
+END IF;
+
+-- 检查并添加 `deleted_at` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'deleted_at') THEN
+    ALTER TABLE `cd_lockcard` ADD COLUMN `deleted_at` datetime NULL DEFAULT NULL AFTER `batchstatus`;
+END IF;
+
+-- 检查并添加 `sync_status` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'sync_status') THEN
+    ALTER TABLE `cd_lockcard` ADD COLUMN `sync_status` tinyint(1) NULL DEFAULT 1 AFTER `deleted_at`;
+END IF;
+
+-- 检查并添加 `remark` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'remark') THEN
+    ALTER TABLE `cd_lockcard` ADD COLUMN `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `sync_status`;
+END IF;
+
+-- 检查并添加 `sync_time` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_lockcard' AND COLUMN_NAME = 'sync_time') THEN
+    ALTER TABLE `cd_lockcard` ADD COLUMN `sync_time` bigint NULL DEFAULT 0 AFTER `remark`;
+END IF;
+
+-- 检查并添加索引 `lockcard_sn`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_lockcard' AND index_name='lockcard_sn') THEN
+    ALTER TABLE `cd_lockcard` ADD INDEX `lockcard_sn`(`lockcard_sn`) USING BTREE;
+END IF;
+
+-- 检查并添加 `lremark` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_locklog' AND COLUMN_NAME = 'lremark') THEN
+    ALTER TABLE `cd_locklog` ADD COLUMN `lremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `user_id`;
+END IF;
+
+-- 检查并添加 `user_name` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_locklog' AND COLUMN_NAME = 'user_name') THEN
+    ALTER TABLE `cd_locklog` ADD COLUMN `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人' AFTER `cardsn`;
+END IF;
+
+-- 检查并添加 `mobile_bak` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_locklog' AND COLUMN_NAME = 'mobile_bak') THEN
+    ALTER TABLE `cd_locklog` ADD COLUMN `mobile_bak` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `user_name`;
+END IF;
+
+-- 检查并添加唯一索引 `locklog_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='locklog_id') THEN
+    ALTER TABLE `cd_locklog` ADD UNIQUE INDEX `locklog_id`(`locklog_id`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_cdsn`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_cdsn') THEN
+    ALTER TABLE `cd_locklog` ADD INDEX `idx_cdsn`(`cardsn`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_lock_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_lock_id') THEN
+    ALTER TABLE `cd_locklog` ADD INDEX `idx_lock_id`(`lock_id`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_member_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_member_id') THEN
+    ALTER TABLE `cd_locklog` ADD INDEX `idx_member_id`(`member_id`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_user_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_user_id') THEN
+    ALTER TABLE `cd_locklog` ADD INDEX `idx_user_id`(`user_id`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `creattime`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='creattime') THEN
+    ALTER TABLE `cd_locklog` ADD INDEX `creattime`(`create_time`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_member_lock`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_locklog' AND index_name='idx_member_lock') THEN
+    ALTER TABLE `cd_locklog` ADD INDEX `idx_member_lock`(`member_id`, `lock_id`) USING BTREE;
+END IF;
+
+-- 检查并添加 `realname` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'realname') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `realname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名' AFTER `unionid`;
+END IF;
+
+-- 检查并添加 `remark` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'remark') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `remark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `realname`;
+END IF;
+
+-- 检查并添加 `sCertificateNumber` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'sCertificateNumber') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `sCertificateNumber` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '人脸faceid' AFTER `remark`;
+END IF;
+
+-- 检查并添加 `level` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'level') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `level` tinyint NULL DEFAULT 0 COMMENT '级别' AFTER `sCertificateNumber`;
+END IF;
+
+-- 检查并添加 `wx_model` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_model') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `wx_model` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '设备型号' AFTER `level`;
+END IF;
+
+-- 检查并添加 `wx_version` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_version') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `wx_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信版本' AFTER `wx_model`;
+END IF;
+
+-- 检查并添加 `wx_platform` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_platform') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `wx_platform` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作系统及版本' AFTER `wx_version`;
+END IF;
+
+-- 检查并添加 `wx_system` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'wx_system') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `wx_system` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端平台' AFTER `wx_platform`;
+END IF;
+
+-- 检查并添加 `SDKVersion` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'SDKVersion') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `SDKVersion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端基础库版本' AFTER `wx_system`;
+END IF;
+
+-- 检查并添加 `bluetoothEnabled` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'bluetoothEnabled') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `bluetoothEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '蓝牙的系统开关' AFTER `SDKVersion`;
+END IF;
+
+-- 检查并添加 `locationEnabled` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'locationEnabled') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `locationEnabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地理位置的系统开关' AFTER `bluetoothEnabled`;
+END IF;
+
+-- 检查并添加 `tt_user_id` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_member' AND COLUMN_NAME = 'tt_user_id') THEN
+    ALTER TABLE `cd_member` ADD COLUMN `tt_user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `locationEnabled`;
+END IF;
+
+-- 检查并添加唯一索引 `member_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='member_id') THEN
+    ALTER TABLE `cd_member` ADD UNIQUE INDEX `member_id`(`member_id`) USING BTREE;
+END IF;
+
+-- 检查并添加唯一索引 `openid`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='openid') THEN
+    ALTER TABLE `cd_member` ADD UNIQUE INDEX `openid`(`openid`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `unionid`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='unionid') THEN
+    ALTER TABLE `cd_member` ADD INDEX `unionid`(`unionid`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `mobile`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_member' AND index_name='mobile') THEN
+    ALTER TABLE `cd_member` ADD INDEX `mobile`(`mobile`) USING BTREE;
+END IF;
+
+-- 检查并添加 `urealname` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_umember' AND COLUMN_NAME = 'urealname') THEN
+    ALTER TABLE `cd_umember` ADD COLUMN `urealname` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名' AFTER `ucreate_time`;
+END IF;
+
+-- 检查并添加 `authlocks` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_umember' AND COLUMN_NAME = 'authlocks') THEN
+    ALTER TABLE `cd_umember` ADD COLUMN `authlocks` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权锁' AFTER `urealname`;
+END IF;
+
+-- 检查并添加 `uremark` 字段
+IF NOT EXISTS (SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = 'cd_umember' AND COLUMN_NAME = 'uremark') THEN
+    ALTER TABLE `cd_umember` ADD COLUMN `uremark` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注' AFTER `authlocks`;
+END IF;
+
+-- 检查并添加索引 `idx_member_id_user_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_umember' AND index_name='idx_member_id_user_id') THEN
+    ALTER TABLE `cd_umember` ADD INDEX `idx_member_id_user_id`(`member_id`, `user_id`) USING BTREE;
+END IF;
+
+-- 检查并添加索引 `idx_user_id`
+IF NOT EXISTS (SELECT * FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='cd_umember' AND index_name='idx_user_id') THEN
+    ALTER TABLE `cd_umember` ADD INDEX `idx_user_id`(`user_id`) USING BTREE;
+END IF;
+
+SET FOREIGN_KEY_CHECKS=1;
+
 
 SET FOREIGN_KEY_CHECKS = 1;
