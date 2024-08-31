@@ -20,8 +20,10 @@
 
 #### 代码说明
 目录结构
-wxapp.wmj.com.cn为管理后台源码。
-wxapp_miniprogram为微信小程序源码。
+目录wxapp.wmj.com.cn为管理后台源码。
+目录wxapp_miniprogram为早期版本微信小程序源码(不再新增功能)。
+目录wxapp_new_vue为微信小程序端vue，uniapp源码，用HbuiderX编译发布。
+目录pre_wxminiapp_20240831为给大家编译好的，可以直接用微信开发者工具预览上传发布的，记得搜索修改小程序appid，小程序名称，连接后台的域名。
 
 #### 管理后台安装教程
 对于新手，强烈建议使用宝塔面板。
