@@ -37,7 +37,7 @@ wxapp_miniprogram为微信小程序源码。
 详情见：https://doc.wmj.com.cn/1/page/34
 
 ### 关键配置
-#### 1.管理平台的配置文件
+#### 1.管理平台的配置文件，站点搭建好后的后台系统管理--系统配置--接口配置，按里面的要求配置硬件的appid等。
 /config/my.php
 配置小程序appid，appsecret
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0422/231900_9caa1881_1840059.png "屏幕截图.png")
