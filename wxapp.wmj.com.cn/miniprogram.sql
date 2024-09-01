@@ -945,7 +945,7 @@ CREATE TABLE `cd_group`  (
 -- ----------------------------
 INSERT INTO `cd_group` VALUES (1, '超级管理员', 10, 1);
 INSERT INTO `cd_group` VALUES (3, '客服人员', 10, 2);
-INSERT INTO `cd_group` VALUES (7, '用户管理员', 10, 2);
+INSERT INTO `cd_group` VALUES (7, '管理员', 10, 2);
 INSERT INTO `cd_group` VALUES (8, '开发管理员', 10, 1);
 
 -- ----------------------------
@@ -1297,7 +1297,7 @@ CREATE TABLE `cd_menu`  (
 -- ----------------------------
 INSERT INTO `cd_menu` VALUES (12, 0, 'Sys', '系统管理', '', '', 0, 1, 793, 0, 0, '', 'fa fa-gears', '', 1, NULL);
 INSERT INTO `cd_menu` VALUES (17, 12, '', '后台首页', '', '', 0, 1, 2, 0, 1, '/admin/Index/main.html', 'fa fa-home', '', 1, 0);
-INSERT INTO `cd_menu` VALUES (18, 12, 'User', '用户管理', 'user_id', 'user', 1, 1, 4, 1, 0, '', 'fa fa-user-secret', '', 1, 0);
+INSERT INTO `cd_menu` VALUES (18, 12, 'User', '管理员', 'user_id', 'user', 1, 1, 4, 1, 0, '', 'fa fa-user-secret', '', 1, 0);
 INSERT INTO `cd_menu` VALUES (19, 12, 'Group', '分组管理', 'group_id', 'group', 1, 0, 5, 1, 0, '', 'fa fa-user', '', 1, NULL);
 INSERT INTO `cd_menu` VALUES (21, 12, '', '菜单管理', '', '', 0, 0, 3, 0, 1, '/admin/Menu/index?app_id=1', '', '', 1, NULL);
 INSERT INTO `cd_menu` VALUES (41, 12, 'Config', '系统配置', '', '', 1, 1, 7, 0, 0, '', 'glyphicon glyphicon-cog', '基本设置|上传配置|门禁配置|隐私政策|服务协议', 1, 0);
