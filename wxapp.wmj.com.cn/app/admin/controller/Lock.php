@@ -11,6 +11,7 @@ namespace app\admin\controller;
 use app\module\code\Code;
 use app\module\hardwareCloud\HardwareCloud;
 use app\module\user\userServer\UserServer;
+use app\Request;
 use xhadmin\service\admin\LockService;
 use xhadmin\db\Lock as LockDb;
 
@@ -447,8 +448,41 @@ class Lock extends Admin
         }
         return 'https://' . $_SERVER['HTTP_HOST'] . '/qrdata/qrcode/' . $file;
     }
-    /*end*/
+    public function sendTestSms(Request $request)
+    {
+        // 获取传递过来的手机号、短信签名和内容
+        $phone = $request->post('phone');
+        $sms_label = $request->post('sms_label');
+        $content = $request->post('content');
 
+        // 校验参数
+        if (empty($phone) || empty($sms_label) || empty($content)) {
+            return json(['code' => 400, 'msg' => '手机号、短信签名或内容不能为空']);
+        }
+
+        // 准备要发送的数组
+        $smsData = [
+            'mobiles' => $phone,
+            'content' => "$content" ,
+            'sms_label' => $sms_label
+        ];
+
+        // 调用发送短信的函数
+        $sendres = sendsms($smsData);
+
+        // 处理发送结果
+        if ($sendres && isset($sendres['code']) && $sendres['code'] === 'success') {
+            return json([
+                'code' => 200,
+                'msg' => '短信发送成功',
+                'smsId' => $sendres['data'][0]['smsId'], // 返回发送的短信ID
+                'balance' => $sendres['balance'] // 返回账户余额
+            ]);
+        } else {
+            return json(['code' => 500, 'msg' => '短信发送失败: ' . ($sendres['message'] ?? '未知错误')]);
+        }
+    }
+    /*end*/
 
 }
 
