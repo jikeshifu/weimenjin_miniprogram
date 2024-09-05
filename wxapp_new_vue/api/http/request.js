@@ -1,5 +1,5 @@
-const commonUrl = "https://wxapp.wmj.com.cn/api"; //公共路径
-
+const apiUrl = "https://wxapp.wmj.com.cn"; //公共路径
+const apirequestUrl = apiUrl+"/api"; 
 
 
 function request(url, data, method, header) {
@@ -7,7 +7,7 @@ function request(url, data, method, header) {
 		
 	
         uni.request({
-            url: commonUrl + url,
+            url: apirequestUrl + url,
             data: data,
             method: method,
             header: header,

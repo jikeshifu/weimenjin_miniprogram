@@ -1,8 +1,10 @@
-const commonUrl = "https://wxapp.wmj.com.cn/api"; //公共路径
+const domainUrl = "https://wxapp.wmj.com.cn";
 
-const HTTPS = 'https://wxapp.wmj.com.cn/api'
-const imgurl = 'https://wxapp.wmj.com.cn'
+const commonUrl = domainUrl+"/api"; //公共路径
 const httpRequest = require('./http/request.js');
+const HTTPS = commonUrl
+const imgurl = domainUrl
+
 import {
 	getToken,
 	setToken,
