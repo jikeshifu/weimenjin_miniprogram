@@ -450,7 +450,7 @@ class Lock extends Admin
     }
     public function sendTestSms(Request $request)
     {
-        // 获取传递过来的手机号、短信签名和内容
+        // 获取传递过来的手机号、短信签名和 内容
         $phone = $request->post('phone');
         $sms_label = $request->post('sms_label');
         $content = $request->post('content');
@@ -467,7 +467,7 @@ class Lock extends Admin
             'sms_label' => $sms_label
         ];
 
-        // 调用发送短信的函数
+        // 调用发送短信的函数 
         $sendres = sendsms($smsData);
 
         // 处理发送结果
