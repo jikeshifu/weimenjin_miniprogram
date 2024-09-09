@@ -35,11 +35,9 @@ CodeInfoDlg.close = function () {
     parent.layer.close(index);
 };
 
-
 CodeInfoDlg.collectData = function () {
     this.set('').set('yjy_appsecret').set('yjy_appid').set('site_title').set('site_logo').set('keyword').set('description').set('file_size').set('file_type').set('domain').set('copyright').set('wmjappid').set('wmjappsecret').set('wmjaeskey').set('sms_appid').set('sms_appsecret').set('adminpw').set('devicecid').set('autodtkey').set('autodtkeylockid').set('gzhappid').set('gzhappsecret').set('gzhminiappid').set('gzhtempleteid1').set('gzhtempleteid2').set('wxpayappid').set('wxpaykey').set('wxpaymchid').set('wxpaycert_path').set('wxpaykey_path').set('sms_lable').set('gzhtempleteid3');
 };
-
 
 CodeInfoDlg.index = function () {
     this.clearData();
