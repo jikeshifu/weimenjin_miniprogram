@@ -452,3 +452,74 @@ function sign($data, $key)
     ksort($data);
     return strtoupper(md5(urldecode(http_build_query($data) . '&key=' . $key)));
 }
+function sendsms($arr)
+{
+    if (!is_array($arr) || !$arr) {
+        return false;
+    }
+    if (!isset($arr['content']) || !$arr['content']) {
+        return false;
+    }
+    if (!isset($arr['mobiles'])) {
+        return false;
+    }
+
+    // 获取配置信息
+    $resconfig = \app\admin\db\Config::loadList();
+    $appid = $resconfig['sms_appid']; // APPid
+    $secretkey = $resconfig['sms_appsecret']; // 秘钥
+
+    // 准备POST请求的数据
+    $postData = [
+        "appid" => $appid,
+        "appsecret" => $secretkey,
+        "sms_header" => "【".$resconfig['sms_lable']."】", // 固定短信头部
+        "phone_number" => $arr['mobiles'], // 接收短信的手机号
+        "sms_content" => $arr['content'] // 短信内容
+    ];
+    //mlog("sendymSms:".json_encode($postData));
+    // 发送POST请求到目标URL
+    $url = 'https://wxapp.wmj.com.cn/webapi/SmsApi/sendSms';
+    $sendres = curl_req($url, 'post', json_encode($postData), ['Content-Type: application/json']);
+    //mlog("sendymSmssendres:".json_encode($sendres));
+    return $sendres;
+}
+function curl_req($url,$type='post', $data = [],$headers=[],$timeout=20)
+{
+    $curl = curl_init();
+    if (strtolower($type)=='get') {
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        if (!empty($data)) {
+            $url = $url . '?' . http_build_query($data);
+        }
+    }else{
+        if (is_array($data)) {
+            $o = "";
+            foreach ( $data as $k => $v )
+            {
+                if (is_array($v)) {
+                    $o.= "$k=" . urlencode( json_encode($v) ). "&" ;
+                }else{
+                    $o.= "$k=" . urlencode( $v ). "&" ;
+                }
+            }
+            $postdata = substr($o,0,-1);
+        }else{
+            $postdata = $data;
+        }
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
+    }
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+    curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);//请求超时，默认3秒
+    if ($headers) {
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    }
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+    $output = curl_exec($curl);
+    $output = json_decode($output,true);
+    curl_close($curl);
+    return $output;
+}
