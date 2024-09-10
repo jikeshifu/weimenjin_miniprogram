@@ -95,10 +95,30 @@ class Callback
 
             case "notify":
                 //人脸设备记录日志
-                if (mb_substr($device_sn,0,3)=="W77")
-                {
+                if (mb_substr($device_sn, 0, 3) == "W77") {
                     $face = Db::name("face")->where(["sCertificateNumber" => $info["sCertificateNumber"], "lock_id" => $lock["lock_id"]])->whereNull("deleted_at")->find();
-                    LockLog::add($face["member_id"], $lock["lock_id"], 11, 1, $face["face_name"], $lock["user_id"]);
+                    if (isset($info['capture_image'])) {
+                        $image_data = base64_decode($info['capture_image']);
+                        $imgdir = '/upload/captureimages/';
+                        $up_loadpath = str_replace('\\', '/', root_path()."\public") . $imgdir;
+                        $sub_dir = date('Y/md/');
+                        $timenow = time();
+                        $rodomnumber = mt_rand(100000, 999999);
+                        $filename = $timenow . $rodomnumber . '.jpg';
+                        if (!is_dir($up_loadpath . $sub_dir)) {
+                            mkdir($up_loadpath . $sub_dir, 0777, true);
+                        }
+                        $request = Request::instance();
+                        $domain = $request->domain();
+
+                        file_put_contents($up_loadpath . $sub_dir . $filename, $image_data);
+                        $capture_imageurl = $domain . $imgdir . $sub_dir . $filename;
+                        LockLog::add($face["member_id"], $lock["lock_id"], 11, 1, $face["face_name"], $lock["user_id"],$capture_imageurl);
+                    }
+                    else
+                    {
+                        LockLog::add($face["member_id"], $lock["lock_id"], 11, 1, $face["face_name"], $lock["user_id"]);
+                    }
                 }
                 break;
             case "card_notify":

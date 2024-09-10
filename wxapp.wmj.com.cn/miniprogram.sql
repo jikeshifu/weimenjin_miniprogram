@@ -1134,6 +1134,7 @@ CREATE TABLE `cd_locklog`  (
                                `cardsn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
                                `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人',
                                `mobile_bak` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `cpurl` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
                                PRIMARY KEY (`locklog_id`) USING BTREE,
                                UNIQUE INDEX `locklog_id`(`locklog_id`) USING BTREE,
                                INDEX `idx_cdsn`(`cardsn`) USING BTREE,
@@ -1142,7 +1143,7 @@ CREATE TABLE `cd_locklog`  (
                                INDEX `idx_user_id`(`user_id`) USING BTREE,
                                INDEX `creattime`(`create_time`) USING BTREE,
                                INDEX `idx_member_lock`(`member_id`, `lock_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 1  CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 
 -- ----------------------------

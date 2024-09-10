@@ -74,7 +74,24 @@
 </div>
 <script>
 	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+	function openImg(url) {
+		// 打开大图弹框
+		var img = new Image();
+		img.src = url;
+		var width = img.width > 800 ? 800 : img.width;
+		var height = img.height > 600 ? 600 : img.height;
 
+		// 弹出图片框
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: 0,
+			area: [width + 'px', height + 'px'],
+			skin: 'layui-layer-nobg',
+			shadeClose: true,
+			content: '<img src="' + url + '" style="width:100%; height:auto;" />'
+		});
+	};
 	CodeGoods.initColumn = function () {
  		return [
  			{field: 'selectItem', checkbox: true},
@@ -101,13 +118,15 @@
 			{/if}
 			return str;
 		}
-	}
+	};
 
-	CodeGoods.headimgurlFormatter = function(value,row,index) {
-		if(value){
-			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
+	CodeGoods.headimgurlFormatter = function(value, row, index) {
+		if (row.type == '11' && row.cpurl) { // 如果类型是刷脸开门，并且有cpurl字段
+			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+row.cpurl+"')\"><img height='30' src="+row.cpurl+"></a>";
+		} else if (value) {
+			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";
 		}
-	}
+	};
 
 	CodeGoods.statusFormatter = function(value,row,index) {
 		if(value !== null){
@@ -121,7 +140,7 @@
 				break;
 			}
 		}
-	}
+	};
 
 	CodeGoods.typeFormatter = function(value,row,index) {
 		if(value !== null){
@@ -136,15 +155,42 @@
 				case '3':
 					return '<span class="label label-success">后台开门</span>';
 				break;
+				case '4':
+					return '<span class="label label-success">刷卡开门</span>';
+				break;
+				case '5':
+					return '<span class="label label-success">点击开电</span>';
+				break;
+				case '6':
+					return '<span class="label label-success">点击关电</span>';
+					break;
+				case '7':
+					return '<span class="label label-success">指纹开门</span>';
+					break;
+				case '8':
+					return '<span class="label label-success">蓝牙开门</span>';
+					break;
+				case '9':
+					return '<span class="label label-success">播放喇叭</span>';
+					break;
+				case '10':
+					return '<span class="label label-success">生成钥匙</span>';
+					break;
+				case '11':
+					return '<span class="label label-success">刷脸开门</span>';
+					break;
+				case '12':
+					return '<span class="label label-success">密码开门</span>';
+					break;
 			}
 		}
-	}
+	};
 
 	CodeGoods.create_timeFormatter = function(value,row,index) {
 		if(value){
-			return formatDateTime(value,'Y-m-d H:i:s');	
+			return formatDateTime(value,'Y-m-d H:i:s');
 		}
-	}
+	};
 
 	CodeGoods.formParams = function() {
 		var queryData = {};
@@ -154,7 +200,7 @@
 		queryData['create_time_start'] = $("#create_time_start").val();
 		queryData['create_time_end'] = $("#create_time_end").val();
 		return queryData;
-	}
+	};
 
 	CodeGoods.check = function () {
 		var selected = $('#' + this.id).bootstrapTable('getSelections');
@@ -202,7 +248,7 @@
 				});
 			}
 		}
-	}
+	};
 
 
 	CodeGoods.view = function (value) {
@@ -221,7 +267,7 @@
 				if(!IsPC()){layer.full(index)}
 			}
 		}
-	}
+	};
 
 
 	CodeGoods.dumpData = function (value) {
@@ -248,7 +294,7 @@
 				layer.close(index)
 			}, 1000);
 		});
-	}
+	};
 
 
 	CodeGoods.add = function (value) {
@@ -256,7 +302,7 @@
 		var index = layer.open({type: 2,title: '添加',area: ['800px', '550px'],fix: false, maxmin: true,content: Feng.ctxPath + '/LockLog/add'+url});
 		this.layerIndex = index;
 		if(!IsPC()){layer.full(index)}
-	}
+	};
 
 
 	CodeGoods.search = function() {
@@ -271,6 +317,7 @@
 		table.setQueryParams(CodeGoods.formParams());
 		CodeGoods.table = table.init();
 	});
+
 	laydate.render({elem: '#create_time_start',type: 'datetime'});
 	laydate.render({elem: '#create_time_end',type: 'datetime'});
 </script>
