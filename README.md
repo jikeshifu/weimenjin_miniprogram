@@ -102,7 +102,11 @@ https://www.bilibili.com/video/BV1dDHceVEsT/?spm_id_from=333.999.0.0&vd_source=e
 - **小程序功能页面填写**: `pages/adduser/adduser`
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0422/232407_f6c55ac4_1840059.png "屏幕截图.png")
+##### 后台扫码登录的配置
 
+- **二维码规则填写**: `域名/qrCodeLogin?key=`
+- **小程序功能页面填写**: `pages/index/index`
+![输入图片说明](images/qrCodeLogin.png)
 ## 小程序代码使用说明
 
 ### 修改说明
