@@ -1264,12 +1264,18 @@ class Device extends Base
         $res = MemberServer::Uid();
         $member_id = $res["uid"];
         $lock_sn = input("lock_sn");
-        $page = input("page");
-        $limit = input("limit");
-        $LockPower = Lock::LockPower($lock_sn);
-        return json(Code::CodeOk(["msg" => "获取成功", "data" => $LockPower, "count" => 100]));
+        $page = input("page", 1); // 默认第一页
+        $limit = input("limit", 100); // 默认每页100条
 
+        // 获取分页后的数据
+        $LockPower = Lock::LockPower($lock_sn, $page, $limit);
+
+        // 获取总记录数以便返回总数
+        $totalCount = Db::name("power")->where(["device_sn" => $lock_sn])->count();
+
+        return json(Code::CodeOk(["msg" => "获取成功", "data" => $LockPower, "count" => $totalCount]));
     }
+
 
     function onoffline()
     {

@@ -46,16 +46,18 @@ class Lock
 
         return Db::name("lock")->where(["lock_sn" => $lock_sn])->whereNull("deleted_at")->find();
     }
-    static function LockPower($lock_sn)
+    static function LockPower($lock_sn, $page = 1, $limit = 100)
     {
+        // 计算偏移量 (分页从0开始计算)
+        $offset = ($page - 1) * $limit;
 
         return Db::name("power")
-        ->where(["device_sn" => $lock_sn])
-        ->order('created_at', 'desc') // 根据创建时间降序排列
-        ->limit(100) // 限制结果为最近的100条记录
-        ->select();
-
+            ->where(["device_sn" => $lock_sn])
+            ->order('created_at', 'desc') // 根据创建时间降序排列
+            ->limit($offset, $limit) // 使用偏移量和限制数量进行分页
+            ->select();
     }
+
     static function OnOffline($lock_sn)
     {
 
