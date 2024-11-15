@@ -130,3 +130,5 @@ https://www.bilibili.com/video/BV1dDHceVEsT/?spm_id_from=333.999.0.0&vd_source=e
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142245_39927691_1840059.png "屏幕截图.png")
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0429/142309_6dad72e4_1840059.png "屏幕截图.png")
+
+### 自建硬件云端说明及教程地址：https://doc.wmj.com.cn/1/page/192
