@@ -1,0 +1,27 @@
+<template>
+	<view class="big-box">
+		<web-view :src="url"></web-view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				url: '',
+			}
+		},
+		onLoad(option) {
+			this.url= option.url
+		},
+		methods: {
+
+		},
+	}
+</script>
+
+<style scoped>
+.big-box {
+	height: 100%;
+}	
+</style>

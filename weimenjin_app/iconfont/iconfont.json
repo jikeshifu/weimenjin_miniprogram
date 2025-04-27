@@ -1,0 +1,653 @@
+{
+  "id": "4677068",
+  "name": "zyxt",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "577312",
+      "name": "加号",
+      "font_class": "jiahao",
+      "unicode": "e726",
+      "unicode_decimal": 59174
+    },
+    {
+      "icon_id": "6536707",
+      "name": "加号",
+      "font_class": "jiahao1",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "8288849",
+      "name": "加号",
+      "font_class": "jiahao2",
+      "unicode": "e84f",
+      "unicode_decimal": 59471
+    },
+    {
+      "icon_id": "9871167",
+      "name": "扫一扫",
+      "font_class": "saoyisao1",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "11372685",
+      "name": "扫一扫",
+      "font_class": "saoyisao",
+      "unicode": "e8b5",
+      "unicode_decimal": 59573
+    },
+    {
+      "icon_id": "441341",
+      "name": "信号",
+      "font_class": "xinhao1",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "579810",
+      "name": "分享",
+      "font_class": "fenxiang",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "643800",
+      "name": "设置",
+      "font_class": "24",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "681813",
+      "name": "积分商城－不可见",
+      "font_class": "bukejian",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "715944",
+      "name": "麦克风",
+      "font_class": "maikefeng",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "866500",
+      "name": "喇叭001_hover",
+      "font_class": "laba",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "973172",
+      "name": "shanchu",
+      "font_class": "shanchu",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "1280535",
+      "name": "Visible-1",
+      "font_class": "48kejian-1",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "1374718",
+      "name": "麦克风",
+      "font_class": "maikefeng1",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "1727440",
+      "name": "213麦克风-线性",
+      "font_class": "maikefeng-xianxing",
+      "unicode": "e8c2",
+      "unicode_decimal": 59586
+    },
+    {
+      "icon_id": "1998969",
+      "name": "固件版本",
+      "font_class": "gujianbanben",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "2076319",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e8a3",
+      "unicode_decimal": 59555
+    },
+    {
+      "icon_id": "3285103",
+      "name": "人脸识别",
+      "font_class": "renlianshibie",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "3353026",
+      "name": "接听",
+      "font_class": "jieting",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "3717486",
+      "name": "人脸识别",
+      "font_class": "renlianshibie1",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "3988202",
+      "name": "电流",
+      "font_class": "dianya",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "3988230",
+      "name": "电压",
+      "font_class": "dianya1",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "5062065",
+      "name": "用电量",
+      "font_class": "yongdianliang",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "5064093",
+      "name": "设备",
+      "font_class": "shebei",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "5282154",
+      "name": "用电量",
+      "font_class": "yongdianliang1",
+      "unicode": "e7ba",
+      "unicode_decimal": 59322
+    },
+    {
+      "icon_id": "5650957",
+      "name": "业务操作",
+      "font_class": "yewucaozuo",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "5926014",
+      "name": "分享",
+      "font_class": "fenxiang1",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "6548522",
+      "name": "不可见",
+      "font_class": "bukejian1",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "6803925",
+      "name": "防御钥匙门锁系列",
+      "font_class": "Enter-",
+      "unicode": "e83d",
+      "unicode_decimal": 59453
+    },
+    {
+      "icon_id": "6940802",
+      "name": "shandian",
+      "font_class": "shandian",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "7001848",
+      "name": "帮助",
+      "font_class": "bangzhu",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "7015506",
+      "name": "断电",
+      "font_class": "duandian",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "7017728",
+      "name": "帮助",
+      "font_class": "bangzhu1",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "7025719",
+      "name": "设备在线",
+      "font_class": "shebeizaixian",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "7025878",
+      "name": "设备离线",
+      "font_class": "shebeilixian",
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
+    },
+    {
+      "icon_id": "7159341",
+      "name": "钥匙",
+      "font_class": "yuechi",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "7461690",
+      "name": "下拉",
+      "font_class": "xiala",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "7970945",
+      "name": "关门",
+      "font_class": "guanmen",
+      "unicode": "e6dc",
+      "unicode_decimal": 59100
+    },
+    {
+      "icon_id": "8039331",
+      "name": "用电量",
+      "font_class": "yongdianliang2",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "8094197",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "8679538",
+      "name": "可见",
+      "font_class": "kejian",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "9826658",
+      "name": "列表-拨打电话",
+      "font_class": "liebiao-bodadianhua",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "10053044",
+      "name": "有功功率",
+      "font_class": "yougonggongshuai",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "10593812",
+      "name": "用户权限,钥匙_jurassic",
+      "font_class": "jurassic_quanxian",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "10912961",
+      "name": "UIicon_电流",
+      "font_class": "UIicon_dianliu",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "11032206",
+      "name": "设备",
+      "font_class": "shebei1",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "11372652",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e8ae",
+      "unicode_decimal": 59566
+    },
+    {
+      "icon_id": "11372772",
+      "name": "闪电",
+      "font_class": "shandian1",
+      "unicode": "e8c5",
+      "unicode_decimal": 59589
+    },
+    {
+      "icon_id": "12046114",
+      "name": "门铃",
+      "font_class": "menling",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "12046374",
+      "name": "门铃",
+      "font_class": "menling2",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "12331669",
+      "name": "功率",
+      "font_class": "gongshuai",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "12699937",
+      "name": "开发者",
+      "font_class": "kaifazhe",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "13644689",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "14358049",
+      "name": "选择参数",
+      "font_class": "menu_choose",
+      "unicode": "e7e9",
+      "unicode_decimal": 59369
+    },
+    {
+      "icon_id": "16571648",
+      "name": "icon_参数设置",
+      "font_class": "canshu",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "18245827",
+      "name": "设备分布图",
+      "font_class": "shebeifenbutu",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "18595444",
+      "name": "开门(1)",
+      "font_class": "kaimen1",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "18655289",
+      "name": "设备报验",
+      "font_class": "shebeibaoyan",
+      "unicode": "e6cd",
+      "unicode_decimal": 59085
+    },
+    {
+      "icon_id": "19990541",
+      "name": "电流",
+      "font_class": "dianliu",
+      "unicode": "e7f5",
+      "unicode_decimal": 59381
+    },
+    {
+      "icon_id": "20009247",
+      "name": "phoneincoming接听",
+      "font_class": "phoneincomingjieting",
+      "unicode": "e6dd",
+      "unicode_decimal": 59101
+    },
+    {
+      "icon_id": "20286897",
+      "name": "指纹@2x",
+      "font_class": "zhiwen",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "20414952",
+      "name": "智能锁",
+      "font_class": "zhinengsuo",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "21053665",
+      "name": "网络指纹门禁管理器",
+      "font_class": "wangluozhiwenmenjinguanliqi",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "21054609",
+      "name": "剩余电量",
+      "font_class": "shengyudianliang",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "22207556",
+      "name": "有功功率",
+      "font_class": "yougonggongshuai1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "24277186",
+      "name": "电流",
+      "font_class": "dianliu1",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "25039136",
+      "name": "电流",
+      "font_class": "dianliu2",
+      "unicode": "e861",
+      "unicode_decimal": 59489
+    },
+    {
+      "icon_id": "28901610",
+      "name": "API管理",
+      "font_class": "APIguanli",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "29358965",
+      "name": "icon／用电量",
+      "font_class": "a-iconyongdianliang",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "29522656",
+      "name": "16E转移",
+      "font_class": "a-16Ezhuanyi",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "29786270",
+      "name": "门禁设备",
+      "font_class": "menjin",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "31153175",
+      "name": "icon-固件版本",
+      "font_class": "icon-gujianbanben",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "31155210",
+      "name": "renlianshibie",
+      "font_class": "renlianshibie2",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "31396550",
+      "name": "评课系统_参数",
+      "font_class": "canshu2",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "33203307",
+      "name": "剩余电量",
+      "font_class": "shengyudianliang1",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "33889560",
+      "name": "门禁",
+      "font_class": "menjin2",
+      "unicode": "e6bb",
+      "unicode_decimal": 59067
+    },
+    {
+      "icon_id": "35109151",
+      "name": "转移 (4)",
+      "font_class": "a-zhuanyi4",
+      "unicode": "ea70",
+      "unicode_decimal": 60016
+    },
+    {
+      "icon_id": "36285070",
+      "name": "门禁",
+      "font_class": "menjin1",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "36285081",
+      "name": "智能门禁",
+      "font_class": "zhinengmenjin",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "37362453",
+      "name": "renlianshibie",
+      "font_class": "renlianshibie3",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "37782368",
+      "name": "指纹",
+      "font_class": "zhiwen2",
+      "unicode": "10182",
+      "unicode_decimal": 65922
+    },
+    {
+      "icon_id": "37968124",
+      "name": "电压",
+      "font_class": "dianya2",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "40113200",
+      "name": "剩余电量",
+      "font_class": "shengyudianliang2",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "40140221",
+      "name": "通断电状态",
+      "font_class": "tongduandianzhuangtai",
+      "unicode": "e7b2",
+      "unicode_decimal": 59314
+    },
+    {
+      "icon_id": "40883954",
+      "name": "icon_nav_renlianshibie",
+      "font_class": "icon_nav_renlianshibie",
+      "unicode": "e8fd",
+      "unicode_decimal": 59645
+    },
+    {
+      "icon_id": "41623032",
+      "name": "mti-挂断1",
+      "font_class": "mti-guaduan1",
+      "unicode": "e781",
+      "unicode_decimal": 59265
+    },
+    {
+      "icon_id": "41623049",
+      "name": "mti-挂断1(实)",
+      "font_class": "a-mti-guaduan1shi",
+      "unicode": "e782",
+      "unicode_decimal": 59266
+    },
+    {
+      "icon_id": "41774015",
+      "name": "密码-copy",
+      "font_class": "mima1",
+      "unicode": "10183",
+      "unicode_decimal": 65923
+    },
+    {
+      "icon_id": "41774033",
+      "name": "转移 (4)-copy",
+      "font_class": "zhuanyi2",
+      "unicode": "10184",
+      "unicode_decimal": 65924
+    },
+    {
+      "icon_id": "1187",
+      "name": "密匙",
+      "font_class": "michi",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1374",
+      "name": "信号",
+      "font_class": "xinhao",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "229552",
+      "name": "家电_剩余电量",
+      "font_class": "jiadianshengyudianliang",
+      "unicode": "e8b4",
+      "unicode_decimal": 59572
+    }
+  ]
+}

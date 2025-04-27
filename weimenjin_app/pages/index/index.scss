@@ -1,0 +1,553 @@
+.background {
+	width: 100%;
+	height: 352rpx;
+	background: rgb(33, 207, 62);
+	opacity: 0.2;
+	box-shadow: 0px 8rpx 374rpx rgb(58, 137, 254);
+	filter: blur(120rpx);
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.content {
+	width: 100%;
+	height: 100%;
+}
+.big-box {
+	position: relative;
+	z-index: 10;
+	padding-bottom: 260rpx;
+}
+.cell-box {
+	display: flex;
+	align-items: center;
+	padding: 40rpx 46rpx 0;
+	position: relative;
+	.list-box {
+		width: 430rpx;
+		background: #ffffff;
+		position: absolute;
+		top: 97rpx;
+		left: 46rpx;
+		z-index: 50;
+		border-radius: 8rpx;
+		height: 504rpx;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		box-shadow: 16rpx 16rpx 33rpx rgba(117, 160, 232, 0.3);
+		.scroll-box {
+			flex: 1;
+			overflow-x: scroll;
+			height: 100%;
+			.item {
+				margin: 20rpx 34rpx;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border: 1px solid rgb(242, 243, 245);
+				height: 72rpx;
+				padding: 0 40rpx;
+				color: #4e5969;
+				font-size: 28rpx;
+				border-radius: 4rpx;
+				.name {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+				}
+				.pitch-on {
+					width: 32rpx;
+					height: 37rpx;
+					flex-shrink: 0;
+				}
+			}
+			.active {
+				background: #edffe8;
+				border: 1px solid rgb(190, 255, 192);
+				box-sizing: border-box;
+				color: #21cf3e;
+			}
+		}
+		.manage {
+			flex-shrink: 0;
+			height: 90rpx;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 34rpx;
+			.text {
+				color: #4e5969;
+				font-size: 28rpx;
+				font-weight: 700;
+			}
+			image {
+				width: 36rpx;
+				height: 36rpx;
+			}
+		}
+	}
+	.dot {
+		width: 6rpx;
+		height: 6rpx;
+		background: #444444;
+		margin: 0 8rpx;
+		border-radius: 50%;
+	}
+	.welcome {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: #444444;
+	}
+	.equipment {
+		position: relative;
+		z-index: 40;
+		.flex-box {
+			display: flex;
+			align-items: center;
+			.name {
+				font-size: 28rpx;
+				color: #444444;
+				opacity: 0.8;
+			}
+			.iconfont {
+				color: #444444;
+				opacity: 0.8;
+				margin-left: 4rpx;
+			}
+		}
+		.position {
+			position: absolute;
+			left: 50%;
+			bottom: 0;
+			transform: translate(-50%, 0);
+			.icon {
+				width: 24rpx;
+				height: 12rpx;
+			}
+		}
+	}
+}
+.list {
+	margin: 40rpx 55rpx 0;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	.item {
+		width: 300rpx;
+		height: 345rpx;
+		background: linear-gradient(180deg, rgb(255, 255, 255), rgba(255, 255, 255, 0) 100%);
+		box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+		border-radius: 24rpx;
+		margin-bottom: 40rpx;
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		.flex-box {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.site,
+			.share {
+				padding: 20rpx 30rpx 0;
+				image {
+					width: 36rpx;
+					height: 36rpx;
+				}
+			}
+			.site {
+				position: relative;
+				z-index: 40;
+				.position-icon {
+					position: absolute;
+					bottom: -10rpx;
+					left: 50%;
+					transform: translate(-50%, 0);
+					width: 24rpx;
+					height: 12rpx;
+				}
+			}
+		}
+
+		.name {
+			margin-top: 30rpx;
+			margin-bottom: 20rpx;
+			font-size: 28rpx;
+			color: #444444;
+			padding: 0 30rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.text {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 1;
+			}
+		}
+		.indate {
+			// margin-top: 20rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 20rpx;
+			color: #999999;
+		}
+		.key {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.btn {
+				width: 130rpx;
+				height: 70rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-sizing: border-box;
+				background: rgb(33, 207, 62);
+				border: 1px solid rgb(255, 255, 255);
+				box-shadow: 12rpx 12rpx 22rpx rgba(176, 181, 197, 0.49);
+
+				border-radius: 100rpx;
+				image {
+					width: 20rpx;
+					height: 35rpx;
+				}
+			}
+			.btn-on {
+				background: linear-gradient(90deg, rgb(240, 241, 244) 1.807%, rgb(228, 230, 235) 97.992%);
+				border: 1px solid rgb(255, 255, 255);
+				box-shadow: inset 12rpx 12rpx 30rpx rgb(176, 181, 197);
+			}
+		}
+		.pop-up-box {
+			position: absolute;
+			top: 70rpx;
+			left: 0;
+			width: 604rpx;
+			background: #ffffff;
+			border-radius: 8rpx;
+			z-index: 50;
+			box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+			.cell-list {
+				display: flex;
+				align-items: center;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				padding: 12rpx 32rpx 32rpx;
+				.cell-item {
+					display: flex;
+					align-items: center;
+					width: 260rpx;
+					height: 72rpx;
+					box-sizing: border-box;
+					border: 1px solid rgb(242, 243, 245);
+					border-radius: 8rpx;
+					margin-top: 20rpx;
+					justify-content: center;
+					.icon-img {
+						width: 28rpx;
+						height: 28rpx;
+					}
+					.text {
+						margin-left: 14rpx;
+						color: #4e5969;
+						font-size: 28rpx;
+					}
+					.iconfont {
+						font-size: 38rpx;
+						color: #21CF3E;
+					}
+					.icon-shanchu {
+						font-size: 38rpx;
+						color: #FF0000;
+					}
+					.icon-canshu {
+						font-size: 34rpx;
+					}
+					.icon-mima {
+						font-size: 34rpx;
+					}
+				}
+				.cell-item-on {
+					background: #edffe8;
+					border: 1px solid rgb(190, 255, 192);
+					.text {
+						color: #21cf3e;
+					}
+				}
+			}
+		}
+	}
+	.item-on {
+		background: linear-gradient(152.53deg, rgb(33, 207, 62) 5.911%, rgb(38, 182, 62) 92.316%);
+		.name {
+			color: #ffffff;
+		}
+		.indate {
+			color: #ffffff;
+			opacity: 0.7;
+		}
+	}
+}
+.share-btn {
+	position: initial;
+	margin: 0;
+	padding: 0;
+	line-height: 0;
+}
+.site-mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #ffffff;
+	opacity: 0;
+	z-index: 30;
+}
+.offline {
+	background: rgb(191, 194, 192) !important;
+}
+.icon-default {
+	font-size: 42rpx;
+	color: #ffffff;
+}
+.icon-on {
+	color: #21CF3E;
+}
+.icon-shandian {
+	font-size: 42rpx;
+}
+
+.horn-popup {
+    background: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 70;
+    .cell-box {
+        display: flex;
+        justify-content: center;
+        margin-top: 300rpx;
+
+        .content-box {
+            background: #fff;
+            box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+            border-radius: 18rpx;
+            width: 600rpx;
+            padding: 50rpx 30rpx 50rpx 30rpx;
+            box-sizing: border-box;
+			overflow-y: auto;
+            .cell-item {
+                margin-top: 20rpx;
+                display: flex;
+                align-items: center;
+                //border-bottom: 1px solid #e5e4e5;
+
+                .label {
+                    font-size: 28rpx;
+                    color: #444444;
+                    flex-shrink: 0;
+                    margin-right: 10rpx;
+                }
+
+                textarea {
+                    width: 100%;
+                    padding: 10rpx;
+                    font-size: 32rpx;
+                    color: #000000;
+                    border: 1rpx solid #ccc;
+                    border-radius: 5rpx;
+                    box-sizing: border-box;
+                    background: #fff;
+                    min-height: 50rpx;
+                    max-height: 200rpx;
+                    overflow-y: scroll;
+                    resize: none;
+					-webkit-overflow-scrolling: touch; /* 关键代码，启用惯性滚动 */
+                }
+
+                input[type="number"] {
+                    flex: 1;
+                    font-size: 32rpx;
+                    color: #000000;
+                    background: none; /* 不增加任何额外的边框或背景 */
+                    border: none;
+                    outline: none; /* 移除输入框的外部边框 */
+                    text-align: left; /* 右对齐数值，符合常规输入习惯 */
+                }
+            }
+
+            .born-btn {
+                margin-top: 30rpx;
+                background: #21cf3e;
+                box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.3);
+                border-radius: 100rpx;
+                height: 80rpx;
+                color: #ffffff;
+                font-size: 28rpx;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
+.bindPhoneModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景遮罩层 */
+    z-index: 1000; /* 确保足够高，使其在最前面 */
+}
+
+.bindPhone {
+    background-color: #fff; /* 白色背景 */
+    border-radius: 20rpx; /* 圆角 */
+    padding: 40rpx; /* 内边距 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20rpx; /* 按钮间隙 */
+}
+
+.btn, .cancel-btn {
+    padding: 0 30rpx;
+    height: 90rpx;
+    background: rgb(33, 207, 62);
+    border-radius: 100rpx;
+    color: #fff;
+    font-size: 28rpx;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10rpx 0; /* 添加一点垂直间距 */
+}
+
+.cancel-btn {
+    background: rgb(255, 69, 58); /* 取消按钮的背景色 */
+    /* 保持取消按钮的样式与其他按钮一致 */
+}
+.super-admin-badge {
+    position: absolute;
+    bottom: 0rpx; /* 根据需要调整位置 */
+    right: 0rpx;  /* 根据需要调整位置 */
+    width: 100rpx;    /* 三角形的宽度 */
+    height: 100rpx;   /* 三角形的高度 */
+    background-color: #ff0000; /* 绿色背景色，可以根据需要调整 */
+    clip-path: polygon(100% 100%, 0 100%, 100% 0); /* 绘制右下角的三角形 */
+    border-bottom-right-radius: 24rpx; /* 圆角设置，匹配卡片圆角 */
+    z-index: 1; /* 确保三角形在其他内容之上 */
+
+    /* 添加文字容器 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .super-admin-text {
+        color: #ffffff; /* 文字颜色为白色 */
+        font-size: 20rpx; /* 字体大小 */
+        font-weight: bold; /* 加粗字体 */
+        text-align: center; /* 文字居中对齐 */
+        transform: translate(16rpx, 20rpx); /* 调整文字的位置，确保在三角形中心 */
+    }
+}
+.admin-badge {
+    position: absolute;
+    bottom: 0rpx; /* 根据需要调整位置 */
+    right: 0rpx;  /* 根据需要调整位置 */
+    width: 100rpx;    /* 三角形的宽度 */
+    height: 100rpx;   /* 三角形的高度 */
+    background-color: #28a745; /* 绿色背景色，可以根据需要调整 */
+    clip-path: polygon(100% 100%, 0 100%, 100% 0); /* 绘制右下角的三角形 */
+    border-bottom-right-radius: 24rpx; /* 圆角设置，匹配卡片圆角 */
+    z-index: 1; /* 确保三角形在其他内容之上 */
+
+    /* 添加文字容器 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .admin-text {
+        color: #ffffff; /* 文字颜色为白色 */
+        font-size: 18rpx; /* 字体大小 */
+        font-weight: bold; /* 加粗字体 */
+        text-align: center; /* 文字居中对齐 */
+        transform: translate(18rpx, 22rpx); /* 调整文字的位置，确保在三角形中心 */
+    }
+}
+
+::v-deep .placeholder {
+	font-size: 28rpx;
+	color: #999999;
+}
+.popup-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px; /* 增加宽度以容纳更多按钮 */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000; /* 确保在其他元素之上 */
+  overflow-y: auto; /* 如果内容超出，允许滚动 */
+  max-height: 70vh; /* 最大高度限制 */
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap; /* 允许换行 */
+  justify-content: space-between; /* 在行之间均匀分布 */
+}
+
+.popup-content button {
+  flex: 1 0 30%; /* 每行三个按钮 */
+  margin: 10px 0; /* 上下间距 */
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745; /* 绿色背景 */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.popup-content button:hover {
+  background-color: #32d455; /* 悬停时变色 */
+}
+
+.popup-content button:active {
+  transform: translateY(5px); /* 按下时的视觉效果 */
+}
+
+.popup-content .close-button {
+  background-color: #28a745; /* 关闭按钮 */
+}
+
+
+/* 针对iOS设备的优化 */
+html[data-platform='ios'] .text {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 针对安卓设备的优化 */
+html[data-platform='android'] .text {
+  -webkit-font-smoothing: auto;
+}

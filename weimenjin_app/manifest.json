@@ -1,0 +1,199 @@
+{
+    "name" : "微门禁",
+    "appid" : "__UNI__1F4A553",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
+    /* 5+App特有相关 */
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        "compatible" : {
+            "ignoreVersion" : true
+        },
+        /* 模块配置 */
+        "modules" : {
+            "OAuth" : {},
+            "VideoPlayer" : {},
+            "Bluetooth" : {}
+        },
+        /* 应用发布信息 */
+        "distribute" : {
+            /* android打包配置 */
+            "android" : {
+                "permissions" : [
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                ]
+            },
+            /* ios打包配置 */
+            "ios" : {
+                "capabilities" : {
+                    "entitlements" : {
+                        "com.apple.developer.associated-domains" : [ "applinks:demo.wmj.com.cn" ]
+                    }
+                },
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "如果不允许,你将无法从相册选择图片",
+                    "NSPhotoLibraryAddUsageDescription" : "如果不允许,你将无法保存图片到相册",
+                    "NSCameraUsageDescription" : "如果不允许,你将无法修改个人头像"
+                },
+                "idfa" : false,
+                "dSYMs" : false
+            },
+            /* SDK配置 */
+            "sdkConfigs" : {
+                "oauth" : {},
+                "payment" : {},
+                "ad" : {}
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "unpackage/res/icons/72x72.png",
+                    "xhdpi" : "unpackage/res/icons/96x96.png",
+                    "xxhdpi" : "unpackage/res/icons/144x144.png",
+                    "xxxhdpi" : "unpackage/res/icons/192x192.png"
+                },
+                "ios" : {
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
+                    "ipad" : {
+                        "app" : "unpackage/res/icons/76x76.png",
+                        "app@2x" : "unpackage/res/icons/152x152.png",
+                        "notification" : "unpackage/res/icons/20x20.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "proapp@2x" : "unpackage/res/icons/167x167.png",
+                        "settings" : "unpackage/res/icons/29x29.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "spotlight" : "unpackage/res/icons/40x40.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png"
+                    },
+                    "iphone" : {
+                        "app@2x" : "unpackage/res/icons/120x120.png",
+                        "app@3x" : "unpackage/res/icons/180x180.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "notification@3x" : "unpackage/res/icons/60x60.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "settings@3x" : "unpackage/res/icons/87x87.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png",
+                        "spotlight@3x" : "unpackage/res/icons/120x120.png"
+                    }
+                }
+            },
+            "splashscreen" : {
+                "android" : {
+                    "hdpi" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/安卓高分屏.png",
+                    "xhdpi" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/安卓720高分屏.png",
+                    "xxhdpi" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/安卓1080高分屏.png"
+                },
+                "ios" : {
+                    "iphone" : {
+                        "iphonex" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhoneX.png",
+                        "retina55" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone6 plus.png",
+                        "retina47" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone6.png",
+                        "retina40" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone5.png",
+                        "retina35" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/iPhone4.png"
+                    },
+                    "ipad" : {
+                        "portrait7" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/ipad.png",
+                        "portrait-retina7" : "/Users/zhouqian/yuethink/yishidai/亿食代打包资料/亿食代启动图及图标/1x/ipad 高分屏ios7.png"
+                    }
+                }
+            }
+        }
+    },
+    /* 快应用特有相关 */
+    "quickapp" : {},
+    /* 小程序特有相关 */
+    "mp-weixin" : {
+        "appid" : "wx8f5b26d6d3db5904",
+        "setting" : {
+            "urlCheck" : false,
+            "minified" : true,
+            "postcss" : true,
+            "es6" : false
+        },
+        "usingComponents" : true,
+        "libVersion" : "2.8.1",
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "小程序将获取您的位置信，否则部分功能不可用"
+            }
+        },
+        "requiredPrivateInfos" : [ "getLocation" ],
+        "lazyCodeLoading" : "requiredComponents"
+    },
+    "mp-alipay" : {
+        "usingComponents" : true,
+        "appid" : "2021001152652253"
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true,
+        "appid" : "ttddf2ab4f42c0840301",
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "小程序将获取您的位置信，否则部分功能不可用"
+            }
+        }
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "plus" : {
+        "distribute" : {
+            "apple" : {
+                "idfa" : false
+            }
+        }
+    },
+    "h5" : {
+        "title" : "微门禁",
+        "domain" : "http://m.meiyaya.yuethink.net/",
+        "template" : "",
+        "router" : {
+            "base" : ""
+        },
+        "devServer" : {
+            "https" : false,
+            "port" : ""
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        }
+    },
+    "vueVersion" : "3"
+}
