@@ -1,6 +1,5 @@
 # 微门禁小程序项目
-搭建视频教程地址：
-https://www.bilibili.com/video/BV1dDHceVEsT/?spm_id_from=333.999.0.0&vd_source=e736e88719358f3113e479056b71810b
+最新版本说明请参考：https://developer.wmj.com.cn/docs/doc/wmj_userapp
 ## 下载请给个Star
 
 **Star是攻城狮生发的动力！**
