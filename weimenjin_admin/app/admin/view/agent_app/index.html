@@ -1,0 +1,457 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h3>合作伙伴申请管理
+                    {if condition="isset($application)"}
+                    <span class="label label-info" style="margin-left: 10px;">
+                            {if condition="$application.status == 0"}
+                                沟通阶段
+                            {elseif condition="$application.status == 1"}
+                                签订合同
+                            {elseif condition="$application.status == 2"}
+                                合同已签
+                            {/if}
+                        </span>
+                    {/if}
+                    {if condition="$application.contract_url"}
+                    <a href="javascript:void(0);" onclick="showContractModal('{$application.contract_url}');">查看合同</a>
+                    {/if}
+                    {if condition="$application.business_license"}
+                    : <a href="javascript:void(0);" onclick="showLicenseModal('{$application.business_license}');">查看营业执照</a>
+                    {/if}
+                    <button class="btn btn-info" onclick="previewContract({$application.id})">预览合作协议</button>
+                </h3>
+            </div>
+            <div class="ibox-content">
+                <p><strong>用户编号: </strong>{$user_id}</p>
+
+                <!-- 自定义提示框 -->
+                <div id="custom-alert" class="custom-alert" style="display: none;">
+                    <p id="alert-message"></p>
+                </div>
+
+                <!-- 判断是否首次提交 -->
+                {if condition="!isset($application)"}
+                <form id="firstSubmitForm" method="post" enctype="multipart/form-data" action="{:url('AgentApp/submitApplication')}">
+                    <div class="form-group">
+                        <label>公司名称:</label>
+                        <input type="text" class="form-control" name="company_name" placeholder="请输入公司名称" required>
+                    </div>
+                    <div class="form-group">
+                        <label>统一社会信用代码:</label>
+                        <input type="text" class="form-control" name="credit_code" placeholder="请输入统一社会信用代码" required>
+                    </div>
+                    <div class="form-group">
+                        <label>办公地址:</label>
+                        <input type="text" class="form-control" name="office_address" placeholder="请输入办公地址" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人姓名:</label>
+                        <input type="text" class="form-control" name="contact_name" placeholder="请输入联系人姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人手机号:</label>
+                        <input type="tel" class="form-control" name="contact_phone" placeholder="请输入联系人手机号" pattern="[0-9]{11}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人邮箱:</label>
+                        <input type="email" class="form-control" name="contact_email" placeholder="请输入联系人邮箱" required>
+                    </div>
+                    <div class="form-group">
+                        <label>经营行业:</label>
+                        <select class="form-control" name="business_industry" required>
+                            <option value="">请选择经营行业</option>
+                            <option value="综合运营商">综合运营商</option>
+                            <option value="信息技术服务商">软件开发商</option>
+                            <option value="物业行业">物业行业</option>
+                            <option value="超市零售">超市零售</option>
+                            <option value="快递驿站">快递驿站</option>
+                            <option value="无人值守">无人值守</option>
+                            <option value="配送无人仓">配送无人仓</option>
+                            <option value="设备安装维护">系统集成商</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>上传营业执照:</label>
+                        <input type="file" class="form-control" name="business_license" accept="image/*" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">提交申请</button>
+                    </div>
+                </form>
+                {else /}
+                <!-- 分开更新功能 -->
+                <form id="basicInfoForm" method="post" action="{:url('AgentApp/updateBasicInfo')}">
+                    <input type="hidden" name="id" value="{$application.id}">
+                    <div class="form-group">
+                        <label>公司名称:</label>
+                        <input type="text" class="form-control" name="company_name" value="{$application.company_name|default=''}" placeholder="请输入公司名称" required>
+                    </div>
+                    <div class="form-group">
+                        <label>统一社会信用代码:</label>
+                        <input type="text" class="form-control" name="credit_code" value="{$application.credit_code|default=''}" placeholder="请输入统一社会信用代码" required>
+                    </div>
+                    <div class="form-group">
+                        <label>办公地址:</label>
+                        <input type="text" class="form-control" name="office_address" value="{$application.office_address|default=''}" placeholder="请输入办公地址" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人姓名:</label>
+                        <input type="text" class="form-control" name="contact_name" value="{$application.contact_name|default=''}" placeholder="请输入联系人姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人手机号:</label>
+                        <input type="tel" class="form-control" name="contact_phone" value="{$application.contact_phone|default=''}" placeholder="请输入联系人手机号" pattern="[0-9]{11}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人邮箱:</label>
+                        <input type="email" class="form-control" name="contact_email" value="{$application.contact_email|default=''}" placeholder="请输入联系人邮箱" required>
+                    </div>
+                    <div class="form-group">
+                        <label>经营行业:</label>
+                        <select class="form-control" name="business_industry" required>
+                            <option value="">请选择经营行业</option>
+                            <option value="综合运营商" {if condition="$application.business_industry=='综合运营商'"}selected{/if}>综合运营商</option>
+                            <option value="信息技术服务商" {if condition="$application.business_industry=='信息技术服务商'"}selected{/if}>信息技术服务商</option>
+                            <option value="物业行业" {if condition="$application.business_industry=='物业行业'"}selected{/if}>物业行业</option>
+                            <option value="超市零售" {if condition="$application.business_industry=='超市零售'"}selected{/if}>超市零售</option>
+                            <option value="快递驿站" {if condition="$application.business_industry=='快递驿站'"}selected{/if}>快递驿站</option>
+                            <option value="无人值守" {if condition="$application.business_industry=='无人值守'"}selected{/if}>无人值守</option>
+                            <option value="配送无人仓" {if condition="$application.business_industry=='配送无人仓'"}selected{/if}>配送无人仓</option>
+                            <option value="设备安装维护" {if condition="$application.business_industry=='设备安装维护'"}selected{/if}>设备安装维护</option>
+                            <option value="其他" {if condition="$application.business_industry=='其他'"}selected{/if}>其他</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">更新基础信息</button>
+                    </div>
+                </form>
+                <hr>
+
+                <!-- 更新营业执照 -->
+                <form id="licenseForm" method="post" enctype="multipart/form-data" action="{:url('AgentApp/updateBusinessLicense')}">
+                    <input type="hidden" name="id" value="{$application.id}">
+                    <div class="form-group">
+                        <label>上传新的营业执照:</label>
+
+                        <input type="file" class="form-control" name="business_license" accept="image/*">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">更新营业执照</button>
+                    </div>
+                </form>
+
+
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 弹出层 HTML 结构 -->
+<div id="modal-wrapper" style="display: none;">
+    <div class="showmodal">
+        <div class="showmodal-content">
+            <span class="close-showmodal" onclick="closeModal()">&times;</span> <!-- 关闭按钮 -->
+            <img id="modalImage" src="" alt="图片预览" class="resizable-img"> <!-- 图片预览 -->
+        </div>
+    </div>
+</div>
+<!-- 合同预览模态框 -->
+<div id="contractModal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeContractModal()">&times;</span>
+        <iframe id="contractPdfFrame" src="" style="width:100%;height:100%;"></iframe>
+    </div>
+</div>
+
+<style>
+    .custom-alert {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 4px;
+        z-index: 1000;
+        display: none;
+        min-width: 200px;
+        text-align: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-alert.error {
+        background-color: #f44336;
+    }
+
+    .showmodal {
+        /*display: flex;*/
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .showmodal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        max-width: 1000px;
+        width: 100%;
+        margin: 10px auto;
+        text-align: center;
+        overflow: hidden;  /* 禁用滚动条 */
+        position: relative;  /* 相对定位，确保图片拖动功能有效 */
+        max-height: 100vh;  /* 允许模态框占据整个视口高度 */
+    }
+
+    .resizable-img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        cursor: zoom-in;  /* 默认放大光标 */
+    }
+    .zoomed {
+        cursor: zoom-out;  /* 放大后变为缩小光标 */
+        transform: scale(2);  /* 放大比例 */
+        max-width: none;  /* 取消最大宽度限制 */
+        height: auto;
+    }
+    .close-showmodal {
+        float: right;
+        font-size: 30px;
+        cursor: pointer;
+        z-index: 1000;  /* 确保关闭按钮始终在最上层 */
+    }
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: 80%;
+        height: 90vh; /* 高度占据 90% 视口 */
+        margin: 0 auto;
+        position: fixed;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+        z-index: 1050;
+    }
+
+    #contractModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* 背景半透明 */
+        z-index: 1040;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .close {
+        position: absolute;
+        right: 5px;
+        top: 1px;
+        color: #ee162d;
+        font-size: 30px;
+        cursor: pointer;
+        opacity: .6;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        // 显示自定义提示框
+        function showAlert(message, type = 'success') {
+            var alertBox = $('#custom-alert');
+            alertBox.removeClass('error');
+            if (type === 'error') {
+                alertBox.addClass('error');
+            }
+            $('#alert-message').text(message);
+            alertBox.show();
+            setTimeout(function() {
+                alertBox.fadeOut();
+            }, 3000);
+        }
+
+        // 首次提交处理
+        $('#firstSubmitForm').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        showAlert(response.message, 'success');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 3000);
+                    } else {
+                        showAlert(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showAlert('提交失败，请重试', 'error');
+                }
+            });
+        });
+
+        // 分开更新处理
+        $('#basicInfoForm, #licenseForm').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            if (!formData.has('id')) {
+                var id = $(this).find('input[name="id"]').val(); // 从表单中获取 id
+                formData.append('id', id);  // 手动添加 id 到 FormData
+            }
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        showAlert(response.message, 'success');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 3000);
+                    } else {
+                        showAlert(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showAlert('提交失败，请重试', 'error');
+                }
+            });
+        });
+    });
+
+    // 显示图片模态框
+    function showLicenseModal(imageUrl) {
+        if (imageUrl) {
+            $('#modalImage').attr('src', imageUrl);
+            $('#modal-wrapper').fadeIn();
+            enableZoom('#modalImage');  // 启用放大功能
+        } else {
+            console.error("没有可显示的营业执照");
+        }
+    }
+
+    function showContractModal(imageUrl) {
+        if (imageUrl) {
+            $('#modalImage').attr('src', imageUrl);
+            $('#modal-wrapper').fadeIn();
+            enableZoom('#modalImage');  // 启用放大功能
+        } else {
+            console.error("没有可显示的合同");
+        }
+    }
+
+    // 关闭模态框
+    function closeModal() {
+        $('#modal-wrapper').fadeOut();
+    }
+
+    function enableZoom(imageSelector) {
+        $(imageSelector).css('cursor', 'zoom-in');  // 设置鼠标样式为放大镜
+
+        // 当图片被点击时进行放大
+        $(imageSelector).off('click').on('click', function() {
+            if ($(this).hasClass('zoomed')) {
+                $(this).removeClass('zoomed');
+                $(this).css({
+                    'transform': 'scale(1)',  // 恢复原始大小
+                    'cursor': 'zoom-in',
+                    'position': 'static',
+                    'left': '0',
+                    'top': '0'
+                });
+                $(this).parent().css({
+                    'overflow': 'auto',  // 恢复模态框滚动
+                    'height': 'auto'
+                });
+                $(this).off('mousedown mousemove mouseup');  // 移除拖动事件
+            } else {
+                $(this).addClass('zoomed');
+                $(this).css({
+                    'transform': 'scale(2)',  // 放大图片
+                    'cursor': 'zoom-out',
+                    'position': 'absolute',
+                    'left': '0',
+                    'top': '0'
+                });
+                $(this).parent().css({
+                    'overflow': 'hidden',  // 禁用模态框滚动
+                    'height': '100vh'      // 允许图片占满整个视口高度
+                });
+                enableImageDrag($(this));  // 启用拖动功能
+            }
+        });
+    }
+
+    function enableImageDrag(imageElement) {
+        var isDragging = false;
+        var startX, startY, initialLeft, initialTop;
+
+        imageElement.on('mousedown', function(e) {
+            isDragging = true;
+            startX = e.pageX;
+            startY = e.pageY;
+            initialLeft = parseInt(imageElement.css('left'), 10) || 0;
+            initialTop = parseInt(imageElement.css('top'), 10) || 0;
+
+            e.preventDefault();  // 阻止默认的图片拖动行为
+        });
+
+        $(document).on('mousemove', function(e) {
+            if (isDragging) {
+                var dx = e.pageX - startX;
+                var dy = e.pageY - startY;
+                imageElement.css({
+                    'left': initialLeft + dx + 'px',
+                    'top': initialTop + dy + 'px'
+                });
+            }
+        });
+
+        $(document).on('mouseup', function() {
+            isDragging = false;  // 停止拖动
+        });
+    }
+    function previewContract(applicationId) {
+        $.post("{:url('AgentApp/generateContract')}", {id: applicationId}, function(response) {
+            if (response.status === 'success') {
+                $('#contractPdfFrame').attr('src', response.download_url);
+                $('#contractModal').fadeIn();  // 显示模态框
+            } else {
+                alert(response.message);
+            }
+        });
+    }
+
+    function closeContractModal() {
+        $('#contractModal').fadeOut();  // 关闭模态框
+    }
+</script>
+{/block}

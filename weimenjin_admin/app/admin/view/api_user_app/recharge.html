@@ -1,0 +1,36 @@
+{extend name="common/_container"}
+{block name="content"}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>充值</h5>
+      </div>
+      <div class="ibox-content">
+        <form id="rechargeForm">
+          <div class="form-group">
+            <label for="amount">充值金额</label>
+            <input type="number" class="form-control" id="amount" name="amount" placeholder="请输入充值金额" required>
+          </div>
+          <input type="hidden" id="user_id" name="user_id" value="{$user_id}">
+          <button type="button" class="btn btn-primary" onclick="doRecharge()">确认充值</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function doRecharge() {
+    var formData = $('#rechargeForm').serialize();
+    $.post(Feng.ctxPath + "/ApiUserApp/dorecharge", formData, function(data) {
+      if (data.status === 'success') {
+        Feng.success('充值成功！当前余额为：' + data.balance + '元');
+        parent.layer.close(parent.layer.getFrameIndex(window.name)); // 关闭当前窗口
+        parent.ApiUserApp.table.refresh(); // 刷新父窗口的表格数据
+      } else {
+        Feng.error(data.message);
+      }
+    }, 'json');
+  }
+</script>
+{/block}

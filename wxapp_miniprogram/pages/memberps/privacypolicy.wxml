@@ -1,6 +1,0 @@
-<!--pages/memberps/privacypolicy.wxml-->
-<view class="container">
-  <view class="pageH5">
-    <web-view src="{{privacyurl}}"></web-view>
-  </view>
-</view>

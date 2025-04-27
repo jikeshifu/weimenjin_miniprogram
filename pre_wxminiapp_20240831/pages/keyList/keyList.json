@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "权限管理",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "uni-load-more": "/components/uni-load-more/uni-load-more"
-  }
-}

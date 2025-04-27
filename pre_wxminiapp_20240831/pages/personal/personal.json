@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "我的",
-  "usingComponents": {
-    "tuniaoui-wx-user-info": "/components/tuniaoui-wx-user-info/tuniaoui-wx-user-info",
-    "tnui-wx-user-info": "/components/uni-dateformat/components/uni-dateformat/uni-dateformat"
-  }
-}

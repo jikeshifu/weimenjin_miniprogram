@@ -1,0 +1,92 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row" id="searchGroup">
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">AppID</button>
+                                    </div>
+                                    <input type="text" class="form-control" id="appid" placeholder="AppID" />
+                                </div>
+                            </div>
+                            <!-- search end -->
+                            <div class="col-sm-2" style="width: 300px">
+                                <button type="button" class="btn btn-primary" onclick="ApiUserApp.search()" >
+                                    <i class="fa fa-search"></i>&nbsp;搜索
+                                </button>
+                            </div>
+                        </div>
+                        <table id="ApiUserAppTable" data-mobile-responsive="true" data-click-to-select="true">
+                            <thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var ApiUserApp = {id: "ApiUserAppTable", seItem: null, table: null, layerIndex: -1};
+
+    ApiUserApp.initColumn = function () {
+        return [
+            {field: 'selectItem', checkbox: true},
+            {title: '用户ID', field: 'user_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+            {title: 'AppID', field: 'appid', visible: true, align: 'center', valign: 'middle',sortable: true},
+            {title: '余额', field: 'balance', visible: true, align: 'center', valign: 'middle',sortable: true},
+            {title: '创建日期', field: 'created_at', visible: true, align: 'center', valign: 'middle',sortable: true},
+            {title: '操作', field: '', visible: true, align: 'center', valign: 'middle', formatter: 'ApiUserApp.buttonFormatter'},
+        ];
+    };
+
+    ApiUserApp.buttonFormatter = function(value, row, index) {
+        if(row.user_id){
+            return '<button type="button" class="btn btn-primary btn-xs" title="充值"  onclick="ApiUserApp.recharge('+row.user_id+')"><i class="fa fa-money"></i>&nbsp;充值</button>';
+        }
+    }
+
+    ApiUserApp.formParams = function() {
+        var queryData = {};
+        queryData['user_id'] = $("#user_id").val();
+        queryData['appid'] = $("#appid").val();
+        queryData['balance'] = $("#balance").val();
+        queryData['created_at'] = $("#create_at").val();
+        return queryData;
+    };
+
+    ApiUserApp.search = function() {
+        ApiUserApp.table.refresh({query : ApiUserApp.formParams()});
+    };
+
+    ApiUserApp.recharge = function (user_id) {
+        var index = layer.open({
+            type: 2,
+            title: '充值',
+            area: ['500px', '300px'],
+            fix: false,
+            maxmin: true,
+            content: Feng.ctxPath + '/ApiUserApp/recharge?user_id=' + user_id,
+            end: function () {
+                // 充值完成后刷新表格
+                ApiUserApp.table.refresh();
+            }
+        });
+        this.layerIndex = index;
+        if(!IsPC()){layer.full(index)}
+    }
+
+    $(function() {
+        var defaultColunms = ApiUserApp.initColumn();
+        var table = new BSTable(ApiUserApp.id, Feng.ctxPath + "/ApiUserApp/index", defaultColunms,20);
+        table.setPaginationType("server");
+        table.setQueryParams(ApiUserApp.formParams());
+        ApiUserApp.table = table.init();
+    });
+</script>
+{/block}

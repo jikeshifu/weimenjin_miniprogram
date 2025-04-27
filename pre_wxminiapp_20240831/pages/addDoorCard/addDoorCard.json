@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "添加门卡",
-  "usingComponents": {
-    "uv-datetime-picker": "/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker"
-  }
-}

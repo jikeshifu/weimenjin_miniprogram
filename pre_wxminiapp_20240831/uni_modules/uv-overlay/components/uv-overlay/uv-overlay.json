@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "uv-transition": "/uni_modules/uv-transition/components/uv-transition/uv-transition"
-  },
-  "component": true
-}
