@@ -1016,8 +1016,8 @@
 				}
 			},
 			isHornLiveTalkCapable(item) {
-				const sn = item && item.lock && item.lock.lock_sn ? item.lock.lock_sn : '';
-				return sn.startsWith('W70B') || sn.startsWith('W70R');
+				// 开源版暂未提供实时喊话调度服务，避免展示不可用入口。
+				return false;
 			},
 			getLiveTalkButtonText() {
 				if (this.liveTalkState === 'talking') {

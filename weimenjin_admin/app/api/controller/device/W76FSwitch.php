@@ -27,8 +27,10 @@ class W76FSwitch extends Base
             return json(Code::CodeErr(1000,$e->getError()));
         }
 
-        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($param['lockauth_id']);
-        $lock = Lock::Info($lockAuth["lock_id"]);
+        $lock = $this->getLockByAuthId($param['lockauth_id']);
+        if (!$lock) {
+            return json(Code::CodeErr(1000, "设备授权不存在"));
+        }
 
         // 获取设备路数配置
         $deviceConfig = Db::name('w76f_device_config')
@@ -114,8 +116,10 @@ class W76FSwitch extends Base
             return json(Code::CodeErr(1000,$e->getError()));
         }
 
-        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($param['lockauth_id']);
-        $lock = Lock::Info($lockAuth["lock_id"]);
+        $lock = $this->getLockByAuthId($param['lockauth_id']);
+        if (!$lock) {
+            return json(Code::CodeErr(1000, "设备授权不存在"));
+        }
 
         // 检查是否已存在配置
         $exists = Db::name('w76f_relay_config')
@@ -228,8 +232,10 @@ class W76FSwitch extends Base
             return json(Code::CodeErr(1000,$e->getError()));
         }
 
-        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($param['lockauth_id']);
-        $lock = Lock::Info($lockAuth["lock_id"]);
+        $lock = $this->getLockByAuthId($param['lockauth_id']);
+        if (!$lock) {
+            return json(Code::CodeErr(1000, "设备授权不存在"));
+        }
 
         // 获取继电器名称
         $relayConfig = Db::name('w76f_relay_config')
@@ -300,8 +306,10 @@ class W76FSwitch extends Base
             return json(Code::CodeErr(1000,$e->getError()));
         }
 
-        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($param['lockauth_id']);
-        $lock = Lock::Info($lockAuth["lock_id"]);
+        $lock = $this->getLockByAuthId($param['lockauth_id']);
+        if (!$lock) {
+            return json(Code::CodeErr(1000, "设备授权不存在"));
+        }
 
         // 更新或插入设备路数配置
         $exists = Db::name('w76f_device_config')
@@ -332,6 +340,21 @@ class W76FSwitch extends Base
     /**
      * 添加操作记录
      */
+    private function getLockByAuthId($lockauthId)
+    {
+        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauthId);
+        if (!$lockAuth || empty($lockAuth["lock_id"])) {
+            return null;
+        }
+
+        $lock = Lock::Info($lockAuth["lock_id"]);
+        if (!$lock || empty($lock["lock_id"])) {
+            return null;
+        }
+
+        return $lock;
+    }
+
     static function AddDeviceLog($device_sn, $member_id, $type, $status = 1, $relay_num = 0){
         $device = Db::name('lock')
             ->where('lock_sn', $device_sn)

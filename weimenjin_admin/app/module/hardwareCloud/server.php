@@ -293,6 +293,25 @@ class server
      * 注销设备
      */
 
+    public static function SendData($device_sn, $data = [], $time_out = 15)
+    {
+        if (empty($device_sn)) {
+            return ["err" => "device_sn不能为空!"];
+        }
+
+        $res = self::Request("mqtt/send", [
+            "device_sn" => $device_sn,
+            "time_out" => $time_out,
+            "data" => $data,
+        ]);
+
+        if (($res["code"] ?? 0) != 0) {
+            return ["err" => $res["msg"] ?? "硬件云请求失败", "data" => $res];
+        }
+
+        return ["err" => null, "data" => $res["data"] ?? []];
+    }
+
     public function Logout($device_sn)
     {
         if (mb_substr($device_sn, 0, 3) == "W77"||mb_substr($device_sn, 0, 4) == "W766"||mb_substr($device_sn, 0, 4) == "W765") {

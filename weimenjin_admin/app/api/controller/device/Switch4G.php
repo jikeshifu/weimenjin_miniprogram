@@ -141,6 +141,9 @@ class Switch4G extends Base
     //添加操作记录
     static function AddDeviceLog($device_sn,$member_id,$type,$status = 1){
         $device = Lock::where(["lock_sn"=>$device_sn])->whereNull("deleted_at")->find();
+        if (!$device) {
+            return;
+        }
         LockLog::add($member_id, $device["lock_id"], $type, $status);
     }
 }
