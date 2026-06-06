@@ -35,7 +35,7 @@ class horn
         return ["err" => null,"data"=>$res["data"]];
     }
 
-    static function Play($device_sn,$ttscontent,$volume=5)
+    static function Play($device_sn,$ttscontent,$volume=5,$speaker='prompt_female_high',$number_mode='digit')
     {
 
         $res = server::Request("send", [
@@ -47,19 +47,22 @@ class horn
                     "tts" =>$ttscontent,
                     //"inner"=>10,
                     "volume" => (int)$volume,
+                    "speaker" => $speaker,
+                    "number_mode" => $number_mode,
                 ]
             ]
         ]);
         if ($res["code"] != 0) {
             return ["err" => $res["msg"]];
         }
-        if ($res["data"]["info"]["code"] !=0) {
-            return ["err" =>"播放语音".$res["data"]["info"]["err_code"],'data'=>$res];
+        $info = $res["data"]["info"] ?? [];
+        if (($info["code"] ?? 0) != 0) {
+            return ["err" =>"播放语音".($info["err_code"] ?? ($info["msg"] ?? "")),'data'=>$res];
         }
 
         return ["err" => null,"data"=>$res["data"]];
     }
-    static function LoopPlay($device_sn,$ttscontent,$volume=5,$loopcmd,$loopInterval)
+    static function LoopPlay($device_sn,$ttscontent,$volume=5,$loopcmd='loop_play',$loopInterval=0,$speaker='prompt_female_high',$number_mode='digit')
     {
 
         $res = server::Request("send", [
@@ -71,15 +74,18 @@ class horn
                     "tts" =>$ttscontent,
                     "inner"=>10,
                     "volume" => (int)$volume,
-                    "interval"=>$loopInterval
+                    "interval"=>$loopInterval,
+                    "speaker" => $speaker,
+                    "number_mode" => $number_mode,
                 ]
             ]
         ]);
         if ($res["code"] != 0) {
             return ["err" => $res["msg"]];
         }
-        if ($res["data"]["info"]["code"] !=0) {
-            return ["err" =>"播放语音".$res["data"]["info"]["err_code"],'data'=>$res];
+        $info = $res["data"]["info"] ?? [];
+        if (($info["code"] ?? 0) != 0) {
+            return ["err" =>"播放语音".($info["err_code"] ?? ($info["msg"] ?? "")),'data'=>$res];
         }
 
         return ["err" => null,"data"=>$res["data"]];

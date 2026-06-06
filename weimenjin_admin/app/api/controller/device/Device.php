@@ -1611,9 +1611,17 @@ class Device extends Base
         $isLoopEnabled = input("isLoopEnabled");
         $stopplay = input("stopplay");
         $loopInterval = input("loopInterval");
+        $speaker = input("speaker", "prompt_female_high");
+        $number_mode = input("number_mode", "digit");
 
         $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+        if (!$lockAuth || empty($lockAuth["lock_id"])) {
+            return json(Code::CodeErr(1000, "设备授权不存在"));
+        }
         $lock = Lock::Info($lockAuth["lock_id"]);
+        if (!$lock || empty($lock["lock_sn"])) {
+            return json(Code::CodeErr(1000, "设备不存在"));
+        }
         Db::name("lock")->where(["lock_id" => $lockAuth["lock_id"]])->update([
             "openttscontent" => $tts,
             "volume" => $volume,
@@ -1621,19 +1629,74 @@ class Device extends Base
         $UidRes = MemberServer::Uid();
         $res = [];
         if (isset($stopplay) && $stopplay) {
-            HardwareCloud::Horn()->LoopPlay($lock["lock_sn"], $tts, $volume, "loop_stop", (int)$loopInterval);
+            $res = HardwareCloud::Horn()->LoopPlay($lock["lock_sn"], $tts, $volume, "loop_stop", (int)$loopInterval, $speaker, $number_mode);
         } else {
             if ($isLoopEnabled) {
-                $res = HardwareCloud::Horn()->LoopPlay($lock["lock_sn"], $tts, $volume, "loop_play", (int)$loopInterval);
+                $res = HardwareCloud::Horn()->LoopPlay($lock["lock_sn"], $tts, $volume, "loop_play", (int)$loopInterval, $speaker, $number_mode);
             } else {
-                $res = HardwareCloud::Horn()->Play($lock["lock_sn"], $tts, $volume);
+                $res = HardwareCloud::Horn()->Play($lock["lock_sn"], $tts, $volume, $speaker, $number_mode);
             }
         }
-        if ($res["err"]) {
+        if (!is_array($res)) {
+            $res = ["err" => "硬件云返回异常", "data" => $res];
+        }
+        if (!empty($res["err"])) {
             LockLog::add($UidRes["uid"], $lock["lock_id"], 9, 0);
             return json(Code::CodeErr(1000, $res["err"]));
         } else {
             LockLog::add($UidRes["uid"], $lock["lock_id"], 9, 1);
+
+            if (!isset($stopplay) || !$stopplay) {
+                $speed = input("speed", 5);
+                $tone = input("tone", 5);
+
+                $existRecord = Db::name("horn_broadcast_history")
+                    ->where("lock_id", $lock["lock_id"])
+                    ->where("content", $tts)
+                    ->where("volume", $volume)
+                    ->where("speed", $speed)
+                    ->where("tone", $tone)
+                    ->find();
+
+                if ($existRecord) {
+                    Db::name("horn_broadcast_history")
+                        ->where("id", $existRecord["id"])
+                        ->update([
+                            "created_at" => time(),
+                            "loop_enabled" => $isLoopEnabled ? 1 : 0,
+                            "loop_interval" => $loopInterval ? (int)$loopInterval : 0
+                        ]);
+                } else {
+                    Db::name("horn_broadcast_history")->insert([
+                        "lock_id" => $lock["lock_id"],
+                        "member_id" => $UidRes["uid"],
+                        "content" => $tts,
+                        "volume" => $volume,
+                        "speed" => $speed,
+                        "tone" => $tone,
+                        "loop_enabled" => $isLoopEnabled ? 1 : 0,
+                        "loop_interval" => $loopInterval ? (int)$loopInterval : 0,
+                        "created_at" => time()
+                    ]);
+
+                    $count = Db::name("horn_broadcast_history")
+                        ->where("lock_id", $lock["lock_id"])
+                        ->count();
+
+                    if ($count > 100) {
+                        $keepIds = Db::name("horn_broadcast_history")
+                            ->where("lock_id", $lock["lock_id"])
+                            ->order("created_at", "desc")
+                            ->limit(100)
+                            ->column("id");
+
+                        Db::name("horn_broadcast_history")
+                            ->where("lock_id", $lock["lock_id"])
+                            ->where("id", "not in", $keepIds)
+                            ->delete();
+                    }
+                }
+            }
         }
 
         return json(Code::CodeOk(["data" => $res]));
