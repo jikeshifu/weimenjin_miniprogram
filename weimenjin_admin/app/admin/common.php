@@ -16,6 +16,14 @@ error_reporting(0);
 
 
 //多级控制器 获取控制其名称
+if (!function_exists('wmjV1BaseUrl')) {
+    function wmjV1BaseUrl()
+    {
+        $url = (string) config("my.wmjv1.wmjv1_url", "https://www.wmj.com.cn");
+        return rtrim($url ?: "https://www.wmj.com.cn", "/");
+    }
+}
+
 function getControllerName($controller_name){
 	if($controller_name && strpos($controller_name,'/') > 0){
 		$controller_name = explode('/',$controller_name)[1];
@@ -153,10 +161,10 @@ function wmjHandle($wmjsn, $type)
     $value_s = $wmjsn;
     $appid = 'appid='.config("my.wmjv1.wmjv1_appid");
     $appsecret = 'appsecret='.config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/api/'.$type.'.html?'.$appid.'&'.$appsecret;
+    $url = wmjV1BaseUrl().'/api/'.$type.'.html?'.$appid.'&'.$appsecret;
     if (mb_substr($wmjsn, 0, 3) == "W66")
     {
-        $url = 'https://www.wmj.com.cn/faceapi/'.$type.'.html?'.$appid.'&'.$appsecret;
+        $url = wmjV1BaseUrl().'/faceapi/'.$type.'.html?'.$appid.'&'.$appsecret;
     }
     //mlog("wmjHandle_url:".$url);
     $result = wmjHttpPost($url, $value_s);
@@ -172,7 +180,7 @@ function wmjgwHandle($gwcidsn,$cmd)
     mlog("wmjgwHandle:".$data['cid']);
     $data['appid']=config("my.wmjv1.wmjv1_appid");
     $data['appsecret']=config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/api/'.$cmd.'.html';
+    $url = wmjV1BaseUrl().'/api/'.$cmd.'.html';
     //
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
@@ -183,7 +191,7 @@ function wmjCardHandle($wmjsn, $type, $str)
     $data=$str;
     $data['appid']=config("my.wmjv1.wmjv1_appid");
     $data['appsecret']=config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/api/'.$type.'.html';
+    $url = wmjV1BaseUrl().'/api/'.$type.'.html';
     //mlog("wmjHandle_url:".$url);
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
@@ -194,7 +202,7 @@ function wmjManageHandle($wmjsn, $type, $str)
     $data=$str;
     $data['appid']=config("my.wmjv1.wmjv1_appid");
     $data['appsecret']=config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/api/'.$type.'.html';
+    $url = wmjV1BaseUrl().'/api/'.$type.'.html';
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
 }

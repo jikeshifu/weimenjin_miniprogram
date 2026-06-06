@@ -248,7 +248,8 @@ class Lock
     {
         $data['appid'] = config("my.wmjv1.wmjv1_appid");
         $data['appsecret'] = config("my.wmjv1.wmjv1_appsecret");
-        $url = 'https://www.wmj.com.cn/api/' . $type . '.html';
+        $baseUrl = rtrim((string) config("my.wmjv1.wmjv1_url", "https://www.wmj.com.cn") ?: "https://www.wmj.com.cn", "/");
+        $url = $baseUrl . '/api/' . $type . '.html';
         $result = self::wmjCardHttpPost($url, http_build_query($data));
         return $result;
     }

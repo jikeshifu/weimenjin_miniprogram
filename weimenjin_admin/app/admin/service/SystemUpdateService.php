@@ -462,7 +462,71 @@ class SystemUpdateService
         if ($manifestUrl !== '') {
             self::saveAppConfig('update', 'manifest_url', $manifestUrl);
         }
+        self::ensureCloudAppConfigs();
         Cache::delete('db_configs');
+    }
+
+    private static function ensureCloudAppConfigs(): void
+    {
+        self::insertAppConfigIfMissing('wmjv1', '微门禁V1接口', 'wmjv1_url', 'https://www.wmj.com.cn', '微门禁V1硬件云地址', 96, 1);
+        self::insertAppConfigIfMissing('wmjv2', '微门禁V2接口', 'wmjv2_url', 'https://wdev.wmj.com.cn/deviceApi/', '微门禁V2硬件云地址', 95, 1);
+        self::updateAppConfigSort('wmjv1', 'wmjv1_appid', 2);
+        self::updateAppConfigSort('wmjv1', 'wmjv1_appsecret', 3);
+        self::updateAppConfigSort('wmjv2', 'wmjv2_appid', 2);
+        self::updateAppConfigSort('wmjv2', 'wmjv2_appsecret', 3);
+    }
+
+    private static function insertAppConfigIfMissing(string $module, string $moduleTitle, string $name, string $value, string $description, int $sortOrder, int $groupSortOrder): void
+    {
+        if (Db::name('appconfig')->where(['module' => $module, 'name' => $name])->find()) {
+            return;
+        }
+
+        $columns = self::appConfigColumns();
+        $data = [
+            'module' => $module,
+            'name' => $name,
+            'value' => $value,
+            'type' => 'string',
+        ];
+        if (in_array('module_name', $columns, true)) {
+            $data['module_name'] = $moduleTitle;
+        } elseif (in_array('title', $columns, true)) {
+            $data['title'] = $moduleTitle;
+        }
+        if (in_array('description', $columns, true)) {
+            $data['description'] = $description;
+        } elseif (in_array('remark', $columns, true)) {
+            $data['remark'] = $description;
+        }
+        if (in_array('created_at', $columns, true)) {
+            $data['created_at'] = date('Y-m-d H:i:s');
+        } elseif (in_array('create_time', $columns, true)) {
+            $data['create_time'] = date('Y-m-d H:i:s');
+        }
+        if (in_array('is_grouped', $columns, true)) {
+            $data['is_grouped'] = 1;
+        }
+        if (in_array('is_readonly', $columns, true)) {
+            $data['is_readonly'] = 0;
+        }
+        if (in_array('sort_order', $columns, true)) {
+            $data['sort_order'] = $sortOrder;
+        }
+        if (in_array('group_sort_order', $columns, true)) {
+            $data['group_sort_order'] = $groupSortOrder;
+        }
+
+        Db::name('appconfig')->insert($data);
+    }
+
+    private static function updateAppConfigSort(string $module, string $name, int $groupSortOrder): void
+    {
+        $columns = self::appConfigColumns();
+        if (!in_array('group_sort_order', $columns, true)) {
+            return;
+        }
+        Db::name('appconfig')->where(['module' => $module, 'name' => $name])->update(['group_sort_order' => $groupSortOrder]);
     }
 
     private static function saveAppConfig(string $module, string $name, string $value): void

@@ -101,10 +101,12 @@ return [
         'toutiao_appsecret' => Env::get('toutiao.appsecret', ''),
     ],
     'wmjv1' => [
+        'wmjv1_url' => Env::get('wmjv1.url', 'https://www.wmj.com.cn'),
         'wmjv1_appid' => Env::get('wmjv1.appid', ''),
         'wmjv1_appsecret' => Env::get('wmjv1.appsecret', ''),
     ],
     'wmjv2' => [
+        'wmjv2_url' => Env::get('wmjv2.url', 'https://wdev.wmj.com.cn/deviceApi/'),
         'wmjv2_appid' => Env::get('wmjv2.appid', ''),
         'wmjv2_appsecret' => Env::get('wmjv2.appsecret', ''),
     ],

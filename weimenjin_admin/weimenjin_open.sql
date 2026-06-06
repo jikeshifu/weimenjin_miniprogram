@@ -165,10 +165,12 @@ INSERT INTO `cd_appconfig` VALUES (102, 'wechart_pay', '微信支付配置', 'rs
 INSERT INTO `cd_appconfig` VALUES (103, 'wechart_template', '公众号发送消息配置', 'gzhtempleteid1', '', 'string', '开门通知', '2024-10-13 23:33:26', 1, 0, 98, 1);
 INSERT INTO `cd_appconfig` VALUES (104, 'wechart_template', '公众号发送消息配置', 'gzhtempleteid2', '', 'string', '申请审核', '2024-10-13 23:33:26', 1, 0, 98, 2);
 INSERT INTO `cd_appconfig` VALUES (129, 'wechart_template', '公众号发送消息配置', 'gzhtempleteid3', '', 'string', '审核通过', '2024-10-13 23:33:26', 1, 0, 98, 3);
-INSERT INTO `cd_appconfig` VALUES (124, 'wmjv1', '微门禁V1接口', 'wmjv1_appid', '', 'string', '微门禁V1硬件appid', '2024-10-14 06:10:26', 1, 0, 96, 1);
-INSERT INTO `cd_appconfig` VALUES (125, 'wmjv1', '微门禁V1接口', 'wmjv1_appsecret', '', 'string', '微门禁V1硬件appsecret', '2024-10-14 06:11:28', 1, 0, 96, 2);
-INSERT INTO `cd_appconfig` VALUES (126, 'wmjv2', '微门禁V2接口', 'wmjv2_appid', '', 'string', '微门禁V2硬件appid', '2024-10-14 06:10:26', 1, 0, 95, 1);
-INSERT INTO `cd_appconfig` VALUES (127, 'wmjv2', '微门禁V2接口', 'wmjv2_appsecret', '', 'string', '微门禁V2硬件appsecret', '2024-10-14 06:11:28', 1, 0, 95, 2);
+INSERT INTO `cd_appconfig` VALUES (134, 'wmjv1', '微门禁V1接口', 'wmjv1_url', 'https://www.wmj.com.cn', 'string', '微门禁V1硬件云地址', '2026-06-06 00:00:00', 1, 0, 96, 1);
+INSERT INTO `cd_appconfig` VALUES (124, 'wmjv1', '微门禁V1接口', 'wmjv1_appid', '', 'string', '微门禁V1硬件appid', '2024-10-14 06:10:26', 1, 0, 96, 2);
+INSERT INTO `cd_appconfig` VALUES (125, 'wmjv1', '微门禁V1接口', 'wmjv1_appsecret', '', 'string', '微门禁V1硬件appsecret', '2024-10-14 06:11:28', 1, 0, 96, 3);
+INSERT INTO `cd_appconfig` VALUES (135, 'wmjv2', '微门禁V2接口', 'wmjv2_url', 'https://wdev.wmj.com.cn/deviceApi/', 'string', '微门禁V2硬件云地址', '2026-06-06 00:00:00', 1, 0, 95, 1);
+INSERT INTO `cd_appconfig` VALUES (126, 'wmjv2', '微门禁V2接口', 'wmjv2_appid', '', 'string', '微门禁V2硬件appid', '2024-10-14 06:10:26', 1, 0, 95, 2);
+INSERT INTO `cd_appconfig` VALUES (127, 'wmjv2', '微门禁V2接口', 'wmjv2_appsecret', '', 'string', '微门禁V2硬件appsecret', '2024-10-14 06:11:28', 1, 0, 95, 3);
 INSERT INTO `cd_appconfig` VALUES (128, 'wmjsms', '短信接口', 'wmjsms_lable', '【微门禁】', 'string', '短信签名', '2024-10-14 23:32:23', 1, 0, 93, 3);
 INSERT INTO `cd_appconfig` VALUES (130, 'siteconfig', '站点链接', 'siteurl', 'https://demo.wmj.com.cn', 'string', '站点链接', '2024-11-25 13:40:13', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.11', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);

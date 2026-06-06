@@ -11,15 +11,23 @@
 
 error_reporting(0);
 /*start*/
+if (!function_exists('wmjV1BaseUrl')) {
+    function wmjV1BaseUrl()
+    {
+        $url = (string) config("my.wmjv1.wmjv1_url", "https://www.wmj.com.cn");
+        return rtrim($url ?: "https://www.wmj.com.cn", "/");
+    }
+}
+
 function wmjHandle($wmjsn, $type)
 {
     $value_s = $wmjsn;
     $appid = 'appid='.config("my.wmjv1.wmjv1_appid");
     $appsecret = 'appsecret='.config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/platformapi/'.$type.'.html?'.$appid.'&'.$appsecret;
+    $url = wmjV1BaseUrl().'/platformapi/'.$type.'.html?'.$appid.'&'.$appsecret;
     if (mb_substr($wmjsn, 0, 3) == "W66")
     {
-        $url = 'https://www.wmj.com.cn/faceapi/'.$type.'.html?'.$appid.'&'.$appsecret;
+        $url = wmjV1BaseUrl().'/faceapi/'.$type.'.html?'.$appid.'&'.$appsecret;
     }
     $result = wmjHttpPost($url, $value_s);
     return $result;
@@ -27,7 +35,7 @@ function wmjHandle($wmjsn, $type)
 //发公众号模板消息
 function wmjSendWechatMsg($type,$data)
 {
-    $url = 'https://www.wmj.com.cn/task/'.$type.'.html';
+    $url = wmjV1BaseUrl().'/task/'.$type.'.html';
     $result = posturl($url, $data);
     return $result;
 }
@@ -37,7 +45,7 @@ function wmjManageHandle($wmjsn, $type, $str)
     $data=$str;
     $data['appid']=config("my.wmjv1.wmjv1_appid");
     $data['appsecret']=config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/platformapi/'.$type.'.html';
+    $url = wmjV1BaseUrl().'/platformapi/'.$type.'.html';
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
 }
@@ -49,7 +57,7 @@ function wmjgwHandle($gwcidsn,$cmd)
     $data['cid']=substr($gwcidsn,11,12);
     $data['appid']=config("my.wmjv1.wmjv1_appid");
     $data['appsecret']=config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/platformapi/'.$cmd.'.html';
+    $url = wmjV1BaseUrl().'/platformapi/'.$cmd.'.html';
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
 }
@@ -91,7 +99,7 @@ function wmjTaskHandle($unionid,$data,$cmd)
     $data['data']=$data;
     $data['appid']=config("my.wmjv1.wmjv1_appid");
     $data['appsecret']=config("my.wmjv1.wmjv1_appsecret");
-    $url = 'https://www.wmj.com.cn/task/'.$cmd.'.html';
+    $url = wmjV1BaseUrl().'/task/'.$cmd.'.html';
     $result = wmjCardHttpPost($url, http_build_query($data));
     return $result;
 }

@@ -9,7 +9,11 @@ class serverConfig
     static $WiFIUrl = "https://wdev.wmj.com.cn/deviceApi/";
 
     static function GetUrl(){
-        return self::$WiFIUrl;
+        $url = (string) config("my.wmjv2.wmjv2_url", "");
+        if ($url === "") {
+            $url = self::$WiFIUrl;
+        }
+        return rtrim($url, "/") . "/";
     }
 
     static function GetAppId(){
