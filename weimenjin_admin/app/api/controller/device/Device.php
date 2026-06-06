@@ -1647,54 +1647,59 @@ class Device extends Base
             LockLog::add($UidRes["uid"], $lock["lock_id"], 9, 1);
 
             if (!isset($stopplay) || !$stopplay) {
-                $speed = input("speed", 5);
-                $tone = input("tone", 5);
+                try {
+                    $speed = input("speed", 5);
+                    $tone = input("tone", 5);
+                    $this->ensureHornBroadcastHistoryTable();
 
-                $existRecord = Db::name("horn_broadcast_history")
-                    ->where("lock_id", $lock["lock_id"])
-                    ->where("content", $tts)
-                    ->where("volume", $volume)
-                    ->where("speed", $speed)
-                    ->where("tone", $tone)
-                    ->find();
-
-                if ($existRecord) {
-                    Db::name("horn_broadcast_history")
-                        ->where("id", $existRecord["id"])
-                        ->update([
-                            "created_at" => time(),
-                            "loop_enabled" => $isLoopEnabled ? 1 : 0,
-                            "loop_interval" => $loopInterval ? (int)$loopInterval : 0
-                        ]);
-                } else {
-                    Db::name("horn_broadcast_history")->insert([
-                        "lock_id" => $lock["lock_id"],
-                        "member_id" => $UidRes["uid"],
-                        "content" => $tts,
-                        "volume" => $volume,
-                        "speed" => $speed,
-                        "tone" => $tone,
-                        "loop_enabled" => $isLoopEnabled ? 1 : 0,
-                        "loop_interval" => $loopInterval ? (int)$loopInterval : 0,
-                        "created_at" => time()
-                    ]);
-
-                    $count = Db::name("horn_broadcast_history")
+                    $existRecord = Db::name("horn_broadcast_history")
                         ->where("lock_id", $lock["lock_id"])
-                        ->count();
+                        ->where("content", $tts)
+                        ->where("volume", $volume)
+                        ->where("speed", $speed)
+                        ->where("tone", $tone)
+                        ->find();
 
-                    if ($count > 100) {
-                        $keepIds = Db::name("horn_broadcast_history")
-                            ->where("lock_id", $lock["lock_id"])
-                            ->order("created_at", "desc")
-                            ->limit(100)
-                            ->column("id");
-
+                    if ($existRecord) {
                         Db::name("horn_broadcast_history")
+                            ->where("id", $existRecord["id"])
+                            ->update([
+                                "created_at" => time(),
+                                "loop_enabled" => $isLoopEnabled ? 1 : 0,
+                                "loop_interval" => $loopInterval ? (int)$loopInterval : 0
+                            ]);
+                    } else {
+                        Db::name("horn_broadcast_history")->insert([
+                            "lock_id" => $lock["lock_id"],
+                            "member_id" => $UidRes["uid"],
+                            "content" => $tts,
+                            "volume" => $volume,
+                            "speed" => $speed,
+                            "tone" => $tone,
+                            "loop_enabled" => $isLoopEnabled ? 1 : 0,
+                            "loop_interval" => $loopInterval ? (int)$loopInterval : 0,
+                            "created_at" => time()
+                        ]);
+
+                        $count = Db::name("horn_broadcast_history")
                             ->where("lock_id", $lock["lock_id"])
-                            ->where("id", "not in", $keepIds)
-                            ->delete();
+                            ->count();
+
+                        if ($count > 100) {
+                            $keepIds = Db::name("horn_broadcast_history")
+                                ->where("lock_id", $lock["lock_id"])
+                                ->order("created_at", "desc")
+                                ->limit(100)
+                                ->column("id");
+
+                            Db::name("horn_broadcast_history")
+                                ->where("lock_id", $lock["lock_id"])
+                                ->where("id", "not in", $keepIds)
+                                ->delete();
+                        }
                     }
+                } catch (\Throwable $e) {
+                    // 历史记录是辅助功能，写入失败不能影响云喇叭播报。
                 }
             }
         }
@@ -2352,19 +2357,37 @@ class Device extends Base
         $limit = input("limit", 20);
 
         $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+        if (!$lockAuth || empty($lockAuth["lock_id"])) {
+            return json(Code::CodeOk([
+                "data" => $this->emptyHornHistoryData($page, $limit)
+            ]));
+        }
         $lock = Lock::Info($lockAuth["lock_id"]);
+        if (!$lock || empty($lock["lock_id"])) {
+            return json(Code::CodeOk([
+                "data" => $this->emptyHornHistoryData($page, $limit)
+            ]));
+        }
 
-        // 获取历史记录，按时间降序，最多100条
-        $list = Db::name("horn_broadcast_history")
-            ->where("lock_id", $lock["lock_id"])
-            ->order("created_at", "desc")
-            ->limit(($page - 1) * $limit, $limit)
-            ->select();
+        try {
+            $this->ensureHornBroadcastHistoryTable();
 
-        // 获取总数，但最多100条
-        $total = Db::name("horn_broadcast_history")
-            ->where("lock_id", $lock["lock_id"])
-            ->count();
+            // 获取历史记录，按时间降序，最多100条
+            $list = Db::name("horn_broadcast_history")
+                ->where("lock_id", $lock["lock_id"])
+                ->order("created_at", "desc")
+                ->limit(($page - 1) * $limit, $limit)
+                ->select();
+
+            // 获取总数，但最多100条
+            $total = Db::name("horn_broadcast_history")
+                ->where("lock_id", $lock["lock_id"])
+                ->count();
+        } catch (\Throwable $e) {
+            return json(Code::CodeOk([
+                "data" => $this->emptyHornHistoryData($page, $limit)
+            ]));
+        }
 
         $total = min($total, 100);
 
@@ -2376,5 +2399,37 @@ class Device extends Base
                 "limit" => (int)$limit
             ]
         ]));
+    }
+
+    private function emptyHornHistoryData($page = 1, $limit = 20)
+    {
+        return [
+            "list" => [],
+            "total" => 0,
+            "page" => (int)$page,
+            "limit" => (int)$limit
+        ];
+    }
+
+    private function ensureHornBroadcastHistoryTable()
+    {
+        $prefix = (string) config('database.connections.mysql.prefix', '');
+        $table = $prefix . 'horn_broadcast_history';
+        Db::execute("CREATE TABLE IF NOT EXISTS `{$table}` (
+            `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+            `lock_id` INT(11) NOT NULL COMMENT '设备ID',
+            `member_id` INT(11) DEFAULT NULL COMMENT '操作用户ID',
+            `content` TEXT NOT NULL COMMENT '播报内容',
+            `volume` INT(3) DEFAULT 5 COMMENT '音量',
+            `speed` INT(3) DEFAULT 5 COMMENT '语速',
+            `tone` INT(3) DEFAULT 5 COMMENT '语调',
+            `loop_enabled` TINYINT(1) DEFAULT 0 COMMENT '是否循环播报',
+            `loop_interval` INT(11) DEFAULT 0 COMMENT '循环间隔',
+            `created_at` INT(11) NOT NULL COMMENT '播报时间',
+            PRIMARY KEY (`id`) USING BTREE,
+            INDEX `idx_lock_id` (`lock_id`) USING BTREE,
+            INDEX `idx_created_at` (`created_at`) USING BTREE,
+            INDEX `idx_member_id` (`member_id`) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='云喇叭播报历史记录表'");
     }
 }
