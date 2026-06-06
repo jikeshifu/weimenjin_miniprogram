@@ -11,6 +11,16 @@ class Device
     {
         $type = mb_substr($lock_sn, 0, 3);
         $deviceType = "lock";
+
+        $type4 = mb_substr($lock_sn, 0, 4);
+        if ($type4 === "W76F") {
+            return "W76F";
+        }
+
+        if ($type === "W75") {
+            return "W75";
+        }
+
         switch ($type) {
             case "W72":
             case "W71";
@@ -22,6 +32,10 @@ class Device
                 break;
             case "W70";
                 $deviceType = "horn";
+                break;
+            case "W33":
+            case "W34":
+                $deviceType = "camera";
                 break;
         }
         return $deviceType;
@@ -133,6 +147,7 @@ class Device
             "pwd_status" => 0,
             "realTime_status" => 0,
             "audioConfig_status" => 0,
+            "device_sound" => 1,
         ];
         switch ($type) {
             case "W76":
@@ -141,6 +156,7 @@ class Device
 						case "W761":
                                 $res["card_status"] = 0;
                                 $res["linkresponse_status"] = 1;
+                                $res["relay_delay_status"] = 1;
                                 break;
 						case "W762":
 								$res["card_status"] = 0;
@@ -150,22 +166,38 @@ class Device
                             $res["card_status"] = 0;
                             $res["linkresponse_status"] = 1;
                             break;
+                        case "W76F":
+                                $res["line"] = 5;
+                                break;
                         case "W764":
                                 $res["audioConfig_status"] = 1;
                                 $res["linkresponse_status"] = 1;
                                 $res["card_status"] = 0;
+                                $res["relay_delay_status"] = 1;
                                 break;
 						case "W765":
 								$res["audioConfig_status"] = 1;
                                 $res["linkresponse_status"] = 1;
 								$res["card_status"] = 1;
+								$res["relay_delay_status"] = 1;
 								break;
 						case "W766":
 								$res["audioConfig_status"] = 1;
                                 $res["linkresponse_status"] = 1;
 								$res["card_status"] = 1;
 								$res["pwd_status"] = 1;
+								$res["relay_delay_status"] = 1;
 								break;
+						case "W76D":
+								$res["audioConfig_status"] = 1;
+                                $res["linkresponse_status"] = 1;
+								$res["card_status"] = 1;
+								$res["pwd_status"] = 1;
+								break;
+                        case "W767":
+                                $res["linkresponse_status"] = 1;
+                                $res["relay_delay_status"] = 1;
+                                break;
 						default:
 								$res["audioConfig_status"] = 0;
 								$res["card_status"] = 0;

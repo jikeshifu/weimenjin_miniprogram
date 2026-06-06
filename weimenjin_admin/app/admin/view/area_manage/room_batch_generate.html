@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>批量生成房号</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .format-example {
+            color: #999;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .preview-area {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: none;
+            border: 1px solid #e7eaec;
+        }
+        .preview-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .preview-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .preview-item {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 3px;
+            background-color: #fff;
+            border: 1px solid #1ab394;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #1ab394;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form class="form-horizontal" id="batchForm">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span class="text-danger">*</span> 选择单元：</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="unit_id" required>
+                                        <option value="">请选择单元</option>
+                                        {volist name="units" id="vo"}
+                                        <option value="{$vo.unit_id}">{$vo.area_name} - {$vo.building_name} - {$vo.unit_name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span class="text-danger">*</span> 起始楼层：</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="start_floor" value="1" placeholder="请输入起始楼层（如：1）" required>
+                                    <span class="format-example">支持负数（如地下室：-1, -2）</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span class="text-danger">*</span> 结束楼层：</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="end_floor" value="10" placeholder="请输入结束楼层（如：10）" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span class="text-danger">*</span> 每层房间数：</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="rooms_per_floor" value="4" placeholder="请输入每层房间数" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span class="text-danger">*</span> 编号格式：</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="number_format" id="number_format">
+                                        <option value="standard">标准格式</option>
+                                        <option value="prefix">前缀格式</option>
+                                        <option value="separator">分隔符格式</option>
+                                        <option value="custom">自定义格式</option>
+                                    </select>
+                                    <span class="format-example" id="format_example">示例：101, 102, 201, 202</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="prefix_input" style="display:none;">
+                                <label class="col-sm-3 control-label">前缀：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="prefix" placeholder="如：A、B、C 等">
+                                    <span class="format-example">用于区分不同单元或区域</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="separator_input" style="display:none;">
+                                <label class="col-sm-3 control-label">分隔符：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="separator" placeholder="如：-、# 等">
+                                    <span class="format-example">用于分隔楼层和房号</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="button" class="btn btn-info" id="previewBtn">
+                                        <i class="fa fa-eye"></i> 预览生成结果
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="preview-area" id="previewArea">
+                                <div class="preview-title">预览（将生成以下房号）：</div>
+                                <div class="preview-list" id="previewList"></div>
+                                <div style="margin-top: 10px; color: #999; font-size: 12px;" id="previewCount"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-check"></i> 开始生成
+                                    </button>
+                                    <button type="button" class="btn btn-white" onclick="parent.layer.closeAll()">
+                                        <i class="fa fa-times"></i> 取消
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/plugins/layer/layer.min.js"></script>
+    <script>
+    $(function() {
+        // 格式说明
+        var formatExamples = {
+            'standard': '示例：101, 102, 201, 202（楼层 + 两位房号）',
+            'prefix': '示例：A101, A102, B201（前缀 + 楼层 + 两位房号）',
+            'separator': '示例：1-01, 1-02, 2-01（楼层 + 分隔符 + 两位房号）',
+            'custom': '示例：A1-01, B2-02（前缀 + 楼层 + 分隔符 + 两位房号）'
+        };
+
+        // 监听格式选择
+        $('#number_format').change(function() {
+            var value = $(this).val();
+            $('#format_example').html(formatExamples[value]);
+
+            if (value === 'prefix' || value === 'custom') {
+                $('#prefix_input').show();
+            } else {
+                $('#prefix_input').hide();
+            }
+
+            if (value === 'separator' || value === 'custom') {
+                $('#separator_input').show();
+            } else {
+                $('#separator_input').hide();
+            }
+        });
+
+        // 生成房号预览
+        function generateRoomNumber(floor, roomNum, format, prefix, separator) {
+            var paddedNum = ('0' + roomNum).slice(-2);
+
+            switch(format) {
+                case 'prefix':
+                    return prefix + floor + paddedNum;
+                case 'separator':
+                    return floor + separator + paddedNum;
+                case 'custom':
+                    return (prefix || '') + floor + (separator || '') + paddedNum;
+                case 'standard':
+                default:
+                    return floor + '' + paddedNum;
+            }
+        }
+
+        // 预览按钮
+        $('#previewBtn').click(function() {
+            var startFloor = parseInt($('input[name="start_floor"]').val()) || 1;
+            var endFloor = parseInt($('input[name="end_floor"]').val()) || 1;
+            var roomsPerFloor = parseInt($('input[name="rooms_per_floor"]').val()) || 1;
+            var format = $('select[name="number_format"]').val();
+            var prefix = $('input[name="prefix"]').val() || '';
+            var separator = $('input[name="separator"]').val() || '';
+
+            if (startFloor > endFloor) {
+                layer.msg('起始楼层不能大于结束楼层', {icon: 2});
+                return;
+            }
+
+            if (roomsPerFloor < 1) {
+                layer.msg('每层房间数至少为1', {icon: 2});
+                return;
+            }
+
+            var total = (endFloor - startFloor + 1) * roomsPerFloor;
+            if (total > 500) {
+                layer.msg('生成数量过多（超过500个），请分批生成', {icon: 2});
+                return;
+            }
+
+            var html = '';
+            var count = 0;
+
+            for (var floor = startFloor; floor <= endFloor; floor++) {
+                for (var room = 1; room <= roomsPerFloor; room++) {
+                    var roomNumber = generateRoomNumber(floor, room, format, prefix, separator);
+                    html += '<span class="preview-item">' + roomNumber + '</span>';
+                    count++;
+                }
+            }
+
+            $('#previewList').html(html);
+            $('#previewCount').html('共 ' + count + ' 个房号');
+            $('#previewArea').slideDown();
+        });
+
+        // 表单提交
+        $('#batchForm').submit(function(e) {
+            e.preventDefault();
+
+            var startFloor = parseInt($('input[name="start_floor"]').val());
+            var endFloor = parseInt($('input[name="end_floor"]').val());
+            var roomsPerFloor = parseInt($('input[name="rooms_per_floor"]').val());
+            var total = (endFloor - startFloor + 1) * roomsPerFloor;
+
+            if (total > 500) {
+                layer.msg('生成数量过多（超过500个），请分批生成', {icon: 2});
+                return false;
+            }
+
+            var loadingIndex = layer.load(2, {shade: [0.3, '#000']});
+
+            $.post('/admin/AreaManage/roomBatchGenerate', $(this).serialize(), function(res) {
+                layer.close(loadingIndex);
+                if(res.status == '00'){
+                    parent.layer.msg(res.msg, {icon: 1});
+                    setTimeout(function() {
+                        parent.layer.closeAll();
+                    }, 1500);
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            });
+
+            return false;
+        });
+    });
+    </script>
+</body>
+</html>

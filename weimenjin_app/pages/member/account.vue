@@ -20,7 +20,7 @@
 
 			<view class="explain">
 				<view class="text"></view>
-				
+
 			</view>
 		</view>
 
@@ -36,7 +36,7 @@
 					user: "",
 					pwd: "",
 				},
-		
+
 			}
 		},
 		onShareAppMessage() {},
@@ -44,12 +44,11 @@
 		onLoad(option) {},
 		async onShow() {
 			let accountRes = await myRequest('/member.Member/account', {}, 'POST');
-			console.log("accountRes",accountRes)
 				this.formData.user =accountRes.data.user
 		},
 		methods: {
 			async hotspotSet() {
-				
+
 				if(this.formData.pwd.length<6){
 					wx.showToast({
 						title:"密码不能小于6位",
@@ -59,7 +58,7 @@
 					});
 					return
 				}
-				
+
 					let accountRes = await myRequest('/member.Member/accountSet', this.formData, 'POST');
 					if(accountRes.code!=0){
 						wx.showToast({
@@ -72,13 +71,13 @@
 					}
 					wx.showToast({
 						title:"修改成功",
-				
+
 						mask: true, // 是否显示透明蒙层，防止触摸穿透
 						duration: 2000
 					});
-					
-					
-					
+
+
+
 			},
 
 		}

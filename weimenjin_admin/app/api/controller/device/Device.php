@@ -67,7 +67,7 @@ class Device extends Base
 
             }
         } catch (\Exception $e) {
-            return json(Code::CodeOk(['msg' => $e->getMessage()]));
+            return json(Code::CodeErr(1000, $e->getMessage()));
         }
         return json(Code::CodeOk(['data' => $lockAddRes]));
     }
@@ -712,9 +712,34 @@ class Device extends Base
             "mobile_check" => $lock["mobile_check"],
             "status" => $lock["status"],
             "xcx_sound" => $lock["xcx_sound"],
+            "device_sound" => isset($lock["device_sound"]) ? $lock["device_sound"] : 1,
             "opsucnt" => $lock["opsucnt"],
             "qrshowminiad" => $lock["qrshowminiad"],
+            "relay_delay" => $lock["relay_delay"] ? intval($lock["relay_delay"]) / 1000 : 1,
+            "relay_nonc_mode" => $lock["relay_nonc_mode"] !== null ? intval($lock["relay_nonc_mode"]) : 0,
         ];
+
+        // 添加设备能力信息
+        $lock_ability = \app\module\device\server\Device::DeviceAbility($lock["lock_sn"]);
+        $config["lock_ability"] = $lock_ability;
+
+        if(mb_substr($lock["lock_sn"], 0, 3) == "W70")
+        {
+            $devinfo = HardwareCloud::App()->GetDevInfo($lock["lock_sn"]);
+
+            if(isset($devinfo["data"]["info"]["volume"]) && !empty($devinfo["data"]["info"]["volume"])) {
+                $config["volume"] = $devinfo["data"]["info"]["volume"];
+            }
+            if(isset($devinfo["data"]["info"]["speaker"]) && !empty($devinfo["data"]["info"]["speaker"])) {
+                $config["speaker"] = $devinfo["data"]["info"]["speaker"];
+            }
+            if(isset($devinfo["data"]["info"]["speed"]) && !empty($devinfo["data"]["info"]["speed"])) {
+                $config["speed"] = $devinfo["data"]["info"]["speed"];
+            }
+            if(isset($devinfo["data"]["info"]["tone"]) && !empty($devinfo["data"]["info"]["tone"])) {
+                $config["tone"] = $devinfo["data"]["info"]["tone"];
+            }
+        }
 
         return json(Code::CodeOk([
             "msg" => "获取成功",
@@ -906,7 +931,7 @@ class Device extends Base
     function list()
     {
         $res = MemberServer::Uid();  // 获取用户的 UID
-        mlog("list_uid:".json_encode($res),"device.txt");
+        // mlog("list_uid:".json_encode($res),"device.txt");
 
         $member_id = $res["uid"];
 
@@ -923,7 +948,7 @@ class Device extends Base
         // 更新分组时间
         Db::name("device_group")->where(["device_group_id" => $device_group_id])->update(["updated_at" => time()]);
 
-        $search_key = input("search_key");
+        $search_key = trim((string)input("search_key"));
 
         // 构建查询模型，首先只查找与当前用户相关的设备
         $model = LockAuth::where(["member_id" => $member_id])
@@ -941,10 +966,40 @@ class Device extends Base
         }
 
         // 如果有搜索关键字，增加搜索条件
-        if ($search_key) {
-            $model->where(function ($query) use ($search_key) {
-                $query->whereOr("user_name", "like", "%{$search_key}%");
-                $query->whereOr("mobile", "like", "%{$search_key}%");
+        if ($search_key !== '') {
+            $matchedLockIds = Db::name("lock")
+                ->where(function ($query) use ($search_key) {
+                    $query->whereOr("lock_sn", "like", "%{$search_key}%");
+                    $query->whereOr("lock_name", "like", "%{$search_key}%");
+                })
+                ->column("lock_id");
+
+            $matchedGroupIds = Db::name("device_group")
+                ->where("device_group_name", "like", "%{$search_key}%")
+                ->column("device_group_id");
+
+            $matchedMemberIds = Db::name("member")
+                ->where(function ($query) use ($search_key) {
+                    $query->whereOr("mobile", "like", "%{$search_key}%");
+                    $query->whereOr("realname", "like", "%{$search_key}%");
+                    $query->whereOr("nickname", "like", "%{$search_key}%");
+                })
+                ->column("member_id");
+
+            $model->where(function ($query) use ($search_key, $matchedLockIds, $matchedGroupIds, $matchedMemberIds) {
+                $query->whereOr("arealname", "like", "%{$search_key}%");
+
+                if (!empty($matchedLockIds)) {
+                    $query->whereOr("lock_id", "in", $matchedLockIds);
+                }
+
+                if (!empty($matchedGroupIds)) {
+                    $query->whereOr("device_group_id", "in", $matchedGroupIds);
+                }
+
+                if (!empty($matchedMemberIds)) {
+                    $query->whereOr("member_id", "in", $matchedMemberIds);
+                }
             });
         }
 
@@ -1004,7 +1059,12 @@ class Device extends Base
         $lockinfo = \app\module\lockServer\Lock::DeviceInfo($lockInfo);
         return json(Code::CodeOk(["msg" => "获取成功", "lockinfo" => $lockinfo]));
     }
-
+    function deviceInfo()
+    {
+        $lock_id = input("lock_id");
+        $deviceinfo = Lock::Info($lock_id);
+        return json(Code::CodeOk(["msg" => "获取成功", "deviceinfo" => $deviceinfo]));
+    }
     function audioConfig()
     {
         $lock_id = input("lock_id");
@@ -1099,16 +1159,31 @@ class Device extends Base
 
     function listFace()
     {
-
-
         $res = MemberServer::Uid();
         $member_id = $res["uid"];
+        $now = time();
+        $exclude_lock_id = input("exclude_lock_id"); // 排除指定设备
 
-
+        // 只要用户拥有该设备的有效钥匙权限（不限于管理员），就可以同步人脸
+        // 需要检查：钥匙已启用、未过期、已到生效时间
         $model = LockAuth::where(["member_id" => $member_id])->whereNull("deleted_at")->where([
             "auth_status" => 1,
-            "auth_isadmin" => 1,
-        ]);
+        ])->where(function($query) use ($now) {
+            // 管理员不受时间限制，或者钥匙在有效期内
+            $query->where("auth_isadmin", 1)
+                  ->whereOr(function($q) use ($now) {
+                      $q->where(function($q2) use ($now) {
+                          // 生效时间：未设置或已到时间
+                          $q2->whereNull("auth_starttime")
+                             ->whereOr("auth_starttime", "<=", $now);
+                      })->where(function($q3) use ($now) {
+                          // 过期时间：未设置或未过期
+                          $q3->whereNull("auth_endtime")
+                             ->whereOr("auth_endtime", "=", 0)
+                             ->whereOr("auth_endtime", ">", $now);
+                      });
+                  });
+        });
 
 
         $lockauth = $model->with("lock")->order("lockauth_id desc")->select()->toArray();
@@ -1117,6 +1192,10 @@ class Device extends Base
 
             $lock_ability = \app\module\device\server\Device::DeviceAbility($vo["lock"]["lock_sn"]);
             if ($lock_ability["face_status"]) {
+                // 如果设置了 exclude_lock_id，则排除该设备
+                if ($exclude_lock_id && $vo["lock_id"] == $exclude_lock_id) {
+                    continue;
+                }
                 $arr[] = [
                     "lock_id" => $vo["lock_id"],
                     "lock_name" => $vo["lock"]["lock_name"],
@@ -1613,7 +1692,7 @@ class Device extends Base
             'total_fee' => $price,
 //            'total_fee' => 1,
 //            'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
-            'notify_url' => 'https://wxapp.wmj.com.cn/api/pay.Notify/index', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+            'notify_url' => 'https://your-domain.example/api/pay.Notify/index', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
             'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
             'openid' => $memberInfo["openid"],
         ]);
@@ -2078,5 +2157,161 @@ class Device extends Base
         } catch (\Exception $e) {
             return json(Code::CodeErr(500, "删除失败", $e->getMessage()));
         }
+    }
+
+    /**
+     * 设置语音参数（音量、语速、音调）
+     */
+    function voiceConfigSet()
+    {
+        $lockauth_id = input("lockauth_id");
+        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+        $reslockdata = Lock::Info($lockAuth["lock_id"]);
+        $onlinestatus = HardwareCloud::App()->OnLineGet($reslockdata["lock_sn"]);
+        if ($reslockdata && mb_substr($reslockdata["lock_sn"], 0, 3) == "W70" && $onlinestatus) {
+            $horndata["volume"] = input("volume");
+            $horndata["speed"] = input("speed");
+            $horndata["tone"] = input("tone");
+            HardwareCloud::Horn()::Setting($reslockdata["lock_sn"], $horndata);
+            return json(Code::CodeOk([
+                "msg" => "更新成功",
+            ]));
+        } else {
+            return json(Code::CodeErr(1000, "设备不在线"));
+        }
+    }
+
+    /**
+     * 设置继电器常开/常闭模式
+     */
+    function relayNoncModeSet()
+    {
+        $lockauth_id = input("lockauth_id");
+        $nonc_mode = input("nonc_mode"); // 0:常闭，1:常开
+
+        if (!$lockauth_id || $nonc_mode === null) {
+            return json(Code::CodeErr(1000, "参数不完整"));
+        }
+
+        // 验证模式值
+        if ($nonc_mode != 0 && $nonc_mode != 1) {
+            return json(Code::CodeErr(1000, "模式值必须为0或1"));
+        }
+
+        try {
+            $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+            $lockdata = Lock::Info($lockAuth["lock_id"]);
+
+            // 检查设备是否在线
+            $onlineStatus = HardwareCloud::App()->OnLineGet($lockdata["lock_sn"]);
+            if (!$onlineStatus) {
+                return json(Code::CodeErr(1000, "设备不在线"));
+            }
+
+            // 调用硬件接口设置模式
+            $result = HardwareCloud::Accesscontrol()->SetNonc($lockdata["lock_sn"], $nonc_mode);
+            if ($result["err"]) {
+                return json(Code::CodeErr(1000, $result["err"]));
+            }
+
+            // 保存到数据库
+            Db::name("lock")->where(["lock_id" => $lockAuth["lock_id"]])->update(["relay_nonc_mode" => $nonc_mode]);
+
+            // 记录继电器模式设置日志
+            $uidInfo = MemberServer::Uid();
+            $modeText = $nonc_mode == 0 ? '常闭' : '常开';
+            LockLog::add($uidInfo["uid"], $lockAuth['lock_id'], 38, 1, "", "", "", "", "设置继电器模式: {$modeText}");
+
+            return json(Code::CodeOk([
+                "msg" => "继电器模式设置成功",
+            ]));
+        } catch (\Exception $e) {
+            return json(Code::CodeErr(1000, $e->getMessage()));
+        }
+    }
+
+    /**
+     * 设置继电器延时
+     */
+    function relayDelaySet()
+    {
+        $lockauth_id = input("lockauth_id");
+        $relay_delay = input("relay_delay"); // 延时时间（秒）
+
+        if (!$lockauth_id || $relay_delay === null) {
+            return json(Code::CodeErr(1000, "参数不完整"));
+        }
+
+        // 验证延时范围：1-30秒
+        $delay_ms = (int)$relay_delay * 1000; // 转换为毫秒
+        if ($delay_ms < 1000 || $delay_ms > 30000) {
+            return json(Code::CodeErr(1000, "延时时间必须在1-30秒之间"));
+        }
+
+        try {
+            $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+            $lockdata = Lock::Info($lockAuth["lock_id"]);
+
+            // 检查设备是否在线
+            $onlineStatus = HardwareCloud::App()->OnLineGet($lockdata["lock_sn"]);
+            if (!$onlineStatus) {
+                return json(Code::CodeErr(1000, "设备不在线"));
+            }
+
+            // 调用硬件接口设置继电器延时
+            $result = HardwareCloud::Accesscontrol()->SetRelay($lockdata["lock_sn"], $delay_ms);
+            if ($result["err"]) {
+                return json(Code::CodeErr(1000, $result["err"]));
+            }
+
+            // 保存到数据库
+            Db::name("lock")->where(["lock_id" => $lockAuth["lock_id"]])->update(["relay_delay" => $delay_ms]);
+
+            // 记录继电器延时设置日志
+            $uidInfo = MemberServer::Uid();
+            LockLog::add($uidInfo["uid"], $lockAuth['lock_id'], 37, 1, "", "", "", "", "设置继电器延时: {$relay_delay}秒");
+
+            return json(Code::CodeOk([
+                "msg" => "继电器延时设置成功",
+            ]));
+        } catch (\Exception $e) {
+            return json(Code::CodeErr(1000, $e->getMessage()));
+        }
+    }
+
+    /**
+     * 获取喇叭播报历史
+     */
+    public function getHornHistory()
+    {
+        $lockauth_id = input("lockauth_id");
+        $page = input("page", 1);
+        $limit = input("limit", 20);
+
+        $lockAuth = \app\module\lockAuthServer\LockAuth::Info($lockauth_id);
+        $lock = Lock::Info($lockAuth["lock_id"]);
+
+        // 获取历史记录，按时间降序，最多100条
+        $list = Db::name("horn_broadcast_history")
+            ->where("lock_id", $lock["lock_id"])
+            ->order("created_at", "desc")
+            ->limit(($page - 1) * $limit, $limit)
+            ->select();
+
+        // 获取总数，但最多100条
+        $total = Db::name("horn_broadcast_history")
+            ->where("lock_id", $lock["lock_id"])
+            ->count();
+
+        $total = min($total, 100);
+
+        return json(Code::CodeOk([
+            "data" => [
+                "list" => $list,
+                "total" => $total,
+                "page" => (int)$page,
+                "limit" => (int)$limit
+            ]
+        ]));
     }
 }

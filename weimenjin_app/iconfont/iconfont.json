@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1634468",
+      "name": "关闭",
+      "font_class": "amc_circle_close",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "17070816",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e7a6",
+      "unicode_decimal": 59302
+    },
+    {
+      "icon_id": "1485517",
+      "name": "播放记录",
+      "font_class": "bofangjilu",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "3817567",
+      "name": "播放记录",
+      "font_class": "bofangjilu1",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "44270463",
+      "name": "多路开关",
+      "font_class": "duolukaiguan",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "33202950",
+      "name": "控制中心",
+      "font_class": "kongzhizhongxin",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "19052904",
+      "name": "软件设置",
+      "font_class": "ruanjianshezhi",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "7335602",
+      "name": "置顶",
+      "font_class": "zhiding",
+      "unicode": "eb3e",
+      "unicode_decimal": 60222
+    },
+    {
       "icon_id": "577312",
       "name": "加号",
       "font_class": "jiahao",

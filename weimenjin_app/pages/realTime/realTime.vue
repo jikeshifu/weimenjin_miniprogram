@@ -144,6 +144,13 @@ export default {
     calculateSignalStrength(rssi, version) {
       let signalStrength = '';
       let signalColor = '';
+      // 添加空值检查，防止 version 未定义时报错
+      if (!version) {
+        signalStrength = '未知';
+        signalColor = '#999999';
+        this.infoList[5].signalColor = signalColor;
+        return signalStrength;
+      }
       if (version.startsWith('71')) {
         if (rssi >= -40) {
           signalStrength = '优';
@@ -199,67 +206,67 @@ export default {
       const chartPaddingBottom = 60; // 增加底部留白，确保X轴标签显示完整
       const chartPaddingLeft = 50;  // 左侧留白，确保Y轴显示
       const chartPaddingRight = 30;  // 右侧留白，确保刻度显示
-    
+
       const data = this.dailyUsageData.map(item => item.usage); // 获取用电数据
       const categories = this.categories;
       const maxVal = Math.max(...data);  // 找到最大值，用来计算刻度
       const barWidth = 20;  // 调整柱子的宽度，使其稍微变窄
       const spacing = 15;   // 调整柱子之间的间隔，使其更紧凑
       const chartHeight = 200; // 图表的高度
-    
+
       const totalWidth = chartPaddingLeft + chartPaddingRight + (data.length * (barWidth + spacing)); // 计算总宽度
-    
+
       // 动态调整画布的宽度，确保在小屏幕下不会超出显示范围
-      const canvasWidth = Math.max(totalWidth, windowWidth - 20); 
-    
+      const canvasWidth = Math.max(totalWidth, windowWidth - 20);
+
       // 绘制X轴
       ctx.beginPath();
       ctx.moveTo(chartPaddingLeft, chartHeight + chartPaddingTop); // 从左侧留白开始绘制X轴
       ctx.lineTo(canvasWidth - chartPaddingRight, chartHeight + chartPaddingTop); // 到右侧留白结束
       ctx.stroke();
-    
+
       // 绘制Y轴
       ctx.beginPath();
       ctx.moveTo(chartPaddingLeft - 5, chartPaddingTop); // 左侧留白5个像素，确保柱子不紧贴Y轴
       ctx.lineTo(chartPaddingLeft - 5, chartHeight + chartPaddingTop); // Y轴到底部结束
       ctx.stroke();
-    
+
       // 绘制Y轴刻度
       for (let i = 0; i <= 5; i++) {
         const yLabel = (i * maxVal) / 5;
         const yPos = chartHeight + chartPaddingTop - (i * chartHeight) / 5;
         ctx.fillText(yLabel.toFixed(0), chartPaddingLeft - 20, yPos); // Y轴刻度显示在Y轴左侧
       }
-    
+
       // 绘制柱状图
       data.forEach((value, index) => {
         const barHeight = (value / maxVal) * chartHeight; // 根据最大值计算柱子的高度
         const x = chartPaddingLeft + index * (barWidth + spacing) + 5; // 确保柱子与Y轴有5个像素的距离
         const y = chartHeight + chartPaddingTop - barHeight;
-    
+
         ctx.setFillStyle(this.calculateBarColor(value)); // 根据用电量计算颜色
         ctx.fillRect(x, y, barWidth, barHeight);
-    
+
         // 调整数据标签的位置，确保始终在柱子顶部显示
         ctx.setFillStyle('#000');
         ctx.setFontSize(12);
-        
+
         // 仅显示数值，不带 "kWh"
         ctx.fillText(value, x + (barWidth / 2) - 10, y - 5); // 标签放在柱子顶部上方
       });
-    
+
       // 绘制X轴标签（日期）
       categories.forEach((label, index) => {
         const x = chartPaddingLeft + index * (barWidth + spacing) + (barWidth / 2) - 10;
         ctx.setFillStyle('#000');
         ctx.fillText(label, x, chartHeight + chartPaddingTop + chartPaddingBottom / 2); // X轴标签放在底部中间
       });
-    
+
       // 在顶部绘制图例，显示 kWh 单位
       ctx.setFontSize(14);
       ctx.setFillStyle('#000');
       ctx.fillText('单位: kWh', windowWidth - 100, 20); // 在画布顶部右侧绘制“单位: kWh”
-    
+
       // 绘制完成
       ctx.draw();
     },

@@ -3,38 +3,111 @@
     <view class="background"></view>
     <view class="content">
       <view class="top-box">
+        <!-- 设备序列号 -->
         <view class="cell-item">
           <view class="flex-box">
             <view class="label">设备序列号(SN)</view>
-            <input placeholder="可点击查找附近设备获取" v-model="device_sn" placeholder-class="placeholder" @input="updateCache('device_sn', device_sn)" />
+            <input
+              placeholder="可点击查找附近设备获取"
+              v-model="device_sn"
+              placeholder-class="placeholder"
+              @input="
+                () => {
+                  device_sn.value = device_sn.value.trim();
+                  updateCache('device_sn', device_sn.value);
+                }
+              "
+            />
           </view>
           <image src="../../static/saomiao.png" @click="scanCode"></image>
         </view>
+
+        <!-- devkey -->
         <view class="cell-item">
           <view class="label">devkey</view>
-          <input placeholder="请输入devkey" placeholder-class="placeholder" v-model="formData.devkey" @input="updateCache('devkey', formData.devkey)" />
+          <input
+            placeholder="请输入devkey"
+            placeholder-class="placeholder"
+            v-model="formData.devkey"
+            @input="
+              () => {
+                formData.devkey = formData.devkey.trim();
+                updateCache('devkey', formData.devkey);
+              }
+            "
+          />
         </view>
+
+        <!-- appkey -->
         <view class="cell-item">
           <view class="label">appkey</view>
-          <input placeholder="请输入appkey" placeholder-class="placeholder" v-model="formData.appkey" @input="updateCache('appkey', formData.appkey)" />
+          <input
+            placeholder="请输入appkey"
+            placeholder-class="placeholder"
+            v-model="formData.appkey"
+            @input="
+              () => {
+                formData.appkey = formData.appkey.trim();
+                updateCache('appkey', formData.appkey);
+              }
+            "
+          />
         </view>
+
+        <!-- server -->
         <view class="cell-item">
           <view class="label">server</view>
-          <input placeholder="请输入域名或IP" placeholder-class="placeholder" v-model="formData.mqtthost" @input="updateCache('mqtthost', formData.mqtthost)" />
+          <input
+            placeholder="请输入域名或IP"
+            placeholder-class="placeholder"
+            v-model="formData.mqtthost"
+            @input="
+              () => {
+                formData.mqtthost = formData.mqtthost.trim();
+                updateCache('mqtthost', formData.mqtthost);
+              }
+            "
+          />
         </view>
+
+        <!-- sm4key -->
         <view class="cell-item">
           <view class="label">sm4key</view>
-          <input placeholder="请输入sm4key" placeholder-class="placeholder" v-model="formData.sm4key" @input="updateCache('sm4key', formData.sm4key)" />
+          <input
+            placeholder="请输入sm4key"
+            placeholder-class="placeholder"
+            v-model="formData.sm4key"
+            @input="
+              () => {
+                formData.sm4key = formData.sm4key.trim();
+                updateCache('sm4key', formData.sm4key);
+              }
+            "
+          />
         </view>
+
+        <!-- sm4offset -->
         <view class="cell-item">
           <view class="label">sm4offset</view>
-          <input placeholder="请输入sm4offset" placeholder-class="placeholder" v-model="formData.sm4offset" @input="updateCache('sm4offset', formData.sm4offset)" />
+          <input
+            placeholder="请输入sm4offset"
+            placeholder-class="placeholder"
+            v-model="formData.sm4offset"
+            @input="
+              () => {
+                formData.sm4offset = formData.sm4offset.trim();
+                updateCache('sm4offset', formData.sm4offset);
+              }
+            "
+          />
         </view>
       </view>
+
       <view class="bottom-box">
         <view class="bottom-btn" @click="searchDevice">查找附近设备</view>
         <view class="bottom-btn" @click="DeviceNetWorkSet">设置</view>
       </view>
+
       <view class="explain">
         <view class="text">1.本功能适用于私有化部署硬件云</view>
         <view class="text">2.使用前请打开手机蓝牙</view>
@@ -101,6 +174,7 @@ export default {
       }
     };
 
+    // 配网设置
     const DeviceNetWorkSet = async () => {
       showLoading("正在配网...");
       uni.setStorageSync("bluetoothPCFormData", formData);
@@ -124,14 +198,17 @@ export default {
         return;
       }
 
+      // 连接蓝牙
       await bleServer.ConnectionBle(bleDeviceInfoRes.data.deviceId);
 
+      // 监听蓝牙数据
       await Ble.NotifyBLECharacteristicValueChange(
         bleDeviceInfoRes.data.deviceId,
         "00000D38-0000-1000-8000-00805F9B34FB",
         "000033FF-0000-1000-8000-00805F9B34FB"
       );
 
+      // 发送配置数据
       let WriteBLECharacteristicValueRes = await bleServer.WriteBLECharacteristicValue(
         bleDeviceInfoRes.data.deviceId,
         "00000D38-0000-1000-8000-00805F9B34FB",
@@ -139,11 +216,13 @@ export default {
         JSON.stringify(formData)
       );
 
+      // 解析返回数据
       if (typeof WriteBLECharacteristicValueRes.data === 'string') {
         WriteBLECharacteristicValueRes.data = JSON.parse(WriteBLECharacteristicValueRes.data);
       }
 
       hideLoading();
+
       if (WriteBLECharacteristicValueRes.err != null) {
         uni.showToast({
           title: WriteBLECharacteristicValueRes.err,
@@ -156,7 +235,7 @@ export default {
       let data = bleDataS.state;
       if (data == 1) {
         uni.showToast({
-          title: "配置成功",
+          title: "配置已写入，请观察设备状态",
           mask: true,
           duration: 2000,
         });
@@ -168,11 +247,11 @@ export default {
       }
     };
 
+    // 搜索设备
     const searchDevice = async () => {
       showLoading("正在搜索设备...");
       await bleServer.SearchDevice();
       let GetBluetoothDevicesRes = await Ble.GetBluetoothDevices();
-      console.log("GetBluetoothDevicesRes:", GetBluetoothDevicesRes);
       hideLoading();
 
       if (GetBluetoothDevicesRes.err != null) {
@@ -212,7 +291,6 @@ export default {
           uni.setClipboardData({
             data: itemList[res.tapIndex],
             success(res) {
-              console.log('success', res);
               uni.showToast({
                 title: "复制序列号成功",
               });
@@ -220,17 +298,16 @@ export default {
           });
         },
         fail(res) {
-          console.log(res.errMsg);
         }
       });
     };
 
+    // 扫码
     const scanCode = () => {
       uni.scanCode({
         success: (res) => {
-          device_sn.value = res.result;
+          device_sn.value = res.result.trim();
           updateCache('device_sn', device_sn.value);
-          console.log(res);
         }
       });
     };
@@ -248,114 +325,117 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .big-box {
-  	height: 100%;
-  	.background {
-  		width: 100%;
-  		height: 352rpx;
-  		background: rgb(33, 207, 62);
-  		opacity: 0.2;
-  		box-shadow: 0px 8rpx 374rpx rgb(58, 137, 254);
-  		filter: blur(120rpx);
-  		position: absolute;
-  		top: 0;
-  		left: 0;
-  	}
-  	.content {
-  		height: 100%;
-  		display: flex;
-  		flex-direction: column;
-  		overflow: hidden;
-  		position: relative;
-  		z-index: 10;
-  		.top-box {
-  			margin: 0 30rpx;
-  			.cell-item {
-  				display: flex;
-  				align-items: center;
-  				justify-content: space-between;
-  				height: 140rpx;
-  				background: linear-gradient(180.00deg, rgb(255, 255, 255),rgba(255, 255, 255, 0.4) 100%);
-  				box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
-  				border-radius:24rpx;
-  				margin-top: 36rpx;
-  				padding: 0 40rpx;
-  				overflow: hidden;
-  				image {
-  					width: 30rpx;
-  					height: 30rpx;
-  				}
-  				.label {
-  					font-size: 28rpx;
-  					flex-shrink: 0;
-  				}
-  				input {
-  					font-size: 28rpx;
-  					flex: 1;
-  					margin-left: 30rpx;
-  					height: 100%;
-  				}
-  				.flex-box {
-  					display: flex;
-  					align-items: center;
-  					height: 100%;
-  					flex: 1;
-  					margin-right: 40rpx;
-  					input {
-  						text-align:left !important;
-  						width: 100%;
-  					}
-  					
-  				}
-  				.right-box {
-  					display: flex;
-  					align-items: center;
-  					flex: 1;
-  					height: 100%;
-  					justify-content: flex-end;
-  					.text {
-  						margin-right: 30rpx;
-  						font-size: 28rpx;
-  					}
-  					image {
-  						width: 16rpx;
-  						height: 22rpx;
-  					}
-  				}
-  			}
-  		}
-  		.bottom-box {
-  			display: flex;
-  			align-items: center;
-  			justify-content: space-around;
-  			margin: 0 30rpx;
-  		}
-  		.bottom-btn {
-  			flex: 1;
-  			margin: 60rpx 20rpx;
-  			height: 90rpx;
-  			background: rgb(33, 207, 62);
-  			box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.3);
-  			border-radius:100rpx;
-  			display: flex;
-  			align-items: center;
-  			justify-content: center;
-  			font-size: 28rpx;
-  			color: #fff;
-  		}
-  	}
-  	
+.big-box {
+  height: 100%;
+  .background {
+    width: 100%;
+    height: 352rpx;
+    background: rgb(33, 207, 62);
+    opacity: 0.2;
+    box-shadow: 0px 8rpx 374rpx rgb(58, 137, 254);
+    filter: blur(120rpx);
+    position: absolute;
+    top: 0;
+    left: 0;
   }
-  ::v-deep .placeholder {
-  	font-size: 28rpx;
-  	color: #999999;
+  .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+
+    .top-box {
+      margin: 0 30rpx;
+      .cell-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 140rpx;
+        background: linear-gradient(180.00deg, rgb(255, 255, 255), rgba(255, 255, 255, 0.4) 100%);
+        box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+        border-radius: 24rpx;
+        margin-top: 36rpx;
+        padding: 0 40rpx;
+        overflow: hidden;
+
+        image {
+          width: 30rpx;
+          height: 30rpx;
+        }
+        .label {
+          font-size: 28rpx;
+          flex-shrink: 0;
+        }
+        input {
+          font-size: 28rpx;
+          flex: 1;
+          margin-left: 30rpx;
+          height: 100%;
+        }
+        .flex-box {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          flex: 1;
+          margin-right: 40rpx;
+          input {
+            text-align: left !important;
+            width: 100%;
+          }
+        }
+        .right-box {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          height: 100%;
+          justify-content: flex-end;
+          .text {
+            margin-right: 30rpx;
+            font-size: 28rpx;
+          }
+          image {
+            width: 16rpx;
+            height: 22rpx;
+          }
+        }
+      }
+    }
+
+    .bottom-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin: 0 30rpx;
+    }
+    .bottom-btn {
+      flex: 1;
+      margin: 60rpx 20rpx;
+      height: 90rpx;
+      background: rgb(33, 207, 62);
+      box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.3);
+      border-radius: 100rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28rpx;
+      color: #fff;
+    }
   }
-  .explain {
-  	margin: 20rpx 40rpx 0;
-  	font-size: 28rpx;
-  	opacity: 0.7;
-  	.text {
-  		margin-bottom: 20rpx;
-  	}
+}
+
+::v-deep .placeholder {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.explain {
+  margin: 20rpx 40rpx 0;
+  font-size: 28rpx;
+  opacity: 0.7;
+  .text {
+    margin-bottom: 20rpx;
   }
+}
 </style>

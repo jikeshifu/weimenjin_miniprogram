@@ -1,0 +1,161 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <h5>申请详情</h5>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="150">申请ID</th>
+                        <td>{$info.application_id}</td>
+                        <th width="150">状态</th>
+                        <td>
+                            {if condition="$info.status == 0"}
+                                <span class="label label-warning">待审核</span>
+                            {elseif condition="$info.status == 1"}
+                                <span class="label label-success">已通过</span>
+                            {else}
+                                <span class="label label-danger">已拒绝</span>
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>申请人姓名</th>
+                        <td>{$info.applicant_name}</td>
+                        <th>手机号</th>
+                        <td>{$info.applicant_phone}</td>
+                    </tr>
+                    <tr>
+                        <th>身份证号</th>
+                        <td colspan="3">{$info.id_card|default='-'}</td>
+                    </tr>
+                    <tr>
+                        <th>房间位置</th>
+                        <td colspan="3">
+                            {$info.area_name|default='-'} -
+                            {$info.building_name|default='-'} -
+                            {$info.unit_name|default='-'} -
+                            {$info.room_number|default='-'}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>关系类型</th>
+                        <td>
+                            {if condition="$info.relation_type == 'owner'"}
+                                业主
+                            {elseif condition="$info.relation_type == 'tenant'"}
+                                租户
+                            {elseif condition="$info.relation_type == 'family'"}
+                                家人
+                            {elseif condition="$info.relation_type == 'employee'"}
+                                员工
+                            {elseif condition="$info.relation_type == 'other'"}
+                                其他
+                            {else}
+                                {$info.relation_type}
+                            {/if}
+                        </td>
+                        <th>申请方式</th>
+                        <td>
+                            {if condition="$info.apply_method == 'key'"}
+                                通过钥匙
+                            {else}
+                                通过扫码
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>申请时间</th>
+                        <td colspan="3">{$info.create_time|date='Y-m-d H:i:s'}</td>
+                    </tr>
+                    {if condition="$info.status != 0"}
+                    <tr>
+                        <th>审核时间</th>
+                        <td colspan="3">{$info.audit_time|date='Y-m-d H:i:s'}</td>
+                    </tr>
+                    <tr>
+                        <th>审核备注</th>
+                        <td colspan="3">{$info.audit_remark|default='-'}</td>
+                    </tr>
+                    {/if}
+                </table>
+
+                <div class="hr-line-dashed"></div>
+
+                {if condition="$info.status == 0"}
+                <div class="form-group">
+                    <button type="button" class="btn btn-success" onclick="doAudit(1)">
+                        <i class="fa fa-check"></i> 通过
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="doAudit(2)">
+                        <i class="fa fa-times"></i> 拒绝
+                    </button>
+                    <button type="button" class="btn btn-default" onclick="parent.layer.closeAll()">
+                        <i class="fa fa-reply"></i> 关闭
+                    </button>
+                </div>
+                {else}
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" onclick="parent.layer.closeAll()">
+                        <i class="fa fa-reply"></i> 关闭
+                    </button>
+                </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/static/js/plugins/layer/layer.min.js"></script>
+<script>
+var appId = '{$info.application_id}';
+
+function doAudit(status) {
+    var actionText = status == 1 ? '通过' : '拒绝';
+
+    // 使用layer.confirm而不是layer.prompt，更兼容
+    layer.confirm('确定要' + actionText + '这个申请吗？<br><br><textarea id="auditRemarkDetail" placeholder="审核备注（选填）" style="width:100%;height:80px;padding:5px;border:1px solid #ddd;border-radius:3px;"></textarea>', {
+        icon: status == 1 ? 3 : 5,
+        title: '审核确认',
+        btn: [actionText, '取消']
+    }, function(index){
+        var remark = $('#auditRemarkDetail').val();
+        layer.close(index);
+
+        // 显示加载中
+        var loadingIndex = layer.load(1, {shade: [0.3, '#fff']});
+
+        $.ajax({
+            type: 'POST',
+            url: '/admin/RoomApplication/audit',
+            data: {
+                application_id: appId,
+                status: status,
+                audit_remark: remark || ''
+            },
+            dataType: 'json',
+            success: function(res){
+                layer.close(loadingIndex);
+                if (res.status == '00') {
+                    layer.msg('审核成功', {icon: 1}, function(){
+                        parent.layer.closeAll();
+                        if (parent.RoomApplicationTable) {
+                            parent.$('#RoomApplicationTable').bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    layer.alert(res.msg || '审核失败', {icon: 2});
+                }
+            },
+            error: function(xhr, status, error){
+                layer.close(loadingIndex);
+                layer.alert('网络错误：' + error, {icon: 2});
+            }
+        });
+    });
+}
+</script>
+{/block}

@@ -27,7 +27,7 @@
 	<view v-else class="empty">
 		<image :src="empty_icon" class="empty-image"></image>
 		<view class="empty-text">{{ empty_text }}</view>
-		<button class="retry-button" @click="retry">重试</button>
+		<button class="retry-button" @click="retry">重新加载</button>
 	</view>
 </template>
 
@@ -71,8 +71,8 @@
 			retry() {
 				uni.clearStorageSync(); // 清理缓存
 				uni.showToast({
-					title: '缓存已清理，重新加载',
-					icon: 'success',
+					title: '加载中...',
+					icon: 'loading',
 					duration: 2000,
 					complete: () => {
 						setTimeout(() => {
@@ -115,7 +115,7 @@
 		margin-bottom: 20rpx;
 	}
 	.retry-button {
-		background-color: #007aff;
+		background-color: rgb(33, 207, 62);
 		color: white;
 		font-size: 28rpx;
 		padding: 10rpx 30rpx;
@@ -124,6 +124,6 @@
 		cursor: pointer;
 	}
 	.retry-button:hover {
-		background-color: #0051aa;
+		background-color: rgb(33, 207, 62);
 	}
 </style>

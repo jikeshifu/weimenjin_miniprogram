@@ -48,7 +48,6 @@
 				this.$refs.datetimePicker.open();
 			},
 			confirm(e) {
-				console.log('confirm', e);
 				this.expirationTime = this.formatDate(e.value)
 			},
 			formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {

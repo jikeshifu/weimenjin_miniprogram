@@ -7,7 +7,7 @@
 				<view class="cell-item" @click="openTime('startTime')">
 					<view class="label">开始时间：</view>
 					<view class="flex-box">
-						<view class="text">{{ formData.startTime ? formatDate(formData.startTime) : ''  }}</view>
+						<view class="text">{{ getLimitText(formData.startTime, formatDate(formData.startTime)) }}</view>
 						<image src="../../static/jiantouyou.png"></image>
 					</view>
 				</view>
@@ -15,20 +15,20 @@
 				<view class="cell-item" @click="openTime('endTime')">
 					<view class="label">结束时间：</view>
 					<view class="flex-box">
-						<view class="text">{{ formData.endTime ? formatDate(formData.endTime) : '' }}</view>
+						<view class="text">{{ getLimitText(formData.endTime, formatDate(formData.endTime)) }}</view>
 						<image src="../../static/jiantouyou.png"></image>
 					</view>
 				</view>
 
 				<view class="cell-item">
 					<view class="label">可分享数</view>
-					<input placeholder="请输入可分享数" type="number" placeholder-class="placeholder"
+					<input placeholder="不限制" type="number" placeholder-class="placeholder"
 						v-model="formData.auth_sharelimit" />
 				</view>
 
 				<view class="cell-item">
 					<view class="label">可开次数</view>
-					<input placeholder="请输入可开次数" type="number" placeholder-class="placeholder"
+					<input placeholder="不限制" type="number" placeholder-class="placeholder"
 						v-model="formData.auth_openlimit" />
 				</view>
 
@@ -52,7 +52,7 @@
 
 			</view>
 			<view class="bottom" style="position: relative;">
-		
+
 				<button class="share-btn" hover-class="none" open-type="share" >
 					<view class="btn">立即分享</view>
 				</button>
@@ -67,6 +67,7 @@
 <script>
 	import UvDatetimePicker from '@/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker.vue'
 	import { shareAuth_api } from '../../api/index.js'
+	import { imgurl } from '../../api/request.js'
 	export default {
 		components: {
 			UvDatetimePicker
@@ -76,12 +77,13 @@
 				dateTimeValue: Number(new Date()),
 				timeType: '',
 				share_lockauth_id: '',
+				lockName: '',
 				formData: {
 					startTime: '',
 					endTime: '',
 					lockauth_id: '',
-					auth_sharelimit: '0',
-					auth_openlimit: '0',
+					auth_sharelimit: '',
+					auth_openlimit: '',
 					auth_shareability: '0',
 					auth_isadmin: '0',
 					auth_status: '1',
@@ -91,8 +93,6 @@
 					// startTime: '请选择开始时间',
 					// endTime: '请选择结束时间',
 					lockauth_id: '缺少钥匙ID',
-					auth_sharelimit: '请输入可分享数',
-					auth_openlimit: '请输入开门次数',
 				}
 			}
 		},
@@ -101,7 +101,7 @@
 		onLoad(option) {
 			// let now = new Date()
 			// this.formData.startTime = Date.parse(now) / 1000 //当前时间
-			
+
 			// // 一年后的时间
 			// let year = now.getFullYear() + 1;
 			// let month = (now.getMonth() + 1).toString().padStart(2, "0"); //得到月份
@@ -113,21 +113,42 @@
 			// this.formData.endTime = Date.parse(endTime) / 1000
 
 			this.formData.lockauth_id = option.lockauth_id ? option.lockauth_id : ''
-			
+			this.lockName = option.lock_name ? decodeURIComponent(option.lock_name) : ''
+
 		},
 		async onShareAppMessage(res) {
-		
+
 		 await	this.create()
-			
+
 			return {
-				title: '点击领取钥匙',
+				title: this.getShareTitle(),
 				path: '/pages/getLock/getLock?share_lockauth_id=' + this.share_lockauth_id,
+				imageUrl: this.getShareImageUrl(),
 			}
 		},
 		methods: {
+			getLimitText(value, text) {
+				return value ? text : '不限制'
+			},
+			getShareTitle() {
+				if (!this.lockName) {
+					return '点击领取钥匙'
+				}
+
+				return '点击领取' + this.lockName + '钥匙'
+			},
+			getShareImageUrl() {
+				return imgurl + '/static/share/qrcode.jpg'
+			},
 			async create() {
-				for (let key in this.formData) {
-					if (!this.formData[key]) {
+				const payload = {
+					...this.formData,
+					auth_sharelimit: this.normalizeLimitValue(this.formData.auth_sharelimit),
+					auth_openlimit: this.normalizeLimitValue(this.formData.auth_openlimit),
+				}
+
+				for (let key in payload) {
+					if (!payload[key]) {
 						if (this.verifyData[key]) {
 							this.showToast(this.verifyData[key]);
 							return false;
@@ -138,7 +159,7 @@
 					title: '加载中...',
 					mask: true
 				})
-				let res = await shareAuth_api(this.formData) 
+				let res = await shareAuth_api(payload)
 				if (res.code === 0) {
 					uni.hideLoading()
 					this.showToast('分享到聊天窗口!')
@@ -147,6 +168,9 @@
 					uni.hideLoading()
 					this.showToast(res.msg)
 				}
+			},
+			normalizeLimitValue(value) {
+				return value === '' || value === null || typeof value === 'undefined' ? '0' : value
 			},
 			changeAllow(e) {
 				if (e.detail.value) {
@@ -170,7 +194,6 @@
 				}
 			},
 			openTime(type) {
-				console.log(type)
 				this.$refs.datetimePicker.open();
 				this.timeType = type
 			},

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35.901" height="48.782" viewBox="0 0 35.901 48.782">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #A5A5A5;
+      }
+
+      .cls-2 {
+        fill: #A5A5A5;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: white;
+        stroke-linecap: round;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g id="日志" transform="translate(-84.392 -78.848)">
+    <rect id="矩形_3" data-name="矩形 3" class="cls-1" width="24" height="20" rx="3" transform="translate(90.392 99.63)"/>
+    <path id="路径_11" data-name="路径 11" class="cls-2" d="M118.957,88.336l-6.861-8.4a2.691,2.691,0,0,0-2.12-1.086H88.185c-2.348.029-4.217,2.4-4.217,5.344v38.123c0,2.943,1.892,5.315,4.217,5.315h27.444c2.348,0,4.24-2.4,4.24-5.315V91.079A4.39,4.39,0,0,0,118.957,88.336Zm-2.074,33.979a1.453,1.453,0,0,1-1.254,1.572H88.185a1.437,1.437,0,0,1-1.231-1.572V84.163a1.437,1.437,0,0,1,1.231-1.572l19.717.029v6.63c0,3.115,2.006,5.63,4.468,5.63h4.49Zm0-31.15h-4.49a1.7,1.7,0,0,1-1.5-1.829v-5.63l5.995,7.344Z" transform="translate(0.424)"/>
+    <path id="路径_22" data-name="路径 22" class="cls-3" d="M93.439,99.692h16.54" transform="translate(0.453 5)"/>
+    <path id="路径_23" data-name="路径 23" class="cls-3" d="M93.439,99.692h16.54" transform="translate(0.453 11)"/>
+    <path id="路径_24" data-name="路径 24" class="cls-3" d="M93.439,99.692h16.54" transform="translate(0.453 17)"/>
+  </g>
+</svg>

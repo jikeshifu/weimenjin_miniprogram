@@ -1,4 +1,4 @@
-{extend name='common/_container'} 
+{extend name='common/_container'}
 {block name="content"}
 <div class="container-fluid" style="padding: 0 !important;">
 	<div class="row">
@@ -11,27 +11,220 @@
 		</div>
 	</div>
 
+	<style>
+		.kpi-card{position:relative;border-radius:10px;color:#fff;overflow:hidden;margin-bottom:15px;cursor:default}
+		.kpi-card .kpi-body{padding:18px 16px}
+		.kpi-card .kpi-title{font-size:14px;opacity:0.9}
+		.kpi-card .kpi-value{font-size:34px;font-weight:700;line-height:1;margin-top:6px}
+		.kpi-card .kpi-icon{position:absolute;right:12px;bottom:10px;font-size:42px;opacity:0.2}
+		.kpi-blue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+		.kpi-green{background:linear-gradient(135deg,#10b981,#059669)}
+		.kpi-orange{background:linear-gradient(135deg,#f59e0b,#d97706)}
+		.kpi-red{background:linear-gradient(135deg,#ef4444,#dc2626)}
+		.sys-version{margin-top:8px;text-align:right;color:#999;font-size:12px}
+		.kpi-link{cursor:pointer}
+	</style>
+	<div class="row" style="margin-top:10px;">
+		<div class="col-lg-3 col-sm-6">
+			<div class="kpi-card kpi-blue">
+				<div class="kpi-body">
+					<div class="kpi-title">设备数量</div>
+					<div class="kpi-value" id="stat-device">-</div>
+					<i class="fa fa-cubes kpi-icon"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-sm-6">
+			<div class="kpi-card kpi-green">
+				<div class="kpi-body">
+					<div class="kpi-title">用户数量</div>
+					<div class="kpi-value" id="stat-user">-</div>
+					<i class="fa fa-users kpi-icon"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-sm-6">
+			<div class="kpi-card kpi-orange">
+				<div class="kpi-body">
+					<div class="kpi-title">钥匙权限数量</div>
+					<div class="kpi-value" id="stat-key">-</div>
+					<i class="fa fa-key kpi-icon"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-sm-6">
+			<div class="kpi-card kpi-red kpi-link" id="failed-open-card" title="点击查看失败记录">
+				<div class="kpi-body">
+					<div class="kpi-title">近30天开门失败</div>
+					<div class="kpi-value" id="stat-failed-open">-</div>
+					<i class="fa fa-exclamation-triangle kpi-icon"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="row">
-		<div class="col-lg-6">
-			<table class="table">
-				<colgroup>
-					<col width="40%">
-					<col>
-				</colgroup>
-				<thead>
-					<tr>
-						<th class="text-center" colspan="2">系统信息</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>版本</td>
-						<td>5.202409</td>
-					</tr>
-					
-				</tbody>
-			</table>
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-title"><h5>近30天操作记录</h5></div>
+				<div class="ibox-content">
+					<div id="opsChart" style="width:100%;height:360px;overflow:visible;"></div>
+					<div class="sys-version">系统版本：<span id="sys-version-text">5.202409</span></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	</div>
+
+<script>
+(function(){
+	function loadScript(url, onload, onerror){
+		var s = document.createElement('script');
+		s.src = url;
+		s.async = true;
+		s.onload = onload;
+		s.onerror = onerror || function(){};
+		document.head.appendChild(s);
+	}
+
+	function loadECharts(callback){
+		var url = "__PUBLIC__/static/js/echarts.min.js";
+		if(window.echarts){ return callback(true); }
+		loadScript(url, function(){ callback(!!window.echarts); }, function(){ callback(false); });
+	}
+
+	function setFallback(){
+		$('#stat-device').text(0);
+		$('#stat-user').text(0);
+		$('#stat-key').text(0);
+		$('#stat-failed-open').text(0);
+		if(window.echarts){
+			renderChart([], []);
+		} else {
+			var el = document.getElementById('opsChart');
+			if(el && !el.dataset.placeholder){
+				el.dataset.placeholder = '1';
+				el.innerHTML = '<div style="text-align:center;color:#888;padding-top:120px;">图表库未加载，已显示数值概览</div>';
+			}
+		}
+	}
+
+	function fetchStats(){
+		$.ajax({
+			url: Feng.ctxPath + '/Index/stats',
+			dataType: 'json',
+			timeout: 8000,
+			success: function(res){
+				if(res && res.status === '00'){
+					var d = res.data || {};
+					$('#stat-device').text(d.device_count || 0);
+					$('#stat-user').text(d.user_count || 0);
+					$('#stat-key').text(d.key_count || 0);
+					$('#stat-failed-open').text(d.failed_open_30d || 0);
+					if(window.echarts){
+						renderChart(
+						  d.dates || [],
+						  d.series || [],
+						  d.series_by_type || {},
+						  d.type_names || {}
+						);
+					}
+				} else {
+					setFallback();
+				}
+			},
+			error: function(){
+				setFallback();
+			}
+		});
+	}
+
+	// 点击失败卡片，跳转至失败记录列表
+	$(document).on('click', '#failed-open-card', function(){
+		// 近30天起止时间，格式与列表页相同（YYYY-MM-DD HH:mm:ss）
+		var end = new Date();
+		var start = new Date();
+		start.setDate(end.getDate() - 29);
+		function fmt(d){
+			var y=d.getFullYear();
+			var m=('0'+(d.getMonth()+1)).slice(-2);
+			var day=('0'+d.getDate()).slice(-2);
+			var hh=('0'+d.getHours()).slice(-2);
+			var mm=('0'+d.getMinutes()).slice(-2);
+			var ss=('0'+d.getSeconds()).slice(-2);
+			return y+'-'+m+'-'+day+' '+hh+':'+mm+':'+ss;
+		}
+		var params = {
+			status: 0,
+			// 开门相关类型集合：扫码、点击、后台、刷卡、指纹、蓝牙、刷脸、密码
+			type_in: '1,2,3,4,7,8,11,12',
+			create_time_start: fmt(new Date(start.setHours(0,0,0,0))),
+			create_time_end: fmt(new Date(end.setHours(23,59,59,999)))
+		};
+		var url = Feng.ctxPath + '/LockLog/index?' + $.param(params);
+		window.location.href = url;
+	});
+
+		function renderChart(dates, totalSeries, seriesByType, typeNames){
+		if(!window.echarts) return;
+				var el = document.getElementById('opsChart');
+				if(!el) return;
+		var legendNames = [];
+		var seriesList = [];
+		// 总次数折线
+				if (Array.isArray(totalSeries) && totalSeries.length){
+					var sumTotal = totalSeries.reduce(function(a,b){return (a||0)+(b||0);},0);
+					if(sumTotal>0){
+						legendNames.push('总次数');
+						seriesList.push({ name: '总次数', type: 'line', smooth: true, data: totalSeries });
+					}
+		}
+		// 各类型折线
+		if (seriesByType && typeof seriesByType === 'object'){
+		  var keys = Object.keys(seriesByType).sort(function(a,b){return (parseInt(a)||0)-(parseInt(b)||0)});
+		  for (var i=0;i<keys.length;i++){
+			var t = keys[i];
+			var name = (typeNames && typeNames[t]) ? typeNames[t] : ('类型'+t);
+						var dataArr = seriesByType[t] || [];
+						var sum = 0;
+						for(var k=0;k<dataArr.length;k++){ sum += (dataArr[k]||0); }
+						if(sum>0){
+							legendNames.push(name);
+							seriesList.push({ name: name, type: 'line', smooth: true, data: dataArr });
+						}
+		  }
+		}
+
+				// 若没有可展示数据，显示占位提示
+				if(seriesList.length === 0){
+					el.innerHTML = '<div style="text-align:center;color:#888;padding-top:120px;">近30天无操作记录</div>';
+					return;
+				}
+
+				var chart = echarts.init(el);
+
+		var option = {
+			tooltip: { trigger: 'axis', confine: true, appendToBody: true },
+			legend: { type: 'scroll', top: 0, data: legendNames },
+			grid: { left: '3%', right: '3%', bottom: '3%', containLabel: true },
+			xAxis: { type: 'category', data: dates },
+			yAxis: { type: 'value', minInterval: 1 },
+			series: seriesList
+		};
+		chart.setOption(option);
+		window.addEventListener('resize', function(){ chart.resize(); });
+	}
+
+	loadECharts(function(){
+		fetchStats();
+		if(!window.echarts){
+			var el = document.getElementById('opsChart');
+			if(el && !el.dataset.placeholder){
+				el.dataset.placeholder = '1';
+				el.innerHTML = '<div style="text-align:center;color:#888;padding-top:120px;">图表库未加载，已显示数值概览</div>';
+			}
+		}
+	});
+})();
+</script>
 {/block}

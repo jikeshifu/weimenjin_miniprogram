@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扫码登录配置提示</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body { width: 100%; min-height: 100%; margin: 0; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            color: #ecfeff;
+            background: #04131e;
+        }
+        .tip-page {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            overflow: hidden;
+            background:
+                linear-gradient(120deg, rgba(2, 14, 25, .66), rgba(4, 32, 46, .38)),
+                url("__PUBLIC__/static/login_new/static/picture/wmj-community-tech-login.webp") center/cover no-repeat;
+        }
+        .tip-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 22% 28%, rgba(34, 211, 238, .12), transparent 30%),
+                radial-gradient(circle at 78% 72%, rgba(46, 204, 113, .1), transparent 30%),
+                linear-gradient(90deg, rgba(125, 211, 252, .08) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(125, 211, 252, .06) 1px, transparent 1px);
+            background-size: auto, auto, 72px 72px, 72px 72px;
+        }
+        .tip-card {
+            position: relative;
+            width: min(92vw, 680px);
+            padding: 34px;
+            border: 1px solid rgba(125, 211, 252, .24);
+            background: linear-gradient(180deg, rgba(8, 30, 44, .92), rgba(2, 14, 25, .96));
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .08);
+            backdrop-filter: blur(18px);
+        }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            color: #fef3c7;
+            border: 1px solid rgba(251, 191, 36, .28);
+            background: rgba(251, 191, 36, .1);
+            margin-bottom: 18px;
+        }
+        .status::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fbbf24;
+        }
+        h1 { margin: 0 0 14px; font-size: 28px; letter-spacing: 0; }
+        p { margin: 0 0 12px; color: rgba(236, 254, 255, .72); line-height: 1.8; }
+        .steps {
+            margin: 20px 0;
+            padding: 0;
+            list-style: none;
+            counter-reset: step;
+        }
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 13px 14px 13px 48px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(125, 211, 252, .18);
+            background: rgba(2, 19, 32, .46);
+            color: rgba(236, 254, 255, .78);
+            line-height: 1.7;
+        }
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 14px;
+            top: 15px;
+            width: 22px;
+            height: 22px;
+            display: grid;
+            place-items: center;
+            color: #04131e;
+            font-weight: 800;
+            background: #5eead4;
+        }
+        code {
+            padding: 2px 6px;
+            color: #67e8f9;
+            background: rgba(8, 145, 178, .16);
+        }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+        .btn {
+            min-width: 138px;
+            padding: 13px 18px;
+            text-align: center;
+            color: #04131e;
+            text-decoration: none;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5eead4, #22c55e);
+        }
+        .btn.secondary {
+            color: #67e8f9;
+            background: rgba(8, 145, 178, .12);
+            border: 1px solid rgba(103, 232, 249, .28);
+        }
+    </style>
+</head>
+<body>
+<main class="tip-page">
+    <section class="tip-card">
+        <div class="status">扫码登录规则未生效</div>
+        <h1>请配置普通二维码打开小程序规则</h1>
+        <p>当前二维码地址已到达后台站点，说明微信端尚未把该路径拉起到小程序。请在微信公众平台配置并发布“普通二维码打开小程序”规则后再扫码。</p>
+        <ol class="steps">
+            <li>进入微信公众平台，打开小程序后台。</li>
+            <li>进入“开发管理”或“开发设置”中的“扫普通链接二维码打开小程序”。</li>
+            <li>添加二维码规则，匹配当前登录二维码路径：<code>/admin/QrCodeLogin/index</code>。</li>
+            <li>配置小程序跳转页面，并确保页面能够读取 URL 中的 <code>key</code> 参数。</li>
+            <li>提交规则并发布。规则未发布或审核未通过时，扫码仍会停留在本提示页。</li>
+        </ol>
+        <p>当前 key：<code>{$key|default='-'}</code></p>
+        <div class="actions">
+            <a class="btn" href="/admin/Login/indexQrCode">返回扫码登录</a>
+            <a class="btn secondary" href="/admin/Login/index">账号登录</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

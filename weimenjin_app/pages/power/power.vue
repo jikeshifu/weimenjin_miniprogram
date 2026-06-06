@@ -2,27 +2,27 @@
 	<view class="big-box">
 		<view class="background"></view>
 		<view class="content">
-			
-		
+
+
 			<view :class="['top-box', scrollTop > 10 ? 'top-box-active' : '']">
-				<view style="margin-left: 20rpx;height: 100rpx;"> 
+				<view style="margin-left: 20rpx;height: 100rpx;">
 					<view class="cell-item" @click="openTime">
-						
+
 						<view class="text">
 							{{ formData.startTime ? formatDate(formData.startTime) : '请选择开始时间' }}</view>
 					</view>
 					<view class="cell-item" @click="openTime2">
-						
+
 						<view class="text">
 							{{ formData.endTime ? formatDate(formData.endTime) : '请选择结束时间' }}</view>
 					</view>
 						<uni-section :title="'日期时间用法：' + datetimesingle" type="line"></uni-section>
-	
+
 				</view>
-			
+
 			</view>
-			
-			<view class="list" v-if="listStatus"> 
+
+			<view class="list" v-if="listStatus">
 				<view class="item" v-for="(item, index) in dataList" :key="index" @click="showMobile(item)">
 					<view class="left-box">
 						<image :src="item.headimgurl | imgPath" class="user-img" v-if="item.headimgurl"></image>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { power_api } from '@/api/index.js';	
+import { power_api } from '@/api/index.js';
 import { formatDate, imgPath } from '@/libs/filters.js'
 	import UvDatetimePicker from '@/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker.vue'
 export default {
@@ -63,7 +63,7 @@ export default {
 		return {
 			listStatus:true,
 			formData: {
-			
+
 				startTime: '',
 				endTime: '',
 			},
@@ -94,12 +94,10 @@ export default {
 	},
 	methods: {
 		showMobile(data){
-			console.log("data",data)
-			
 			uni.showActionSheet({
 				itemList: [data.mobileShow],
 				success: function (res) {
-					
+
 					uni.makePhoneCall({
 					  phoneNumber:  data.mobileShow, //此号码并非真实电话号码，仅用于测试
 					  success: function () {
@@ -109,10 +107,9 @@ export default {
 					    //console.log("拨打电话失败！")
 					  }
 					})
-			
+
 				},
 				fail: function (res) {
-					console.log(res.errMsg);
 				}
 			});
 		},
@@ -132,10 +129,10 @@ export default {
 			this.listStatus =false
 			this.$refs.datetimePicker2.open();
 		},
-		
-		
+
+
 		searchTime(e) {
-	
+
 		this.dataList = [];
 		this.page = 1;
 		setTimeout(()=>{
@@ -182,11 +179,10 @@ export default {
 		},
 		async getList() {
 			this.noMore = 'loading';
-			console.log("formData",this.formData)
 			let params = {
 				page: this.page,
 				limit: 10,
-				
+
 					startTime: this.formData.startTime/1000,
 					endTime: this.formData.endTime/1000,
 				lock_sn: this.lock_sn,
@@ -194,7 +190,7 @@ export default {
 			};
 			let res = await power_api(params);
 			this.groupInfo = res.data.info
-		
+
 			if (this.page !== 1 && !res.data.length) {
 				this.noMore = 'noMore';
 				return;
@@ -204,17 +200,16 @@ export default {
 				this.noMore = 'nodata';
 				return;
 			}
-			
-	
-			
+
+
+
 			this.dataList = this.dataList.concat(res.data); //将数据拼接在一起
-		
+
 			if (this.dataList.length < 10) {
 				this.noMore = 'noMore';
 			}
 		},
 		confirm(e) {
-			console.log("e",e)
 			this.search_key = e.detail.value
 			this.dataList = [];
 			this.page = 1;
@@ -231,7 +226,7 @@ export default {
 	async onPullDownRefresh() {
 		let that = this;
 		this.page = 1;
-	
+
 		that.dataList = [];
 		await that.getList();
 		uni.stopPullDownRefresh();
@@ -240,5 +235,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import './power.scss';	
+@import './power.scss';
 </style>

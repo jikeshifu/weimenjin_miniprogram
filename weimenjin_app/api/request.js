@@ -1,5 +1,6 @@
-const domainUrl = "https://demo.wmj.com.cn";
-const commonUrl = domainUrl + "/api"; // 公共路径
+import { domainUrl, apiUrl, softwareDomainUrl, softwareApiUrl } from '@/config/domain.js';
+
+const commonUrl = apiUrl; // 公共路径
 const HTTPS = commonUrl;
 const imgurl = domainUrl;
 
@@ -17,7 +18,7 @@ export async function myRequest(url, data, method = "POST") {
     await login();
   }
   header.Authorization = getToken();
-
+  url=commonUrl + url;
   let requestRes = await httpRequest(url, data, method, header);
 
   if (requestRes.code === 101) {
@@ -28,7 +29,48 @@ export async function myRequest(url, data, method = "POST") {
  //console.log("token:",header.Authorization)
   return requestRes;
 }
+// 封装的 POST 请求函数
+export async function myAdRequest(url, data, method = "POST") {
+  let header = {
+    "content-type": "application/json"
+  };
 
+  if (!getToken()) {
+    await login();
+  }
+  header.Authorization = getToken();
+  url=softwareApiUrl + (url.startsWith('/') ? url : `/${url}`);
+  let requestRes = await httpRequest(url, data, method, header);
+
+  if (requestRes.code === 101) {
+    await login();
+    header.Authorization = getToken();
+    requestRes = await httpRequest(url, data, method, header);
+  }
+ //console.log("token:",header.Authorization)
+  return requestRes;
+}
+// 封装的 POST 请求函数
+export async function softwareRequest(url, data, method = "POST") {
+  let header = {
+    "content-type": "application/json"
+  };
+
+  if (!getToken()) {
+    await login();
+  }
+  header.Authorization = getToken();
+  url=softwareDomainUrl + (url.startsWith('/') ? url : `/${url}`);
+  let requestRes = await httpRequest(url, data, method, header);
+
+  if (requestRes.code === 101) {
+    await login();
+    header.Authorization = getToken();
+    requestRes = await httpRequest(url, data, method, header);
+  }
+ //console.log("token:",header.Authorization)
+  return requestRes;
+}
 // 封装的上传图片函数
 export async function uploadImg(url, data) {
   return new Promise((resolve, reject) => {
@@ -67,4 +109,55 @@ export async function uploadImg(url, data) {
 }
 
 // 直接导出已经声明的变量
+export async function uploadFileRequest(url, options = {}) {
+  const filePath = String(options.filePath || '').trim();
+  const name = String(options.name || 'file').trim() || 'file';
+  const formData = options.formData && typeof options.formData === 'object' ? options.formData : {};
+
+  if (!filePath) {
+    throw new Error('上传文件路径不能为空');
+  }
+
+  if (!getToken()) {
+    await login();
+  }
+
+  const doUpload = () => new Promise((resolve, reject) => {
+    uni.uploadFile({
+      url: commonUrl + url,
+      filePath,
+      name,
+      formData,
+      header: {
+        Accept: 'application/json',
+        Authorization: getToken()
+      },
+      success: (res) => {
+        let responseData = res.data;
+        try {
+          responseData = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
+        } catch (error) {
+        }
+
+        if (res.statusCode === 200) {
+          resolve(responseData);
+          return;
+        }
+
+        reject(new Error(`上传失败(${res.statusCode || 'unknown'})`));
+      },
+      fail: (error) => {
+        reject(new Error(`网络异常: ${(error && (error.errMsg || error.message)) || '上传失败'}`));
+      }
+    });
+  });
+
+  let response = await doUpload();
+  if (response && Number(response.code) === 101) {
+    await login();
+    response = await doUpload();
+  }
+  return response;
+}
+
 export { commonUrl, HTTPS, imgurl };

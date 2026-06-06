@@ -9,15 +9,18 @@ use chillerlan\QRCode\QROptions;
 
 class SmsApp extends Admin
 {
-    // 微信支付配置
-    private $wxConfig = [
-        'appid' => 'wx8f7dda3368e4f017',
-        'mchid' => '1360430502',
-        'key' => 'Kjdkslieaojkjdmuhri893w992939eki',
-        'appsecret' => '89eecb60f0958ff4a5e3dbbd9db0336f',
-        'notify_url' => 'https://wxapp.wmj.com.cn/webapi/SmsApi/paymentCallback',
+    private function getWxConfig(): array
+    {
+        $siteUrl = rtrim((string) config('my.siteconfig.siteurl'), '/');
 
-    ];
+        return [
+            'appid' => config('my.wxmp.wxmp_appid'),
+            'mchid' => config('my.wechart_pay.mch_id'),
+            'key' => config('my.wechart_pay.key'),
+            'appsecret' => config('my.wxmp.wxmp_appsecret'),
+            'notify_url' => $siteUrl . '/webapi/SmsApi/paymentCallback',
+        ];
+    }
 
     function index(){
         $admin = session('admin');
@@ -67,23 +70,24 @@ class SmsApp extends Admin
 
     private function generateQrcodeUrl($appid, $amount)
     {
+        $wxConfig = $this->getWxConfig();
         $nonce_str = $this->generateNonceStr();
         $total_fee = $amount * 100; // 金额单位为分
         $out_trade_no = $appid . time(); // 生成唯一订单号
 
         $params = [
-            'appid' => $this->wxConfig['appid'],
-            'mch_id' => $this->wxConfig['mchid'],
+            'appid' => $wxConfig['appid'],
+            'mch_id' => $wxConfig['mchid'],
             'nonce_str' => $nonce_str,
             'body' => '充值服务',
             'out_trade_no' => $out_trade_no,
             'total_fee' => $total_fee,
             'spbill_create_ip' => $this->getClientIp(),
-            'notify_url' => $this->wxConfig['notify_url'],
+            'notify_url' => $wxConfig['notify_url'],
             'trade_type' => 'NATIVE',
         ];
 
-        $params['sign'] = $this->makeSign($params, $this->wxConfig['key']);
+        $params['sign'] = $this->makeSign($params, $wxConfig['key']);
 
         // 调用微信统一下单API
         $xml = $this->arrayToXml($params);

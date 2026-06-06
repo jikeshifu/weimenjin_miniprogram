@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { simRenew_api, simOrder_api } from "@/api/index.js";	
+import { simRenew_api, simOrder_api } from "@/api/index.js";
 export default {
 	data() {
 		return {
@@ -65,14 +65,13 @@ export default {
 				signType: payData.signType,
 				paySign: payData.paySign,
 				success: (res) => {
-					this.showToast('支付成功')					
+					this.showToast('支付成功')
 					uni.hideLoading();
 					uni.navigateBack({
 						delta: 1
 					})
 				},
 				fail: (err) => {
-					console.log(err)
 					uni.hideLoading();
 				}
 			});
@@ -84,7 +83,7 @@ export default {
 			})
 		}
 	}
-}	
+}
 </script>
 
 <style scoped lang="scss">

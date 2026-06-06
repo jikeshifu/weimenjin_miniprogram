@@ -15,6 +15,7 @@
 namespace app\admin\controller;
 
 use app\admin\service\AuthService;
+use app\admin\service\LoginDisclaimerService;
 use app\module\redis\Redis;
 use app\module\user\userServer\UserServer;
 use think\facade\Db;
@@ -26,6 +27,7 @@ class Login extends Admin
     public function index()
     {
         if (!$this->request->isPost()) {
+            $this->assignDisclaimer();
             return $this->display('index');
         } else {
             $username = $this->request->post('username', '', 'html_in,trim');
@@ -51,6 +53,7 @@ class Login extends Admin
 
 
             $this->view->assign("cs", time() . uniqid());
+            $this->assignDisclaimer();
             return $this->display('indexQrCode');
         } else {
 
@@ -87,7 +90,13 @@ class Login extends Admin
     public function out()
     {
         session('admin', null);
-        $this->success('退出登录成功！', url('admin/Login/indexQrCode'));
+        $this->assignDisclaimer();
+        return $this->display('logout');
+    }
+
+    private function assignDisclaimer(): void
+    {
+        $this->view->assign('disclaimerHtml', LoginDisclaimerService::html());
     }
 
 }

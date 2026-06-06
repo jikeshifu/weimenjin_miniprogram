@@ -584,7 +584,7 @@ class Member extends Common
      * console.log('getPhoneNumber-res')
      * console.log(encryptedData)
      * my.request({
-     * url: 'https://wxapp.wmj.com.cn/api/Member/getalipayphonenumber',
+     * url: 'https://your-domain.example/api/Member/getalipayphonenumber',
      * method:'POST',
      * data:encryptedData,
      * success: (resa) => {
@@ -603,7 +603,7 @@ class Member extends Common
      * },
      * });
      * }
-     * {"code":"10000","msg":"Success","mobile":"13885111171"}
+     * {"code":"10000","msg":"Success","mobile":"13800000000"}
      * @apiErrorExample {json} 02 失败示例
      * {"status":"201","msg":"操作失败"}
      */
@@ -622,4 +622,3 @@ class Member extends Common
 
 
 }
-

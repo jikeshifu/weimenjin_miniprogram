@@ -1,0 +1,123 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>系统在线更新</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="alert alert-info">
+                    当前版本：<strong>{$currentVersion}</strong>。系统会从演示平台自动检测最新更新包，升级前会自动备份代码和数据库。
+                </div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">更新源</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="manifest_url" class="form-control" value="{$manifestUrl}">
+                            <span class="help-block m-b-none">默认使用微门禁开源演示平台更新源，正常情况下无需修改。</span>
+                        </div>
+                    </div>
+                    <div id="advanced-update" style="display:none;">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">更新包地址</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="package_url" class="form-control" placeholder="可选，手动指定 zip 更新包">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">SHA256</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="sha256" class="form-control" placeholder="可选，填写后会校验更新包完整性">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <button class="btn btn-primary" onclick="Updater.check()"><i class="fa fa-search"></i> 检测更新</button>
+                            <button class="btn btn-danger" id="install-btn" onclick="Updater.install()" disabled><i class="fa fa-cloud-download"></i> 立即升级</button>
+                            <button class="btn btn-default" onclick="Updater.logs()"><i class="fa fa-list"></i> 查看日志</button>
+                            <button class="btn btn-link" onclick="Updater.toggleAdvanced()">高级设置</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="update-result" class="well" style="display:none;white-space:pre-wrap;max-height:420px;overflow:auto;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var Updater = {};
+    Updater.latest = null;
+    Updater.params = function () {
+        return {
+            manifest_url: $('#manifest_url').val(),
+            package_url: $('#package_url').val(),
+            sha256: $('#sha256').val()
+        };
+    };
+    Updater.show = function (data) {
+        $('#update-result').show().text(typeof data === 'string' ? data : JSON.stringify(data, null, 2));
+    };
+    Updater.toggleAdvanced = function () {
+        $('#advanced-update').toggle();
+    };
+    Updater.check = function () {
+        $('#install-btn').prop('disabled', true);
+        var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/check', function (data) {
+            if (data.status === '00') {
+                Updater.latest = data.data || {};
+                $('#package_url').val(Updater.latest.package_url || '');
+                $('#sha256').val(Updater.latest.sha256 || '');
+                $('#manifest_url').val(Updater.latest.manifest_url || $('#manifest_url').val());
+                if (Updater.latest.has_update) {
+                    Feng.success('检测到新版本：' + Updater.latest.latest_version);
+                    $('#install-btn').prop('disabled', false);
+                } else {
+                    Feng.success('当前已是最新版本');
+                }
+                Updater.show(Updater.latest);
+            } else {
+                Feng.error(data.msg);
+                Updater.show(data.msg);
+            }
+        });
+        ajax.setData(Updater.params());
+        ajax.start();
+    };
+    Updater.install = function () {
+        Feng.confirm('升级前会自动备份代码和数据库，执行期间请不要关闭页面。确认开始升级？', function () {
+            var loading = layer.load(1, {shade: [0.2, '#000']});
+            var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/install', function (data) {
+                layer.close(loading);
+                if (data.status === '00') {
+                    Feng.success(data.msg);
+                    $('#install-btn').prop('disabled', true);
+                    Updater.show(data.data);
+                } else {
+                    Feng.error(data.msg);
+                    Updater.show(data.msg);
+                }
+            }, function () {
+                layer.close(loading);
+                Feng.error('请求失败');
+            });
+            ajax.setData(Updater.params());
+            ajax.start();
+        });
+    };
+    Updater.logs = function () {
+        var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/logs', function (data) {
+            if (data.status === '00') {
+                Updater.show(data.data || '暂无日志');
+            } else {
+                Feng.error(data.msg);
+            }
+        });
+        ajax.start();
+    };
+    $(function () {
+        Updater.check();
+    });
+</script>
+{/block}

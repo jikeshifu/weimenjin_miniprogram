@@ -1,7 +1,10 @@
 // const request = require('./request.js');
 import {
 	myRequest,
-	uploadImg
+	myAdRequest,
+	softwareRequest,
+	uploadImg,
+	uploadFileRequest
 } from './request.js';
 
 // 获取分组
@@ -53,6 +56,10 @@ export function deviceStatusBySerial_api(params) {
 // 获取设备状态
 export function deviceStatus_api(params) {
 	return myRequest('/device.Device/getStatus', params, 'POST');
+}
+// 用lockid获取设备信息
+export function deviceInfo_api(params) {
+	return myRequest('/device.Device/deviceInfo', params, 'POST');
 }
 // 指纹列表
 export function fingerList_api(params) {
@@ -166,7 +173,12 @@ export function wxXcxMobile_api(params) {
 }
 // 添加广告日志
 export function adlog_api(params) {
-	return myRequest('/member.Member/addadlog', params, 'POST');
+	return myAdRequest('/member.Member/addadlog', params, 'POST');
+}
+
+// 添加广告日志
+export function updateAdStatus_api(params) {
+	return softwareRequest('/index/software/updateAdStatus', params, 'POST');
 }
 // 获取积分
 export function adlog_getpointsapi(params) {
@@ -180,6 +192,10 @@ export function userInfo_api(params) {
 export function adUnitId_api(params) {
 	return myRequest('/member.Member/adUnitId', params, 'POST');
 }
+// 获取广告ID
+export function adControlUnitId_api(params) {
+	return myRequest('/member.Member/adControlUnitId', params, 'POST');
+}
 // 申请钥匙
 export function applyAuth_api(params) {
 	return myRequest('/device.LockAuth/applyAuth', params, 'POST');
@@ -187,6 +203,10 @@ export function applyAuth_api(params) {
 
 // 设备信息
 export function equipmentInfo_api(params) {
+	return myRequest('/device.Device/infoV2', params, 'POST');
+}
+// 刷新设备信息（在线时调用getdevinfo接口更新）
+export function refreshDeviceInfo_api(params) {
 	return myRequest('/device.Device/infoV2', params, 'POST');
 }
 // 重启设备
@@ -206,9 +226,18 @@ export function DevAddCard(params) {
 export function DevNoNc(params) {
 	return myRequest('/device.Device/devNoNc', params, 'POST');
 }
-//设置开启和关闭抓拍
+//设置开启和关闭抶拍
 export function DevToggleCapture(params) {
 	return myRequest('/device.Device/devToggleCapture', params, 'POST');
+}
+// 设置继电器延时
+export function setRelayDelay(params) {
+	return myRequest('/device.Device/relayDelaySet', params, 'POST');
+}
+
+// 设置继电器常开/常闭模式
+export function setRelayNoncMode(params) {
+	return myRequest('/device.Device/relayNoncModeSet', params, 'POST');
 }
 // 门卡列表
 export function cardList_api(params) {
@@ -239,6 +268,10 @@ export function editMember_api(params) {
 	return myRequest('/member.Member/edit', params, 'POST');
 }
 
+// 编辑用户信息
+export function unbindPhone_api(params) {
+	return myRequest('/member.Member/unbindPhone', params, 'POST');
+}
 // 人脸列表
 export function faceList_api(params) {
 	return myRequest('/device.Face/list', params, 'POST');
@@ -262,6 +295,56 @@ export function clearFaces_api(params) {
 // 人脸编辑
 export function editFace_api(params) {
 	return myRequest('/device.Face/edit', params, 'POST');
+}
+
+// 人脸详情（从设备查询）
+export function findFace_api(params) {
+	return myRequest('/device.Face/find', params, 'POST');
+}
+
+// 获取用户有权限的人脸设备列表
+export function getFaceDevices_api(params) {
+	return myRequest('/device.Device/listFace', params, 'POST');
+}
+
+// 批量同步人脸到多台设备
+export function syncFaceToDevices_api(params) {
+	return myRequest('/device.Face/syncToDevices', params, 'POST');
+}
+
+// 批量删除人脸（从多台设备删除）
+export function delFaceFromDevices_api(params) {
+	return myRequest('/device.Face/delFromDevices', params, 'POST');
+}
+
+// 人脸校对 - 比对云端与设备的人脸数据
+export function compareFace_api(params) {
+	return myRequest('/device.Face/compare', params, 'POST');
+}
+
+// 同步差异人脸到设备
+export function syncDiffFace_api(params) {
+	return myRequest('/device.Face/syncDiff', params, 'POST');
+}
+
+// 创建异步同步任务
+export function createSyncTask_api(params) {
+	return myRequest('/device.Face/createSyncTask', params, 'POST');
+}
+
+// 查询异步同步任务进度
+export function getSyncTaskProgress_api(params) {
+	return myRequest('/device.Face/getSyncTaskProgress', params, 'POST');
+}
+
+// 处理异步同步任务（分批处理）
+export function processSyncTask_api(params) {
+	return myRequest('/device.Face/processSyncTask', params, 'POST');
+}
+
+// 清理云端重复人脸记录
+export function cleanDuplicateFace_api(params) {
+	return myRequest('/device.Face/cleanDuplicate', params, 'POST');
 }
 
 // 操作记录
@@ -323,6 +406,11 @@ export function authconfig_api(params) {
 export function configSet_api(params) {
 	return myRequest('/device.Device/configSet', params, 'POST');
 }
+// 编辑喇叭参数
+export function voiceConfigSet_api(params) {
+	return myRequest('/device.Device/voiceConfigSet', params, 'POST');
+}
+
 // 编辑参数
 export function authconfigSet_api(params) {
 	return myRequest('/device.Device/authconfigSet', params, 'POST');
@@ -348,6 +436,11 @@ export function playHornApiTest(params) {
 	return myRequest('/device.Device/hornTest', params, 'POST');
 }
 
+// 获取喇叭播报历史
+export function getHornHistory_api(params) {
+	return myRequest('/device.Device/getHornHistory', params, 'POST');
+}
+
 
 // 语音设置
 export function audioConfig(params) {
@@ -367,6 +460,10 @@ export function memberDeviceInfo(params) {
 // 上传图片
 export function images_api(params) {
 	return uploadImg('/file.Images/upload', params, 'POST');
+}
+// 上传开门成功图片（后端自动压缩到506*900，100KB以内）
+export function uploadSuccessImg_api(params) {
+	return uploadImg('/file.Images/uploadSuccessImg', params, 'POST');
 }
 
 // 实时状态
@@ -396,6 +493,65 @@ export function listCard_api(params) {
 export function sendCard_api(params) {
 	return myRequest('/device.Device/sendCard', params, 'POST');
 }
+
+// =============== 免广告二维码订阅相关 ===============
+// 获取订阅套餐列表
+export function getAdfreePackages_api(params) {
+	return myRequest('/device.AdfreeSubscription/getPackages', params, 'POST');
+}
+
+// 获取设备订阅状态
+export function getAdfreeStatus_api(params) {
+	return myRequest('/device.AdfreeSubscription/getStatus', params, 'POST');
+}
+
+// 创建订阅订单
+export function createAdfreeOrder_api(params) {
+	return myRequest('/device.AdfreeSubscription/createOrder', params, 'POST');
+}
+
+// 生成免广告二维码
+export function generateAdfreeQrcode_api(params) {
+	return myRequest('/device.AdfreeSubscription/generateQrcode', params, 'POST');
+}
+
+// 获取订阅历史
+export function getAdfreeHistory_api(params) {
+	return myRequest('/device.AdfreeSubscription/getHistory', params, 'POST');
+}
+
+export function hornTalkCreate_api(params) {
+	return myRequest('/device.Device/hornTalkCreate', params, 'POST');
+}
+
+export function hornTalkStop_api(params) {
+	return myRequest('/device.Device/hornTalkStop', params, 'POST');
+}
+
+export function hornTalkStatus_api(params) {
+	return myRequest('/device.Device/hornTalkStatus', params, 'POST');
+}
+
+export function hornTalkPrepareAudio_api(params) {
+	return myRequest('/device.Device/hornTalkPrepareAudio', params, 'POST');
+}
+
+export function hornTalkHistory_api(params) {
+	return myRequest('/device.Device/hornTalkHistory', params, 'POST');
+}
+
+export function hornTalkUploadRecord_api(filePath, params = {}) {
+	return uploadFileRequest('/device.Device/hornTalkUploadRecord', {
+		filePath,
+		name: 'file',
+		formData: params,
+	});
+}
+
+export function verifyScanAdfree_api(params) {
+	return myRequest('/device.AdfreeSubscription/verifyScan', params, 'POST');
+}
+// =============== 免广告二维码订阅结束 ===============
 
 // 查询充值列表
 export function simRenew_api(params) {
@@ -474,4 +630,271 @@ export function deletelinkSpeaker_api(params) {
 }
 export function deletelinkSwitch_api(params) {
 	return myRequest('/device.Device/deleteLinkSwitch', params, 'POST');
+}
+//查询设备配置
+export function getDeviceCfg_api(params) {
+	return myRequest('/device.Camera/GetConfig', params, 'POST');
+}
+
+// ============= 房间绑定相关接口 =============
+// 获取已绑定房间
+export function roomBindGetMyRooms(params) {
+	return myRequest('/room.RoomBind/getMyRooms', params, 'POST');
+}
+
+// 获取申请记录
+export function roomBindGetApplications(params) {
+	return myRequest('/room.RoomBind/getMyApplications', params, 'POST');
+}
+
+// 获取区域列表
+export function roomBindGetAreas(params) {
+	return myRequest('/room.RoomBind/getAreas', params, 'POST');
+}
+
+// 获取楼栋列表
+export function roomBindGetBuildings(params) {
+	return myRequest('/room.RoomBind/getBuildings', params, 'POST');
+}
+
+// 获取单元列表
+export function roomBindGetUnits(params) {
+	return myRequest('/room.RoomBind/getUnits', params, 'POST');
+}
+
+// 获取房间列表
+export function roomBindGetRooms(params) {
+	return myRequest('/room.RoomBind/getRooms', params, 'POST');
+}
+
+// 解析二维码获取房间信息
+export function roomBindParseQRCode(params) {
+	return myRequest('/room.RoomBind/getAreaInfoByLockQr', params, 'POST');
+}
+
+// 提交绑定申请
+export function roomBindApply(params) {
+	return myRequest('/room.RoomBind/applyBind', params, 'POST');
+}
+
+// 获取用户拥有的钥匙（房间绑定用）
+export function userGetMyKeys(params) {
+	return myRequest('/room.RoomBind/getMyKeys', params, 'POST');
+}
+
+// ========== W76F 5路继电器相关接口 ==========
+// 获取W76F设备配置
+export function getW76FConfig_api(params) {
+	return myRequest('/device.W76FSwitch/getConfig', params, 'POST');
+}
+
+// 设置W76F继电器配置(名称、模式、延迟)
+export function setW76FRelayConfig_api(params) {
+	return myRequest('/device.W76FSwitch/setRelayConfig', params, 'POST');
+}
+
+// 控制W76F指定路继电器
+export function controlW76FRelay_api(params) {
+	return myRequest('/device.W76FSwitch/controlRelay', params, 'POST');
+}
+
+// 生成W76F单路二维码
+export function createW76FQrcode_api(params) {
+	return myRequest('/device.W76FSwitch/createQrcode', params, 'POST');
+}
+
+// 获取W76F设备状态
+export function getW76FSta_api(params) {
+	return myRequest('/device.W76FSwitch/GetSta', params, 'POST');
+}
+
+// 设置W76F设备路数
+export function setW76FRelayCount_api(params) {
+	return myRequest('/device.W76FSwitch/setRelayCount', params, 'POST');
+}
+
+// ========== W75 柜门锁系列相关接口 (W751=WiFi, W752=4G, W753=网线) ==========
+// 获取W75柜门配置
+export function getW75Config_api(params) {
+	return myRequest('/device.W75Cabinet/getConfig', params, 'POST');
+}
+
+// 设置W75柜门配置(名称、延迟)
+export function setW75LockConfig_api(params) {
+	return myRequest('/device.W75Cabinet/setLockConfig', params, 'POST');
+}
+
+// 开启指定柜门
+export function openW75Lock_api(params) {
+	return myRequest('/device.W75Cabinet/openLock', params, 'POST');
+}
+
+// 批量开锁
+export function openW75Locks_api(params) {
+	return myRequest('/device.W75Cabinet/openLocks', params, 'POST');
+}
+
+// 查询门状态
+export function getW75DoorStatus_api(params) {
+	return myRequest('/device.W75Cabinet/getDoorStatus', params, 'POST');
+}
+
+// 生成W75设备总二维码
+export function createW75Qrcode_api(params) {
+	return myRequest('/device.W75Cabinet/createQrcode', params, 'POST');
+}
+
+// 生成W75单个柜门二维码
+export function createW75LockQrcode_api(params) {
+	return myRequest('/device.W75Cabinet/createLockQrcode', params, 'POST');
+}
+
+// 设置W75柜门总数
+export function setW75LockCount_api(params) {
+	return myRequest('/device.W75Cabinet/setLockCount', params, 'POST');
+}
+
+// 扫描下位机板子
+export function scanW75Boards_api(params) {
+	return myRequest('/device.W75Cabinet/scanBoards', params, 'POST');
+}
+
+// 更新柜门使用状态（存入/取出）
+export function setW75LockUsage_api(params) {
+	return myRequest('/device.W75Cabinet/setLockUsage', params, 'POST');
+}
+
+// 设置W75工作模式 (1=存取模式, 2=售卖模式)
+export function setW75WorkMode_api(params) {
+	return myRequest('/device.W75Cabinet/setWorkMode', params, 'POST');
+}
+
+// 设置W75柜门商品SKU（售卖模式）
+export function setW75Sku_api(params) {
+	return myRequest('/device.W75Cabinet/setSku', params, 'POST');
+}
+
+// 获取W75柜门商品详情（用户扫码后展示）
+export function getW75SkuDetail_api(params) {
+	return myRequest('/device.W75Cabinet/getSkuDetail', params, 'POST');
+}
+
+// 创建W75购买订单
+export function createW75Order_api(params) {
+	return myRequest('/device.W75Cabinet/createOrder', params, 'POST');
+}
+
+// 支付成功后开门取货
+export function payAndOpenW75_api(params) {
+	return myRequest('/device.W75Cabinet/payAndOpen', params, 'POST');
+}
+
+// 获取W75售卖订单列表
+export function getW75Orders_api(params) {
+	return myRequest('/device.W75Cabinet/getOrders', params, 'POST');
+}
+
+// 设置W75存取模式收费配置
+export function setW75StorageCharge_api(params) {
+	return myRequest('/device.W75Cabinet/setStorageCharge', params, 'POST');
+}
+
+// 创建W75存取订单（存入或取回付费）
+export function createW75StorageOrder_api(params) {
+	return myRequest('/device.W75Cabinet/createStorageOrder', params, 'POST');
+}
+
+// W75存取订单支付成功后开门
+export function storagePayAndOpenW75_api(params) {
+	return myRequest('/device.W75Cabinet/storagePayAndOpen', params, 'POST');
+}
+
+// W75存入完成，生成/更新存取订单
+export function completeW75Store_api(params) {
+	return myRequest('/device.W75Cabinet/completeStore', params, 'POST');
+}
+
+// 获取W75存取订单详情（用于分享取件）
+export function getW75StorageOrderDetail_api(params) {
+	return myRequest('/device.W75Cabinet/getStorageOrderDetail', params, 'POST');
+}
+
+// 获取W75扫码信息（用于判断工作模式和用户权限）
+export function getW75ScanInfo_api(params) {
+	return myRequest('/device.W75Cabinet/getScanInfo', params, 'POST');
+}
+
+export function getW75ScanData_api(params) {
+	return myRequest('/device.W75Cabinet/getScanData', params, 'POST');
+}
+
+// ========== W71 WiFi空开相关接口 ==========
+// 获取W71设备状态
+export function getW71Status_api(params) {
+	return myRequest('/device.W71Switch/getStatus', params, 'POST');
+}
+
+// W71开启
+export function turnOnW71_api(params) {
+	return myRequest('/device.W71Switch/turnOn', params, 'POST');
+}
+
+// W71关闭
+export function turnOffW71_api(params) {
+	return myRequest('/device.W71Switch/turnOff', params, 'POST');
+}
+
+// 获取W71计划任务
+export function getW71Schedules_api(params) {
+	return myRequest('/device.W71Switch/getSchedules', params, 'POST');
+}
+
+// 设置W71所有计划任务
+export function setW71Schedules_api(params) {
+	return myRequest('/device.W71Switch/setSchedules', params, 'POST');
+}
+
+// 设置W71单个计划任务
+export function setW71Schedule_api(params) {
+	return myRequest('/device.W71Switch/setSchedule', params, 'POST');
+}
+
+// 清除W71单个计划任务
+export function clearW71Schedule_api(params) {
+	return myRequest('/device.W71Switch/clearSchedule', params, 'POST');
+}
+
+// 清除W71所有计划任务
+export function clearW71AllSchedules_api(params) {
+	return myRequest('/device.W71Switch/clearAllSchedules', params, 'POST');
+}
+
+// 获取云喇叭定时播报任务
+export function getTtsSchedules_api(params) {
+	return myRequest('/device.TtsSchedule/getSchedules', params, 'POST');
+}
+
+// 设置云喇叭所有定时播报任务
+export function setTtsSchedules_api(params) {
+	return myRequest('/device.TtsSchedule/setSchedules', params, 'POST');
+}
+
+// 设置云喇叭单个定时播报任务
+export function setTtsSchedule_api(params) {
+	return myRequest('/device.TtsSchedule/setSchedule', params, 'POST');
+}
+
+// 清除云喇叭单个定时播报任务
+export function clearTtsSchedule_api(params) {
+	return myRequest('/device.TtsSchedule/clearSchedule', params, 'POST');
+}
+
+// 清除云喇叭所有定时播报任务
+export function clearAllTtsSchedules_api(params) {
+	return myRequest('/device.TtsSchedule/clearAllSchedules', params, 'POST');
+}
+
+// 获取云喇叭发音人列表
+export function getTtsSpeakers_api(params) {
+	return myRequest('/device.TtsSchedule/getSpeakers', params, 'POST');
 }

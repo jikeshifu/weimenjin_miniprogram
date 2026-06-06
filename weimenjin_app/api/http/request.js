@@ -1,10 +1,8 @@
-const apiUrl = "https://demo.wmj.com.cn/api"; // 公共路径
-
 // 请求封装
 export default function request(url, data, method = 'GET', header = { 'Content-Type': 'application/json' }) {
     return new Promise((resolve, reject) => {
         uni.request({
-            url: apiUrl + url,
+            url: url,
             data: data,
             method: method,
             header: header,

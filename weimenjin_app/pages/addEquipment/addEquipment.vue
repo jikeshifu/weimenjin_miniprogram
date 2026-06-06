@@ -1,15 +1,17 @@
 <template>
-	<view class="big-box">
+	<view class="big-box content">
 		<view class="background"></view>
 		<view class="content">
 			<view class="top-box">
-				<view class="cell-item">
+				<view class="cell-item" style="padding-right: 0;">
 					<view class="flex-box">
 						<view class="label">序列号：</view>
 						<input placeholder="手动输入序列号" placeholder-class="placeholder" v-model="lock_sn" />
 					</view>
 
-					<image src="../../static/saomiao.png" @click="scanCode"></image>
+					<view @click="scanCode" style="display: flex; justify-content: center; align-items: center; width: 120rpx; height: 100%;">
+					    <image src="../../static/saomiao.png"></image>
+					</view>
 				</view>
 				<view class="cell-item">
 					<view class="label">设备名称：</view>
@@ -26,7 +28,7 @@
 						</view>
 					</view>
 				</picker>
-				
+
 
 			</view>
 			<view class="bottom-btn" @click="onSubmit">立即提交</view>
@@ -89,12 +91,13 @@
 					this.showToast('请选择分组！')
 					return
 				}
-				
+
 				let data = {
 					lock_sn: this.lock_sn,
 					lock_name: this.lock_name,
 					device_group_id: this.device_group_id
 				}
+
 				uni.showLoading({
 					title: '加载中...',
 					mask:true
@@ -103,17 +106,29 @@
 				if (res.code === 0) {
 					uni.hideLoading()
 					this.showToast('添加成功')
-					let timer = setTimeout(() => {
-					uni.reLaunch({
-						url: '/pages/index/index'
-					});
-						clearTimeout(timer)
-					}, 1000)
-					
+
+					if(this.lock_sn.length > 10 && this.checkString(this.lock_sn)){
+						uni.navigateTo({
+							url:`/pages/camWifi/camWifi?device_sn=${this.lock_sn}`
+						})
+						return
+					}else{
+						let timer = setTimeout(() => {
+						uni.reLaunch({
+							url: '/pages/index/index'
+						});
+							clearTimeout(timer)
+						}, 1000)
+					}
+
 				} else {
 					uni.hideLoading()
 					this.showToast(res.msg)
 				}
+			},
+			checkString(str) {
+			  const target = str.slice(-10, -8);
+			  return target === '33' || target === '34';
 			},
 			showToast(msg) {
 				uni.showToast({

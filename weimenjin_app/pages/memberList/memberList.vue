@@ -67,7 +67,6 @@
 		onShareTimeline() {},
 		methods: {
 			confirm(e) {
-				console.log(e)
 			},
 			checkboxItem(e) {
 				this.checkedArr = e.detail.value
@@ -95,7 +94,6 @@
 				}
 			},
 			onAdd() {
-				console.log(this.checkedArr)
 			}
 		}
 	}

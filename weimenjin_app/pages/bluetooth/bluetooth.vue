@@ -27,7 +27,7 @@
 				<view class="text">1.本功能利用蓝牙给设备配置网络</view>
 				<view class="text">2.使用前请打开手机蓝牙</view>
 				<view class="text">3.确保设备进入配网模式</view>
-				
+
 			</view>
 			<view class="bottom-box">
 				<view class="bottom-btn" @click="navigateToPconfiguration">硬件云配置</view>
@@ -65,7 +65,6 @@
 				// 初始化蓝牙
 				const openBluetoothAdapter = await Ble.OpenBluetoothAdapter();
 				if (openBluetoothAdapter.err != null) {
-					console.log(openBluetoothAdapter);
 					uni.showToast({
 						icon: "none",
 						title: openBluetoothAdapter.err,
@@ -156,8 +155,8 @@
 				let data = bleDataS.state;
 				if (data == 1) {
 					uni.showToast({
-						title: "配置成功",
-						mask: true, // 是否显示透明蒙层，防止触摸穿透
+						title: "配置已写入，请观察设备状态",
+						mask: true, // 是否显示透明蒦层，防止触摸穿透
 						duration: 2000,
 					});
 				} else {
@@ -174,7 +173,6 @@
 				// 开启搜索
 				await bleServer.SearchDevice();
 				let GetBluetoothDevicesRes = await Ble.GetBluetoothDevices();
-				console.log("GetBluetoothDevicesRes:", GetBluetoothDevicesRes);
 				hideLoading();
 				if (GetBluetoothDevicesRes.err != null) {
 					uni.showToast({
@@ -212,7 +210,6 @@
 						uni.setClipboardData({
 							data: itemList[res.tapIndex],
 							success(res) {
-								console.log('success', res);
 								uni.showToast({
 									title: "复制序列号成功",
 								});
@@ -220,7 +217,6 @@
 						});
 					},
 					fail(res) {
-						console.log(res.errMsg);
 					}
 				});
 			};
@@ -229,7 +225,6 @@
 				uni.scanCode({
 					success: (res) => {
 						device_sn.value = res.result;
-						console.log(res);
 					}
 				});
 			};

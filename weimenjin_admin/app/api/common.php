@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 
+// | Author:
 // +----------------------------------------------------------------------
 
 error_reporting(0);
@@ -79,7 +79,7 @@ function sendymSms($arr)
     ];
     //mlog("sendymSms:".json_encode($postData));
     // 发送POST请求到目标URL
-    $url = 'https://wxapp.wmj.com.cn/webapi/SmsApi/sendSms';
+    $url = 'https://your-domain.example/webapi/SmsApi/sendSms';
     $sendres = curl_request($url, 'post', json_encode($postData), ['Content-Type: application/json']);
     //mlog("sendymSmssendres:".json_encode($sendres));
     return $sendres;

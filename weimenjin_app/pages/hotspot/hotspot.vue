@@ -65,9 +65,7 @@
 					});
 					return
 				}
-				//^wmj^0KGIoT*^_^*9638527410
 				let rd = "^wmj^0" + this.formData.wifiName + "*^_^*" + this.formData.wifiPwd
-				console.log('rd.lenght：', rd.length)
 				if (rd.length > 63) {
 					uni.showToast({
 						title: "wifi名称密码过长",
@@ -77,13 +75,11 @@
 					});
 					return
 				}
-				console.log('this.data.wifi_pwd', rd)
 				this.hotspot = rd
 
 				wx.setClipboardData({
 					data: rd,
 					success(res) {
-						console.log('success', res);
 						wx.showToast({
 							title: "复制热点名称成功",
 

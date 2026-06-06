@@ -1,0 +1,230 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>房号管理</h5>
+                <button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row" id="searchGroup">
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-white dropdown-toggle" type="button">所属单元</button>
+                                    </div>
+                                    <select class="form-control" id="unit_id">
+                                        <option value="">全部单元</option>
+                                        {volist name="units" id="unit"}
+                                        <option value="{$unit.unit_id}">{$unit.area_name} - {$unit.building_name} - {$unit.unit_name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-white dropdown-toggle" type="button">关键词</button>
+                                    </div>
+                                    <input type="text" class="form-control" id="keyword" placeholder="房号或业主姓名" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-primary" onclick="RoomManager.search()">
+                                    <i class="fa fa-search"></i>&nbsp;搜索
+                                </button>
+                            </div>
+                        </div>
+                        <div class="btn-group-sm" id="RoomTableToolbar" role="group">
+                            <button type="button" class="btn btn-primary button-margin" onclick="RoomManager.add()">
+                                <i class="fa fa-plus"></i>&nbsp;添加房号
+                            </button>
+                            <button type="button" class="btn btn-info button-margin" onclick="RoomManager.batchGenerate()">
+                                <i class="fa fa-magic"></i>&nbsp;批量生成
+                            </button>
+                            <button type="button" class="btn btn-success button-margin" onclick="RoomManager.update()">
+                                <i class="fa fa-pencil"></i>&nbsp;修改
+                            </button>
+                            <button type="button" class="btn btn-danger button-margin" onclick="RoomManager.delete()">
+                                <i class="fa fa-trash"></i>&nbsp;删除
+                            </button>
+                        </div>
+                        <table id="RoomTable" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var RoomManager = {
+    table: null,
+
+    init: function() {
+        this.initTable();
+    },
+
+    initTable: function() {
+        this.table = $('#RoomTable').bootstrapTable({
+            url: '/admin/AreaManage/roomIndex',
+            method: 'get',
+            dataType: 'json',
+            pagination: true,
+            sidePagination: 'server',
+            pageSize: 20,
+            pageList: [10, 20, 50, 100],
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset,
+                    unit_id: $('#unit_id').val(),
+                    keyword: $('#keyword').val()
+                };
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'room_id',
+                title: 'ID',
+                width: '60px'
+            }, {
+                field: 'area_name',
+                title: '区域',
+                width: '100px'
+            }, {
+                field: 'building_name',
+                title: '楼栋',
+                width: '100px'
+            }, {
+                field: 'unit_name',
+                title: '单元',
+                width: '80px'
+            }, {
+                field: 'room_number',
+                title: '房号',
+                width: '100px'
+            }, {
+                field: 'floor',
+                title: '楼层',
+                width: '60px'
+            }, {
+                field: 'owner_name',
+                title: '业主',
+                width: '100px'
+            }, {
+                field: 'owner_phone',
+                title: '联系电话',
+                width: '120px'
+            }, {
+                field: 'member_count',
+                title: '住户数',
+                width: '80px'
+            }, {
+                field: 'room_type',
+                title: '类型',
+                width: '80px',
+                formatter: function(value) {
+                    return value == 'residential' ? '住宅' : '商业';
+                }
+            }, {
+                field: 'status',
+                title: '状态',
+                width: '80px',
+                formatter: function(value) {
+                    return value == 1 ? '<span class="label label-primary">启用</span>' : '<span class="label label-default">禁用</span>';
+                }
+            }]
+        });
+    },
+
+    search: function() {
+        this.table.bootstrapTable('refresh');
+    },
+
+    add: function() {
+        layer.open({
+            type: 2,
+            title: '添加房号',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['800px', '90%'],
+            content: '/admin/AreaManage/roomAdd',
+            end: function() {
+                RoomManager.search();
+            }
+        });
+    },
+
+    batchGenerate: function() {
+        layer.open({
+            type: 2,
+            title: '批量生成房号',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['700px', '80%'],
+            content: '/admin/AreaManage/roomBatchGenerate',
+            end: function() {
+                RoomManager.search();
+            }
+        });
+    },
+
+    update: function() {
+        var rows = this.table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            layer.msg('请选择一条记录');
+            return;
+        }
+        if (rows.length > 1) {
+            layer.msg('只能选择一条记录');
+            return;
+        }
+
+        layer.open({
+            type: 2,
+            title: '修改房号',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['800px', '90%'],
+            content: '/admin/AreaManage/roomUpdate?room_id=' + rows[0].room_id,
+            end: function() {
+                RoomManager.search();
+            }
+        });
+    },
+
+    delete: function() {
+        var rows = this.table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            layer.msg('请选择要删除的记录');
+            return;
+        }
+
+        layer.confirm('确定要删除选中的房号吗？', {
+            btn: ['确定', '取消']
+        }, function(index) {
+            var room_id = rows[0].room_id;
+            $.post('/admin/AreaManage/roomDelete', {room_id: room_id}, function(res) {
+                if (res.status == '00') {
+                    layer.msg('删除成功');
+                    RoomManager.search();
+                } else {
+                    layer.msg(res.msg);
+                }
+            });
+            layer.close(index);
+        });
+    }
+};
+
+$(function() {
+    RoomManager.init();
+});
+</script>
+{/block}

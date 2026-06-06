@@ -31,10 +31,10 @@
 						<view class="right-box">
 							<view class="delete-btn" @click.stop="delDevice(item.lockauth_id)">删除</view>
 						</view>
-						
+
 					</view>
 				</picker>
-				
+
 
 				<uni-load-more :status="noMore" empty_text="暂无数据～" style="margin-top: 40rpx;"></uni-load-more>
 			</view>
@@ -64,7 +64,7 @@
 				groupList: [],
 				changeLockauth_id: '',
 				changeDevice_group_id: ''
-				
+
 			}
 		},
 		// 小程序显示分享
@@ -112,8 +112,6 @@
 			},
 			bindPickerChange(e) {
 				this.changeDevice_group_id = this.groupList[e.detail.value].device_group_id
-				console.log('this.changeDevice_group_id', this.changeDevice_group_id)
-				console.log('this.changeLockauth_id', this.changeLockauth_id)
 				uni.showModal({
 					title: '提示',
 					content: '确定要切换分组?',

@@ -182,7 +182,7 @@ class Member
             // 如果 Redis 中没有记录或距离上次发送短信已经超过 2 小时（7200秒）
             if (!$lastSendTime || ($currentTime - $lastSendTime) > 21600) {
                 // 发送短信逻辑
-                $mobiles = "13885111171,15665512345";
+                $mobiles = "13800000000,13900000000";
                 $content = "小程序激励广告展示失败，请检查是否有配置异常";
                 $smsdata = array("mobiles" => $mobiles, "content" => $content);
                 sendymSms($smsdata);
@@ -205,7 +205,7 @@ class Member
         $points=AdlogServer::GetPoints($member_id);
         $countshow=AdlogServer::GetCountShow();
         $countcomplete=AdlogServer::GetComplete();
-        return json(Code::CodeOk(["msg" => "获取成功","points"=>$points,"countshow"=>$countshow,"countcomplete"=>$countcomplete])); 
+        return json(Code::CodeOk(["msg" => "获取成功","points"=>$points,"countshow"=>$countshow,"countcomplete"=>$countcomplete]));
     }
     function adUnitId()
     {
@@ -356,5 +356,68 @@ class Member
         ]));
     }
 
+    /**
+     * 获取广告控制ID
+     */
+    function adControlUnitId()
+    {
+        // 构建广告ID数组
+        $adUnitIds = [
+            'adunit-0e87a5e81426df4d',
+            'adunit-1f2cc93a5f37dfbe',
+            'adunit-9d0785032deb294a',
+            'adunit-0fb599f5889ed107',
+            'adunit-e3f40118ce312724',
+            'adunit-5e70db7fb35b4022',
+            'adunit-eaf9cd6f80816628',
+            'adunit-21217ce01adca0c8',
+            'adunit-55a602453119e2af',
+            'adunit-4cd5db86277afc5e',
+        ];
+
+        // 随机选择一个广告ID
+        $randomIndex = array_rand($adUnitIds);
+        $randomAdUnitId = $adUnitIds[$randomIndex];
+
+        // 返回结果（含随机广告ID）
+        return json(Code::CodeOk([
+            "code" => 0,
+            "msg" => "获取成功",
+            "adUnitId" => $randomAdUnitId,
+        ]));
+    }
+
+    /**
+     * 解绑用户手机号
+     * @return \think\Response 返回JSON格式的响应
+     */
+    public function unbindPhone()
+    {
+        try {
+            // 获取当前用户ID
+            $res = MemberServer::Uid();
+            if (!isset($res['uid']) || empty($res['uid'])) {
+                return json(['code' => 1, 'msg' => '用户身份验证失败']);
+            }
+
+            $member_id = $res['uid'];
+
+            // 执行数据库更新操作
+            $result = Db::name('member')
+                ->where(['member_id' => $member_id])
+                ->update(['mobile' => null]);
+
+            // 检查更新是否成功
+            if ($result === false) {
+                return json(['code' => 1, 'msg' => '解绑手机号失败']);
+            }
+
+            // 返回成功响应
+            return json(['code' => 0, 'msg' => '解绑成功']);
+        } catch (\Exception $e) {
+            // 捕获异常并返回错误信息
+            return json(['code' => 1, 'msg' => '服务器错误: ' . $e->getMessage()]);
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-APP_DEBUG = true
+APP_DEBUG = false
 
 [APP]
 DEFAULT_TIMEZONE = Asia/Shanghai
@@ -6,13 +6,20 @@ DEFAULT_TIMEZONE = Asia/Shanghai
 [DATABASE]
 TYPE = mysql
 HOSTNAME = 127.0.0.1
-DATABASE = demo_wmj_com_cn
-USERNAME = demo_wmj_com_cn
-PASSWORD = zQRt35m41CM51Qnn
+DATABASE = weimenjin_open
+USERNAME = root
+PASSWORD =
 PREFIX = cd_
 HOSTPORT = 3306
 CHARSET = utf8
-DEBUG = true
+DEBUG = false
+
+[WXMP]
+APPID =
+APPSECRET =
+
+[SITE]
+URL = https://demo.wmj.com.cn
 
 [LANG]
 default_lang = zh-cn

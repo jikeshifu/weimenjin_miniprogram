@@ -8,5 +8,6 @@ return [
         'weikaimencardAdd' => 'app\command\CardAdd',
         'weikaimenfaceAdd' => 'app\command\FaceAdd',
         'cacheView' => 'app\command\CacheView',
+        'exportworker' => 'app\command\ExportWorker',
     ],
 ];

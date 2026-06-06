@@ -2,31 +2,31 @@
 	<view class="big-box">
 		<view class="background"></view>
 		<view class="content">
-			
-		
+
+
 			<view :class="['top-box', scrollTop > 10 ? 'top-box-active' : '']">
 				<view class="search-box">
 					<image src="../../static/sousuo.png"></image>
 					<input placeholder="请输入手机号" placeholder-class="placeholder" class="search-input" confirm-type="search" @confirm="confirm"/>
 				</view>
-				
-				<view style="margin-left: 20rpx;height: 100rpx;"> 
+
+				<view style="margin-left: 20rpx;height: 100rpx;">
 					<view class="cell-item" @click="openTime">
-						
+
 						<view class="text">
 							{{ formData.startTime ? formatDate(formData.startTime) : '请选择开始时间' }}</view>
 					</view>
 					<view class="cell-item" @click="openTime2">
-						
+
 						<view class="text">
 							{{ formData.endTime ? formatDate(formData.endTime) : '请选择结束时间' }}</view>
 					</view>
-	
+
 				</view>
-			
+
 			</view>
-			
-			<view class="list" v-if="listStatus"> 
+
+			<view class="list" v-if="listStatus">
 				<view class="item" v-for="(item, index) in dataList" :key="index" >
 				    <view class="left-box">
 						<view class="left-box" v-if="item.type === 11 && item.cpurl" style="display: flex; align-items: center; position: relative;">
@@ -45,7 +45,7 @@
 				        <image v-else-if="item.headimgurl" :src="getImgPath(item.headimgurl)" class="user-img"></image>
 				        <!-- 无头像地址时显示默认头像 -->
 				        <image v-else src="../../static/moren.png" class="user-img"></image>
-				
+
 				        <view class="user-info">
 				            <view class="flex-box">
 				                <view class="user-name" v-if="item.user_name">{{ item.user_name }}</view>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { record_api } from '@/api/index.js';	
+import { record_api } from '@/api/index.js';
 import { formatDate, imgPath } from '@/libs/filters.js';
 import UvDatetimePicker from '@/components/uv-datetime-picker/components/uv-datetime-picker/uv-datetime-picker.vue';
 import ImagePreview from '@/components/imagepreview/ImagePreview.vue';
@@ -92,7 +92,7 @@ export default {
 		return {
 			listStatus:true,
 			formData: {
-			
+
 				startTime: oneWeekAgo.getTime(),
 				endTime: now.getTime(),
 			},
@@ -125,12 +125,10 @@ export default {
 	},
 	methods: {
 		showMobile(data){
-			console.log("data",data)
-			
 			uni.showActionSheet({
 				itemList: [data.mobileShow],
 				success: function (res) {
-					
+
 					uni.makePhoneCall({
 					  phoneNumber:  data.mobileShow, //此号码并非真实电话号码，仅用于测试
 					  success: function () {
@@ -140,10 +138,9 @@ export default {
 					    //console.log("拨打电话失败！")
 					  }
 					})
-			
+
 				},
 				fail: function (res) {
-					console.log(res.errMsg);
 				}
 			});
 		},
@@ -159,21 +156,20 @@ export default {
 			this.$refs.datetimePicker2.open();
 		},
 		showPreview(url) {
-			console.log("Preview URL:", url);  // 输出 URL 以检查是否正确
 		      this.previewUrl = url;
 		      this.showPreviewImg = true;
 		    },
-		
+
 		searchTime(e) {
-	
+
 		this.dataList = [];
 		this.page = 1;
 		setTimeout(()=>{
 			this.getList()
 		},100)
 		},
-		
-	
+
+
 		formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
 			var crtTime;
 			if (typeof date === 'number') {
@@ -214,11 +210,10 @@ export default {
 		},
 		async getList() {
 			this.noMore = 'loading';
-			console.log("formData",this.formData)
 			let params = {
 				page: this.page,
 				limit: 10,
-				
+
 					startTime: this.formData.startTime/1000,
 					endTime: this.formData.endTime/1000,
 				lock_id: this.lock_id,
@@ -226,7 +221,7 @@ export default {
 			};
 			let res = await record_api(params);
 			this.groupInfo = res.data.info
-		
+
 			if (this.page !== 1 && !res.data.length) {
 				this.noMore = 'noMore';
 				return;
@@ -236,17 +231,16 @@ export default {
 				this.noMore = 'nodata';
 				return;
 			}
-			
-	
-			
+
+
+
 			this.dataList = this.dataList.concat(res.data); //将数据拼接在一起
-		
+
 			if (this.dataList.length < 10) {
 				this.noMore = 'noMore';
 			}
 		},
 		confirm(e) {
-			console.log("e",e)
 			this.search_key = e.detail.value
 			this.dataList = [];
 			this.page = 1;
@@ -263,7 +257,7 @@ export default {
 	async onPullDownRefresh() {
 		let that = this;
 		this.page = 1;
-	
+
 		that.dataList = [];
 		await that.getList();
 		uni.stopPullDownRefresh();
@@ -272,5 +266,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import './operateList.scss';	
+@import './operateList.scss';
 </style>

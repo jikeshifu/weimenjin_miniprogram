@@ -67,9 +67,8 @@
 		},
 		onShareAppMessage() {},
 		onShareTimeline() {},
-		onLoad(option) {
-			console.log("onLoad", option);
-			if (option && option.iccid) {
+	onLoad(option) {
+		if (option && option.iccid) {
 				this.sim_sn = option.iccid;
 				if (this.sim_sn.startsWith('898')) {
 					this.onSubmit(); // 自动执行查询

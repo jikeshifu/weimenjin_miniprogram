@@ -65,7 +65,7 @@
 				color: #999999;
 			}
 		}
-		
+
 		.search-box {
 			margin: 12rpx 30rpx;
 			height: 90rpx;
@@ -116,7 +116,7 @@
 				  display: flex;
 				  align-items: center;
 				  flex: 1;
-				
+
 				  // 抓拍提示斜三角样式
 				  .capture-tip {
 				    position: absolute;
@@ -128,12 +128,12 @@
 				    clip-path: polygon(0 0, 100% 0, 0 100%);  // 使用clip-path绘制三角形
 				    border-top-left-radius: 24rpx;  // 圆角设置，匹配卡片圆角
 				    z-index: 1;  // 确保三角形在其他内容之上
-				  
+
 				    // 在三角形中添加文字容器
 				    display: flex;
 				    align-items: center;
 				    justify-content: center;
-				  
+
 				    .capture-text {
 				      color: white;  // 文字颜色为白色
 				      font-size: 18rpx;  // 字体大小
@@ -143,7 +143,7 @@
 				    }
 				  }
 
-				
+
 				  .user-img {
 				    width: 80rpx;
 				    height: 80rpx;
@@ -152,14 +152,14 @@
 				    position: relative;
 				    z-index: 2;  // 确保头像在抓拍提示的下方
 				  }
-				
+
 				  .user-info {
 				    margin-left: 22rpx;
-				
+
 				    .flex-box {
 				      display: flex;
 				      align-items: center;
-				
+
 				      .user-name {
 				        font-size: 28rpx;
 				        color: #21CF3E;
@@ -169,18 +169,18 @@
 				        -webkit-box-orient: vertical;
 				        -webkit-line-clamp: 1;
 				      }
-				
+
 				      .tourist {
 				        color: #444444;
 				      }
 				    }
-				
+
 				    .phone {
 				      font-size: 26rpx;
 				      color: #999999;
 				      margin-top: 10rpx;
 				    }
-				
+
 				    .time {
 				      font-size: 24rpx;
 				      color: #999999;
@@ -215,8 +215,10 @@
 
 					.status {
 						margin-top: 20rpx;
-						width: 200rpx;
-						height: 50rpx;
+						padding: 15rpx 20rpx;
+						min-width: 140rpx;
+						max-width: 280rpx;
+						min-height: 50rpx;
 						box-shadow: 6rpx 6rpx 22rpx rgba(176, 181, 197, 0.49);
 						border-radius:100rpx;
 						color: #FFFFFF;
@@ -224,6 +226,9 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
+						word-break: break-word;
+						white-space: normal;
+						line-height: 1.4;
 					}
 				}
 			}

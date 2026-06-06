@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退出登录 - {:config('xhadmin.site_title')}</title>
+    <link rel="shortcut icon" href="__PUBLIC__/static/favicon.ico">
+    <style>
+        * { box-sizing: border-box; }
+        html, body { width: 100%; min-height: 100%; margin: 0; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            color: #ecfeff;
+            background: #04131e;
+        }
+        .logout-page {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 28px;
+            background:
+                linear-gradient(120deg, rgba(2, 14, 25, .66), rgba(4, 32, 46, .38)),
+                url("__PUBLIC__/static/login_new/static/picture/wmj-community-tech-login.webp") center/cover no-repeat;
+            overflow: hidden;
+        }
+        .logout-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 28% 24%, rgba(34, 211, 238, .12), transparent 30%),
+                radial-gradient(circle at 78% 76%, rgba(46, 204, 113, .1), transparent 30%),
+                linear-gradient(90deg, rgba(125, 211, 252, .08) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(125, 211, 252, .06) 1px, transparent 1px);
+            background-size: auto, auto, 72px 72px, 72px 72px;
+        }
+        .logout-card {
+            position: relative;
+            width: min(92vw, 520px);
+            padding: 44px 38px;
+            text-align: center;
+            border: 1px solid rgba(125, 211, 252, .22);
+            background: linear-gradient(180deg, rgba(8, 30, 44, .9), rgba(2, 14, 25, .94));
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .08);
+            backdrop-filter: blur(18px);
+        }
+        .logout-icon {
+            width: 82px;
+            height: 82px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 24px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #5eead4, #22c55e);
+            color: #04131e;
+            font-size: 42px;
+            font-weight: 900;
+            box-shadow: 0 18px 50px rgba(34, 197, 94, .24);
+        }
+        h1 { margin: 0 0 12px; font-size: 30px; letter-spacing: 0; }
+        p { margin: 0; color: rgba(236, 254, 255, .68); line-height: 1.8; }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+        .btn {
+            min-width: 138px;
+            padding: 13px 18px;
+            color: #04131e;
+            text-decoration: none;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5eead4, #22c55e);
+        }
+        .btn.secondary {
+            color: #67e8f9;
+            background: rgba(8, 145, 178, .12);
+            border: 1px solid rgba(103, 232, 249, .28);
+        }
+        .countdown { color: #86efac; font-weight: 800; }
+    </style>
+</head>
+<body>
+<main class="logout-page">
+    <section class="logout-card">
+        <div class="logout-icon">✓</div>
+        <h1>已安全退出</h1>
+        <p>会话已结束，系统将在 <span id="wait" class="countdown">3</span> 秒后返回登录页。</p>
+        <div class="actions">
+            <a class="btn" id="href" href="{:url('admin/Login/indexQrCode')}">立即登录</a>
+            <a class="btn secondary" href="/">返回首页</a>
+        </div>
+    </section>
+</main>
+<script>
+    (function() {
+        var wait = document.getElementById('wait');
+        var href = document.getElementById('href').href;
+        var interval = setInterval(function() {
+            var time = parseInt(wait.innerHTML, 10) - 1;
+            wait.innerHTML = time;
+            if (time <= 0) {
+                clearInterval(interval);
+                location.href = href;
+            }
+        }, 1000);
+    })();
+</script>
+</body>
+</html>

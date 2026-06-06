@@ -6,12 +6,12 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 
+// | Author:
 // +----------------------------------------------------------------------
 
 
-use think\facade\Db; 
-use think\facade\Log; 
+use think\facade\Db;
+use think\facade\Log;
 
 error_reporting(0);
 
@@ -67,7 +67,7 @@ function deldir($dir) {
 		 }
 	  }
    }
- 
+
    closedir($dh);
    //删除当前文件夹：
    if(rmdir($dir)) {
@@ -113,17 +113,18 @@ function ip(){
 }
 function is_ip($str){
     $ip=explode('.',$str);
-    for($i=0;$i<count($ip);$i++){ 
-        if($ip[$i]>255){ 
-            return false; 
-        } 
-    } 
-    return preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/',$str); 
+    for($i=0;$i<count($ip);$i++){
+        if($ip[$i]>255){
+            return false;
+        }
+    }
+    return preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/',$str);
 }
 
 
 //通过字段值获取字段配置的名称
 function getFieldVal($val,$fieldConfig){
+	$fieldvals = '';
 	if($fieldConfig){
 		foreach(explode(',',$fieldConfig) as $k=>$v){
 			$tempstr = explode('|',$v);
@@ -132,7 +133,7 @@ function getFieldVal($val,$fieldConfig){
 					$fieldvals .= $tempstr[0].',';
 				}
 			}
-			
+
 		}
 		return rtrim($fieldvals,',');
 	}
@@ -173,7 +174,7 @@ function formartExportWhere($field){
 			unset($field[$k]);
 		}
 	}
-	
+
 	return \xhadmin\CommonService::filterEmptyArray(array_merge($field,explode('|',$dt)));
 }
 
@@ -200,38 +201,38 @@ function filePutContents($content,$filepath,$type){
 				$ext_content .= $val."\n\n";
 			}
 		}
-		
+
 		$content .= $ext_content."\n\n";
 		if($type == 1){
 			$content .="}\n\n";
 		}
 	}
-	
+
 	ob_start();
 	echo $content;
 	$_cache=ob_get_contents();
 	ob_end_clean();
-	
+
 	if($_cache){
 		$File = new \think\template\driver\File();
-		$File->write($filepath, $_cache);	
+		$File->write($filepath, $_cache);
 	}
 }
 
 function htmlOutList($list,$err_status=false){
 	foreach($list as $key=>$row) {
-		$res[$key] = checkData($row,$err_status);	
+		$res[$key] = checkData($row,$err_status);
 	}
-	
+
 	return $res;
 }
 
 //err_status  没有数据是否抛出异常 true 是 false 否
-function checkData($data,$err_status=true){	
+function checkData($data,$err_status=true){
 	if(!$data && $err_status){
 		throw new \Exception('没有数据');
 	}
-	
+
 	foreach($data as $k=>$v){
 		if($v && is_array($v)){
 			$data[$k] = checkData($v);
@@ -240,17 +241,17 @@ function checkData($data,$err_status=true){
 		}
 	}
 	return $data;
-	
+
 }
 
 //html代码输入
 function html_in($str) {
     // 转义 HTML 特殊字符
     $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-    
+
     // 移除 HTML 和 PHP 标签
     $str = strip_tags($str);
-    
+
     // 添加反斜杠以转义字符串
     $str = addslashes($str);
 
@@ -260,6 +261,7 @@ function html_in($str) {
 
 //html代码输出
 function html_out($str){
+    if ($str === null) $str = '';
     if(function_exists('htmlspecialchars_decode')){
         $str=htmlspecialchars_decode($str);
     }else{
@@ -311,9 +313,9 @@ function getTimeFormat($val){
  * @return array
  */
 function filterEmptyArray($data = []){
-	foreach( $data as $k=>$v){   
-		if( !$v && $v !== 0)   
-			unset( $data[$k] );   
+	foreach( $data as $k=>$v){
+		if( !$v && $v !== 0)
+			unset( $data[$k] );
 	}
 	return $data;
 }
@@ -340,17 +342,17 @@ function formatWhere($data){
 	foreach( $data as $k=>$v){
 		if(is_array($v)){
 			if(isNotEmpty($v[1])){
-				switch(strtolower($v[0])){			
+				switch(strtolower($v[0])){
 					//模糊查询
 					case 'like':
 						$v[1] = '%'.$v[1].'%';
 					break;
-					
+
 					//表达式查询
 					case 'exp':
 						$v[1] = Db::raw($v[1]);
 					break;
-					
+
 					//区间查询
 					case 'between':
 						if($v[1] && is_array($v[1])){
@@ -381,15 +383,15 @@ function formatWhere($data){
 function getTag($key3,$no=100){
 	$data=[];
 	$key = ord("A");//A--65
-	$key2 = ord("@");//@--64	
+	$key2 = ord("@");//@--64
 	for($n=1;$n<=$no;$n++){
 		if($key>ord("Z")){
 			$key2 += 1;
 			$key = ord("A");
-			$data[$n] = chr($key2).chr($key);//超过26个字母时才会启用  
+			$data[$n] = chr($key2).chr($key);//超过26个字母时才会启用
 		}else{
 			if($key2>=ord("A")){
-				$data[$n] = chr($key2).chr($key);//超过26个字母时才会启用  
+				$data[$n] = chr($key2).chr($key);//超过26个字母时才会启用
 			}else{
 				$data[$n] = chr($key);
 			}
@@ -478,7 +480,7 @@ function sendsms($arr)
     ];
     //mlog("sendymSms:".json_encode($postData));
     // 发送POST请求到目标URL
-    $url = 'https://wxapp.wmj.com.cn/webapi/SmsApi/sendSms';
+    $url = 'https://your-domain.example/webapi/SmsApi/sendSms';
     $sendres = curl_req($url, 'post', json_encode($postData), ['Content-Type: application/json']);
     //mlog("sendymSmssendres:".json_encode($sendres));
     return $sendres;

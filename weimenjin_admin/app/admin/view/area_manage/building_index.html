@@ -1,0 +1,201 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>楼栋管理</h5>
+                <button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row" id="searchGroup">
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-white dropdown-toggle" type="button">所属区域</button>
+                                    </div>
+                                    <select class="form-control" id="area_id">
+                                        <option value="">全部区域</option>
+                                        {volist name="areas" id="area"}
+                                        <option value="{$area.area_id}">{$area.area_name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-white dropdown-toggle" type="button">关键词</button>
+                                    </div>
+                                    <input type="text" class="form-control" id="keyword" placeholder="楼栋名称或编码" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-primary" onclick="BuildingManager.search()">
+                                    <i class="fa fa-search"></i>&nbsp;搜索
+                                </button>
+                            </div>
+                        </div>
+                        <div class="btn-group-sm" id="BuildingTableToolbar" role="group">
+                            <button type="button" class="btn btn-primary button-margin" onclick="BuildingManager.add()">
+                                <i class="fa fa-plus"></i>&nbsp;添加楼栋
+                            </button>
+                            <button type="button" class="btn btn-success button-margin" onclick="BuildingManager.update()">
+                                <i class="fa fa-pencil"></i>&nbsp;修改
+                            </button>
+                            <button type="button" class="btn btn-danger button-margin" onclick="BuildingManager.delete()">
+                                <i class="fa fa-trash"></i>&nbsp;删除
+                            </button>
+                        </div>
+                        <table id="BuildingTable" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var BuildingManager = {
+    table: null,
+
+    init: function() {
+        this.initTable();
+    },
+
+    initTable: function() {
+        this.table = $('#BuildingTable').bootstrapTable({
+            url: '/admin/AreaManage/buildingIndex',
+            method: 'get',
+            dataType: 'json',
+            pagination: true,
+            sidePagination: 'server',
+            pageSize: 20,
+            pageList: [10, 20, 50, 100],
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset,
+                    area_id: $('#area_id').val(),
+                    keyword: $('#keyword').val()
+                };
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'building_id',
+                title: 'ID',
+                width: '80px'
+            }, {
+                field: 'area_name',
+                title: '所属区域',
+                width: '150px'
+            }, {
+                field: 'building_name',
+                title: '楼栋名称',
+                width: '150px'
+            }, {
+                field: 'building_code',
+                title: '楼栋编码',
+                width: '120px'
+            }, {
+                field: 'floors',
+                title: '楼层数',
+                width: '100px'
+            }, {
+                field: 'unit_count',
+                title: '单元数',
+                width: '100px'
+            }, {
+                field: 'status',
+                title: '状态',
+                width: '100px',
+                formatter: function(value) {
+                    return value == 1 ? '<span class="label label-primary">启用</span>' : '<span class="label label-default">禁用</span>';
+                }
+            }, {
+                field: 'create_time',
+                title: '创建时间',
+                width: '180px',
+                formatter: function(value) {
+                    return value ? new Date(value * 1000).toLocaleString() : '-';
+                }
+            }]
+        });
+    },
+
+    search: function() {
+        this.table.bootstrapTable('refresh');
+    },
+
+    add: function() {
+        layer.open({
+            type: 2,
+            title: '添加楼栋',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['700px', '80%'],
+            content: '/admin/AreaManage/buildingAdd',
+            end: function() {
+                BuildingManager.search();
+            }
+        });
+    },
+
+    update: function() {
+        var rows = this.table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            layer.msg('请选择一条记录');
+            return;
+        }
+        if (rows.length > 1) {
+            layer.msg('只能选择一条记录');
+            return;
+        }
+
+        layer.open({
+            type: 2,
+            title: '修改楼栋',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['700px', '80%'],
+            content: '/admin/AreaManage/buildingUpdate?building_id=' + rows[0].building_id,
+            end: function() {
+                BuildingManager.search();
+            }
+        });
+    },
+
+    delete: function() {
+        var rows = this.table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            layer.msg('请选择要删除的记录');
+            return;
+        }
+
+        layer.confirm('确定要删除选中的楼栋吗？', {
+            btn: ['确定', '取消']
+        }, function(index) {
+            var building_id = rows[0].building_id;
+            $.post('/admin/AreaManage/buildingDelete', {building_id: building_id}, function(res) {
+                if (res.status == '00') {
+                    layer.msg('删除成功');
+                    BuildingManager.search();
+                } else {
+                    layer.msg(res.msg);
+                }
+            });
+            layer.close(index);
+        });
+    }
+};
+
+$(function() {
+    BuildingManager.init();
+});
+</script>
+{/block}

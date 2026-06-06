@@ -32,10 +32,12 @@ export const formatMoney = (num, cent = true) => {
 // 时间戳转日期
 export const formatDate = (date, fmt = 'yyyy-MM-dd hh:mm:ss') => {
   let crtTime;
-  date = date.replace(/-/g, '/');
-  
+
   if (typeof date === 'number') {
     crtTime = (date + '').length !== 13 ? new Date(date * 1000) : new Date(date);
+  } else if (typeof date === 'string') {
+    date = date.replace(/-/g, '/');
+    crtTime = new Date(date);
   } else {
     crtTime = new Date(date);
   }
@@ -65,7 +67,7 @@ export const formatDate = (date, fmt = 'yyyy-MM-dd hh:mm:ss') => {
       );
     }
   }
-  
+
   return fmt;
 };
 

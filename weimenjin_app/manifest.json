@@ -2,7 +2,7 @@
     "name" : "微门禁",
     "appid" : "__UNI__1F4A553",
     "description" : "",
-    "versionName" : "1.0.0",
+    "versionName" : "2.0.46",
     "versionCode" : "100",
     "transformPx" : false,
     /* 5+App特有相关 */
@@ -60,7 +60,7 @@
             "ios" : {
                 "capabilities" : {
                     "entitlements" : {
-                        "com.apple.developer.associated-domains" : [ "applinks:demo.wmj.com.cn" ]
+                        "com.apple.developer.associated-domains" : []
                     }
                 },
                 "privacyDescription" : {
@@ -135,16 +135,18 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx8f5b26dxxxxxxxxx",
+        "appid" : "wxaebd88d59cc0074a",
         "setting" : {
             "urlCheck" : false,
             "minified" : true,
-            "postcss" : true,
-            "es6" : false
+            "postcss" : true
         },
         "usingComponents" : true,
         "libVersion" : "2.8.1",
         "permission" : {
+            "scope.record" : {
+                "desc" : "实时喊话需要使用麦克风录音，否则无法发送语音"
+            },
             "scope.userLocation" : {
                 "desc" : "小程序将获取您的位置信，否则部分功能不可用"
             }
@@ -180,7 +182,7 @@
     },
     "h5" : {
         "title" : "微门禁",
-        "domain" : "http://m.meiyaya.yuethink.net/",
+        "domain" : "",
         "template" : "",
         "router" : {
             "base" : ""

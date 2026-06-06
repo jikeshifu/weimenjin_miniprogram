@@ -1,10 +1,25 @@
 <template>
 	<view class="content">
-		<view class="icon" :style="{color: color, fontSize: fontSize}" v-html="type" @click="toclick"></view>
+		<view class="icon" :style="{color: color, fontSize: fontSize}" @click="toclick">{{ iconText }}</view>
 	</view>
 </template>
 
 <script>
+	const iconMap = {
+		'&#xe6f3;': '+',
+		'&#xe6f9;': 'T',
+		'&#xe6eb;': '-',
+		'&#xe6e8;': '↶',
+		'&#xe705;': '↷',
+		'&#xeb8a;': '⚙',
+		'&#xe6e7;': 'B',
+		'&#xe6fe;': 'I',
+		'&#xe6f8;': 'S',
+		'&#xe6e3;': 'H',
+		'&#xe6f1;': 'C',
+		'&#xe6ed;': 'R'
+	};
+
 	export default {
 		props: {
 			type: {
@@ -18,6 +33,11 @@
 			fontSize: {
 				type: String,
 				default: '34rpx'
+			}
+		},
+		computed: {
+			iconText() {
+				return iconMap[this.type] || '';
 			}
 		},
 		methods: {
@@ -34,15 +54,13 @@
 		align-items: center;
 		justify-content: center;
 	}
-	@font-face {
-		font-family: 'jin';
-		/** 阿里巴巴矢量图标库的字体库地址，可以替换自己的字体库地址 **/
-		src: url('https://demo.wmj.com.cn/static/fonts/font_1491431_6m7ltjo8wi.ttf') format('truetype');
-	}
 
 	.icon {
-		font-family: jin !important;
+		min-width: 44rpx;
 		font-size: 34rpx;
+		font-weight: 600;
+		line-height: 1;
+		text-align: center;
 	}
 
 </style>

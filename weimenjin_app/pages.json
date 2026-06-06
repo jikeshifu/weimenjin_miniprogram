@@ -3,11 +3,11 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "微门禁",
+							   "navigationBarTitleText": "微门禁",
 				"enablePullDownRefresh": true,
-				// #ifdef APP-PLUS 
+				// #ifdef APP-PLUS
 				"navigationStyle": "custom"
-				// #endif 
+				// #endif
 			}
 		},
 		{
@@ -104,6 +104,12 @@
 			"style": {
 				"navigationBarTitleText": "分组详情",
 				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/adfreeSubscribe/adfreeSubscribe",
+			"style": {
+				"navigationBarTitleText": "免广告订阅"
 			}
 		},
 		{
@@ -266,51 +272,182 @@
 		},
 		{
 			"path" : "pages/authinfo/authinfo",
-			"style" : 
+			"style" :
 			{
 				"navigationBarTitleText" : ""
 			}
 		},
 		{
 			"path" : "pages/login/login",
-			"style" : 
+			"style" :
 			{
 				"navigationBarTitleText" : ""
 			}
 		},
 		{
 			"path" : "pages/pconfiguration/pconfiguration",
-			"style" : 
+			"style" :
 			{
 				"navigationBarTitleText" : "硬件云参数配置"
 			}
 		},
 		{
 			"path" : "pages/linkresponse/linkresponse",
-			"style" : 
+			"style" :
 			{
 				"navigationBarTitleText" : "联动管理"
 			}
 		},
 		{
 			"path" : "pages/addlinkspeaker/addlinkspeaker",
-			"style" : 
+			"style" :
 			{
 				"navigationBarTitleText" : "添加联动喇叭"
 			}
 		},
 		{
 			"path" : "pages/addlinkswitch/addlinkswitch",
-			"style" : 
+			"style" :
 			{
 				"navigationBarTitleText" : "添加联动空开"
 			}
+		},
+		{
+			"path" : "pages/hornSettings/hornSettings",
+			"style" :
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/hornHistory/hornHistory",
+			"style" :
+			{
+				"navigationBarTitleText" : "播放历史",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/adcontrol/adcontrol",
+			"style" :
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/camWifi/camWifi",
+			"style" :
+			{
+				"navigationBarTitleText" : "设备配网"
+			}
+		},
+		{
+			"path" : "pages/camera/camera",
+			"style" :
+			{
+				"navigationBarTitleText" : "摄像头",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/4GSwitch/4GSwitch",
+			"style" :
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/W76FSwitch/W76FSwitch",
+			"style" :
+			{
+				"navigationBarTitleText" : "多路控制器"
+			}
+		},
+		{
+			"path" : "pages/W75Cabinet/W75Cabinet",
+			"style" :
+			{
+				"navigationBarTitleText" : "柜门管理"
+			}
+		},
+		{
+			"path" : "pages/W75Buy/W75Buy",
+			"style" :
+			{
+				"navigationBarTitleText" : "商品购买"
+			}
+		},
+		{
+			"path" : "pages/W75Scan/W75Scan",
+			"style" :
+			{
+				"navigationBarTitleText" : "柜门操作"
+			}
+		},
+		{
+			"path" : "pages/W75Storage/W75Storage",
+			"style" :
+			{
+				"navigationBarTitleText" : "存取柜门"
+			}
+		},
+		{
+			"path" : "pages/W75StorageOrder/W75StorageOrder",
+			"style" :
+			{
+				"navigationBarTitleText" : "存取订单"
+			}
+		},
+		{
+			"path" : "pages/W71Switch/W71Switch",
+			"style" :
+			{
+				"navigationBarTitleText" : "空开断路器",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/TtsSchedule/TtsSchedule",
+			"style" :
+			{
+				"navigationBarTitleText" : "定时播放",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/qrAddDev/qrAddDev",
+			"style" :
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/videoPlayback/videoPlayback",
+			"style" :
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/roomBind/roomBind",
+			"style" :
+			{
+				"navigationBarTitleText" : "房间绑定",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/roomBindApply/roomBindApply",
+			"style" :
+			{
+				"navigationBarTitleText" : "申请绑定"
+			}
 		}
-		
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "微门禁",
+			   "navigationBarTitleText": "微门禁",
 		"navigationBarBackgroundColor": "#21CF3E",
 		"backgroundColor": "#F7F7FA"
 	},
@@ -323,7 +460,7 @@
 		"list": [{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/shouye.png",
-		
+
 				"selectedIconPath": "static/shouye-on.png",
 				"text": "首页"
 			},

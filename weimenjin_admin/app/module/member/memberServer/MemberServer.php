@@ -53,8 +53,15 @@ class MemberServer
     {
         $wxappconfigdata['app_id']=config('my.wxmp.wxmp_appid');
         $wxappconfigdata['secret']=config('my.wxmp.wxmp_appsecret');
+        if (empty($wxappconfigdata['app_id']) || empty($wxappconfigdata['secret'])) {
+            return ["err" => "请先配置微信小程序 AppID 和 AppSecret", "res" => []];
+        }
         $app = Factory::miniProgram($wxappconfigdata);
-        $res = $app->auth->session($code);
+        try {
+            $res = $app->auth->session($code);
+        } catch (\Throwable $e) {
+            return ["err" => $e->getMessage(), "res" => []];
+        }
         $err = null;
 
         // 检查是否有错误信息

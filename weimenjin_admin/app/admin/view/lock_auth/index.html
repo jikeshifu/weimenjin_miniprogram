@@ -20,14 +20,15 @@
 									<input type="text" class="form-control" id="lock_name" placeholder="锁名称" />
 								</div>
 							</div>
-							<div class="col-sm-2">
-								<div class="input-group">
-									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">昵称</button>
-									</div>
-									<input type="text" class="form-control" id="nickname" placeholder="昵称" />
-								</div>
+						<div class="col-sm-2">
+							<div class="input-group">
+								<select class="form-control" id="auth_isadmin">
+									<option value="">是否为管理员</option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
 							</div>
+						</div>
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
@@ -89,22 +90,21 @@
 	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
 
 	CodeGoods.initColumn = function () {
- 		return [
- 			{field: 'selectItem', checkbox: true},
- 			{title: '编号', field: 'lockauth_id', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
- 			{title: '昵称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '有效期结束', field: 'auth_endtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_endtimeFormatter},
- 			{title: '分享权限', field: 'auth_shareability', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_shareabilityFormatter},
- 			{title: '钥匙状态', field: 'auth_status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_statusFormatter},
- 			{title: '创建时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
- 			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
- 		];
- 	};
+		return [
+			{field: 'selectItem', checkbox: true},
+			{title: '编号', field: 'lockauth_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '是否是管理', field: 'auth_isadmin', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_isadminFormatter},
+			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '有效期结束', field: 'auth_endtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_endtimeFormatter},
+			{title: '分享权限', field: 'auth_shareability', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_shareabilityFormatter},
+			{title: '钥匙状态', field: 'auth_status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_statusFormatter},
+			{title: '创建时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
+			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+		];
+	};
 
 	CodeGoods.buttonFormatter = function(value,row,index) {
 		if(row.lockauth_id){
@@ -119,15 +119,23 @@
 		}
 	}
 
-	CodeGoods.headimgurlFormatter = function(value,row,index) {
-		if(value){
-			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
+	// avatar formatter removed
+
+	CodeGoods.auth_isadminFormatter = function(value,row,index) {
+		if(value !== null){
+			if(value == 1){
+				return '<input class="mui-switch mui-switch-animbg" type="checkbox" checked disabled>';
+			}else{
+				return '<input class="mui-switch mui-switch-animbg" type="checkbox" disabled>';
+			}
 		}
 	}
 
 	CodeGoods.auth_endtimeFormatter = function(value,row,index) {
-		if(value){
-			return formatDateTime(value,'Y-m-d H:i:s');	
+		if(value && value != 0){
+			return formatDateTime(value,'Y-m-d H:i:s');
+		} else {
+			return '不限制';
 		}
 	}
 
@@ -181,14 +189,14 @@
 
 	CodeGoods.create_timeFormatter = function(value,row,index) {
 		if(value){
-			return formatDateTime(value,'Y-m-d H:i:s');	
+			return formatDateTime(value,'Y-m-d H:i:s');
 		}
 	}
 
 	CodeGoods.formParams = function() {
 		var queryData = {};
 		queryData['lock_name'] = $("#lock_name").val();
-		queryData['nickname'] = $("#nickname").val();
+		queryData['auth_isadmin'] = $("#auth_isadmin").val();
 		queryData['realname'] = $("#realname").val();
 		queryData['remark'] = $("#remark").val();
 		queryData['mobile'] = $("#mobile").val();

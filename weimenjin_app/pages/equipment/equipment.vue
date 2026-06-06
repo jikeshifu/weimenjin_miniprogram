@@ -2,10 +2,27 @@
 	<view class="big-box" style="padding-bottom: 40upx;">
 		<view class="background"></view>
 		<view class="info-box">
-			<view class="top-text">设备二维码，可打印张贴给用户使用</view>
-			<view class="qrcode">
-				<image :src="info.lock_qrcode">
-				</image>
+			<view class="top-text">二维码，可保存打印张贴给用户使用</view>
+			<view class="qrcode-container">
+				<view class="qrcode-wrapper">
+					<view class="qrcode">
+						<image :src="info.lock_qrcode">
+						</image>
+					</view>
+					<view class="qrcode-label">普通二维码</view>
+				</view>
+				<view class="qrcode-wrapper" v-if="adfreeInfo.has_subscription && adfreeInfo.adfree_qrcode">
+					<view class="qrcode adfree-qrcode">
+						<image :src="adfreeInfo.adfree_qrcode">
+						</image>
+					</view>
+					<view class="qrcode-label adfree-label">免广告二维码</view>
+				</view>
+			</view>
+			<!-- 免广告订阅状态 -->
+			<view class="adfree-status" v-if="adfreeInfo.has_subscription">
+				<view class="adfree-badge">已订阅</view>
+				<view class="adfree-expire">到期时间：{{ adfreeInfo.expire_time }} (剩余{{ adfreeInfo.remaining_days }}天)</view>
 			</view>
 			<!-- <view class="name">{{ info.lock_name }}</view> -->
 			<view class="cell-box">
@@ -50,6 +67,14 @@
 
 		</view>
 		<view class="save" @click="saveImg">保存二维码图片</view>
+		<!-- 免广告二维码订阅按钮 -->
+		<view class="save adfree-btn" v-if="!adfreeInfo.has_subscription" @click="goAdfreeSubscribe">
+			<text class="adfree-icon">🎁</text> 订阅免广告二维码
+		</view>
+		<view class="save adfree-btn" v-if="adfreeInfo.has_subscription" @click="goAdfreeSubscribe">
+			<text class="adfree-icon">⏰</text> 续订免广告服务 (剩余{{ adfreeInfo.remaining_days }}天)
+		</view>
+		<view class="save" v-if="adfreeInfo.has_subscription && adfreeInfo.adfree_qrcode" @click="saveAdfreeImg">保存免广告二维码</view>
 		<view class="save" v-if="info.qrServer_status" @click="saveQr">设置二维码到显示屏</view>
 		<view class="save" v-if="info.addcardmode_status && info.addcardmode==2" @click="devAddCard(1,'进入中')">进入发卡模式
 		</view>
@@ -72,7 +97,8 @@
 		SaveQr,
 		DevAddCard,
 		DevNoNc,
-		DevToggleCapture
+		DevToggleCapture,
+		getAdfreeStatus_api
 	} from '@/api/index.js'
 	export default {
 		data() {
@@ -82,7 +108,14 @@
 					rssi: 0
 				},
 				signalDesc: '', // 信号描述
-				signalStyle: '' // 信号颜色样式
+				signalStyle: '', // 信号颜色样式
+				isRefreshing: false, // 是否正在刷新设备实时信息
+				adfreeInfo: {
+					has_subscription: false,
+					expire_time: null,
+					adfree_qrcode: null,
+					remaining_days: 0
+				}
 			}
 		},
 		// 小程序显示分享
@@ -91,8 +124,63 @@
 		onLoad(option) {
 			this.lockauth_id = option.lockauth_id
 			this.getInfo()
+			this.getAdfreeStatus()
 		},
 		methods: {
+			// 获取免广告订阅状态
+			async getAdfreeStatus() {
+				try {
+					let res = await getAdfreeStatus_api({
+						lockauth_id: this.lockauth_id
+					});
+					if (res.code === 0 && res.data) {
+						this.adfreeInfo = res.data;
+					}
+				} catch (error) {
+					console.error('获取免广告订阅状态失败:', error);
+				}
+			},
+			// 跳转到免广告订阅页面
+			goAdfreeSubscribe() {
+				uni.navigateTo({
+					url: '/pages/adfreeSubscribe/adfreeSubscribe?lockauth_id=' + this.lockauth_id
+				})
+			},
+			// 保存免广告二维码图片
+			saveAdfreeImg() {
+				if (!this.adfreeInfo.adfree_qrcode) {
+					uni.showToast({
+						title: '暂无免广告二维码',
+						icon: 'none'
+					});
+					return;
+				}
+				uni.showLoading({
+					title: '保存中...'
+				})
+				uni.downloadFile({
+					url: this.adfreeInfo.adfree_qrcode,
+					success: (res) => {
+						if (res.statusCode === 200) {
+							uni.saveImageToPhotosAlbum({
+								filePath: res.tempFilePath,
+								success: function() {
+									uni.showToast({
+										title: '保存成功！',
+										icon: 'none'
+									})
+								},
+								fail: res => {
+									uni.showToast({
+										title: '保存失败！',
+										icon: 'none'
+									})
+								}
+							});
+						}
+					}
+				});
+			},
 			iccidInfo() {
 				uni.navigateTo({
 					url: '/pages/sim/sim?iccid=' + this.info.iccid
@@ -116,6 +204,33 @@
 					this.info = res.data;
 					this.updateSignalStrength(this.info.rssi); // 更新信号强度描述和样式
 					this.info.batterypower = this.convertVoltageToPercentage(this.info.batterypower); // 更新电池电量显示值
+
+					// 如果设备在线，再调用一次接口获取实时设备信息（getdevinfo）
+					if (this.info.online === 1) {
+						this.refreshDeviceRealTimeInfo();
+					}
+				}
+			},
+			async refreshDeviceRealTimeInfo() {
+				// 延迟调用，确保第一次请求完成
+				if (this.isRefreshing) return;
+				this.isRefreshing = true;
+
+				try {
+					// 再次调用infoV2接口，此时会触发getdevinfo更新
+					let res = await equipmentInfo_api({
+						lockauth_id: this.lockauth_id
+					});
+					if (res.code === 0) {
+						// 更新新获取的数据
+						this.info = res.data;
+						this.updateSignalStrength(this.info.rssi);
+						this.info.batterypower = this.convertVoltageToPercentage(this.info.batterypower);
+					}
+				} catch (error) {
+					console.error('刷新设备信息失败:', error);
+				} finally {
+					this.isRefreshing = false;
 				}
 			},
 			updateSignalStrength: function(rssi) {
@@ -153,7 +268,7 @@
 					return '无信号';
 				}
 			},
-		
+
 			getWifiSignalDescription: function(rssi) {
 				if (rssi > 0) {
 					if (rssi <= 9) return '非常差';
@@ -170,7 +285,7 @@
 					return '无信号';
 				}
 			},
-		
+
 			get4GSignalStyle: function(rssi) {
 				if (rssi > 0) {
 					if (rssi <= 9) return '#FF0000'; // 红色
@@ -245,7 +360,6 @@
 				uni.setClipboardData({
 					data: this.info.lock_sn,
 					success(res) {
-						console.log('success', res);
 						uni.showToast({
 							title: "复制序列号成功",
 
@@ -290,17 +404,13 @@
 					}
 					uni.showActionSheet({
 						itemList: ['主动扫描', '反扫码', '兼容模式'],
-						success: function(res) {
-							console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
-							Res.data = res.tapIndex + 1
+					success: function(res) {
+						Res.data = res.tapIndex + 1
 							resolve(Res)
-						},
-						fail: function(res) {
-							console.log(res.errMsg);
-							Res.err = res.errMsg
-							resolve(Res)
-
-						}
+					},
+					fail: function(res) {
+						Res.err = res.errMsg
+						resolve(Res)						}
 					});
 				})
 			},
@@ -309,11 +419,9 @@
 					mask: true,
 					title: '设置中...'
 				})
-				console.log("this", this.info)
 
 				let type = 0
 				if (this.info.qrServer_type == 1) {
-					console.log("this", this.info)
 					let Res = await this.qrActionSheet()
 					if (Res.err != null) {
 						uni.hideLoading()
@@ -327,7 +435,6 @@
 					type: type,
 
 				})
-				console.log("this", res)
 				uni.hideLoading()
 				uni.showToast({
 					title: res.msg,
@@ -340,7 +447,6 @@
 					mask: true,
 					title: addCardmodeMsg
 				})
-				console.log("this", this.info)
 				let res = await DevAddCard({
 					lockauth_id: this.lockauth_id,
 					addcardmode: addCardmode
@@ -349,7 +455,6 @@
 				if (res.code === 0) {
 					this.info.addcardmode = addCardmode
 				}
-				console.log("this", res)
 				uni.hideLoading()
 				uni.showToast({
 					title: res.msg,
@@ -362,7 +467,6 @@
 					mask: true,
 					title: NoNcmodeMsg
 				})
-				console.log("this", this.info)
 				let res = await DevNoNc({
 					lockauth_id: this.lockauth_id,
 					noncmode: NoNcmode
@@ -371,7 +475,6 @@
 				if (res.code === 0) {
 					this.info.noncmode = NoNcmode
 				}
-				console.log("this", res)
 				uni.hideLoading()
 				uni.showToast({
 					title: res.msg,
@@ -385,11 +488,11 @@
 			            title: cpimgmodeMsg
 			        });
 			        try {
-			            let res = await DevToggleCapture({ 
+			            let res = await DevToggleCapture({
 			                lockauth_id: this.lockauth_id,
 			                cpimgmode: cpimgmode
 			            });
-			
+
 			            if (res.code === 0) {
 			                this.info.cpimgmode = cpimgmode; // 更新抓拍模式状态
 			            }

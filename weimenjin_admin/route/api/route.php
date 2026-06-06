@@ -65,4 +65,81 @@ Route::rule('device.DeviceGroup/add', 'device.DeviceGroup/add')->middleware(['Jw
 /*end*/
 
 
+Route::group(function (){
+    //4G开关----相关
+    Route::post("device.Switch4G/GetSta","device.Switch4G/GetSta");
+    Route::post("device.Switch4G/Operation","device.Switch4G/Operation");
+    Route::post("device.Switch4G/Lockup","device.Switch4G/Lockup");
 
+    //W76F继电器----相关
+    Route::post("device.W76FSwitch/getConfig","device.W76FSwitch/getConfig");
+    Route::post("device.W76FSwitch/setRelayConfig","device.W76FSwitch/setRelayConfig");
+    Route::post("device.W76FSwitch/controlRelay","device.W76FSwitch/controlRelay");
+    Route::post("device.W76FSwitch/createQrcode","device.W76FSwitch/createQrcode");
+    Route::post("device.W76FSwitch/GetSta","device.W76FSwitch/GetSta");
+    Route::post("device.W76FSwitch/setRelayCount","device.W76FSwitch/setRelayCount");
+
+    //W71 WiFi空开----相关
+    Route::post("device.W71Switch/getStatus","device.W71Switch/getStatus");
+    Route::post("device.W71Switch/turnOn","device.W71Switch/turnOn");
+    Route::post("device.W71Switch/turnOff","device.W71Switch/turnOff");
+    Route::post("device.W71Switch/getSchedules","device.W71Switch/getSchedules");
+    Route::post("device.W71Switch/setSchedules","device.W71Switch/setSchedules");
+    Route::post("device.W71Switch/setSchedule","device.W71Switch/setSchedule");
+    Route::post("device.W71Switch/clearSchedule","device.W71Switch/clearSchedule");
+    Route::post("device.W71Switch/clearAllSchedules","device.W71Switch/clearAllSchedules");
+
+    //TTS定时播报----相关
+    Route::post("device.TtsSchedule/getSchedules","device.TtsSchedule/getSchedules");
+    Route::post("device.TtsSchedule/setSchedules","device.TtsSchedule/setSchedules");
+    Route::post("device.TtsSchedule/setSchedule","device.TtsSchedule/setSchedule");
+    Route::post("device.TtsSchedule/clearSchedule","device.TtsSchedule/clearSchedule");
+    Route::post("device.TtsSchedule/clearAllSchedules","device.TtsSchedule/clearAllSchedules");
+    Route::post("device.TtsSchedule/getSpeakers","device.TtsSchedule/getSpeakers");
+
+    //房间绑定----相关
+    Route::post("room.RoomBind/getMyRooms","room.RoomBind/getMyRooms");
+    Route::post("room.RoomBind/getMyApplications","room.RoomBind/getMyApplications");
+    Route::post("room.RoomBind/getAreas","room.RoomBind/getAreas");
+    Route::post("room.RoomBind/getBuildings","room.RoomBind/getBuildings");
+    Route::post("room.RoomBind/getUnits","room.RoomBind/getUnits");
+    Route::post("room.RoomBind/getRooms","room.RoomBind/getRooms");
+    Route::post("room.RoomBind/getAreaInfoByLockQr","room.RoomBind/getAreaInfoByLockQr");
+    Route::post("room.RoomBind/applyBind","room.RoomBind/applyBind");
+    Route::post("room.RoomBind/getMyKeys","room.RoomBind/getMyKeys");
+
+    //摄像头----相关
+    Route::post("device.Camera/getToken","device.Camera/getToken");
+    Route::post("device.Camera/rtspStart","device.Camera/rtspStart");
+    Route::post("device.Camera/SetPtz","device.Camera/SetPtz");
+    Route::post("device.Camera/SetMute","device.Camera/SetMute");
+    Route::post("device.Camera/SetNightAuto","device.Camera/SetNightAuto");
+    Route::post("device.Camera/SetNight","device.Camera/SetNight");
+    Route::post("device.Camera/SetRot","device.Camera/SetRot");
+    Route::post("device.Camera/GetConfig","device.Camera/GetConfig");
+    Route::post("device.Camera/Register","device.Camera/Register");
+    Route::post("device.Camera/Reboot","device.Camera/Reboot");
+    Route::post("device.Camera/getDeviceInfo","device.Camera/getDeviceInfo");
+    Route::post("device.Camera/getRemoteControl","device.Camera/getRemoteControl");
+    Route::post("device.Camera/addControl","device.Camera/addControl");
+    Route::post("device.Camera/delControl","device.Camera/delControl");
+    Route::post("device.Camera/controlStudy","device.Camera/controlStudy");
+    Route::post("device.Camera/controlStudyStop","device.Camera/controlStudyStop");
+    Route::post("device.Camera/controlRmt","device.Camera/controlRmt");
+    Route::post("device.Camera/switchVideoCodec","device.Camera/switchVideoCodec");
+    Route::post("device.Camera/getReplayDate","device.Camera/getReplayDate");
+    Route::post("device.Camera/getReplayTime","device.Camera/getReplayTime");
+    Route::post("device.Camera/getReplayFind","device.Camera/getReplayFind");
+    Route::post("device.Camera/setSdFormat","device.Camera/setSdFormat");
+    Route::post("device.Camera/replayRtspStart","device.Camera/replayRtspStart");
+
+    //设备配置----相关
+    Route::post("device.Device/voiceConfigSet","device.Device/voiceConfigSet");
+    Route::post("device.Device/relayNoncModeSet","device.Device/relayNoncModeSet");
+    Route::post("device.Device/relayDelaySet","device.Device/relayDelaySet");
+    Route::post("device.Device/getHornHistory","device.Device/getHornHistory");
+
+    //会员----相关
+    Route::post("member.Member/adControlUnitId","member.Member/adControlUnitId");
+    Route::post("member.Member/unbindPhone","member.Member/unbindPhone");
+})->middleware(['JwtAuth']);

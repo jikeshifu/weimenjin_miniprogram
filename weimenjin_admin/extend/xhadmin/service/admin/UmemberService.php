@@ -1,9 +1,9 @@
-<?php 
+<?php
 /*
  module:		用户管理
  create_time:	2022-09-24 18:38:47
- author:		
- contact:		
+ author:
+ contact:
 */
 
 namespace xhadmin\service\admin;
@@ -17,10 +17,10 @@ class UmemberService extends CommonService {
 
 
 	/*
- 	* @Description  添加
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
+     * @Description  添加
+     * @param (输入参数：)  {array}        data 原始数据
+     * @return (返回参数：) {bool}
+     */
 	public static function add($data){
 		try{
 			$data['user_id'] = session('admin.user_id');
@@ -35,10 +35,10 @@ class UmemberService extends CommonService {
 
 
 	/*
- 	* @Description  编辑数据
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
+     * @Description  编辑数据
+     * @param (输入参数：)  {array}        data 原始数据
+     * @return (返回参数：) {bool}
+     */
 	public static function authlocks($data){
 		try{
 
@@ -51,10 +51,10 @@ class UmemberService extends CommonService {
 
 
 	/*
- 	* @Description  修改
- 	* @param (输入参数：)  {array}        data 原始数据
- 	* @return (返回参数：) {bool}        
- 	*/
+     * @Description  修改
+     * @param (输入参数：)  {array}        data 原始数据
+     * @return (返回参数：) {bool}
+     */
 	public static function update($data){
 		try{
 
@@ -67,10 +67,10 @@ class UmemberService extends CommonService {
 
 
 	/*
- 	* @Description  删除
- 	* @param (输入参数：)  {array}        where 删除条件
- 	* @return (返回参数：) {bool}        
- 	*/
+     * @Description  删除
+     * @param (输入参数：)  {array}        where 删除条件
+     * @return (返回参数：) {bool}
+     */
 	public static function delete($where){
 		try{
 			$res = Umember::delete($where);
@@ -82,11 +82,11 @@ class UmemberService extends CommonService {
 
 
 	/*
- 	* @Description  导出
- 	* @param (输入参数：)  {array}        where 查询条件
- 	* @return (返回参数：) {bool}        
- 	*/
-	public static function dumpData($where,$orderby,$field){
+     * @Description  导出
+     * @param (输入参数：)  {array}        where 查询条件
+     * @return (返回参数：) {bool}
+     */
+	public static function dumpData($where, $orderby = '', $field = '*'){
 		try{
 			$list = Umember::loadList($where,$limit=50000,'*',$orderby);
 			$list = htmlOutList($list);
@@ -121,12 +121,12 @@ class UmemberService extends CommonService {
 					$v[$n['field']] = '';
 				}
 			}
-			
+
 			$filename = date('YmdHis');
 			header('Content-Type: application/vnd.ms-excel');
-			header('Content-Disposition: attachment;filename='.$filename.'.'.config('my.import_type')); 
+			header('Content-Disposition: attachment;filename='.$filename.'.'.config('my.import_type'));
 			header('Cache-Control: max-age=0');
-			$writer = new Xlsx($spreadsheet); 
+			$writer = new Xlsx($spreadsheet);
 			$writer->save('php://output');
 		}catch(\Exception $e){
 			throw new \Exception($e->getMessage());
@@ -135,4 +135,3 @@ class UmemberService extends CommonService {
 
 
 }
-

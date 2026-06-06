@@ -24,7 +24,7 @@
         placeholder="请输入验证码"
         v-model="smsCode"
       />
-      
+
       <!-- 登录按钮 -->
       <button class="login-btn" @click="applogin">
         登录
@@ -63,7 +63,7 @@ export default {
           uni.showToast({ title: '请输入正确的手机号', icon: 'none' });
           return;
         }
-    
+
         // 开始倒计时
         this.isSendingCode = true;
         this.sendCodeText = `${this.countdown}秒后重新获取`;
@@ -77,20 +77,18 @@ export default {
             this.countdown = 60;
           }
         }, 1000);
-		console.log("phoneNumber:",this.phoneNumber)
         // 调用封装好的发送验证码接口
 		//let res = await sendSms_api({ phoneNumber: this.phoneNumber });
-		//console.log("res:",res)	
+		//console.log("res:",res)
         try {
           let res = await sendSms_api({ phoneNumber: this.phoneNumber });
-		  console.log("res:",res)	
-          // 如果接口返回code为0，则表示成功
+          // 如果接口返回 code 为 0，则表示成功
           if (res.code === 0) {
             uni.showToast({ title: '验证码发送成功', icon: 'success' });
           } else {
             // 如果发送失败，提示用户
             uni.showToast({ title: res.msg || '发送失败', icon: 'error' });
-    
+
             // 重置倒计时（允许用户重新获取验证码）
             clearInterval(timer);
             this.sendCodeText = '验证码';
@@ -100,7 +98,6 @@ export default {
         } catch (error) {
           // 捕获错误并展示给用户
           uni.showToast({ title: `请求失败: ${JSON.stringify(error)}`, icon: 'none' });
-			console.log("请求失败")
           // 重置倒计时（允许用户重新获取验证码）
           clearInterval(timer);
           this.sendCodeText = '验证码';
@@ -124,8 +121,6 @@ export default {
         try {
           const res = await smsLogin_api({ phoneNumber: this.phoneNumber, code: this.smsCode });
           if (res.code === 0) {
-			console.log("res",res);
-			console.log("res.data.token",res.data.token);
             uni.setStorageSync('token', res.data.token); // 存储登录token
             uni.reLaunch({ url: '/pages/index/index' }); // 登录成功，跳转到首页
           } else {

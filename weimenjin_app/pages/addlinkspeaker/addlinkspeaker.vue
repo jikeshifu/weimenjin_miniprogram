@@ -1,38 +1,60 @@
 <template>
-	<view class="container">
-		<view class="form-section">
-			<view class="form-item">
-				<text class="label">序列号：</text>
-				<picker mode="selector" :range="deviceOptions" range-key="displayName" :value="selectedDeviceIndex" @change="onDeviceChange">
-					<view class="picker">
-						{{ deviceOptions[selectedDeviceIndex]?.displayName || '请选择序列号' }}
-					</view>
-				</picker>
-			</view>
-			
-			<!-- 显示设备名称 -->
-			<view class="form-item">
-				<text class="label">设备名称：</text>
-				<view class="device-name">{{ formData.linkspeaker_name || '请选择序列号以显示名称' }}</view>
-			</view>
+  <view class="container">
+    <view class="form-section">
+      <!-- 序列号选择 -->
+      <view class="form-item">
+        <text class="label">序列号</text>
+        <view class="picker" @click="toggleDeviceDropdown">
+          <text>{{ deviceOptions[selectedDeviceIndex]?.displayName || '请选择序列号' }}</text>
+          <text class="arrow">▼</text>
+        </view>
+        <view class="dropdown" v-if="showDeviceDropdown">
+          <view
+            v-for="(option, index) in deviceOptions"
+            :key="index"
+            class="dropdown-item"
+            @click="selectDevice(index)"
+          >
+            {{ option.displayName }}
+          </view>
+        </view>
+      </view>
 
-			<view class="form-item">
-				<text class="label">播放内容：</text>
-				<textarea class="textarea" placeholder="请输入播放内容" placeholder-class="placeholder" v-model="formData.linkspeaker_tts"></textarea>
-			</view>
+      <!-- 设备名称 -->
+      <view class="form-item">
+        <text class="label">设备名称</text>
+        <view class="device-name">{{ formData.linkspeaker_name || '请选择序列号以显示名称' }}</view>
+      </view>
 
-			<view class="form-item">
-				<text class="label">音量：</text>
-				<picker mode="selector" :range="volumeLevels" :value="formData.linkspeaker_volume" @change="onVolumeChange">
-					<view class="picker">
-						{{ formData.linkspeaker_volume || '请选择音量' }}
-					</view>
-				</picker>
-			</view>
-		</view>
+      <!-- 播放内容 -->
+      <view class="form-item">
+        <text class="label">播放内容</text>
+        <textarea class="textarea" placeholder="请输入播放内容" placeholder-class="placeholder" v-model="formData.linkspeaker_tts"></textarea>
+      </view>
 
-		<view class="submit-btn" @click="onSubmit">立即提交</view>
-	</view>
+      <!-- 音量 -->
+      <view class="form-item">
+        <text class="label">音量</text>
+        <view class="picker" @click="toggleVolumeDropdown">
+          <text>{{ formData.linkspeaker_volume || '请选择音量' }}</text>
+          <text class="arrow">▼</text>
+        </view>
+        <view class="dropdown" v-if="showVolumeDropdown">
+          <view
+            v-for="(level, index) in volumeLevels"
+            :key="index"
+            class="dropdown-item"
+            @click="selectVolume(level)"
+          >
+            {{ level }}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-btn" @click="onSubmit">立即提交</view>
+  </view>
 </template>
 
 <script>
@@ -40,8 +62,9 @@ import {
   getuserdevices_api,
   addlinkspeaker_api,
   editlinkspeaker_api,
-  getlinkspeakerBySn_api // 确保引入接口
+  getlinkspeakerBySn_api
 } from '@/api/index.js'
+
 export default {
   data() {
     return {
@@ -52,45 +75,42 @@ export default {
         linkspeaker_tts: '',
         linkspeaker_volume: ''
       },
-      deviceOptions: [], // 存储设备选项，包含设备名称和序列号的组合
-      selectedDeviceIndex: -1, // 当前选择的设备索引
-      volumeLevels: ['1', '2', '3', '4', '5', '6', '7'], // 音量选择范围
+      deviceOptions: [],
+      selectedDeviceIndex: -1,
+      volumeLevels: ['1', '2', '3', '4', '5', '6', '7'],
+      showDeviceDropdown: false,
+      showVolumeDropdown: false,
       verifyData: {
         lock_id: '缺少锁ID',
         linkspeaker_tts: '请输入播放内容',
         linkspeaker_sn: '请选择联动喇叭',
-        linkspeaker_volume: '请选择音量',
+        linkspeaker_volume: '请选择音量'
       },
       isEdit: false
     }
   },
   async onLoad(option) {
-    console.log("onLoad options:", option);
     this.formData.lock_id = option.lock_id || '';
     this.isEdit = !!option.sn;
 
-    await this.fetchDeviceOptions(); // 调用接口获取设备选项
+    await this.fetchDeviceOptions();
 
-    // 如果是编辑模式，通过序列号获取联动喇叭信息
     if (option.sn) {
-      await this.fetchSpeakerData(option.sn); // 通过接口获取设备详情
+      await this.fetchSpeakerData(option.sn);
     }
   },
   methods: {
-    // 获取联动喇叭信息
     async fetchSpeakerData(linkspeaker_sn) {
       try {
-        const res = await getlinkspeakerBySn_api({ linkspeaker_sn }); // 请求接口
+        const res = await getlinkspeakerBySn_api({ linkspeaker_sn });
         if (res.code === 0 && res.data) {
           this.formData = {
             ...this.formData,
             linkspeaker_sn: res.data.linkspeaker_sn,
             linkspeaker_name: res.data.linkspeaker_name,
             linkspeaker_tts: res.data.linkspeaker_tts,
-            linkspeaker_volume: String(res.data.linkspeaker_volume) // 确保音量为字符串
+            linkspeaker_volume: String(res.data.linkspeaker_volume)
           };
-          
-          // 设置 selectedDeviceIndex 以匹配返回的设备序列号
           this.selectedDeviceIndex = this.deviceOptions.findIndex(device => device.lock_sn === res.data.linkspeaker_sn);
         } else {
           this.showToast(res.msg || '获取设备数据失败');
@@ -99,7 +119,6 @@ export default {
         this.showToast('请求设备数据失败');
       }
     },
-    // 获取设备选项
     async fetchDeviceOptions() {
       try {
         const res = await getuserdevices_api();
@@ -108,7 +127,7 @@ export default {
             .filter(device => device.lock_sn.startsWith('W70'))
             .map(device => ({
               ...device,
-              displayName: `${device.lock_name} (${device.lock_sn})` // 拼接名称和序列号
+              displayName: `${device.lock_name} (${device.lock_sn})`
             }));
         } else {
           this.showToast(res.msg || '获取设备失败');
@@ -117,16 +136,24 @@ export default {
         this.showToast('请求设备数据失败');
       }
     },
-    // 当选择序列号时触发
-    onDeviceChange(e) {
-      this.selectedDeviceIndex = e.detail.value;
-      const selectedDevice = this.deviceOptions[this.selectedDeviceIndex];
-      this.formData.linkspeaker_sn = selectedDevice.lock_sn;
-      this.formData.linkspeaker_name = selectedDevice.lock_name; // 同步设备名称
+    toggleDeviceDropdown() {
+      this.showDeviceDropdown = !this.showDeviceDropdown;
+      this.showVolumeDropdown = false; // 关闭其他下拉菜单
     },
-    // 当选择音量时触发
-    onVolumeChange(e) {
-      this.formData.linkspeaker_volume = this.volumeLevels[e.detail.value];
+    selectDevice(index) {
+      this.selectedDeviceIndex = index;
+      const selectedDevice = this.deviceOptions[index];
+      this.formData.linkspeaker_sn = selectedDevice.lock_sn;
+      this.formData.linkspeaker_name = selectedDevice.lock_name;
+      this.showDeviceDropdown = false;
+    },
+    toggleVolumeDropdown() {
+      this.showVolumeDropdown = !this.showVolumeDropdown;
+      this.showDeviceDropdown = false; // 关闭其他下拉菜单
+    },
+    selectVolume(level) {
+      this.formData.linkspeaker_volume = level;
+      this.showVolumeDropdown = false;
     },
     async onSubmit() {
       for (let key in this.formData) {
@@ -148,7 +175,7 @@ export default {
       uni.hideLoading();
       if (res.code === 0) {
         this.showToast('操作成功!');
-		uni.setStorageSync('shouldRefreshDeviceList', true); // 设置刷新标记
+        uni.setStorageSync('shouldRefreshDeviceList', true);
         setTimeout(() => {
           uni.navigateBack({ delta: 1 });
         }, 1000);
@@ -167,75 +194,131 @@ export default {
 }
 </script>
 
-
 <style scoped lang="scss">
-	.container {
-		padding: 20rpx;
-		background-color: #f8f9fb;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
-	.form-section {
-		background-color: #ffffff;
-		padding: 20rpx;
-		border-radius: 16rpx;
-		box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
-	}
-	.form-item {
-		margin-bottom: 20rpx;
-	}
-	.label {
-		font-size: 28rpx;
-		color: #333333;
-		margin-bottom: 8rpx;
-	}
-	.device-name {
-		font-size: 28rpx;
-		color: #666666;
-		margin-left: 20rpx;
-	}
-	.picker {
-		height: 90rpx;
-		line-height: 90rpx;
-		background-color: #f4f4f4;
-		border-radius: 8rpx;
-		padding: 0 20rpx;
-		font-size: 28rpx;
-		color: #666666;
-	}
-	.textarea {
-		width: 100%;
-		height: 200rpx;
-		background-color: #f4f4f4;
-		border-radius: 8rpx;
-		padding: 20rpx;
-		font-size: 28rpx;
-		color: #333333;
-		box-sizing: border-box;
-		overflow: hidden;
-		resize: none;
-	}
+.container {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-	.submit-btn {
-		width: 90%;
-		height: 90rpx;
-		background-color: #1aad19;
-		border-radius: 8rpx;
-		text-align: center;
-		line-height: 90rpx;
-		font-size: 32rpx;
-		color: #ffffff;
-		font-weight: bold;
-		box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
-		position: fixed;
-		bottom: 30rpx;
-		left: 5%;
-	}
+.form-section {
+  background: #ffffff;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 60rpx;
+}
 
-	::v-deep .placeholder {
-		font-size: 28rpx;
-		color: #999999;
-	}
+.form-item {
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+.label {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+  margin-right: 20rpx;
+  display: inline-block;
+  width: 160rpx;
+}
+
+.device-name {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 80rpx;
+}
+
+.picker {
+  height: 80rpx;
+  line-height: 80rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.picker:hover {
+  background: #f0f0f0;
+}
+
+.arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.dropdown {
+  position: absolute;
+  top: 90rpx;
+  left: 160rpx;
+  right: 0;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  padding: 20rpx 30rpx;
+  font-size: 28rpx;
+  color: #333;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.textarea {
+  width: 100%;
+  height: 200rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: none;
+}
+
+.submit-btn {
+  width: 80%;
+  height: 90rpx;
+  background: linear-gradient(90deg, #1aad19, #2ecc71);
+  border-radius: 45rpx;
+  text-align: center;
+  line-height: 90rpx;
+  font-size: 32rpx;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 6rpx 20rpx rgba(26, 173, 25, 0.3);
+  margin: 0 auto 100rpx;
+  transition: all 0.3s;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 8rpx 24rpx rgba(26, 173, 25, 0.4);
+}
+
+::v-deep .placeholder {
+  font-size: 28rpx;
+  color: #999;
+}
 </style>

@@ -60,10 +60,9 @@ export default {
 			uni.setClipboardData({
 				data: context,
 				success(res) {
-					console.log('success', res);
 					uni.showToast({
 						title: "复制成功",
-			
+
 					});
 				}
 			})

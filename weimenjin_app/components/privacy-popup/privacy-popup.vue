@@ -7,9 +7,16 @@
 				<text class="link" @tap="openPrivacyContract">{{privacyContractName}}</text>
 				。如你同意{{privacyContractName}}，请点击“同意”开始使用。
 			</view>
+			<view class="checkbox-container" @tap="toggleCheckbox">
+				<checkbox-group>
+					<checkbox value="agree" :checked="isAgreed" color="#07c160" style="transform: scale(1.0);" />
+				</checkbox-group>
+				<text class="checkbox-text">我已阅读并同意{{privacyContractName}}</text>
+			</view>
 			<view class="btns">
 				<button class="item reject" @tap="exitMiniProgram">拒绝</button>
 				<button id="agree-btn" class="item agree" open-type="agreePrivacyAuthorization"
+					:disabled="!isAgreed"
 					@agreeprivacyauthorization="handleAgreePrivacyAuthorization">同意</button>
 			</view>
 		</view>
@@ -24,6 +31,7 @@
 				privacyContractName: '',
 				showPrivacy: false,
 				isRead: false,
+				isAgreed: false,
 				resolvePrivacyAuthorization: null,
 			};
 		},
@@ -48,6 +56,12 @@
 		},
 
 		methods: {
+			onCheckboxChange(e) {
+				this.isAgreed = e.detail.value.includes('agree');
+			},
+			toggleCheckbox() {
+				this.isAgreed = !this.isAgreed;
+			},
 			openPrivacyContract() {
 				wx.openPrivacyContract({
 					success: () => {
@@ -67,6 +81,13 @@
 
 			},
 			handleAgreePrivacyAuthorization() {
+				if (!this.isAgreed) {
+					uni.showToast({
+						title: '请先勾选同意隐私协议',
+						icon: 'none',
+					});
+					return;
+				}
 				this.showPrivacy = false;
 				if (typeof this.resolvePrivacyAuthorization === 'function') {
 					this.resolvePrivacyAuthorization({
@@ -74,21 +95,7 @@
 						event: 'agree',
 					});
 				}
-				return;
-				if (this.isRead) {
-					this.showPrivacy = false;
-					if (typeof this.resolvePrivacyAuthorization === 'function') {
-						this.resolvePrivacyAuthorization({
-							buttonId: 'agree-btn',
-							event: 'agree',
-						});
-					}
-				} else {
-					uni.showToast({
-						title: '请先阅读隐私授权协议',
-						icon: 'error',
-					});
-				}
+				this.$emit('agree');
 			},
 		},
 	};
@@ -162,5 +169,17 @@
 	.btns .agree {
 		background: #07c160;
 		color: #fff;
+	}
+	.checkbox-container {
+		margin-top: 32rpx;
+		display: flex;
+		align-items: center;
+		padding: 16rpx 0;
+	}
+	.checkbox-text {
+		font-size: 26rpx;
+		color: #333;
+		margin-left: 16rpx;
+		line-height: 1.4;
 	}
 </style>

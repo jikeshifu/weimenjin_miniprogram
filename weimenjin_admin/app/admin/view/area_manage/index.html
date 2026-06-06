@@ -1,0 +1,192 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>区域管理</h5>
+                <button style="float:right; margin-top:-10px;" title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row" id="searchGroup">
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-white dropdown-toggle" type="button">关键词</button>
+                                    </div>
+                                    <input type="text" class="form-control" id="keyword" placeholder="区域名称或编码" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-primary" onclick="AreaManager.search()">
+                                    <i class="fa fa-search"></i>&nbsp;搜索
+                                </button>
+                            </div>
+                        </div>
+                        <div class="btn-group-sm" id="AreaTableToolbar" role="group">
+                            <button type="button" class="btn btn-primary button-margin" onclick="AreaManager.add()">
+                                <i class="fa fa-plus"></i>&nbsp;添加区域
+                            </button>
+                            <button type="button" class="btn btn-success button-margin" onclick="AreaManager.update()">
+                                <i class="fa fa-pencil"></i>&nbsp;修改
+                            </button>
+                            <button type="button" class="btn btn-danger button-margin" onclick="AreaManager.delete()">
+                                <i class="fa fa-trash"></i>&nbsp;删除
+                            </button>
+                            {if condition="session('admin.role') == 1"}
+                            <button type="button" class="btn btn-warning button-margin" onclick="window.location.href='/admin/AreaManage/migration'">
+                                <i class="fa fa-database"></i>&nbsp;数据迁移
+                            </button>
+                            {/if}
+                        </div>
+                        <table id="AreaTable" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var AreaManager = {
+    table: null,
+
+    init: function() {
+        this.initTable();
+    },
+
+    initTable: function() {
+        this.table = $('#AreaTable').bootstrapTable({
+            url: '/admin/AreaManage/index',
+            method: 'get',
+            dataType: 'json',
+            pagination: true,
+            sidePagination: 'server',
+            pageSize: 20,
+            pageList: [10, 20, 50, 100],
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset,
+                    keyword: $('#keyword').val()
+                };
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'area_id',
+                title: 'ID',
+                width: '80px'
+            }, {
+                field: 'area_name',
+                title: '区域名称',
+                width: '200px'
+            }, {
+                field: 'area_code',
+                title: '区域编码',
+                width: '150px'
+            }, {
+                field: 'address',
+                title: '地址',
+                width: '250px'
+            }, {
+                field: 'building_count',
+                title: '楼栋数',
+                width: '100px'
+            }, {
+                field: 'device_count',
+                title: '设备数',
+                width: '100px'
+            }, {
+                field: 'status',
+                title: '状态',
+                width: '100px',
+                formatter: function(value) {
+                    return value == 1 ? '<span class="label label-primary">启用</span>' : '<span class="label label-default">禁用</span>';
+                }
+            }, {
+                field: 'create_time',
+                title: '创建时间',
+                width: '180px',
+                formatter: function(value) {
+                    return value ? new Date(value * 1000).toLocaleString() : '-';
+                }
+            }]
+        });
+    },
+
+    search: function() {
+        this.table.bootstrapTable('refresh');
+    },
+
+    add: function() {
+        layer.open({
+            type: 2,
+            title: '添加区域',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['800px', '90%'],
+            content: '/admin/AreaManage/add',
+            end: function() {
+                AreaManager.search();
+            }
+        });
+    },
+
+    update: function() {
+        var rows = this.table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            layer.msg('请选择一条记录');
+            return;
+        }
+        if (rows.length > 1) {
+            layer.msg('只能选择一条记录');
+            return;
+        }
+
+        layer.open({
+            type: 2,
+            title: '修改区域',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['800px', '90%'],
+            content: '/admin/AreaManage/update?area_id=' + rows[0].area_id,
+            end: function() {
+                AreaManager.search();
+            }
+        });
+    },
+
+    delete: function() {
+        var rows = this.table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            layer.msg('请选择要删除的记录');
+            return;
+        }
+
+        layer.confirm('确定要删除选中的区域吗？', {
+            btn: ['确定', '取消']
+        }, function(index) {
+            var area_id = rows[0].area_id;
+            $.post('/admin/AreaManage/delete', {area_id: area_id}, function(res) {
+                if (res.status == '00') {
+                    layer.msg('删除成功');
+                    AreaManager.search();
+                } else {
+                    layer.msg(res.msg);
+                }
+            });
+            layer.close(index);
+        });
+    }
+};
+
+$(function() {
+    AreaManager.init();
+});
+</script>
+{/block}

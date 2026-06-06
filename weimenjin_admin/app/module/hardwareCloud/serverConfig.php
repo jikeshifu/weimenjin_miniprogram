@@ -4,8 +4,6 @@
 namespace app\module\hardwareCloud;
 
 
-use think\facade\Db;
-
 class serverConfig
 {
     static $WiFIUrl = "https://wdev.wmj.com.cn/deviceApi/";
@@ -15,15 +13,11 @@ class serverConfig
     }
 
     static function GetAppId(){
-
-       $config= Db::name("config")->where(["name"=>"yjy_appid"])->cache(true,120)->find();
-        return $config["data"];
+        return (string) config("my.wmjv2.wmjv2_appid", "");
     }
 
     static function GetAppSecret(){
-        $config= Db::name("config")->where(["name"=>"yjy_appsecret"])->cache(true,120)->find();
-        return $config["data"];
-
+        return (string) config("my.wmjv2.wmjv2_appsecret", "");
     }
 
 }

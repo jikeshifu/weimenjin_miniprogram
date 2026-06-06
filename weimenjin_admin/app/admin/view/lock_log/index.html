@@ -62,6 +62,12 @@
 						<i class="fa fa-download"></i>&nbsp;导出
 						</button>
 						{/if}
+						{if condition="in_array('/admin/LockLog/dumpDataZip',session('admin.nodes')) || session('admin.role') eq 1"}
+						<!-- 原打包导出按钮已移除，仅保留下方按钮 -->
+						{/if}
+						<button type="button" id="asyncExport" class="btn btn-success button-margin" onclick="CodeGoods.asyncExport()">
+						<i class="fa fa-file-archive-o"></i>&nbsp;打包导出
+						</button>
 						</div>
 						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
 							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
@@ -93,23 +99,23 @@
 		});
 	};
 	CodeGoods.initColumn = function () {
- 		return [
- 			{field: 'selectItem', checkbox: true},
- 			{title: '编号', field: 'locklog_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+		return [
+			{field: 'selectItem', checkbox: true},
+			{title: '编号', field: 'locklog_id', visible: true, align: 'center', valign: 'middle',sortable: true},
 			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle', sortable: true, formatter: CodeGoods.lockNameFormatter},
 			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
- 			{title: '呢称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '呢称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
 			{title: '终端类型', field: 'member_type', visible: true, align: 'center', valign: 'middle', sortable: true, formatter: CodeGoods.memberTypeFormatter},
 			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
- 			{title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.typeFormatter},
- 			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
- 			{title: '开门时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
- 			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
- 		];
- 	};
+			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
+			{title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.typeFormatter},
+			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '开门时间', field: 'create_time', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.create_timeFormatter},
+			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+		];
+	};
 
 	CodeGoods.buttonFormatter = function(value,row,index) {
 		if(row.locklog_id){
@@ -119,6 +125,17 @@
 			{/if}
 			return str;
 		}
+	};
+	CodeGoods.escapeHtml = function(value) {
+		return String(value).replace(/[&<>"']/g, function(match) {
+			return {
+				'&': '&amp;',
+				'<': '&lt;',
+				'>': '&gt;',
+				'"': '&quot;',
+				"'": '&#39;'
+			}[match];
+		});
 	};
 	CodeGoods.lockNameFormatter = function(value, row, index) {
 		if (!value) {
@@ -165,57 +182,65 @@
 			}
 		}
 	};
-		CodeGoods.typeFormatter = function(value,row,index) {
-		if(value !== null){
-			var value = value.toString();
-			switch(value){
-				case '1':
-					return '<span class="label label-primary">扫码开门</span>';
-				break;
-				case '2':
-					return '<span class="label label-info">点击开门</span>';
-				break;
-				case '3':
-					return '<span class="label label-success">后台开门</span>';
-				break;
-				case '4':
-					return '<span class="label label-success">刷卡开门</span>';
-				break;
-				case '5':
-					return '<span class="label label-success">点击开电</span>';
-				break;
-				case '6':
-					return '<span class="label label-success">点击关电</span>';
-					break;
-				case '7':
-					return '<span class="label label-success">指纹开门</span>';
-					break;
-				case '8':
-					return '<span class="label label-success">蓝牙开门</span>';
-					break;
-				case '9':
-					return '<span class="label label-success">播放喇叭</span>';
-					break;
-				case '10':
-					return '<span class="label label-success">生成钥匙</span>';
-					break;
-				case '11':
-					return '<span class="label label-success">刷脸开门</span>';
-					break;
-				case '12':
-					return '<span class="label label-success">密码开门</span>';
-					break;
-				case '13':
-					return '<span class="label label-success">点击开</span>';
-					break;
-				case '14':
-					return '<span class="label label-success">点击关</span>';
-					break;
-				case '15':
-					return '<span class="label label-success">点击停</span>';
-					break;
-			}
+	CodeGoods.typeFormatter = function(value,row,index) {
+		if(value === null || value === undefined || value === ''){
+			return '';
 		}
+		var types = {
+			'1': ['\u626b\u7801\u5f00\u95e8', 'primary'],
+			'2': ['\u70b9\u51fb\u5f00\u95e8', 'info'],
+			'3': ['\u540e\u53f0\u5f00\u95e8', 'success'],
+			'4': ['\u5237\u5361\u5f00\u95e8', 'warning'],
+			'5': ['\u70b9\u51fb\u5f00\u7535', 'info'],
+			'6': ['\u70b9\u51fb\u5173\u7535', 'danger'],
+			'7': ['\u6307\u7eb9\u5f00\u95e8', 'primary'],
+			'8': ['\u84dd\u7259\u5f00\u95e8', 'info'],
+			'9': ['\u64ad\u653e\u5587\u53ed', 'warning'],
+			'10': ['\u751f\u6210\u94a5\u5319', 'success'],
+			'11': ['\u5237\u8138\u5f00\u95e8', 'primary'],
+			'12': ['\u5bc6\u7801\u5f00\u95e8', 'info'],
+			'13': ['\u70b9\u51fb\u5f00', 'info'],
+			'14': ['\u70b9\u51fb\u5173', 'danger'],
+			'15': ['\u70b9\u51fb\u505c', 'warning'],
+			'16': ['\u8054\u52a8\u5f00\u7535', 'info'],
+			'17': ['\u8054\u52a8\u5173\u7535', 'danger'],
+			'18': ['\u8054\u52a8\u64ad\u62a5', 'warning'],
+			'19': ['\u5f00\u9501\u6b65', 'info'],
+			'20': ['\u5173\u9501\u6b65', 'danger'],
+			'21': ['\u505c\u9501\u6b65', 'warning'],
+			'22': ['\u6444\u50cf\u5934\u5411\u4e0a', 'info'],
+			'23': ['\u6444\u50cf\u5934\u5411\u4e0b', 'info'],
+			'24': ['\u6444\u50cf\u5934\u5411\u5de6', 'info'],
+			'25': ['\u6444\u50cf\u5934\u5411\u53f3', 'info'],
+			'26': ['\u753b\u9762\u65cb\u8f6c', 'info'],
+			'27': ['\u81ea\u52a8\u591c\u89c6', 'info'],
+			'28': ['\u9065\u63a7\u5668\u5b66\u4e60', 'info'],
+			'29': ['\u8bbe\u7f6e\u591c\u89c6', 'info'],
+			'30': ['\u8bbe\u5907\u91cd\u542f', 'warning'],
+			'31': ['\u6dfb\u52a0\u9065\u63a7\u5668', 'success'],
+			'32': ['\u5220\u9664\u9065\u63a7\u5668', 'danger'],
+			'33': ['\u8bed\u97f3\u8bbe\u7f6e', 'warning'],
+			'34': ['\u9065\u63a7\u5668\u5b66\u4e60', 'info'],
+			'35': ['\u683c\u5f0f\u5316SD\u5361', 'danger'],
+			'36': ['\u5e94\u7528\u914d\u7f6e\u4fee\u6539', 'info'],
+			'37': ['\u7ee7\u7535\u5668\u5ef6\u65f6\u8bbe\u7f6e', 'info'],
+			'38': ['\u7ee7\u7535\u5668\u6a21\u5f0f\u8bbe\u7f6e', 'info'],
+			'39': ['\u5f00\u542f', 'success'],
+			'40': ['\u5173\u95ed', 'danger'],
+			'41': ['\u624b\u52a8\u5f00\u542f', 'success'],
+			'42': ['\u624b\u52a8\u5173\u95ed', 'danger'],
+			'43': ['\u5b9a\u65f6\u5f00\u542f', 'success'],
+			'44': ['\u5b9a\u65f6\u5173\u95ed', 'danger'],
+			'50': ['\u8bbe\u7f6e\u5b9a\u65f6\u64ad\u62a5', 'warning'],
+			'51': ['\u8bbe\u7f6e\u64ad\u62a5\u4efb\u52a1', 'warning'],
+			'52': ['\u6e05\u9664\u64ad\u62a5\u4efb\u52a1', 'danger'],
+			'53': ['\u6e05\u9664\u5168\u90e8\u64ad\u62a5', 'danger']
+		};
+		var item = types[value.toString()];
+		if (!item) {
+			return '<span class="label label-default">' + CodeGoods.escapeHtml(value.toString()) + '</span>';
+		}
+		return '<span class="label label-' + item[1] + '">' + item[0] + '</span>';
 	};
 
 	CodeGoods.create_timeFormatter = function(value,row,index) {
@@ -308,8 +333,8 @@
 			$.each(CodeGoods.seItem, function() {
 				select_id += ',' + this.locklog_id;
 			});
-		}
-		select_id = select_id.substr(1);
+			select_id = select_id.substr(1);
+		} // 不选数据时 select_id 为空，后端自动导出全部
 		Feng.confirm("是否确定导出记录?", function() {
 			var index = layer.msg('正在导出下载，请耐心等待...', {
 				time : 3600000,
@@ -352,5 +377,119 @@
 
 	laydate.render({elem: '#create_time_start',type: 'datetime'});
 	laydate.render({elem: '#create_time_end',type: 'datetime'});
+
+	CodeGoods.dumpDataZip = function () {
+		Feng.confirm("是否确定打包导出全部记录?", function() {
+			var progressIndex = layer.open({
+				type: 1,
+				title: '导出进度',
+				area: ['400px', '120px'],
+				content: '<div id="exportProgressBar" style="margin:20px 10px 10px 10px;"><div style="margin-bottom:8px;">正在打包导出，请耐心等待...</div><div class="progress"><div id="exportProgressInner" class="progress-bar progress-bar-striped active" style="width:0%">0%</div></div></div>'
+			});
+			var queryData = CodeGoods.formParams();
+			var url = Feng.ctxPath + '/LockLog/dumpDataZip?' + Feng.parseParam(queryData);
+			// 启动导出
+			var iframe = document.createElement('iframe');
+			iframe.style.display = 'none';
+			iframe.src = url;
+			document.body.appendChild(iframe);
+			// 轮询进度
+			var timer = setInterval(function() {
+				$.get(Feng.ctxPath + '/LockLog/exportProgress', function(res) {
+					if (res.status === 'not_login') {
+						layer.alert('登录已失效，请重新登录');
+						window.location.reload();
+						clearInterval(timer);
+						return;
+					}
+					if (res.status === 'nodata') {
+						layer.alert('没有数据可导出');
+						layer.close(progressIndex);
+						clearInterval(timer);
+						setTimeout(function(){ document.body.removeChild(iframe); }, 1000);
+						return;
+					}
+					if (res.status === 'processing') {
+						var percent = res.total > 0 ? Math.floor(res.current / res.total * 100) : 0;
+						$('#exportProgressInner').css('width', percent + '%').text(percent + '%');
+					} else if (res.status === 'finished') {
+						$('#exportProgressInner').css('width', '100%').text('100%');
+						layer.close(progressIndex);
+						clearInterval(timer);
+						Feng.success('导出完成，正在下载...');
+						window.location.href = Feng.ctxPath + '/runtime/' + res.zip;
+						setTimeout(function(){ document.body.removeChild(iframe); }, 10000);
+					}
+				}).fail(function() {
+					layer.alert('服务器异常，请刷新页面');
+					clearInterval(timer);
+				});
+			}, 1000);
+			// 失败或超时处理
+			setTimeout(function() {
+				clearInterval(timer);
+				layer.close(progressIndex);
+			}, 60 * 60 * 1000); // 最多等1小时
+		});
+	};
+
+	CodeGoods.asyncExport = function () {
+		Feng.confirm("是否确定异步打包导出全部记录?", function() {
+			var progressIndex = layer.open({
+				type: 1,
+				title: '异步导出进度',
+				area: ['400px', '120px'],
+				content: '<div id="exportProgressBar" style="margin:20px 10px 10px 10px;"><div style="margin-bottom:8px;">正在异步导出，请耐心等待...</div><div class="progress"><div id="exportProgressInner" class="progress-bar progress-bar-striped active" style="width:0%">0%</div></div></div>'
+			});
+			var queryData = CodeGoods.formParams();
+			$.post(Feng.ctxPath + '/LockLog/createExportTask', queryData, function(res) {
+				if(res.status !== 'ok') {
+					layer.alert('任务创建失败: ' + (res.msg || '未知错误'));
+					layer.close(progressIndex);
+					return;
+				}
+				var task_id = res.task_id;
+				var timer = setInterval(function() {
+					$.get(Feng.ctxPath + '/LockLog/exportTaskStatus', {task_id: task_id}, function(r) {
+						if(r.status === 'not_login') {
+							layer.alert('登录已失效，请重新登录');
+							window.location.reload();
+							clearInterval(timer);
+							return;
+						}
+						if(r.status === 'nodata') {
+							layer.alert('没有数据可导出');
+							layer.close(progressIndex);
+							clearInterval(timer);
+							return;
+						}
+						if(r.status === 'processing' || r.status === 'pending') {
+							$('#exportProgressInner').css('width', '50%').text('处理中...');
+						} else if(r.status === 'finished') {
+							$('#exportProgressInner').css('width', '100%').text('100%');
+							layer.close(progressIndex);
+							clearInterval(timer);
+							Feng.success('导出完成，正在下载...');
+							window.location.href = Feng.ctxPath + '/LockLog/downloadExportFile?task_id=' + task_id;
+						} else if(r.status === 'failed') {
+							layer.alert('导出失败: ' + (r.msg || '未知错误'));
+							layer.close(progressIndex);
+							clearInterval(timer);
+						}
+					}).fail(function() {
+						layer.alert('服务器异常，请刷新页面');
+						clearInterval(timer);
+					});
+				}, 2000);
+				setTimeout(function() {
+					clearInterval(timer);
+					layer.close(progressIndex);
+				}, 60 * 60 * 1000);
+			}, 'json').fail(function() {
+				layer.alert('服务器异常，任务创建失败');
+				layer.close(progressIndex);
+			});
+		});
+	};
 </script>
 {/block}

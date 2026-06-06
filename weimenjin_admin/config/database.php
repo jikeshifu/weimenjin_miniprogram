@@ -24,11 +24,11 @@ return [
             // 服务器地址
             'hostname'          => Env::get('database.hostname', '127.0.0.1'),
             // 数据库名
-            'database'          => Env::get('database.database', 'demo_wmj_com_cn'),
+            'database'          => Env::get('database.database', 'weimenjin_open'),
             // 用户名
-            'username'          => Env::get('database.username', 'demo_wmj_com_cn'),
+            'username'          => Env::get('database.username', 'root'),
             // 密码
-            'password'          => Env::get('database.password', 'zQRt35m41CM51Qnn'),
+            'password'          => Env::get('database.password', ''),
             // 端口
             'hostport'          => Env::get('database.hostport', '3306'),
             // 数据库连接参数

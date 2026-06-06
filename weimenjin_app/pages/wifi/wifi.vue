@@ -78,8 +78,10 @@
 				uni.scanCode({
 					success: (res) => {
 						_this.data.device_ssid = res.result
-						// 二维码内容
-						console.log(res)
+						// 扫码后重置连接状态，需要重新连接设备
+						_this.data.join_wifi = false
+						// 同步更新缓存
+						uni.setStorageSync("WifiData", _this.data)
 					}
 				});
 			},
@@ -99,11 +101,10 @@
 					title: "正在连接设备...",
 					mask: true
 				})
-				var _this = this;
-				uni.startWifi({
-					success: (startWifiRes) => {
-						console.log("startWifiRes", startWifiRes)
-						//连接wifi
+			var _this = this;
+			uni.startWifi({
+				success: (startWifiRes) => {
+					//连接wifi
 						uni.connectWifi({
 							SSID: this.data.device_ssid,
 							password: "",
@@ -117,9 +118,8 @@
 								//关闭wifi模块
 								uni.stopWifi()
 							},
-							fail(err) {
-								console.log("err", err)
-								setTimeout(() => {
+						fail(err) {
+							setTimeout(() => {
 									_this.show_toast("请检查设备是否进入了配网模式或是否已打开WiFi！")
 								}, 500)
 							},
@@ -174,7 +174,6 @@
 					},
 					success: (res) => {
 						_this.data.restart = true;
-						console.log('返回', res)
 						if (res.data.state === 0) {
 							_this.show_toast("配置成功")
 							return;

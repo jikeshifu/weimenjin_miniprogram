@@ -41,6 +41,21 @@ let OpenLockBle = function (deviceSn, lock_id = 0, data = null) {
       }, 'POST');
       console.log("temporaryPasswordRes:", temporaryPasswordRes);
 
+      // 检查是否获取临时密码成功
+      if (temporaryPasswordRes.code !== 0) {
+        setTimeout(() => {
+          resolve();
+        }, 3000);
+        wx.showModal({
+          title: "无法开门",
+          content: temporaryPasswordRes.msg || "获取开门密码失败",
+          showCancel: false,
+          confirmText: "我知道了",
+          confirmColor: "#ff0000"
+        });
+        return;
+      }
+
       bleData = {
         "cmd_type": "ble_pwd_open_lock",
         "info": {

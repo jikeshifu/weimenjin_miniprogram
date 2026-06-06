@@ -332,6 +332,12 @@ class Lock
 //            $result['state_msg'] = "无远程开门权限";
 //            return $result;
 //        }
+        if (self::checkCamString($lockInfo["lock_sn"] ?? '')) {
+            $result['state'] = 0;
+            $result['state_code'] = 2003;
+            $result['state_msg'] = "摄像头设备不支持开门操作";
+            return $result;
+        }
         if ($lockInfo["location_check"] != 0 && $lockInfo["location"]) {
             $location = json_decode(html_entity_decode($lockInfo["location"]), true);
             if ($latitude != null) {
@@ -391,6 +397,13 @@ class Lock
         //计算距离
 
 
+        if (self::checkCamString($lock_sn)) {
+            $result['state'] = 0;
+            $result['state_code'] = 2003;
+            $result['state_msg'] = "摄像头设备不支持开门操作";
+            return $result;
+        }
+
         if (mb_substr($lock_sn, 0, 3) == "W89" || mb_substr($lock_sn, 0, 3) == "W82" || mb_substr($lock_sn, 0, 3) == "W76" || mb_substr($lock_sn, 0, 3) == "W77") {
             $OpenLock = HardwareCloud::WifiLock()->OpenLock($lock_sn, "88888888888888888888");
 
@@ -420,12 +433,21 @@ class Lock
 
     static $Yjy = [
         "W8",
-        "W8",
         "W7",
+        "W3",
     ];
 
     static function Register($data)
     {
+        $data['lock_sn'] = strtoupper($data['lock_sn']);
+        if (self::checkCamString($data["lock_sn"])) {
+            $Register = HardwareCloud::KGCamera()::Register($data["lock_sn"]);
+            if ($Register["err"]) {
+                return ["err" => $Register["err"]];
+            }
+            return null;
+        }
+
         if (in_array(mb_substr($data["lock_sn"], 0, 2), self::$Yjy)) {
             $Register = HardwareCloud::App()->Register($data["lock_sn"]);
 
@@ -445,7 +467,6 @@ class Lock
             $data["admin_pwd"] = $ActivateRes["admin_pwd"];
             $data["online"] = 1;
         } else {
-            $data['lock_sn'] = strtoupper($data['lock_sn']);
             $wmjapiresult = wmjHandle($data['lock_sn'], 'postlock');
 
             if ($wmjapiresult['state'] == 0) {
@@ -472,21 +493,65 @@ class Lock
         $data['qrshowminiad'] = 1;
         $data['create_time'] = time();
         $data['successimg'] = '/static/img/shareimg.jpg';
-        $lock_id = LockService::add($data);
-        $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $data['user_id'] . "&lock_id=" . $lock_id;
+        Db::startTrans();
+        try {
+            $lock_id = LockService::add($data);
+            $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $data['user_id'] . "&lock_id=" . $lock_id;
 
-        HardwareCloud::App()->QrCodeSet($data["lock_sn"], $qrcodeurl);
-        
-        $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
+            if(!self::checkCamString($data["lock_sn"])){
+                $skip_apis = false;
+                $device_prefix = mb_substr($data["lock_sn"], 0, 4);
+                if (in_array($device_prefix, ["W761", "W762", "W763", "W764", "W767", "W76C", "W76F"])) {
+                    $skip_apis = true;
+                }
 
-        LockService::update(["lock_id" => $lock_id], $data);
-        //添加钥匙
-        LockAuth::Add($lock_id, $data['member_id'], $data['user_id'], $device_group_id);
+                if (!$skip_apis) {
+                    $isOnline = HardwareCloud::App()->OnLineGet($data["lock_sn"]);
+                    if ($isOnline) {
+                        HardwareCloud::App()->QrCodeSet($data["lock_sn"], $qrcodeurl);
+                    }
+                }
+                $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
+                LockService::update(["lock_id" => $lock_id], $data);
+            }else{
+                Db::name("cam_remote_control")->insert([
+                    'device_sn' => $data["lock_sn"],
+                    'title' => "遥控器",
+                    'member_id' => $data['member_id']
+                ]);
+            }
+            //添加钥匙
+            LockAuth::Add($lock_id, $data['member_id'], $data['user_id'], $device_group_id);
+            Db::commit();
+        } catch (\Throwable $e) {
+            Db::rollback();
+            throw $e;
+        }
         //重启设备
         usleep(1000);
-        HardwareCloud::App()->Appreg($data["lock_sn"]);
+        $skip_appreg = false;
+        $device_prefix = mb_substr($data["lock_sn"], 0, 4);
+        if (self::checkCamString($data["lock_sn"]) || in_array($device_prefix, ["W761", "W762", "W763", "W764", "W767", "W76C", "W76F"])) {
+            $skip_appreg = true;
+        }
+        if (!$skip_appreg) {
+            $isOnline = HardwareCloud::App()->OnLineGet($data["lock_sn"]);
+            if ($isOnline) {
+                HardwareCloud::App()->Appreg($data["lock_sn"]);
+            }
+        }
         return ["err" => null, "lock_id" => $lock_id];
 
+    }
+
+    static function checkCamString($str) {
+        if (!is_string($str) || strlen($str) < 10) {
+            return false;
+        }
+
+        $target = substr($str, -10, 2);
+
+        return $target === '33' || $target === '34';
     }
 
     /**

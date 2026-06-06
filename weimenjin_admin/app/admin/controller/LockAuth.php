@@ -86,14 +86,15 @@ class LockAuth extends Admin {
 			$offset = $this->request->post('offset', 0, 'intval');
 			$page   = floor($offset / $limit) +1 ;
 
-			$where = [];
-			$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
-			$where['b.realname'] = ['like',$this->request->param('realname', '', 'serach_in')];
-			$where['b.remark'] = ['like',$this->request->param('remark', '', 'serach_in')];
-			$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
-			$where['b.nickname'] = ['like',$this->request->param('nickname', '', 'serach_in')];
-			$where['a.auth_shareability'] = $this->request->param('auth_shareability', '', 'serach_in');
-			$where['a.auth_status'] = $this->request->param('auth_status', '', 'serach_in');
+		$where = [];
+		$where['c.lock_name'] = ['like',$this->request->param('lock_name', '', 'serach_in')];
+		$where['b.realname'] = ['like',$this->request->param('realname', '', 'serach_in')];
+		$where['b.remark'] = ['like',$this->request->param('remark', '', 'serach_in')];
+		$where['b.mobile'] = ['like',$this->request->param('mobile', '', 'serach_in')];
+		// removed nickname search per UI change
+		$where['a.auth_isadmin'] = $this->request->param('auth_isadmin', '', 'serach_in');
+		$where['a.auth_shareability'] = $this->request->param('auth_shareability', '', 'serach_in');
+		$where['a.auth_status'] = $this->request->param('auth_status', '', 'serach_in');
 			if(session('admin.role') <> 1){
 				$where['a.user_id'] = session('admin.user_id');
 			}
@@ -106,7 +107,8 @@ class LockAuth extends Admin {
 			$orderby = ($sort && $order) ? $sort.' '.$order : 'lockauth_id desc';
 
 			try{
-				$sql = 'select a.*,b.headimgurl,b.nickname,b.realname,b.remark,b.mobile,c.lock_name from cd_lockauth as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id and a.deleted_at  IS NULL ';
+				// select auth_isadmin and remove avatar/nickname as requested
+				$sql = 'select a.*,b.realname,b.remark,b.mobile,c.lock_name from cd_lockauth as a inner join cd_member as b inner join cd_lock as c where a.member_id=b.member_id and a.lock_id=c.lock_id and a.deleted_at  IS NULL ';
 				$res = \xhadmin\CommonService::loadList($sql,formatWhere($where),$limit,$orderby,'cd_lockauth');
 				$list = $res['list'];
 			}catch(\Exception $e){
@@ -131,4 +133,3 @@ class LockAuth extends Admin {
 
 
 }
-

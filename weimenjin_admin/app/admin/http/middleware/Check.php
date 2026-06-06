@@ -27,13 +27,14 @@ class Check
 		$admin = session('admin');
         $userid = session('admin_sign') == data_auth_sign($admin) ? $admin['userid'] : 0;
 
-        if( !$userid && ( $app <> 'admin' || $controller <> 'Login' )){
+        $publicControllers = ['Login', 'QrCodeLogin', 'qrCodeLogin'];
+        if( !$userid && ( $app <> 'admin' || !in_array($controller, $publicControllers, true) )){
 			echo '<script type="text/javascript">window.parent.frames.location.href="'.url('admin/Login/indexQrCode').'";</script>';exit();
         }
 
 		//验证权限
 		$url =  "/{$app}/{$controller}/{$action}";
-		if(session('admin.role') <> 1 && !in_array($url,config('my.nocheck')) && $action !== 'startImport' && $action !== 'getExtends'){
+		if(session('admin.role') <> 1 && !in_array($controller, $publicControllers, true) && !in_array($url,config('my.nocheck')) && $action !== 'startImport' && $action !== 'getExtends'){
 			if(!in_array($url,session('admin.nodes'))){
 				exit('你没权限访问1');
 			}

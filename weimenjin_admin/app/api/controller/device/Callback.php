@@ -139,6 +139,19 @@ class Callback
                     Db::name("lock")->where(['lock_sn' => $device_sn,])->whereNull("deleted_at")->update($updateData);
                     break;
 
+                case "renew_token":
+                    $channel = $device_sn;
+                    if(!empty($info['channel'])){
+                        $channel = $info['channel'];
+                    }
+                    $res = Camera::DevRenewToken($device_sn,$channel);
+                    mlog("DevRenewToken:" . json_encode($res), "camera_log.txt");
+                    break;
+                case "get_lic":
+                    $res = Camera::getLicense($device_sn);
+                    mlog("getLicense:" . json_encode($res), "camera_log.txt");
+                    break;
+
                 case "notify":
                     //人脸设备记录日志
                     if (mb_substr($device_sn, 0, 3) == "W77") {

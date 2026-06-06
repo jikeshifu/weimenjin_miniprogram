@@ -1,244 +1,257 @@
-﻿<!DOCTYPE HTML>
-<html>
-
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{:config('xhadmin.site_title')}</title>
     <link rel="shortcut icon" href="__PUBLIC__/static/favicon.ico">
-    <!-- Bootstrap core CSS     -->
-    <link href="__PUBLIC__/static/login_new/static/css/bootstrap.min.css" rel="stylesheet"/>
-    <!--  Material Dashboard CSS    -->
-    <link href="__PUBLIC__/static/login_new/static/css/material-dashboard.css" rel="stylesheet"/>
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="__PUBLIC__/static/login_new/static/css/demo.css" rel="stylesheet"/>
-    <!--     Fonts and icons     -->
     <link href="__PUBLIC__/static/login_new/static/css/font-awesome.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css"
-          href="__PUBLIC__/static/login_new/static/css/e26f8e48f3f747dfa9fb3972355ed854.css">
-    <!-- 	    <link href="__PUBLIC__/static/login_new/static/css/3a636a6d66e7464c94ec79220689e90e.css" rel="stylesheet"> -->
-
-    <!-- 	<link href="__PUBLIC__/static/login_new/static/css/common.css" rel="stylesheet"> -->
-    <script type="text/javascript">
-        if (navigator.appName == 'Microsoft Internet Explorer') {
-            if (navigator.userAgent.indexOf("MSIE 5.0") > 0 || navigator.userAgent.indexOf("MSIE 6.0") > 0 || navigator.userAgent.indexOf("MSIE 7.0") > 0) {
-                alert('您使用的 IE 浏览器版本过低, 推荐使用 Chrome 浏览器或 IE8 及以上版本浏览器.');
-            }
-        }
-
-    </script>
-
     <script src="__PUBLIC__/static/js/jquery.min.js?v=2.1.4"></script>
-    <script src="__PUBLIC__/static/js/plugins/layer/layer.min.js"></script>
-    <script src="__PUBLIC__/static/js/common/ajax-object.js"></script>
-    <script src="__PUBLIC__/static/js/common/Feng.js"></script>
-
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/jquery-3.2.1.js"></script>
-
-
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/material.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/perfect-scrollbar.jquery.min.js"></script>
-
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/material-dashboard.js"></script>
-    <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/demo.js"></script>
-
-
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/util.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/common.min.js"></script>
-
-    <script type="text/javascript" src="__PUBLIC__/static/login_new/static/js/require.js"></script>
-
-    <script src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.qrcode.min.js"></script>
-
+    <script src="/js/jquery.qrcode.min.js"></script>
     <style>
-        body .layer-ext-myskin .layui-layer-content {
-            overflow: visible;
+        * { box-sizing: border-box; }
+        html, body { width: 100%; min-height: 100%; margin: 0; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            color: #ecfeff;
+            background: #04131e;
+            overflow-x: hidden;
+        }
+        .auth-page {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(320px, 1fr) minmax(360px, 470px);
+            gap: 48px;
+            align-items: center;
+            padding: 48px clamp(24px, 6vw, 96px);
+            background:
+                linear-gradient(120deg, rgba(2, 14, 25, .66), rgba(4, 32, 46, .36)),
+                url("__PUBLIC__/static/login_new/static/picture/wmj-community-tech-login.webp") center/cover no-repeat;
+            isolation: isolate;
+        }
+        .auth-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 18% 22%, rgba(34, 211, 238, .12), transparent 28%),
+                radial-gradient(circle at 82% 74%, rgba(46, 204, 113, .1), transparent 30%),
+                linear-gradient(90deg, rgba(125, 211, 252, .08) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(125, 211, 252, .06) 1px, transparent 1px);
+            background-size: auto, auto, 72px 72px, 72px 72px;
+        }
+        .auth-page::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                linear-gradient(135deg, transparent 0 18%, rgba(34, 211, 238, .18) 18.2%, transparent 18.6% 58%, rgba(46, 204, 113, .14) 58.2%, transparent 58.7%),
+                linear-gradient(45deg, transparent 0 35%, rgba(125, 211, 252, .12) 35.2%, transparent 35.6%);
+            opacity: .38;
+        }
+        .brand-panel { max-width: 720px; }
+        .brand-panel h1 {
+            margin: 0 0 18px;
+            font-size: clamp(34px, 4vw, 58px);
+            line-height: 1.08;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+        .brand-panel p {
+            margin: 0;
+            max-width: 560px;
+            color: rgba(236, 254, 255, .74);
+            font-size: 17px;
+            line-height: 1.9;
+        }
+        .login-card {
+            width: 100%;
+            padding: 34px;
+            color: #102030;
+            border: 1px solid rgba(255, 255, 255, .78);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(240, 249, 255, .9));
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .9);
+            backdrop-filter: blur(16px);
+            text-align: center;
+        }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            text-align: left;
+            margin-bottom: 28px;
+        }
+        .card-top h2 { margin: 0 0 8px; font-size: 28px; font-weight: 750; }
+        .card-top p { margin: 0; color: #64748b; }
+        .mode-link {
+            white-space: nowrap;
+            color: #0f766e;
+            text-decoration: none;
+            border: 1px solid rgba(20, 184, 166, .32);
+            padding: 9px 12px;
+            background: rgba(20, 184, 166, .08);
+        }
+        .qr-shell {
+            width: 292px;
+            height: 292px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 18px;
+            padding: 18px;
+            background: #fff;
+            box-shadow: 0 18px 60px rgba(34, 211, 238, .18);
+            border: 1px solid rgba(255, 255, 255, .5);
+        }
+        #myQrcode canvas { width: 246px !important; height: 246px !important; display: block; }
+        .scan-tip { color: #475569; line-height: 1.8; margin: 0; }
+        .pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            color: #0f766e;
+            font-size: 13px;
+        }
+        .pulse::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, .7);
+            animation: pulse 1.4s infinite;
+        }
+        @keyframes pulse {
+            to { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
+        }
+        .page-footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 20px;
+            color: rgba(236, 254, 255, .54);
+            text-align: center;
+            font-size: 13px;
+        }
+        .page-footer a { color: rgba(236, 254, 255, .68); text-decoration: none; }
+        .disclaimer-link {
+            margin-left: 14px;
+            color: #67e8f9 !important;
+            cursor: pointer;
+        }
+        .disclaimer-mask {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            z-index: 9999;
+            background: rgba(1, 8, 14, .72);
+            backdrop-filter: blur(10px);
+        }
+        .disclaimer-mask.active { display: flex; }
+        .disclaimer-dialog {
+            width: min(92vw, 680px);
+            max-height: 82vh;
+            overflow: auto;
+            padding: 28px;
+            border: 1px solid rgba(125, 211, 252, .28);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(240, 249, 255, .98));
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .45);
+            text-align: left;
+        }
+        .disclaimer-dialog h3 { margin: 0 0 14px; color: #102030; font-size: 22px; }
+        .disclaimer-dialog p,
+        .disclaimer-text {
+            margin: 0 0 12px;
+            color: #334155;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+        .disclaimer-close {
+            width: 100%;
+            height: 42px;
+            margin-top: 8px;
+            border: 0;
+            cursor: pointer;
+            color: #04131e;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5eead4, #22c55e);
+        }
+        @media (max-width: 900px) {
+            body { overflow: auto; }
+            .auth-page {
+                grid-template-columns: 1fr;
+                padding: 34px 18px 72px;
+            }
+            .brand-panel { display: none; }
+            .login-card { max-width: 460px; margin: 0 auto; padding: 28px 22px; }
+            .qr-shell { width: 260px; height: 260px; }
+            #myQrcode canvas { width: 220px !important; height: 220px !important; }
         }
     </style>
 </head>
-<body class="off-canvas-sidebar">
-<nav class="navbar navbar-primary navbar-transparent navbar-absolute">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                <span class="sr-only">{:config('xhadmin.site_title')}</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="javascript:volid(0);">{:config('xhadmin.site_title')}</a>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-
-<!--                <li class="">-->
-<!--                    <a href="javascript:void(0)"-->
-<!--                       onclick="openImg('https://{$_SERVER['HTTP_HOST']}/qrdata/qrcode/adduser.png')">-->
-<!--                        <i class="material-icons">person_add</i> 注册-->
-<!--                    </a>-->
-<!--                </li>-->
-                <!--<li class="">
-                    <a href="{:url('supplier/Login/')}">
-                        <i class="material-icons">fingerprint</i> 伙伴登录
-                    </a>
-                </li>-->
-
-            </ul>
-        </div>
-
-    </div>
-</nav>
-<div class="wrapper wrapper-full-page">
-    <div class="full-page login-page" filter-color="black"
-         data-image="__PUBLIC__/static/login_new/static/picture/login.jpeg">
-        <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
-        <div class="content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-
-                        <div class="card card-login card-hidden">
-                            <div class="card-header text-center" data-background-color="rose">
-                                <h4 class="card-title">{:config('xhadmin.site_title')}</h4>
-                                <div class="social-line">
-                                </div>
-                            </div>
-                            <p class="category text-center">
-                                <a href="/admin/Login/index">账号密码登录</a>
-                            </p>
-                            <div id="myQrcode" style="margin-top:30px;text-align: center">
-                            </div>
-                            <p class="category text-center">
-                                直接用微信扫码即可注册并登录
-                            </p>
-                        </div>
-                    </div>
-                </div>
+<body>
+<main class="auth-page">
+    <section class="brand-panel">
+        <h1>微门禁</h1>
+        <p>方便快捷的门禁管理系统。</p>
+    </section>
+    <section class="login-card">
+        <div class="card-top">
+            <div>
+                <h2>扫码登录</h2>
+                <p>微信扫码注册并进入后台</p>
             </div>
+            <a class="mode-link" href="/admin/Login/index">账号登录</a>
         </div>
-        <footer class="footer">
-            <div class="container">
-
-                <p class="copyright text-center">
-                    &copy;
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script>
-                    <a href="javascript:volid(0);"> {:config('xhadmin.site_title')} </a>
-                    <a href="https://beian.miit.gov.cn/">{:config('xhadmin.copyright')}</a>
-                </p>
-            </div>
-        </footer>
+        <div class="qr-shell">
+            <div id="myQrcode"></div>
+        </div>
+        <p class="scan-tip">请使用微信扫描二维码，授权后自动进入系统。</p>
+        <div class="pulse">正在等待扫码确认</div>
+    </section>
+    <footer class="page-footer">
+        &copy; <script>document.write(new Date().getFullYear())</script>
+        <a href="javascript:void(0);">{:config('xhadmin.site_title')}</a>
+        <a class="disclaimer-link" href="javascript:void(0);" onclick="showDisclaimer()">免责声明</a>
+    </footer>
+</main>
+<div id="disclaimerModal" class="disclaimer-mask" onclick="hideDisclaimer(event)">
+    <div class="disclaimer-dialog">
+        <h3>免责声明</h3>
+        <div class="disclaimer-text">{$disclaimerHtml|raw}</div>
+        <button class="disclaimer-close" type="button" onclick="hideDisclaimer()">我已了解</button>
     </div>
 </div>
-</body>
-</body>
-
-<script type="text/javascript">
-    var currentDomain = window.location.hostname; // 获取当前站点的域名
-    var qrCodeText = "https://" + currentDomain + "/qrCodeLogin?key={$cs}"; // 动态构建域名
-    $('#myQrcode').qrcode({text: qrCodeText});
-
-    $().ready(function () {
-        demo.checkFullPageBackgroundImage();
-
-        setTimeout(function () {
-            // after 1000 ms we add the class animated to the login/register card
-            $('.card').removeClass('card-hidden');
-        }, 700)
-
-
-        let aa = setInterval(function () {
-            $.post("/admin/Login/indexQrCode",
-                {
-                    data: "{$cs}",
-
-                },
-                function (data, status) {
-                    console.log("data", data)
-
-                    if (data.code == 0) {
-
-
-                        clearInterval(aa);
-                        window.location.replace("/admin");
-                    }
-
-                });
-        }, 3000)
+<script>
+    var currentDomain = window.location.hostname;
+    var qrCodeText = 'https://' + currentDomain + '/admin/QrCodeLogin/index?key={$cs}';
+    $('#myQrcode').qrcode({ text: qrCodeText });
+    function showDisclaimer() {
+        $('#disclaimerModal').addClass('active');
+    }
+    function hideDisclaimer(event) {
+        if (!event || event.target.id === 'disclaimerModal') {
+            $('#disclaimerModal').removeClass('active');
+        }
+    }
+    $(function() {
+        var poller = setInterval(function() {
+            $.post('/admin/Login/indexQrCode', { data: '{$cs}' }, function(data) {
+                if (data.code == 0) {
+                    clearInterval(poller);
+                    window.location.replace('/admin');
+                }
+            });
+        }, 3000);
     });
-
-
 </script>
-
-<script type="text/javascript">
-    document.onkeydown = function (e) {
-        var ev = document.all ? window.event : e;
-        if (ev.keyCode == 13) {
-            login();
-        }
-    };
-
-    $('#username').focus();
-
-    function login() {
-        var username = $("#username").val();
-        var password = $("#password").val();
-        var verify = $("#averfiy").val();
-
-        if (!username || !password) {
-            Feng.info("请输入用户名或者密码！");
-            return false;
-        }
-
-        if (!verify) {
-            Feng.info("请输入验证码！");
-            return false;
-        }
-
-        var ajax = new $ax("{:url('admin/Login/index')}", function (data) {
-            if (1 === data.code) {
-                Feng.success(data.msg);
-                $("#submit").val('正在登陆');
-                window.location.href = data.url;
-            } else {
-                $("#img").attr('src', "{:url('admin/Login/Verify')}?=" + Math.random());
-                Feng.error(data.msg);
-            }
-
-        });
-        ajax.set('username', username);
-        ajax.set('password', password);
-        ajax.set('verify', verify);
-        ajax.start();
-    }
-
-    openImg = function (value) {
-        var img = "<img src=" + value + " height=\"450px\" style=\"max-width:500px\">";
-        layer.open({
-            type: 1,
-            shade: false,
-            title: false, //不显示标题
-            area: ['auto', 'auto'],
-            //area: '500px',
-            area: [img.width + 'px', img.height + 'px'],
-            content: img, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-            cancel: function () {
-                //layer.msg('图片查看结束！', { time: 5000, icon: 6 });
-            }
-        });
-    }
-
-    function reset() {
-        $("#username").val('');
-        $("#password").val('')
-        $("#averfiy").val('')
-    }
-
-</script>
+</body>
 </html>

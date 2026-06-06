@@ -53,7 +53,6 @@
 			let audioConfigRes = await audioConfig({
 				"lock_id": this.lock_id
 			})
-			console.log("audioConfigRes", audioConfigRes)
 			this.tts = audioConfigRes.data.openttscontent
 			this.volume = audioConfigRes.data.volume
 		},

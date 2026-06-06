@@ -84,7 +84,7 @@ class Jwt
             throw new \InvalidArgumentException('Secret key cannot be null or empty.');
         }
 
-        $this->secret = $secret;
+        $this->secret = $this->normalizeSecret((string) $secret);
 
         // 配置 SymmetricSigner，确保 secret 非空
         $this->config = Configuration::forSymmetricSigner(
@@ -93,6 +93,11 @@ class Jwt
         );
 
         return $this;
+    }
+
+    private function normalizeSecret(string $secret): string
+    {
+        return strlen($secret) >= 32 ? $secret : hash('sha256', $secret);
     }
 
     public function encode()

@@ -1,0 +1,209 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>区域数据迁移</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="alert alert-info">
+                    <h4>迁移说明：</h4>
+                    <ul>
+                        <li>系统将为所有未配置区域的设备自动创建默认区域结构</li>
+                        <li>每个设备的授权用户将自动分配一个默认房号并绑定</li>
+                        <li>迁移过程不影响现有功能，可安全执行</li>
+                        <li>建议在业务低峰期执行迁移</li>
+                    </ul>
+                </div>
+
+                <div class="row m-t-lg">
+                    <div class="col-sm-12">
+                        <h3>迁移状态</h3>
+                        <div id="migrationStatus" class="well">
+                            <p><i class="fa fa-spinner fa-spin"></i> 正在加载状态...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-t-lg">
+                    <div class="col-sm-12">
+                        <h3>执行迁移</h3>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-lg" onclick="Migration.startBatch()">
+                                <i class="fa fa-play"></i> 开始分批迁移（推荐）
+                            </button>
+                            <button type="button" class="btn btn-warning btn-lg" onclick="Migration.startAll()">
+                                <i class="fa fa-bolt"></i> 一键迁移全部
+                            </button>
+                            <button type="button" class="btn btn-info btn-lg" onclick="Migration.checkStatus()">
+                                <i class="fa fa-refresh"></i> 刷新状态
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-t-lg" id="progressArea" style="display: none;">
+                    <div class="col-sm-12">
+                        <h3>迁移进度</h3>
+                        <div class="progress progress-striped active">
+                            <div id="progressBar" class="progress-bar" style="width: 0%">0%</div>
+                        </div>
+                        <div id="progressLog" class="well" style="max-height: 300px; overflow-y: auto;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var Migration = {
+    isRunning: false,
+    totalDevices: 0,
+    processedDevices: 0,
+
+    init: function() {
+        this.checkStatus();
+    },
+
+    checkStatus: function() {
+        $.post('/admin/AreaManage/migration', {action: 'check'}, function(res) {
+            if (res.status == '00') {
+                var data = res.data;
+                var html = '<div class="row">' +
+                    '<div class="col-sm-3"><div class="widget style1 navy-bg"><div class="row"><div class="col-xs-4"><i class="fa fa-database fa-5x"></i></div><div class="col-xs-8 text-right"><span>总设备数</span><h2 class="font-bold">' + data.total + '</h2></div></div></div></div>' +
+                    '<div class="col-sm-3"><div class="widget style1 lazur-bg"><div class="row"><div class="col-xs-4"><i class="fa fa-check fa-5x"></i></div><div class="col-xs-8 text-right"><span>已迁移</span><h2 class="font-bold">' + data.migrated + '</h2></div></div></div></div>' +
+                    '<div class="col-sm-3"><div class="widget style1 yellow-bg"><div class="row"><div class="col-xs-4"><i class="fa fa-clock-o fa-5x"></i></div><div class="col-xs-8 text-right"><span>待迁移</span><h2 class="font-bold">' + data.not_migrated + '</h2></div></div></div></div>' +
+                    '<div class="col-sm-3"><div class="widget style1 ' + (data.progress == 100 ? 'lazur' : 'red') + '-bg"><div class="row"><div class="col-xs-4"><i class="fa fa-percent fa-5x"></i></div><div class="col-xs-8 text-right"><span>完成度</span><h2 class="font-bold">' + data.progress + '%</h2></div></div></div></div>' +
+                    '</div>';
+                $('#migrationStatus').html(html);
+
+                Migration.totalDevices = data.not_migrated;
+            } else {
+                $('#migrationStatus').html('<p class="text-danger">加载状态失败</p>');
+            }
+        });
+    },
+
+    startBatch: function() {
+        if (this.isRunning) {
+            layer.msg('迁移正在进行中');
+            return;
+        }
+
+        layer.confirm('确定要开始分批迁移吗？', {
+            btn: ['确定', '取消']
+        }, function(index) {
+            layer.close(index);
+            Migration.isRunning = true;
+            Migration.processedDevices = 0;
+            $('#progressArea').show();
+            $('#progressLog').html('<p>[' + new Date().toLocaleTimeString() + '] 开始分批迁移...</p>');
+            Migration.processBatch(0);
+        });
+    },
+
+    processBatch: function(offset) {
+        var batchSize = 50;
+
+        $.post('/admin/AreaManage/migration', {
+            action: 'batch',
+            batch_size: batchSize,
+            offset: offset
+        }, function(res) {
+            if (res.status == '00') {
+                var data = res.data;
+                Migration.processedDevices += data.success_count;
+
+                var progress = Migration.totalDevices > 0 ? Math.round((Migration.processedDevices / Migration.totalDevices) * 100) : 0;
+                $('#progressBar').css('width', progress + '%').text(progress + '%');
+
+                $('#progressLog').append('<p>[' + new Date().toLocaleTimeString() + '] 批次完成: 成功 ' + data.success_count + ' 个，错误 ' + data.errors.length + ' 个</p>');
+
+                if (data.errors.length > 0) {
+                    $('#progressLog').append('<p class="text-warning">错误信息: ' + data.errors.join('; ') + '</p>');
+                }
+
+                if (data.has_more) {
+                    // 继续下一批
+                    setTimeout(function() {
+                        Migration.processBatch(data.next_offset);
+                    }, 1000);
+                } else {
+                    // 完成
+                    Migration.isRunning = false;
+                    $('#progressLog').append('<p class="text-success">[' + new Date().toLocaleTimeString() + '] ✅ 迁移完成！总计处理 ' + Migration.processedDevices + ' 个设备</p>');
+                    layer.msg('迁移完成');
+                    setTimeout(function() {
+                        Migration.checkStatus();
+                    }, 1000);
+                }
+            } else {
+                Migration.isRunning = false;
+                $('#progressLog').append('<p class="text-danger">[' + new Date().toLocaleTimeString() + '] ❌ 迁移失败: ' + res.msg + '</p>');
+                layer.msg('迁移失败');
+            }
+        }).fail(function() {
+            Migration.isRunning = false;
+            $('#progressLog').append('<p class="text-danger">[' + new Date().toLocaleTimeString() + '] ❌ 请求失败</p>');
+            layer.msg('请求失败');
+        });
+    },
+
+    startAll: function() {
+        if (this.isRunning) {
+            layer.msg('迁移正在进行中');
+            return;
+        }
+
+        layer.confirm('确定要一次性迁移所有设备吗？（设备数量较多时可能超时，建议使用分批迁移）', {
+            btn: ['确定', '取消']
+        }, function(index) {
+            layer.close(index);
+            Migration.isRunning = true;
+            $('#progressArea').show();
+            $('#progressLog').html('<p>[' + new Date().toLocaleTimeString() + '] 开始一键迁移...</p>');
+
+            $.post('/admin/AreaManage/migration', {action: 'all'}, function(res) {
+                Migration.isRunning = false;
+
+                if (res.status == '00') {
+                    var data = res.data;
+                    $('#progressBar').css('width', '100%').text('100%');
+                    $('#progressLog').append('<p class="text-success">[' + new Date().toLocaleTimeString() + '] ✅ 迁移完成！</p>');
+                    $('#progressLog').append('<p>区域: ' + data.areas + ' 个</p>');
+                    $('#progressLog').append('<p>楼栋: ' + data.buildings + ' 个</p>');
+                    $('#progressLog').append('<p>单元: ' + data.units + ' 个</p>');
+                    $('#progressLog').append('<p>房号: ' + data.rooms + ' 个</p>');
+                    $('#progressLog').append('<p>用户绑定: ' + data.member_bindings + ' 条</p>');
+                    $('#progressLog').append('<p>设备更新: ' + data.device_updates + ' 个</p>');
+
+                    if (data.errors.length > 0) {
+                        $('#progressLog').append('<p class="text-warning">错误: ' + data.errors.join('; ') + '</p>');
+                    }
+
+                    layer.msg('迁移完成');
+                    setTimeout(function() {
+                        Migration.checkStatus();
+                    }, 1000);
+                } else {
+                    $('#progressLog').append('<p class="text-danger">[' + new Date().toLocaleTimeString() + '] ❌ 迁移失败: ' + res.msg + '</p>');
+                    layer.msg('迁移失败');
+                }
+            }).fail(function() {
+                Migration.isRunning = false;
+                $('#progressLog').append('<p class="text-danger">[' + new Date().toLocaleTimeString() + '] ❌ 请求失败</p>');
+                layer.msg('请求失败');
+            });
+        });
+    }
+};
+
+$(function() {
+    Migration.init();
+});
+</script>
+{/block}

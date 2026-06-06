@@ -126,7 +126,7 @@ class CommonService
 	 * @param  $orderby  排序
 	 * @return array
 	 */
-    public static function loadList($sql,$where=[],$limit,$orderby,$countetable='cd_locklog'){
+    public static function loadList($sql, $where = [], $limit = '', $orderby = '', $countetable = 'cd_locklog'){
 		$sql = strtolower($sql);
 		$map = '';
 		foreach($where as $key=>$val){
@@ -216,7 +216,7 @@ class CommonService
 	 * @param  $orderby  排序
 	 * @return array
 	 */
-    public static function loadgroupbyList($sql,$where=[],$limit,$orderby,$groupby){
+    public static function loadgroupbyList($sql, $where = [], $limit = '', $orderby = '', $groupby = ''){
 		$sql = strtolower($sql);
 		$map = '';
 		foreach($where as $key=>$val){

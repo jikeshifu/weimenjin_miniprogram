@@ -1,9 +1,9 @@
-<?php 
+<?php
 /*
  module:		登记点管理
  create_time:	2020-02-24 01:20:15
- author:		
- contact:		
+ author:
+ contact:
 */
 
 namespace app\api\controller;
@@ -23,17 +23,17 @@ class Regpoint extends Common {
 	* @apiGroup Regpoint
 	* @apiVersion 1.0.0
 	* @apiDescription  修改
-	
+
 	* @apiParam (输入参数：) {string}     		regpoint_id 主键ID (必填)
 
 	* @apiHeader {String} Authorization 用户授权token
 	* @apiHeaderExample {json} Header-示例:
 	* "Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjM2NzgsImF1ZGllbmNlIjoid2ViIiwib3BlbkFJZCI6MTM2NywiY3JlYXRlZCI6MTUzMzg3OTM2ODA0Nywicm9sZXMiOiJVU0VSIiwiZXhwIjoxNTM0NDg0MTY4fQ.Gl5L-NpuwhjuPXFuhPax8ak5c64skjDTCBC64N_QdKQ2VT-zZeceuzXB9TqaYJuhkwNYEhrV3pUx1zhMWG7Org"
-	* @apiParam (输入参数：) {string}			member_id 会员ID 
-	* @apiParam (输入参数：) {string}			user_id 用户ID 
-	* @apiParam (输入参数：) {string}			regpointname 名称 
-	* @apiParam (输入参数：) {string}			regpointurl 注册点url 
-	* @apiParam (输入参数：) {string}			create_time 创建时间 
+	* @apiParam (输入参数：) {string}			member_id 会员ID
+	* @apiParam (输入参数：) {string}			user_id 用户ID
+	* @apiParam (输入参数：) {string}			regpointname 名称
+	* @apiParam (输入参数：) {string}			regpointurl 注册点url
+	* @apiParam (输入参数：) {string}			create_time 创建时间
 
 	* @apiParam (失败返回参数：) {object}     	array 返回结果集
 	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码  201
@@ -98,7 +98,7 @@ class Regpoint extends Common {
 	* @apiGroup Regpoint
 	* @apiVersion 1.0.0
 	* @apiDescription  查看数据
-	
+
 	* @apiParam (输入参数：) {string}     		regpoint_id 主键ID
 
 	* @apiHeader {String} Authorization 用户授权token
@@ -138,10 +138,10 @@ class Regpoint extends Common {
 	* @apiHeader {String} Authorization 用户授权token
 	* @apiHeaderExample {json} Header-示例:
 	* "Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjM2NzgsImF1ZGllbmNlIjoid2ViIiwib3BlbkFJZCI6MTM2NywiY3JlYXRlZCI6MTUzMzg3OTM2ODA0Nywicm9sZXMiOiJVU0VSIiwiZXhwIjoxNTM0NDg0MTY4fQ.Gl5L-NpuwhjuPXFuhPax8ak5c64skjDTCBC64N_QdKQ2VT-zZeceuzXB9TqaYJuhkwNYEhrV3pUx1zhMWG7Org"
-	* @apiParam (输入参数：) {string}			member_id 会员ID 
-	* @apiParam (输入参数：) {string}			user_id 用户ID 
-	* @apiParam (输入参数：) {string}			regpointname 名称 
-	* @apiParam (输入参数：) {string}			regpointurl 注册点url 
+	* @apiParam (输入参数：) {string}			member_id 会员ID
+	* @apiParam (输入参数：) {string}			user_id 用户ID
+	* @apiParam (输入参数：) {string}			regpointname 名称
+	* @apiParam (输入参数：) {string}			regpointurl 注册点url
 
 	* @apiParam (失败返回参数：) {object}     	array 返回结果集
 	* @apiParam (失败返回参数：) {string}     	array.status 返回错误码  201
@@ -158,7 +158,7 @@ class Regpoint extends Common {
 		$postField = 'member_id,user_id,regpointname,lock_id,regpointurl,create_time';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		$url = $this->request->param('regpointurl').$this->request->param('user_id');
-		//$url = 'https://wxapp.wmj.com.cn/qrdata/qrcode/大地.png';
+		//$url = 'https://your-domain.example/qrdata/qrcode/大地.png';
 		$qrcodename = $this->request->param('regpointname');
 		//$name ='dddddd';
 		try {
@@ -190,10 +190,10 @@ class Regpoint extends Common {
 
 	* @apiParam (输入参数：) {int}     		[limit] 每页数据条数（默认20）
 	* @apiParam (输入参数：) {int}     		[page] 当前页码
-	* @apiParam (输入参数：) {string}		[member_id] 会员ID 
-	* @apiParam (输入参数：) {string}		[user_id] 用户ID 
-	* @apiParam (输入参数：) {string}		[regpointname] 名称 
-	* @apiParam (输入参数：) {string}		[regpointurl] 注册点url 
+	* @apiParam (输入参数：) {string}		[member_id] 会员ID
+	* @apiParam (输入参数：) {string}		[user_id] 用户ID
+	* @apiParam (输入参数：) {string}		[regpointname] 名称
+	* @apiParam (输入参数：) {string}		[regpointurl] 注册点url
 	* @apiParam (输入参数：) {string}		[create_time_start] 创建时间开始
 	* @apiParam (输入参数：) {string}		[create_time_end] 创建时间结束
 
@@ -235,8 +235,8 @@ class Regpoint extends Common {
 			} else {
 				$res = RegpointService::pageList(formatWhere($where),$limit,$field,$orderby);
 			}
-			
-			
+
+
 		}catch(\Exception $e){
 			return json(['status'=>$this->errorCode,'msg'=>$e->getMessage()]);
 		}
@@ -248,7 +248,7 @@ class Regpoint extends Common {
  /*start*/
    function creatqrcode()
 	{
-		$url='https://wxapp.wmj.com.cn/qrdata/qrcode/%E5%B0%8F%E5%8C%BA%E9%97%A8%E5%8F%A3.png';
+		$url='https://your-domain.example/qrdata/qrcode/%E5%B0%8F%E5%8C%BA%E9%97%A8%E5%8F%A3.png';
 		$qrcodename='测试567';
 		return $this->createmarkqrcode($url,$qrcodename);
 	}
@@ -384,4 +384,3 @@ class Regpoint extends Common {
 
 
 }
-

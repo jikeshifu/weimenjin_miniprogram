@@ -24,11 +24,12 @@ class FaceAdd extends Command
 
     protected function execute(Input $input, Output $output)
     {
-    	// 指令输出
-    	$output->writeln('weikaimenfaceAdd');
+	// 指令输出
+	$output->writeln('weikaimenfaceAdd');
         while (true) {
             $lockface = Db::name("face")->where(["sync_status" => 0])->whereNull("deleted_at ")->select()->toArray();
             sleep(10);
+            $output->writeln('startsyncface');
             mlog("开始处理1：","exeaddface.txt");
             if (!$lockface) {
                 sleep(10);
@@ -44,10 +45,12 @@ class FaceAdd extends Command
                     if($vo["face_feature"])
                     {
                         $addres = HardwareCloud::Face()->AddFeature($lockdata["lock_sn"], $vo["sCertificateNumber"], $vo["face_feature"], $vo["end_time"], $vo["face_name"]);
+                        $output->writeln('startsyncface_face_feature');
                     }
                     else
                     {
                         $addres = HardwareCloud::Face()->Add($lockdata["lock_sn"], $vo["sCertificateNumber"], config("my.siteconfig.siteurl"). $vo["face_images"], $vo["end_time"], $vo["face_name"]);
+                        $output->writeln('startsyncface_face_image');
                     }
                     //mlog(json_encode($addres,JSON_UNESCAPED_UNICODE),"exeaddface.txt");
                     $updata = [];
@@ -75,10 +78,12 @@ class FaceAdd extends Command
                                 if($vo["face_feature"])
                                 {
                                     $addres = HardwareCloud::Face()->AddFeature($lockdata["lock_sn"], $vo["sCertificateNumber"], $vo["face_feature"], $vo["end_time"], $vo["face_name"]);
+                                    $output->writeln('startsyncface_del__face_feature');
                                 }
                                 else
                                 {
                                     $addres = HardwareCloud::Face()->Add($lockdata["lock_sn"], $vo["sCertificateNumber"], config("my.siteconfig.siteurl"). $vo["face_images"], $vo["end_time"], $vo["face_name"]);
+                                    $output->writeln('startsyncface_del_face_face_images');
                                 }
                                 if(isset($addres["res"]["data"]["info"]["code"])&&$addres["res"]["data"]["info"]["code"]==0)
                                 {

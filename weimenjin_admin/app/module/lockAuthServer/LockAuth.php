@@ -25,7 +25,7 @@ class LockAuth
         $authdata['auth_status'] = 1;
         $authdata['device_group_id'] = $device_group_id;
         $authdata['user_id'] = $user_id;
-        \xhadmin\service\api\LockAuthService::applyauth($authdata);
+        return \xhadmin\service\api\LockAuthService::applyauth($authdata);
     }
     //添加演示钥匙
     static function Addtestauth($lock_id, $member_id, $user_id, $device_group_id = 0)

@@ -1,7 +1,7 @@
 <template>
 	<view class="container" :style="{
 		paddingBottom: showMoreTool ? '220rpx' : '120rpx'
-	}"> 
+	}">
 		<editor
 			class="ql-container"
 			:placeholder="placeholder"
@@ -9,12 +9,12 @@
 			@ready="onEditorReady"
 			id="editor"
 			@statuschange="statuschange"
-			@focus="editFocus" 
+			@focus="editFocus"
 			@blur="editBlur"
 			ref="editot"
-		></editor>   
+		></editor>
 		<!-- 操作工具 -->
-		<view class="tool-view" > 
+		<view class="tool-view" >
 			<view class="tool">
 				<jinIcon class="single" type="&#xe6f3;" font-size="44rpx" title="插入图片" @click="insertImage"></jinIcon>
 				<jinIcon class="single" type="&#xe6f9;" font-size="44rpx" title="修改文字样式" @click="showMore" :color="showMoreTool ? activeColor : '#666666'"></jinIcon>
@@ -79,7 +79,7 @@ export default {
 		// 图片上传的地址
 		uploadFileUrl: {
 			type: String,
-			default: 'https://ysdwnkj.com/api/upUser'
+			default: ''
 		},
 		// 上传文件时的name
 		fileKeyName: {
@@ -96,7 +96,7 @@ export default {
 		}
 	},
 	computed:{
-		
+
 	},
 	data() {
 		return {
@@ -167,7 +167,7 @@ export default {
 								});
 								uni.hideLoading()
 							},
-							
+
 						});
 					}
 				}
@@ -240,14 +240,14 @@ export default {
 			this.editorCtx.getContents({
 				success: res => {
 					this.$emit('editOk', res);
-				} 
+				}
 			})
 		},
 		async editFocus() {
-			
+
 		},
 		editBlur() {
-			
+
 		},
 	}
 };
@@ -269,7 +269,7 @@ export default {
 	margin: 0 auto;
 	flex: 1;
 	overflow-y: auto;
-} 
+}
 .tool-view {
 	flex-shrink: 0;
 }
@@ -323,6 +323,6 @@ export default {
 	top: 0;
 	width: 100vw;
 	height: 100vh;
-	background: transparent; 
+	background: transparent;
 }
 </style>

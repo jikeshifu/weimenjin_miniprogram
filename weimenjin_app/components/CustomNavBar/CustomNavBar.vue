@@ -39,7 +39,37 @@ export default {
 
                     // 手动解析URL，提取 user_id 和 lock_id 参数
                     const url = res.result;
-                    if (url.includes("minilock?")) {
+                    if (url.includes("minicabinet?")) {
+                        const params = {};
+                        const queryString = url.split('?')[1];
+                        if (queryString) {
+                            const queryArray = queryString.split('&');
+                            queryArray.forEach(item => {
+                                const [key, value] = item.split('=');
+                                if (key && value) {
+                                    params[key] = decodeURIComponent(value);
+                                }
+                            });
+                        }
+
+                        const lockId = params['lock_id'];
+                        if (lockId) {
+                            const queryParts = [
+                                `lock_id=${encodeURIComponent(lockId)}`,
+                                params['device_sn'] ? `device_sn=${encodeURIComponent(params['device_sn'])}` : '',
+                                params['global_lock'] ? `global_lock=${encodeURIComponent(params['global_lock'])}` : ''
+                            ].filter(Boolean);
+                            uni.navigateTo({
+                                url: `/pages/W75Scan/W75Scan?${queryParts.join('&')}`
+                            });
+                        } else {
+                            uni.showToast({
+                                title: "无法获取柜门参数",
+                                icon: "none",
+                                duration: 2000
+                            });
+                        }
+                    } else if (url.includes("minilock?")) {
                         const params = {};
                         const queryString = url.split('?')[1];
                         if (queryString) {
@@ -54,11 +84,12 @@ export default {
                             // 获取 user_id 和 lock_id 参数
                             const userId = params['user_id'];
                             const lockId = params['lock_id'];
+                            const globalLock = params['global_lock'];
 
                             if (userId && lockId) {
-                                // 跳转到指定页面并传递参数
+                                const extra = globalLock ? `&global_lock=${globalLock}` : '';
                                 uni.navigateTo({
-                                    url: `/pages/open/open?user_id=${userId}&lock_id=${lockId}`
+                                    url: `/pages/open/open?user_id=${userId}&lock_id=${lockId}${extra}`
                                 });
                             } else {
                                 console.error("扫描的URL中缺少必要的参数");

@@ -23,7 +23,7 @@
         "topthink/think-template": "^2.0",
         "topthink/think-view": "^1.0",
         "topthink/think-captcha": "^3.0",
-        "phpoffice/phpspreadsheet": "^1.9",
+        "phpoffice/phpspreadsheet": "^1.18",
         "overtrue/wechat": "~5.0",
         "chillerlan/php-qrcode": "^5.0",
         "lcobucci/jwt": "^5.3",

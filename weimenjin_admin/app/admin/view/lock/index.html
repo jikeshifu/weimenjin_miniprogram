@@ -515,70 +515,128 @@
 					}, 1000);
 				});
 			}
+			CodeGoods.getSingleLockId = function (value) {
+				if (value) {
+					return value;
+				}
+				if (!this.check()) {
+					return false;
+				}
+				var ids = [];
+				$.each(CodeGoods.seItem, function() {
+					ids.push(this.lock_id);
+				});
+				if (ids.length !== 1) {
+					Feng.info("请选择一台设备后再操作");
+					return false;
+				}
+				return ids[0];
+			}
 
+			CodeGoods.escapeHtml = function (text) {
+				return String(text == null ? '' : text).replace(/[&<>"']/g, function (char) {
+					return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char];
+				});
+			}
+
+			CodeGoods.responseMessage = function (data, defaultMsg) {
+				if (!data) {
+					return defaultMsg || '操作完成';
+				}
+				return data.msg || data.err || data.state_msg || data.message || defaultMsg || '操作完成';
+			}
+
+			CodeGoods.runDeviceAction = function (options) {
+				var lockId = CodeGoods.getSingleLockId(options.lockId);
+				if (!lockId) {
+					return false;
+				}
+				Feng.confirm(options.confirmText, function () {
+					var loading = layer.msg(options.loadingText || '正在处理，请稍候...', {
+						time: 3600000,
+						icon: 16,
+						shade: 0.08
+					});
+					$.ajax({
+						url: Feng.ctxPath + options.url,
+						type: 'GET',
+						data: {lock_id: lockId},
+						dataType: 'json',
+						success: function (data) {
+							layer.close(loading);
+							var msg = CodeGoods.responseMessage(data, options.successText);
+							if (data && (data.status === '00' || data.code === 0 || data.err === null)) {
+								Feng.success(msg);
+							} else {
+								Feng.error(msg);
+							}
+						},
+						error: function (xhr) {
+							layer.close(loading);
+							var msg = xhr.responseJSON && (xhr.responseJSON.msg || xhr.responseJSON.message);
+							Feng.error(msg || '请求失败，请稍后重试');
+						}
+					});
+				});
+			}
 
 			CodeGoods.opendoor = function (value) {
-				if(value){
-					var index = layer.open({type: 2,title: '编辑数据',area: ['', ''],fix: false, maxmin: true,content: Feng.ctxPath + '/Lock/opendoor?lock_id='+value});
-					if(!IsPC()){layer.full(index)}
-				}else{
-					if (this.check()) {
-						var idx = '';
-						$.each(CodeGoods.seItem, function() {
-							idx += ',' + this.lock_id;
-						});
-						idx = idx.substr(1);
-						if(idx.indexOf(",") !== -1){
-							Feng.info("请选择单条数据！");
-							return false;
-						}
-						var index = layer.open({type: 2,title: '编辑数据',area: ['', ''],fix: false, maxmin: true,content: Feng.ctxPath + '/Lock/opendoor?lock_id='+idx});
-						this.layerIndex = index;
-						if(!IsPC()){layer.full(index)}
-					}
-				}
+				CodeGoods.runDeviceAction({
+					lockId: value,
+					url: '/Lock/opendoor',
+					confirmText: '确定要向该设备发送开门测试指令吗？',
+					loadingText: '正在发送开门指令...',
+					successText: '开门指令已发送'
+				});
 			}
+
 			CodeGoods.deviceinfo = function (value) {
-				if(value){
-					var index = layer.open({type: 2,title: '设备信息',area: ['400px', '600px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Lock/deviceinfo?lock_id='+value});
-					if(!IsPC()){layer.full(index)}
-				}else{
-					if (this.check()) {
-						var idx = '';
-						$.each(CodeGoods.seItem, function() {
-							idx += ',' + this.lock_id;
-						});
-						idx = idx.substr(1);
-						if(idx.indexOf(",") !== -1){
-							Feng.info("请选择单条数据！");
-							return false;
-						}
-						var index = layer.open({type: 2,title: '设备信息',area: ['400px', '600px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Lock/deviceinfo?lock_id='+idx});
-						this.layerIndex = index;
-						if(!IsPC()){layer.full(index)}
-					}
+				var lockId = CodeGoods.getSingleLockId(value);
+				if (!lockId) {
+					return false;
 				}
+				var loading = layer.msg('正在读取设备信息...', {
+					time: 3600000,
+					icon: 16,
+					shade: 0.08
+				});
+				$.ajax({
+					url: Feng.ctxPath + '/Lock/deviceinfo',
+					type: 'GET',
+					data: {lock_id: lockId},
+					dataType: 'json',
+					success: function (data) {
+						layer.close(loading);
+						var msg = CodeGoods.responseMessage(data, '设备信息读取完成');
+						var pretty = CodeGoods.escapeHtml(JSON.stringify(data, null, 2));
+						var isSuccess = data && (data.code === 0 || data.status === '00' || data.err === null);
+						layer.open({
+							type: 1,
+							title: isSuccess ? '设备信息' : '设备信息读取失败',
+							area: IsPC() ? ['560px', '520px'] : ['92%', '80%'],
+							shadeClose: true,
+							content: '<div style="padding:18px 20px;">'
+								+ '<div style="font-size:14px;margin-bottom:12px;color:' + (isSuccess ? '#18a689' : '#ed5565') + ';">' + CodeGoods.escapeHtml(msg) + '</div>'
+								+ '<pre style="max-height:390px;overflow:auto;margin:0;padding:12px;background:#f8f9fb;border:1px solid #e7eaec;border-radius:4px;color:#333;white-space:pre-wrap;word-break:break-all;">' + pretty + '</pre>'
+								+ '</div>'
+						});
+					},
+					error: function (xhr) {
+						layer.close(loading);
+						var msg = xhr.responseJSON && (xhr.responseJSON.msg || xhr.responseJSON.message);
+						Feng.error(msg || '读取设备信息失败，请稍后重试');
+					}
+				});
 			}
+
 			CodeGoods.regdoor = function (value) {
-				if(value){
-					var index = layer.open({type: 2,title: '更新到接口',area: ['', ''],fix: false, maxmin: true,content: Feng.ctxPath + '/Lock/regdoor?lock_id='+value});
-					if(!IsPC()){layer.full(index)}
-				}else{
-					if (this.check()) {
-						var idx = '';
-						$.each(CodeGoods.seItem, function() {
-							idx += ',' + this.lock_id;
-						});
-						idx = idx.substr(1);
-						if(idx.indexOf(",") !== -1){
-							Feng.info("请选择单条数据！");
-							return false;
-						}
-						var index = layer.open({type: 2,title: '更新到接口',area: ['', ''],fix: false, maxmin: true,content: Feng.ctxPath + '/Lock/regdoor?lock_id='+idx});
-						this.layerIndex = index;
-						if(!IsPC()){layer.full(index)}
-					}
-				}
+				CodeGoods.runDeviceAction({
+					lockId: value,
+					url: '/Lock/regdoor',
+					confirmText: '确定要刷新该设备的绑定信息吗？',
+					loadingText: '正在刷新绑定信息...',
+					successText: '绑定信息已刷新'
+				});
 			}
 
 			CodeGoods.enopentimesset = function (value) {

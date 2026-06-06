@@ -315,6 +315,9 @@ class Lock extends Admin
             try {
 
                 if ($reslookdata) {
+                    if (\app\module\lockServer\Lock::checkCamString($reslookdata['lock_sn'])) {
+                        return json(['status' => '01', 'msg' => '摄像头设备不支持开门测试，请在小程序摄像头页面操作']);
+                    }
                     $result = \app\module\lockServer\Lock::OpenLock($reslookdata);
 
                     $data['user_id'] = $reslookdata['user_id'];
@@ -328,7 +331,7 @@ class Lock extends Admin
                     } else {
                         $data['status'] = 0;
                         $rel = \xhadmin\service\admin\LockLogService::add($data);
-                        return json(['status' => '00', 'msg' => $result['state_msg']]);
+                        return json(['status' => '01', 'msg' => $result['state_msg']]);
                     }
                 }
             } catch (\Exception $e) {
@@ -350,6 +353,23 @@ class Lock extends Admin
             try {
 
                 if ($reslookdata) {
+                    if (\app\module\lockServer\Lock::checkCamString($reslookdata['lock_sn'])) {
+                        $controlCount = Db::name('cam_remote_control')
+                            ->where(['device_sn' => strtoupper((string)$reslookdata['lock_sn'])])
+                            ->whereNull('deleted_at')
+                            ->count();
+                        return json([
+                            'status' => '00',
+                            'msg' => '摄像头设备信息读取成功',
+                            'data' => [
+                                'device_type' => 'camera',
+                                'lock_id' => $reslookdata['lock_id'],
+                                'lock_name' => $reslookdata['lock_name'],
+                                'device_sn' => $reslookdata['lock_sn'],
+                                'remote_control_count' => $controlCount,
+                            ],
+                        ]);
+                    }
                     $result = HardwareCloud::Accesscontrol()::GetInfo($reslookdata["lock_sn"]);
                     if ($result['code'] == 0) {
                         return json($result);
@@ -376,19 +396,43 @@ class Lock extends Admin
             try {
 
                 if ($reslookdata) {
-                    if (mb_substr($reslookdata['lock_sn'], 0, 2) == "W7") {
-                        $result = HardwareCloud::App()->Register($reslookdata["lock_sn"]);
-                        print_r($result);
-                        return json(['status' => '00', 'msg' => $result['msg']]);
+                    $lockSn = strtoupper((string)$reslookdata['lock_sn']);
+                    if (\app\module\lockServer\Lock::checkCamString($lockSn)) {
+                        $exists = Db::name('cam_remote_control')
+                            ->where(['device_sn' => $lockSn])
+                            ->whereNull('deleted_at')
+                            ->find();
+                        if (!$exists) {
+                            Db::name('cam_remote_control')->insert([
+                                'device_sn' => $lockSn,
+                                'title' => '遥控器',
+                                'member_id' => $reslookdata['member_id'] ?? null,
+                                'created_at' => time(),
+                            ]);
+                        }
+                        $result = HardwareCloud::KGCamera()::Register($lockSn);
+                        if (!empty($result['err'])) {
+                            return json(['status' => '01', 'msg' => $result['err']]);
+                        }
+                        return json(['status' => '00', 'msg' => $result['msg'] ?? '摄像头绑定信息已刷新']);
+                    } elseif (mb_substr($lockSn, 0, 2) == "W7") {
+                        $result = HardwareCloud::App()->Register($lockSn);
+                        if (!empty($result['err'])) {
+                            return json(['status' => '01', 'msg' => $result['err']]);
+                        }
+                        return json(['status' => '00', 'msg' => $result['msg'] ?? '设备绑定信息已刷新']);
                     } else {
-                        $result = wmjHandle($reslookdata['lock_sn'], 'postlock');
-                        return json(['status' => '00', 'msg' => $result['state_msg']]);
+                        $result = wmjHandle($lockSn, 'postlock');
+                        $msg = $result['state_msg'] ?? $result['msg'] ?? '设备绑定信息已刷新';
+                        $status = !empty($result['state']) || ($result['status'] ?? '') === '00' ? '00' : '01';
+                        return json(['status' => $status, 'msg' => $msg]);
                     }
 
 
                 }
+                return json(['status' => '01', 'msg' => '设备不存在或已删除']);
             } catch (\Exception $e) {
-                $this->error($e->getMessage());
+                return json(['status' => '01', 'msg' => $e->getMessage()]);
             }
         }
     }
@@ -510,4 +554,3 @@ class Lock extends Admin
 
 
 }
-

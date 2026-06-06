@@ -1,0 +1,116 @@
+.content {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f7e0da 0%, #dcc6c1 100%);
+}
+
+.big-box {
+    height: 100%;
+}
+
+.big-box .background {
+    width: 100%;
+    height: 352rpx;
+    background: rgb(255, 111, 82);
+    opacity: 0.2;
+    box-shadow: 0px 8rpx 374rpx rgb(58, 137, 254);
+    filter: blur(120rpx);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.big-box .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+}
+
+.big-box .content .top-box {
+    flex: 1;
+    margin: 0 30rpx;
+}
+
+.big-box .content .top-box .cell-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 140rpx;
+    background: linear-gradient(180.00deg, rgb(255, 255, 255), rgba(255, 255, 255, 0.4) 100%);
+    box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.2);
+    border-radius: 24rpx;
+    margin-top: 36rpx;
+    padding: 0 50rpx;
+    overflow: hidden;
+}
+
+.big-box .content .top-box .cell-item image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.big-box .content .top-box .cell-item .label {
+    font-size: 28rpx;
+    flex-shrink: 0;
+}
+
+.big-box .content .top-box .cell-item input {
+    text-align: right;
+    font-size: 28rpx;
+    flex: 1;
+    margin-left: 30rpx;
+    height: 100%;
+}
+
+.big-box .content .top-box .cell-item .flex-box {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+    margin-right: 40rpx;
+}
+
+.big-box .content .top-box .cell-item .flex-box input {
+    text-align: left !important;
+    width: 100%;
+}
+
+.big-box .content .top-box .cell-item .right-box {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.big-box .content .top-box .cell-item .right-box .text {
+    margin-right: 30rpx;
+    font-size: 28rpx;
+}
+
+.big-box .content .top-box .cell-item .right-box image {
+    width: 16rpx;
+    height: 22rpx;
+}
+
+.big-box .content .bottom-btn {
+    margin: 0 30rpx 60rpx;
+    height: 90rpx;
+    background: #ff6f52;
+    box-shadow: 16rpx 16rpx 66rpx rgba(117, 160, 232, 0.3);
+    border-radius: 100rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28rpx;
+    color: #fff;
+}
+
+/* 注意：微信小程序中可能不支持 ::v-deep 选择器 */
+.placeholder {
+    font-size: 28rpx;
+    color: #999999;
+}

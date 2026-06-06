@@ -16,7 +16,7 @@ return [
 
     // 应用地址
     'app_host'         => Env::get('app.host', ''),
-    'app_debug' => true,
+    'app_debug' => Env::get('app.debug', Env::get('app_debug', false)),
     // 应用的命名空间
     'app_namespace'    => '',
 
@@ -77,4 +77,3 @@ return [
     // 显示错误信息
     'show_error_msg'   => true
 ];
-

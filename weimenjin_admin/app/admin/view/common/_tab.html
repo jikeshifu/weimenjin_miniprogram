@@ -5,12 +5,12 @@
         <ul class="nav" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
-                     <span><img alt="image" class="img-circle" src="{:config('xhadmin.site_logo')}" width="64px" height="64px"/></span>
+                     <span><img alt="image" class="img-circle" src="{:config('xhadmin.site_logo') ?: '/static/img/head.jpg'}" width="64px" height="64px" onerror="this.onerror=null;this.src='/static/img/head.jpg';"/></span>
 
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear">
                        <span class="block m-t-xs"><strong class="font-bold">{:session('admin.username')} </strong></span>
-                       
+
                         </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -21,9 +21,9 @@
                 <div class="logo-element">
                 </div>
             </li>
-            
+
             {volist name='menus' id='pmenu'}
-                {empty name='pmenu.sub'}				    
+                {empty name='pmenu.sub'}
 					{if condition ="in_array($pmenu.access_url,session('admin.nodes')) || session('admin.role') eq 1 "}
 					<li>
 						<a class="J_menuItem" href="{$pmenu.url}" name="tabMenuItem">
@@ -31,7 +31,7 @@
 							<span class="nav-label">{$pmenu.title}</span>
 						</a>
 					</li>
-					{/if}					
+					{/if}
                 {else}
 				{if condition ="in_array($pmenu.access_url,session('admin.nodes')) || session('admin.role') eq 1 "}
 				<li>
@@ -63,7 +63,7 @@
 											<li><a class="J_menuItem" href="{$thirdmenu.url}">{$thirdmenu.title}<i class="{$thirdmenu.icon} nav-icon"></i></a></li>
 											{/if}
 										{/volist}
-										
+
 									</ul>
 								</li>
 								{/if}
@@ -74,7 +74,7 @@
 				{/if}
 				{/empty}
             {/volist}
-			
+
 
         </ul>
     </div>

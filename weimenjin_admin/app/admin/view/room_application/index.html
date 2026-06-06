@@ -1,0 +1,581 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>房间绑定申请</h5>
+                <div style="float:right; margin-top:-10px;">
+                    <button title="批量导入" type="button" class="btn btn-primary btn-outline" onclick="RoomApplicationTable.showImportDialog()">
+                        <i class="fa fa-upload"></i> 批量导入
+                    </button>
+                    <button title="下载模板" type="button" class="btn btn-success btn-outline" onclick="RoomApplicationTable.downloadTemplate()">
+                        <i class="fa fa-download"></i> 下载模板
+                    </button>
+                    <button title="刷新页面" type="button" class="btn btn-default btn-outline" onclick="window.location.reload()">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row" id="searchGroup">
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">状态</button>
+                                    </div>
+                                    <select class="form-control" id="status">
+                                        <option value="">全部状态</option>
+                                        <option value="0">待审核</option>
+                                        <option value="1">已通过</option>
+                                        <option value="2">已拒绝</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">区域</button>
+                                    </div>
+                                    <select class="form-control" id="areaId">
+                                        <option value="">全部区域</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">楼栋</button>
+                                    </div>
+                                    <select class="form-control" id="buildingId">
+                                        <option value="">全部楼栋</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="searchGroup2" style="margin-top:10px;">
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">单元</button>
+                                    </div>
+                                    <select class="form-control" id="unitId">
+                                        <option value="">全部单元</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">房号</button>
+                                    </div>
+                                    <select class="form-control" id="roomId">
+                                        <option value="">全部房间</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">用户类型</button>
+                                    </div>
+                                    <select class="form-control" id="hasKeys">
+                                        <option value="">全部用户</option>
+                                        <option value="1">已有钥匙</option>
+                                        <option value="0">未激活</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">关键词</button>
+                                    </div>
+                                    <input type="text" class="form-control" id="keyword" placeholder="姓名/手机号/房号" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-primary" onclick="RoomApplicationTable.search()">
+                                    <i class="fa fa-search"></i> 搜索
+                                </button>
+                                <button type="button" class="btn btn-default" onclick="RoomApplicationTable.reset()">
+                                    <i class="fa fa-refresh"></i> 重置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="example-wrap">
+                    <div class="example">
+                        <table id="RoomApplicationTable" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+// URL配置
+var detailUrl = '/admin/RoomApplication/detail';
+var auditUrl = '/admin/RoomApplication/audit';
+
+$(function(){
+    console.log('====== 房间申请列表初始化 ======');
+
+    RoomApplicationTable.init();
+    RoomApplicationTable.loadAreas();
+    RoomApplicationTable.bindEvents();
+});
+
+var RoomApplicationTable = {
+    init: function(){
+        var _this = this;
+        console.log('初始化Bootstrap Table');
+
+        $('#RoomApplicationTable').bootstrapTable({
+            url: '{:url("index")}',
+            method: 'post',
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            pagination: true,
+            sidePagination: 'server',
+            pageSize: 20,
+            pageList: [10, 20, 30, 50],
+                queryParams: function(params){
+                console.log('请求参数:', params);
+                return {
+                    limit: params.limit,
+                    offset: params.offset,
+                    status: $('#status').val(),
+                    area_id: $('#areaId').val(),
+                    building_id: $('#buildingId').val(),
+                    unit_id: $('#unitId').val(),
+                    room_id: $('#roomId').val(),
+                    has_keys: $('#hasKeys').val(),
+                    keyword: $('#keyword').val()
+                };
+            },
+            responseHandler: function(res){
+                console.log('接收到的数据:', res);
+                console.log('数据条数:', res.data ? res.data.length : 0);
+                if (res.data && res.data.length > 0) {
+                    console.log('第一条数据:', res.data[0]);
+                }
+                return {
+                    total: res.count || 0,
+                    rows: res.data || []
+                };
+            },
+            onLoadSuccess: function(data){
+                console.log('表格渲染成功');
+                console.log('总数:', data.total);
+                console.log('数据条数:', data.rows ? data.rows.length : 0);
+            },
+            onLoadError: function(status, res){
+                console.error('表格加载失败:', status, res);
+            },
+            columns: [
+                {field: 'application_id', title: 'ID', width: 80, sortable: true},
+                {field: 'applicant_name', title: '申请人', width: 120},
+                {field: 'applicant_phone', title: '手机号', width: 130},
+                {field: 'area_name', title: '区域', width: 120},
+                {field: 'building_name', title: '楼栋', width: 120},
+                {field: 'unit_name', title: '单元', width: 100},
+                {field: 'room_number', title: '房号', width: 100},
+                {
+                    field: 'relation_type',
+                    title: '关系',
+                    width: 100,
+                    formatter: function(value, row, index){
+                        var relations = {owner: '业主', tenant: '租户', family: '家人', employee: '员工', other: '其他'};
+                        return relations[value] || value;
+                    }
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    width: 100,
+                    formatter: function(value, row, index){
+                        var statusMap = {
+                            0: '<span class="label label-warning">待审核</span>',
+                            1: '<span class="label label-success">已通过</span>',
+                            2: '<span class="label label-danger">已拒绝</span>'
+                        };
+                        return statusMap[value] || value;
+                    }
+                },
+                {
+                    field: 'create_time',
+                    title: '申请时间',
+                    width: 160,
+                    formatter: function(value, row, index){
+                        return RoomApplicationTable.formatTime(value);
+                    }
+                },
+                {
+                    field: 'operate',
+                    title: '操作',
+                    width: 200,
+                    formatter: function(value, row, index){
+                        var html = '<a class="btn btn-primary btn-xs" onclick="RoomApplicationTable.viewDetail(' + row.application_id + ')"><i class="fa fa-eye"></i> 查看</a> ';
+                        if (row.status == 0) {
+                            html += '<a class="btn btn-success btn-xs" onclick="RoomApplicationTable.audit(' + row.application_id + ', 1)"><i class="fa fa-check"></i> 通过</a> ';
+                            html += '<a class="btn btn-danger btn-xs" onclick="RoomApplicationTable.audit(' + row.application_id + ', 2)"><i class="fa fa-times"></i> 拒绝</a> ';
+                        }
+                        html += '<a class="btn btn-warning btn-xs" onclick="RoomApplicationTable.deleteBinding(' + row.application_id + ')"><i class="fa fa-trash"></i> 删除</a>';
+                        return html;
+                    }
+                }
+            ]
+        });
+    },
+
+    search: function(){
+        console.log('搜索参数:', {status: $('#status').val(), keyword: $('#keyword').val()});
+        $('#RoomApplicationTable').bootstrapTable('refresh');
+    },
+
+    reset: function(){
+        $('#status').val('');
+        $('#areaId').val('');
+        $('#buildingId').val('').html('<option value="">全部楼栋</option>');
+        $('#unitId').val('').html('<option value="">全部单元</option>');
+        $('#roomId').val('').html('<option value="">全部房间</option>');
+        $('#hasKeys').val('');
+        $('#keyword').val('');
+        this.search();
+    },
+
+    loadAreas: function(){
+        var _this = this;
+        $.get('/admin/RoomApplication/getAreaList', function(res){
+            if (res.status == '00' && res.data) {
+                var html = '<option value="">全部区域</option>';
+                res.data.forEach(function(item){
+                    html += '<option value="' + item.area_id + '">' + item.area_name + '</option>';
+                });
+                $('#areaId').html(html);
+
+                // 区域变化时加载楼栋并自动搜索
+                $('#areaId').off('change').on('change', function(){
+                    var areaId = $(this).val();
+                    $('#buildingId').val('').html('<option value="">全部楼栋</option>');
+                    $('#unitId').val('').html('<option value="">全部单元</option>');
+                    $('#roomId').val('').html('<option value="">全部房间</option>');
+                    if (areaId) {
+                        _this.loadBuildings(areaId);
+                    }
+                    // 自动触发搜索
+                    _this.search();
+                });
+            }
+        });
+    },
+
+    loadBuildings: function(areaId){
+        var _this = this;
+        $.get('/admin/RoomApplication/getBuildingList', {area_id: areaId}, function(res){
+            if (res.status == '00' && res.data) {
+                var html = '<option value="">全部楼栋</option>';
+                res.data.forEach(function(item){
+                    html += '<option value="' + item.building_id + '">' + item.building_name + '</option>';
+                });
+                $('#buildingId').html(html);
+
+                // 楼栋变化时加载单元并自动搜索
+                $('#buildingId').off('change').on('change', function(){
+                    var buildingId = $(this).val();
+                    $('#unitId').val('').html('<option value="">全部单元</option>');
+                    $('#roomId').val('').html('<option value="">全部房间</option>');
+                    if (buildingId) {
+                        _this.loadUnits(buildingId);
+                    }
+                    // 自动触发搜索
+                    _this.search();
+                });
+            }
+        });
+    },
+
+    loadUnits: function(buildingId){
+        var _this = this;
+        $.get('/admin/RoomApplication/getUnitList', {building_id: buildingId}, function(res){
+            if (res.status == '00' && res.data) {
+                var html = '<option value="">全部单元</option>';
+                res.data.forEach(function(item){
+                    html += '<option value="' + item.unit_id + '">' + item.unit_name + '</option>';
+                });
+                $('#unitId').html(html);
+
+                // 单元变化时加载房间并自动搜索
+                $('#unitId').off('change').on('change', function(){
+                    var unitId = $(this).val();
+                    $('#roomId').val('').html('<option value="">全部房间</option>');
+                    if (unitId) {
+                        _this.loadRooms(unitId);
+                    }
+                    // 自动触发搜索
+                    _this.search();
+                });
+            }
+        });
+    },
+
+    loadRooms: function(unitId){
+        var _this = this;
+        $.get('/admin/RoomApplication/getRoomList', {unit_id: unitId}, function(res){
+            if (res.status == '00' && res.data) {
+                var html = '<option value="">全部房间</option>';
+                res.data.forEach(function(item){
+                    html += '<option value="' + item.room_id + '">' + item.room_number + '</option>';
+                });
+                $('#roomId').html(html);
+
+                // 房间变化时自动搜索
+                $('#roomId').off('change').on('change', function(){
+                    _this.search();
+                });
+            }
+        });
+    },
+
+    bindEvents: function(){
+        var _this = this;
+
+        // 状态下拉框自动触发搜索
+        $('#status').off('change').on('change', function(){
+            _this.search();
+        });
+
+        // 用户类型下拉框自动触发搜索
+        $('#hasKeys').off('change').on('change', function(){
+            _this.search();
+        });
+
+        // 关键词输入框支持回车键搜索
+        $('#keyword').off('keypress').on('keypress', function(e){
+            if (e.which == 13) {
+                _this.search();
+                return false;
+            }
+        });
+    },
+
+    viewDetail: function(applicationId){
+        layer.open({
+            type: 2,
+            title: '申请详情',
+            shadeClose: true,
+            shade: 0.3,
+            maxmin: true,
+            area: ['800px', '90%'],
+            content: detailUrl + '?application_id=' + applicationId
+        });
+    },
+
+    audit: function(applicationId, status){
+        var title = status == 1 ? '通过' : '拒绝';
+        var actionText = status == 1 ? '通过' : '拒绝';
+
+        // 使用layer.confirm而不是layer.prompt，更兼容
+        layer.confirm('确定要' + actionText + '这个申请吗？<br><br><textarea id="auditRemark" placeholder="审核备注（选填）" style="width:100%;height:80px;padding:5px;border:1px solid #ddd;border-radius:3px;"></textarea>', {
+            icon: status == 1 ? 3 : 5,
+            title: '审核确认',
+            btn: [actionText, '取消']
+        }, function(index){
+            var remark = $('#auditRemark').val();
+            layer.close(index);
+
+            // 显示加载中
+            var loadingIndex = layer.load(1, {shade: [0.3, '#fff']});
+
+            $.post(auditUrl, {
+                application_id: applicationId,
+                status: status,
+                audit_remark: remark || ''
+            }, function(res){
+                layer.close(loadingIndex);
+                if (res.status == '00') {
+                    layer.msg('审核成功', {icon: 1});
+                    setTimeout(function(){
+                        $('#RoomApplicationTable').bootstrapTable('refresh');
+                    }, 500);
+                } else {
+                    layer.alert(res.msg || '审核失败', {icon: 2});
+                }
+            }).fail(function(xhr, status, error){
+                layer.close(loadingIndex);
+                layer.alert('网络错误：' + error, {icon: 2});
+            });
+        });
+    },
+
+    deleteBinding: function(applicationId){
+        layer.confirm('确定要删除此房间绑定吗？<br><br><span style="color:red;">注意：删除后将同时移除用户的房间绑定和设备授权！</span>', {
+            icon: 0,
+            title: '删除确认',
+            btn: ['确定删除', '取消']
+        }, function(index){
+            layer.close(index);
+
+            // 显示加载中
+            var loadingIndex = layer.load(1, {shade: [0.3, '#fff']});
+
+            $.ajax({
+                url: '/admin/RoomApplication/deleteBinding',
+                type: 'POST',
+                data: {application_id: applicationId},
+                dataType: 'json',
+                success: function(res){
+                    layer.close(loadingIndex);
+                    console.log('删除响应:', res);
+                    if (res.status == '00') {
+                        layer.msg('删除成功', {icon: 1, time: 1500});
+                        setTimeout(function(){
+                            $('#RoomApplicationTable').bootstrapTable('refresh');
+                        }, 500);
+                    } else {
+                        var errorMsg = res.msg || '删除失败，未知错误';
+                        console.error('删除失败:', errorMsg);
+                        layer.alert('<div style="max-height:400px;overflow-y:auto;">' +
+                            '<strong>删除失败</strong><br><br>' + errorMsg + '</div>', {
+                            icon: 2,
+                            title: '错误提示',
+                            area: ['500px', 'auto']
+                        });
+                    }
+                },
+                error: function(xhr, status, error){
+                    layer.close(loadingIndex);
+                    console.error('请求错误:', xhr, status, error);
+                    var errorDetail = '网络错误：' + error;
+                    if (xhr.responseText) {
+                        try {
+                            var errRes = JSON.parse(xhr.responseText);
+                            errorDetail += '<br><br>详细信息：' + (errRes.msg || errRes.message || xhr.responseText.substring(0, 200));
+                        } catch(e) {
+                            errorDetail += '<br><br>响应内容：' + xhr.responseText.substring(0, 200);
+                        }
+                    }
+                    layer.alert('<div style="max-height:400px;overflow-y:auto;">' + errorDetail + '</div>', {
+                        icon: 2,
+                        title: '请求失败',
+                        area: ['500px', 'auto']
+                    });
+                }
+            });
+        });
+    },
+
+    formatTime: function(timestamp){
+        if (!timestamp) return '-';
+        var date = new Date(timestamp * 1000);
+        return date.getFullYear() + '-' +
+               ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+               ('0' + date.getDate()).slice(-2) + ' ' +
+               ('0' + date.getHours()).slice(-2) + ':' +
+               ('0' + date.getMinutes()).slice(-2);
+    },
+
+    showImportDialog: function(){
+        // 重置文件选择框
+        $('#importFile').val('');
+
+        layer.open({
+            type: 1,
+            title: '批量导入房间绑定',
+            area: ['600px', 'auto'],
+            shade: 0,
+            content: $('#importDialog'),
+            btn: ['开始导入', '取消'],
+            yes: function(index, layero){
+                RoomApplicationTable.doImport(index);
+            }
+        });
+    },
+
+    doImport: function(layerIndex){
+        var fileInput = document.getElementById('importFile');
+        if (!fileInput.files || fileInput.files.length === 0) {
+            layer.msg('请选择文件', {icon: 2});
+            return;
+        }
+
+        var file = fileInput.files[0];
+        var fileName = file.name;
+        var fileExt = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+
+        if (fileExt !== '.csv' && fileExt !== '.xls' && fileExt !== '.xlsx') {
+            layer.msg('请选择CSV或Excel文件（.csv、.xls、.xlsx）', {icon: 2});
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('file', file);
+
+        layer.close(layerIndex);
+        var loadingIndex = layer.load(1, {shade: [0.3, '#fff']});
+
+        $.ajax({
+            url: '/admin/RoomApplication/importExcel',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(res){
+                layer.close(loadingIndex);
+                if (res.status == '00') {
+                    var msg = '导入完成！<br>成功：' + res.data.success + ' 条';
+                    if (res.data.skipped > 0) {
+                        msg += '<br>跳过：' + res.data.skipped + ' 条（已存在）';
+                    }
+                    if (res.data.failed > 0) {
+                        msg += '<br>失败：' + res.data.failed + ' 条';
+                    }
+                    if (res.data.errors && res.data.errors.length > 0) {
+                        msg += '<br><br>错误详情：<br>' + res.data.errors.join('<br>');
+                    }
+
+                    layer.alert(msg, {icon: 1}, function(index){
+                        layer.close(index);
+                        $('#RoomApplicationTable').bootstrapTable('refresh');
+                    });
+                } else {
+                    layer.alert(res.msg || '导入失败', {icon: 2});
+                }
+            },
+            error: function(xhr, status, error){
+                layer.close(loadingIndex);
+                layer.alert('上传失败：' + error, {icon: 2});
+            }
+        });
+    },
+
+    downloadTemplate: function(){
+        window.location.href = '/admin/RoomApplication/downloadTemplate';
+    }
+};
+</script>
+
+<!-- 导入对话框（隐藏） -->
+<div id="importDialog" style="display:none; padding:20px;">
+    <div class="form-group">
+        <label>选择文件：</label>
+        <input type="file" id="importFile" accept=".csv,.xls,.xlsx" class="form-control" />
+    </div>
+    <div class="alert alert-info">
+        <strong>导入说明：</strong><br>
+        1. 请先下载CSV模板，按格式填写数据（也支持Excel格式）<br>
+        2. <strong>支持自动创建：</strong>区域、楼栋、单元不存在时会自动创建<br>
+        3. <strong>智能去重：</strong>相同手机号自动合并，已绑定房间自动跳过<br>
+        4. <strong>自动授权：</strong>导入后自动审核通过并授予设备钥匙<br>
+        5. <strong>用户激活：</strong>用户在小程序绑定手机号后自动获得权限<br>
+        6. <strong>数据安全：</strong>支持事务回滚，导入失败不影响现有数据
+    </div>
+</div>
+{/block}

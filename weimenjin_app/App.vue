@@ -12,7 +12,11 @@
       if (qrstr) {
         let url = decodeURIComponent(qrstr); // 解析二维码中的 URL
         let lock_ids = getQueryString(url).lock_id;
+        let relay_num = getQueryString(url).relay_num;
         uni.setStorageSync('qrcodeLockId', lock_ids); // 存储锁 ID
+        if (relay_num) {
+          uni.setStorageSync('qrcodeRelayNum', relay_num); // 存储继电器路数
+        }
       }
       // #endif
 
@@ -22,7 +26,11 @@
         let qrstr = option.query ? option.query.q : '';
         if (qrstr) {
           let lock_ids = getQueryString(qrstr).lock_id;
+          let relay_num = getQueryString(qrstr).relay_num;
           uni.setStorageSync('qrcodeLockId', lock_ids); // 存储锁 ID
+          if (relay_num) {
+            uni.setStorageSync('qrcodeRelayNum', relay_num); // 存储继电器路数
+          }
         }
       }
       // #endif
@@ -33,7 +41,11 @@
       if (qrstr) {
         let url = decodeURIComponent(qrstr);
         let lock_ids = getQueryString(url).lock_id;
+        let relay_num = getQueryString(url).relay_num;
         uni.setStorageSync('qrcodeLockId', lock_ids);
+        if (relay_num) {
+          uni.setStorageSync('qrcodeRelayNum', relay_num);
+        }
       }
       // #endif
 
@@ -45,12 +57,14 @@
     onShow: function () {
       // 清除二维码锁定 ID
       uni.removeStorageSync('qrcodeLockId');
+      uni.removeStorageSync('qrcodeRelayNum');
     },
 
     // 小程序隐藏时执行的逻辑
     onHide: function () {
       // 清除缓存信息
       uni.removeStorageSync('qrcodeLockId');
+      uni.removeStorageSync('qrcodeRelayNum');
     },
 
     methods: {

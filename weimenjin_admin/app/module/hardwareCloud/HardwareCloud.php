@@ -7,6 +7,7 @@ namespace app\module\hardwareCloud;
 use app\module\hardwareCloud\deivce\airSwitch;
 use app\module\hardwareCloud\deivce\face;
 use app\module\hardwareCloud\deivce\horn;
+use app\module\hardwareCloud\deivce\kgCamera;
 use app\module\hardwareCloud\deivce\lockSwitch;
 use app\module\hardwareCloud\deivce\wifiLock;
 use app\module\hardwareCloud\deivce\accesscontrol;
@@ -35,5 +36,8 @@ class HardwareCloud
     }
     static function Accesscontrol(){
         return new accesscontrol();
+    }
+    static function KGCamera(){
+        return new kgCamera();
     }
 }
