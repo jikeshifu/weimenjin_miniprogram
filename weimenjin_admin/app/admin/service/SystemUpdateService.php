@@ -11,13 +11,14 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.13';
+    private const DEFAULT_VERSION = '2026.06.06.14';
 
     private static array $preserveFiles = [
         '.env',
         'env',
         'weimenjin_admin/.env',
         'weimenjin_admin/env',
+        'config/database.php',
         'weimenjin_admin/config/database.php',
     ];
 
@@ -25,6 +26,10 @@ class SystemUpdateService
         '.git',
         'runtime',
         'backup',
+        'public/upload',
+        'public/uploads',
+        'public/qrdata',
+        'extend/utils/wechart/zcerts',
         'weimenjin_admin/runtime',
         'weimenjin_admin/public/upload',
         'weimenjin_admin/public/uploads',
@@ -76,15 +81,16 @@ class SystemUpdateService
             $archive = self::downloadPackage($manifest);
             $extractDir = self::extractPackage($archive);
             $packageRoot = self::locatePackageRoot($extractDir);
+            $layout = self::installLayout();
 
             $backup = [
                 'code' => self::backupCode(),
                 'database' => self::backupDatabase(),
             ];
 
-            self::applyPackage($packageRoot, self::projectRoot());
+            self::applyPackage($packageRoot, $layout['target'], $layout['strip_admin_prefix']);
             $sqlResult = self::runDatabaseUpgrade($packageRoot, $manifest);
-            self::applyDeletePaths($manifest);
+            self::applyDeletePaths($manifest, $layout);
             self::markInstalled((string) ($manifest['version'] ?? ''), (string) ($manifest['_manifest_url'] ?? ''));
             self::clearRuntime();
 
@@ -200,14 +206,21 @@ class SystemUpdateService
 
     private static function locatePackageRoot(string $extractDir): string
     {
-        if (is_dir($extractDir . '/weimenjin_admin') || is_dir($extractDir . '/weimenjin_app')) {
+        if (self::isPackageRoot($extractDir)) {
             return $extractDir;
         }
         $items = array_values(array_filter(glob($extractDir . '/*'), 'is_dir'));
-        if (count($items) === 1 && (is_dir($items[0] . '/weimenjin_admin') || is_dir($items[0] . '/weimenjin_app'))) {
+        if (count($items) === 1 && self::isPackageRoot($items[0])) {
             return $items[0];
         }
-        throw new \RuntimeException('更新包目录结构不正确，根目录需包含 weimenjin_admin 或 weimenjin_app');
+        throw new \RuntimeException('更新包目录结构不正确，根目录需包含 weimenjin_admin、weimenjin_app 或后台 app/config/public 目录');
+    }
+
+    private static function isPackageRoot(string $dir): bool
+    {
+        return is_dir($dir . '/weimenjin_admin')
+            || is_dir($dir . '/weimenjin_app')
+            || self::isBackendRoot($dir);
     }
 
     private static function backupCode(): string
@@ -278,7 +291,7 @@ class SystemUpdateService
         return "'" . str_replace(["\\", "'", "\0", "\n", "\r", "\x1a"], ["\\\\", "\\'", "\\0", "\\n", "\\r", "\\Z"], (string) $value) . "'";
     }
 
-    private static function applyPackage(string $source, string $target): void
+    private static function applyPackage(string $source, string $target, bool $stripAdminPrefix = false): void
     {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
@@ -286,6 +299,10 @@ class SystemUpdateService
         );
         foreach ($iterator as $item) {
             $relative = self::normalizeRelative(substr($item->getPathname(), strlen($source) + 1));
+            $relative = self::mapPackageRelative($relative, $stripAdminPrefix);
+            if ($relative === '') {
+                continue;
+            }
             if (self::shouldPreserve($relative)) {
                 continue;
             }
@@ -391,14 +408,16 @@ class SystemUpdateService
         return $statements;
     }
 
-    private static function applyDeletePaths(array $manifest): void
+    private static function applyDeletePaths(array $manifest, ?array $layout = null): void
     {
+        $layout = $layout ?: self::installLayout();
         foreach (($manifest['delete_paths'] ?? []) as $path) {
             $relative = self::normalizeRelative((string) $path);
+            $relative = self::mapPackageRelative($relative, $layout['strip_admin_prefix']);
             if ($relative === '' || self::shouldPreserve($relative)) {
                 continue;
             }
-            $target = self::projectRoot() . $relative;
+            $target = $layout['target'] . $relative;
             if (is_dir($target)) {
                 self::removeDir($target);
             } elseif (is_file($target)) {
@@ -443,14 +462,48 @@ class SystemUpdateService
 
     private static function projectRoot(): string
     {
+        return self::installLayout()['target'];
+    }
+
+    private static function installLayout(): array
+    {
         $root = rtrim(root_path(), '/\\') . DIRECTORY_SEPARATOR;
-        if (basename(rtrim($root, '/\\')) === 'weimenjin_admin') {
-            $parent = dirname(rtrim($root, '/\\')) . DIRECTORY_SEPARATOR;
+        $rootNoSlash = rtrim($root, '/\\');
+        $parent = dirname($rootNoSlash) . DIRECTORY_SEPARATOR;
+
+        if (basename($rootNoSlash) === 'weimenjin_admin') {
             if (is_dir($parent . 'weimenjin_admin') || is_dir($parent . 'weimenjin_app')) {
-                return $parent;
+                return ['target' => $parent, 'strip_admin_prefix' => false];
             }
         }
-        return $root;
+
+        if (self::isBackendRoot($rootNoSlash)) {
+            return ['target' => $root, 'strip_admin_prefix' => true];
+        }
+
+        return ['target' => $root, 'strip_admin_prefix' => false];
+    }
+
+    private static function isBackendRoot(string $dir): bool
+    {
+        return is_dir($dir . '/app')
+            && is_dir($dir . '/config')
+            && is_dir($dir . '/public');
+    }
+
+    private static function mapPackageRelative(string $relative, bool $stripAdminPrefix): string
+    {
+        $relative = self::normalizeRelative($relative);
+        if (!$stripAdminPrefix) {
+            return $relative;
+        }
+        if ($relative === 'weimenjin_admin') {
+            return '';
+        }
+        if (str_starts_with($relative, 'weimenjin_admin/')) {
+            return substr($relative, strlen('weimenjin_admin/'));
+        }
+        return $relative;
     }
 
     private static function markInstalled(string $version, string $manifestUrl): void

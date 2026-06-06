@@ -1,9 +1,13 @@
 {
-  "version": "2026.06.06.13",
-  "package_url": "weimenjin_update_20260606_13.zip",
-  "sha256": "c360135742c2f093e2bdc0af4fac8e15599c6477c312100c317d43faeddaf18a",
-  "notes": "恢复后台管理员扫码登录二维码为原有 /qrCodeLogin 规则路径，并增加浏览器兜底提示页，避免已发布普通二维码规则失效。",
-  "force": false,
-  "delete_paths": [],
-  "sql_files": []
+    "version":  "2026.06.06.14",
+    "package_url":  "weimenjin_update_20260606_14.zip",
+    "sha256":  "02b798b363acd849793bb034adf5d50ebe69e2ebb44a2003699bfb4ceb017bbc",
+    "notes":  "优化在线更新目录识别，支持后台单独部署到任意站点目录；更新包同时兼容标准源码目录和单独后台目录。",
+    "force":  false,
+    "delete_paths":  [
+
+                     ],
+    "sql_files":  [
+
+                  ]
 }
