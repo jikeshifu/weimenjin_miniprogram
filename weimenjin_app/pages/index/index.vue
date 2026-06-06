@@ -533,6 +533,7 @@
 	} from '../../libs/utils.js'
 	import LiveTalkClient from '../../module/liveTalk/liveTalkClient.js'
 	import { assetUrl } from '@/config/domain.js'
+	import { loadRuntimeConfig, getRuntimeConfig, buildLiveTalkSession } from '@/config/runtime.js'
 	const LIVE_TALK_REMOTE_AUDIO_MAX_BYTES = 10 * 1024 * 1024
 	export default {
 		components: {
@@ -601,6 +602,7 @@
 				liveTalkPlayingIndex: -1,
 				liveTalkAudioContext: null,
 				liveTalkMp3Url: assetUrl('/audio/wmj.mp3'),
+				runtimeConfig: getRuntimeConfig(),
 				liveTalkMp3Testing: false,
 				liveTalkMp3Previewing: false,
 				longitude: '',
@@ -638,6 +640,7 @@
 			this.dataList = [];
 			this.page = 1;
 			this.getDeviceGroup();
+			this.loadRuntimeConfig();
 
 			// 检查是否是通过二维码登录
 			if (option.q) {
@@ -776,6 +779,14 @@
 			// 其他监听...
 		},
 		methods: {
+			async loadRuntimeConfig() {
+				const config = await loadRuntimeConfig();
+				this.runtimeConfig = config;
+				const defaultAudioUrl = config && config.live_talk ? String(config.live_talk.default_audio_url || '').trim() : '';
+				if (defaultAudioUrl && (!this.liveTalkMp3Url || this.liveTalkMp3Url === assetUrl('/audio/wmj.mp3'))) {
+					this.liveTalkMp3Url = defaultAudioUrl;
+				}
+			},
 			// 初始化发音人列表
 			async initSpeakers() {
 				// 使用默认发音人列表
@@ -1016,8 +1027,12 @@
 				}
 			},
 			isHornLiveTalkCapable(item) {
-				// 开源版暂未提供实时喊话调度服务，避免展示不可用入口。
-				return false;
+				const liveTalk = (this.runtimeConfig && this.runtimeConfig.live_talk) || {};
+				if (!liveTalk.enabled || !item || !item.lock || !item.lock.lock_sn) {
+					return false;
+				}
+				const sn = String(item.lock.lock_sn || '');
+				return sn.startsWith('W70B') || sn.startsWith('W70R');
 			},
 			getLiveTalkButtonText() {
 				if (this.liveTalkState === 'talking') {
@@ -1560,12 +1575,12 @@
 							filePath: replaySource.value,
 							duration: Number(record.duration_ms || 0),
 							chunkSize: 4096,
-							chunkDelayMs: 40,
+							chunkDelayMs: this.getLiveTalkChunkDelayMs(),
 						})
 						: await client.streamMp3(session, {
 							url: preparedReplay && preparedReplay.url ? preparedReplay.url : replaySource.value,
 							chunkSize: 4096,
-							chunkDelayMs: 40,
+							chunkDelayMs: this.getLiveTalkChunkDelayMs(),
 						});
 					const waitMs = this.estimateLiveTalkMp3PlaybackWaitMs(resendRecord);
 					this.liveTalkSession = session;
@@ -1740,8 +1755,8 @@
 				if (res.code !== 0) {
 					throw new Error(res.msg || '创建喊话会话失败');
 				}
-				const session = this.normalizeHornTalkResponse(res);
-				if (!session || !session.app_ws_url) {
+				const session = buildLiveTalkSession(this.normalizeHornTalkResponse(res), this.runtimeConfig);
+				if (!session || (!session.app_ws_url && !session.app_ws_host && !session.public_wss_base)) {
 					throw new Error('调度平台未返回小程序连接地址');
 				}
 				this.liveTalkSession = session;
@@ -1786,6 +1801,10 @@
 				const estimatedMs = Math.ceil((fileSize * 8 * 1000) / 32000) + 2500;
 				return Math.max(4000, Math.min(30000, estimatedMs));
 			},
+			getLiveTalkChunkDelayMs() {
+				const liveTalk = (this.runtimeConfig && this.runtimeConfig.live_talk) || {};
+				return Math.max(0, Number(liveTalk.chunk_delay_ms || 40));
+			},
 			async startLiveTalkMp3Test() {
 				if (!this.isHornLiveTalkCapable(this.hornItem)) {
 					return;
@@ -1823,7 +1842,7 @@
 					const record = await client.streamMp3(session, {
 						url: preparedAudio.url,
 						chunkSize: 4096,
-						chunkDelayMs: 40,
+						chunkDelayMs: this.getLiveTalkChunkDelayMs(),
 					});
 					const waitMs = this.estimateLiveTalkMp3PlaybackWaitMs(record);
 					this.liveTalkSession = session;

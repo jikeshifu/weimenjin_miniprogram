@@ -144,9 +144,6 @@
         "usingComponents" : true,
         "libVersion" : "2.8.1",
         "permission" : {
-            "scope.record" : {
-                "desc" : "实时喊话需要使用麦克风录音，否则无法发送语音"
-            },
             "scope.userLocation" : {
                 "desc" : "小程序将获取您的位置信，否则部分功能不可用"
             }

@@ -113,8 +113,30 @@ return [
     'siteconfig' => [
         'siteurl' => Env::get('site.url', 'https://demo.wmj.com.cn'),
     ],
+    'miniapp' => [
+        'site_url' => Env::get('miniapp.site_url', 'https://demo.wmj.com.cn'),
+        'api_url' => Env::get('miniapp.api_url', 'https://demo.wmj.com.cn/api'),
+        'asset_url' => Env::get('miniapp.asset_url', 'https://demo.wmj.com.cn'),
+        'camweb_url' => Env::get('miniapp.camweb_url', 'https://demo.wmj.com.cn/camweb/'),
+    ],
+    'live_talk' => [
+        'enabled' => Env::get('live_talk.enabled', false),
+        'public_wss_base' => Env::get('live_talk.public_wss_base', ''),
+        'app_ws_protocol' => Env::get('live_talk.app_ws_protocol', 'wss'),
+        'app_ws_host' => Env::get('live_talk.app_ws_host', ''),
+        'app_ws_port' => Env::get('live_talk.app_ws_port', ''),
+        'app_ws_path_prefix' => Env::get('live_talk.app_ws_path_prefix', '/ws/horn/live/app'),
+        'sample_rate' => Env::get('live_talk.sample_rate', 16000),
+        'channels' => Env::get('live_talk.channels', 1),
+        'encode_bitrate' => Env::get('live_talk.encode_bitrate', 64000),
+        'frame_size_kb' => Env::get('live_talk.frame_size_kb', 1),
+        'chunk_delay_ms' => Env::get('live_talk.chunk_delay_ms', 40),
+        'max_duration_sec' => Env::get('live_talk.max_duration_sec', 90),
+        'app_upload_codec' => Env::get('live_talk.app_upload_codec', 'mp3'),
+        'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
+    ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.06.11'),
+        'current_version' => Env::get('update.current_version', '2026.06.06.12'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [

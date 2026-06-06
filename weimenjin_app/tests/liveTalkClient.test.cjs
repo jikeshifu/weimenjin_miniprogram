@@ -526,6 +526,38 @@ async function testStopWaitsForRecorderOnStop() {
 	assert.strictEqual(record.tempFilePath, '/tmp/delayed-live-talk.mp3', 'delayed recorder result should be preserved');
 }
 
+async function testHandleErrorUsesAllowedSocketCloseCode() {
+	const recorderState = { handlers: {}, starts: [], stopCalls: 0 };
+	const socketState = { handlers: {}, sent: [], closed: [] };
+
+	global.uni = {
+		getRecorderManager() {
+			return createRecorder(recorderState);
+		},
+		authorize({ success }) {
+			success();
+		},
+		connectSocket() {
+			const socketTask = createSocketTask(socketState);
+			process.nextTick(() => {
+				socketState.handlers.open && socketState.handlers.open({});
+			});
+			return socketTask;
+		},
+	};
+
+	const LiveTalkClient = loadLiveTalkClient();
+	const client = new LiveTalkClient();
+	await client.start({
+		talk_id: 'talk_007',
+		app_ws_url: 'wss://dispatch.example.com/ws/horn/live/app/talk_007',
+	});
+	client.handleError(new Error('boom'));
+
+	assert.strictEqual(socketState.closed.length, 1, 'handleError should close the socket once');
+	assert.strictEqual(socketState.closed[0].code, 3000, 'error close code should be allowed by mini program WebSocket rules');
+}
+
 async function testStreamFileUploadsLocalRecording() {
 	const socketState = { handlers: {}, sent: [], closed: [] };
 	const fileBytes = new Uint8Array(1800);
@@ -580,6 +612,7 @@ async function main() {
 	await testStreamMp3UsesDetectedBitrateInStartPayload();
 	await testStreamMp3StripsTaggedHeadersBeforeUpload();
 	await testStopWaitsForRecorderOnStop();
+	await testHandleErrorUsesAllowedSocketCloseCode();
 	await testStreamFileUploadsLocalRecording();
 	console.log('liveTalkClient tests passed');
 }

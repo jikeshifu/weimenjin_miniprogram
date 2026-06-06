@@ -4,6 +4,8 @@
 
 use think\facade\Route;
 
+Route::rule('AppConfig/runtime', 'AppConfig/runtime');
+
 Route::rule('LockAuth/getauthlistbymemid', 'LockAuth/getauthlistbymemid')->middleware(['JwtAuth']);	//根据会员id查询钥匙;
 Route::rule('LockLog/getopenlog', 'LockLog/getopenlog')->middleware(['JwtAuth']);	//获取开门日志;
 Route::rule('Locktimes/getopentimes', 'Locktimes/getopentimes')->middleware(['JwtAuth']);	//查询可开门时段;

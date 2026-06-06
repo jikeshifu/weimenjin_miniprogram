@@ -173,7 +173,7 @@ INSERT INTO `cd_appconfig` VALUES (126, 'wmjv2', '微门禁V2接口', 'wmjv2_app
 INSERT INTO `cd_appconfig` VALUES (127, 'wmjv2', '微门禁V2接口', 'wmjv2_appsecret', '', 'string', '微门禁V2硬件appsecret', '2024-10-14 06:11:28', 1, 0, 95, 3);
 INSERT INTO `cd_appconfig` VALUES (128, 'wmjsms', '短信接口', 'wmjsms_lable', '【微门禁】', 'string', '短信签名', '2024-10-14 23:32:23', 1, 0, 93, 3);
 INSERT INTO `cd_appconfig` VALUES (130, 'siteconfig', '站点链接', 'siteurl', 'https://demo.wmj.com.cn', 'string', '站点链接', '2024-11-25 13:40:13', 1, 0, 0, 0);
-INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.11', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
+INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.12', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (132, 'update', '系统更新', 'manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json', 'string', '更新清单地址', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (133, 'login', '登录设置', 'disclaimer_content', '开源免责声明
 本开源版本仅用于学习、研究、演示和二次开发参考，不承诺适用于任何特定业务场景。使用者应自行评估系统功能、数据安全、网络安全、设备兼容性和合规要求。
@@ -184,6 +184,25 @@ INSERT INTO `cd_appconfig` VALUES (133, 'login', '登录设置', 'disclaimer_con
 门禁、开门、摄像头、继电器、开关等远程控制设备涉及人员通行、财产安全和现场设备状态。使用者应确保设备安装、供电、联网、权限分配、日志审计和应急处置符合实际场景要求。
 远程开门、批量授权、设备重绑、摄像头控制等操作可能受到网络延迟、设备离线、云服务异常、权限配置错误、人员误操作等因素影响。由此产生的通行风险、设备误动作、现场安全事件或业务损失，由使用者自行承担。
 请勿将本系统作为唯一安全保障手段。正式使用前应建立线下核验、人工复核、备用通行、权限回收、数据备份和安全巡检机制。', 'string', '登录页免责声明', '2026-06-06 00:00:00', 1, 0, 90, 1);
+
+INSERT INTO `cd_appconfig` VALUES (136, 'miniapp', '小程序运行配置', 'site_url', 'https://demo.wmj.com.cn', 'string', '小程序站点地址', '2026-06-06 00:00:00', 1, 0, 90, 1);
+INSERT INTO `cd_appconfig` VALUES (137, 'miniapp', '小程序运行配置', 'api_url', 'https://demo.wmj.com.cn/api', 'string', '小程序接口地址', '2026-06-06 00:00:00', 1, 0, 90, 2);
+INSERT INTO `cd_appconfig` VALUES (138, 'miniapp', '小程序运行配置', 'asset_url', 'https://demo.wmj.com.cn', 'string', '小程序资源地址', '2026-06-06 00:00:00', 1, 0, 90, 3);
+INSERT INTO `cd_appconfig` VALUES (139, 'miniapp', '小程序运行配置', 'camweb_url', 'https://demo.wmj.com.cn/camweb/', 'string', '摄像头 Web 地址', '2026-06-06 00:00:00', 1, 0, 90, 4);
+INSERT INTO `cd_appconfig` VALUES (140, 'live_talk', '实时对讲配置', 'enabled', '0', 'boolean', '是否启用实时对讲', '2026-06-06 00:00:00', 1, 0, 89, 1);
+INSERT INTO `cd_appconfig` VALUES (141, 'live_talk', '实时对讲配置', 'public_wss_base', '', 'string', '公开 WebSocket 基础地址', '2026-06-06 00:00:00', 1, 0, 89, 2);
+INSERT INTO `cd_appconfig` VALUES (142, 'live_talk', '实时对讲配置', 'app_ws_protocol', 'wss', 'string', 'WebSocket 协议', '2026-06-06 00:00:00', 1, 0, 89, 3);
+INSERT INTO `cd_appconfig` VALUES (143, 'live_talk', '实时对讲配置', 'app_ws_host', '', 'string', 'WebSocket 主机', '2026-06-06 00:00:00', 1, 0, 89, 4);
+INSERT INTO `cd_appconfig` VALUES (144, 'live_talk', '实时对讲配置', 'app_ws_port', '', 'string', 'WebSocket 端口', '2026-06-06 00:00:00', 1, 0, 89, 5);
+INSERT INTO `cd_appconfig` VALUES (145, 'live_talk', '实时对讲配置', 'app_ws_path_prefix', '/ws/horn/live/app', 'string', 'WebSocket 路径前缀', '2026-06-06 00:00:00', 1, 0, 89, 6);
+INSERT INTO `cd_appconfig` VALUES (146, 'live_talk', '实时对讲配置', 'sample_rate', '16000', 'integer', '采样率', '2026-06-06 00:00:00', 1, 0, 89, 7);
+INSERT INTO `cd_appconfig` VALUES (147, 'live_talk', '实时对讲配置', 'channels', '1', 'integer', '声道数', '2026-06-06 00:00:00', 1, 0, 89, 8);
+INSERT INTO `cd_appconfig` VALUES (148, 'live_talk', '实时对讲配置', 'encode_bitrate', '64000', 'integer', '编码码率', '2026-06-06 00:00:00', 1, 0, 89, 9);
+INSERT INTO `cd_appconfig` VALUES (149, 'live_talk', '实时对讲配置', 'frame_size_kb', '1', 'integer', '录音分片大小 KB', '2026-06-06 00:00:00', 1, 0, 89, 10);
+INSERT INTO `cd_appconfig` VALUES (150, 'live_talk', '实时对讲配置', 'chunk_delay_ms', '40', 'integer', '音频分片发送间隔毫秒', '2026-06-06 00:00:00', 1, 0, 89, 11);
+INSERT INTO `cd_appconfig` VALUES (151, 'live_talk', '实时对讲配置', 'max_duration_sec', '90', 'integer', '单次对讲最长秒数', '2026-06-06 00:00:00', 1, 0, 89, 12);
+INSERT INTO `cd_appconfig` VALUES (152, 'live_talk', '实时对讲配置', 'app_upload_codec', 'mp3', 'string', '小程序上传音频编码', '2026-06-06 00:00:00', 1, 0, 89, 13);
+INSERT INTO `cd_appconfig` VALUES (153, 'live_talk', '实时对讲配置', 'default_audio_url', '/audio/wmj.mp3', 'string', '默认测试音频地址', '2026-06-06 00:00:00', 1, 0, 89, 14);
 
 -- ----------------------------
 -- Table structure for cd_application

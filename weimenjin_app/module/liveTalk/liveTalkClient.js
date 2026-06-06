@@ -64,6 +64,14 @@ function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 }
 
+function normalizeSocketCloseCode(code, fallback = 1000) {
+	const normalized = Number(code);
+	if (normalized === 1000 || (normalized >= 3000 && normalized <= 4999)) {
+		return normalized;
+	}
+	return fallback;
+}
+
 function getArrayBufferView(arrayBuffer) {
 	if (!arrayBuffer || typeof arrayBuffer.byteLength !== 'number') {
 		return null;
@@ -1087,7 +1095,7 @@ export default class LiveTalkClient {
 		try {
 			if (this.socketTask) {
 				this.socketTask.close({
-					code: 1011,
+					code: normalizeSocketCloseCode(1011, 3000),
 					reason: 'client_error',
 				});
 			}

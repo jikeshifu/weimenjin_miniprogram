@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.11';
+    private const DEFAULT_VERSION = '2026.06.06.12';
 
     private static array $preserveFiles = [
         '.env',
@@ -463,6 +463,7 @@ class SystemUpdateService
             self::saveAppConfig('update', 'manifest_url', $manifestUrl);
         }
         self::ensureCloudAppConfigs();
+        self::ensureRuntimeAppConfigs();
         Cache::delete('db_configs');
     }
 
@@ -476,7 +477,30 @@ class SystemUpdateService
         self::updateAppConfigSort('wmjv2', 'wmjv2_appsecret', 3);
     }
 
-    private static function insertAppConfigIfMissing(string $module, string $moduleTitle, string $name, string $value, string $description, int $sortOrder, int $groupSortOrder): void
+    private static function ensureRuntimeAppConfigs(): void
+    {
+        self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'site_url', 'https://demo.wmj.com.cn', '小程序站点地址', 90, 1);
+        self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'api_url', 'https://demo.wmj.com.cn/api', '小程序接口地址', 90, 2);
+        self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'asset_url', 'https://demo.wmj.com.cn', '小程序资源地址', 90, 3);
+        self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'camweb_url', 'https://demo.wmj.com.cn/camweb/', '摄像头 Web 地址', 90, 4);
+
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'enabled', '0', '是否启用实时对讲', 89, 1, 'boolean');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'public_wss_base', '', '公开 WebSocket 基础地址', 89, 2);
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'app_ws_protocol', 'wss', 'WebSocket 协议', 89, 3);
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'app_ws_host', '', 'WebSocket 主机', 89, 4);
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'app_ws_port', '', 'WebSocket 端口', 89, 5);
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'app_ws_path_prefix', '/ws/horn/live/app', 'WebSocket 路径前缀', 89, 6);
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'sample_rate', '16000', '采样率', 89, 7, 'integer');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'channels', '1', '声道数', 89, 8, 'integer');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'encode_bitrate', '64000', '编码码率', 89, 9, 'integer');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'frame_size_kb', '1', '录音分片大小 KB', 89, 10, 'integer');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'chunk_delay_ms', '40', '音频分片发送间隔毫秒', 89, 11, 'integer');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'max_duration_sec', '90', '单次对讲最长秒数', 89, 12, 'integer');
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'app_upload_codec', 'mp3', '小程序上传音频编码', 89, 13);
+        self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'default_audio_url', '/audio/wmj.mp3', '默认测试音频地址', 89, 14);
+    }
+
+    private static function insertAppConfigIfMissing(string $module, string $moduleTitle, string $name, string $value, string $description, int $sortOrder, int $groupSortOrder, string $type = 'string'): void
     {
         if (Db::name('appconfig')->where(['module' => $module, 'name' => $name])->find()) {
             return;
@@ -487,7 +511,7 @@ class SystemUpdateService
             'module' => $module,
             'name' => $name,
             'value' => $value,
-            'type' => 'string',
+            'type' => $type,
         ];
         if (in_array('module_name', $columns, true)) {
             $data['module_name'] = $moduleTitle;
