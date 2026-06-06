@@ -1,13 +1,9 @@
 {
-    "version":  "2026.06.06.13",
-    "package_url":  "weimenjin_update_20260606_13.zip",
-    "sha256":  "39a4e15d0ce36cc54f5de1525a05f0e4ba906e2d98a806119387df63d6da1d78",
-    "notes":  "恢复后台管理员扫码登录二维码为原有 /qrCodeLogin 规则路径，并增加浏览器兜底提示页，避免已发布普通二维码规则失效。",
-    "force":  false,
-    "delete_paths":  [
-
-                     ],
-    "sql_files":  [
-
-                  ]
+  "version": "2026.06.06.13",
+  "package_url": "weimenjin_update_20260606_13.zip",
+  "sha256": "c360135742c2f093e2bdc0af4fac8e15599c6477c312100c317d43faeddaf18a",
+  "notes": "恢复后台管理员扫码登录二维码为原有 /qrCodeLogin 规则路径，并增加浏览器兜底提示页，避免已发布普通二维码规则失效。",
+  "force": false,
+  "delete_paths": [],
+  "sql_files": []
 }
