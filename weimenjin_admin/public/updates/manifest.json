@@ -1,8 +1,8 @@
 {
-    "version":  "2026.06.06.17",
-    "package_url":  "weimenjin_update_20260606_17.zip",
-    "sha256":  "8e166ad9bf86a28d6a3fb18bb86b8159def922b21d4ee122fef70a7f00c3f574",
-    "notes":  "优化在线升级交互，升级过程中显示进度条、阶段状态和等待提示，避免页面看起来卡死。",
+    "version":  "2026.06.06.18",
+    "package_url":  "weimenjin_update_20260606_18.zip",
+    "sha256":  "00ad73e51a7dfcca73d6ccaac068a35f1cf075089ee9dccc7c5dcf5cb05eecab",
+    "notes":  "修复后台左侧栏Logo/头像显示异常，恢复为固定64px头像并增加样式兜底，避免图片撑开侧栏。",
     "force":  false,
     "delete_paths":  [
 

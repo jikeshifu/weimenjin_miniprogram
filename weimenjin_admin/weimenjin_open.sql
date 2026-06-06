@@ -173,7 +173,7 @@ INSERT INTO `cd_appconfig` VALUES (126, 'wmjv2', '微门禁V2接口', 'wmjv2_app
 INSERT INTO `cd_appconfig` VALUES (127, 'wmjv2', '微门禁V2接口', 'wmjv2_appsecret', '', 'string', '微门禁V2硬件appsecret', '2024-10-14 06:11:28', 1, 0, 95, 3);
 INSERT INTO `cd_appconfig` VALUES (128, 'wmjsms', '短信接口', 'wmjsms_lable', '【微门禁】', 'string', '短信签名', '2024-10-14 23:32:23', 1, 0, 93, 3);
 INSERT INTO `cd_appconfig` VALUES (130, 'siteconfig', '站点链接', 'siteurl', 'https://demo.wmj.com.cn', 'string', '站点链接', '2024-11-25 13:40:13', 1, 0, 0, 0);
-INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.17', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
+INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.18', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (132, 'update', '系统更新', 'manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json', 'string', '更新清单地址', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (133, 'login', '登录设置', 'disclaimer_content', '开源免责声明
 本开源版本仅用于学习、研究、演示和二次开发参考，不承诺适用于任何特定业务场景。使用者应自行评估系统功能、数据安全、网络安全、设备兼容性和合规要求。
