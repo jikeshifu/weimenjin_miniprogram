@@ -1,13 +1,13 @@
 {
-    "version":  "2026.06.06.12",
-    "package_url":  "weimenjin_update_20260606_12.zip",
-    "sha256":  "0c7f132e89da60fd94cb1dff99571083b5c3442c9230af85b65a4148952e13d1",
-    "notes":  "新增小程序运行配置接口，后台应用配置可下发小程序站点、摄像头 Web 和实时对讲参数；修复小程序 WebSocket 关闭码和微信 scope.record 配置问题。",
+    "version":  "2026.06.06.13",
+    "package_url":  "weimenjin_update_20260606_13.zip",
+    "sha256":  "39a4e15d0ce36cc54f5de1525a05f0e4ba906e2d98a806119387df63d6da1d78",
+    "notes":  "恢复后台管理员扫码登录二维码为原有 /qrCodeLogin 规则路径，并增加浏览器兜底提示页，避免已发布普通二维码规则失效。",
     "force":  false,
     "delete_paths":  [
 
                      ],
     "sql_files":  [
-                      "weimenjin_admin/database/update_20260606_12.sql"
+
                   ]
 }

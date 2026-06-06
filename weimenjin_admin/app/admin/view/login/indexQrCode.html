@@ -232,7 +232,7 @@
 </div>
 <script>
     var currentDomain = window.location.hostname;
-    var qrCodeText = 'https://' + currentDomain + '/admin/QrCodeLogin/index?key={$cs}';
+    var qrCodeText = 'https://' + currentDomain + '/qrCodeLogin?key={$cs}';
     $('#myQrcode').qrcode({ text: qrCodeText });
     function showDisclaimer() {
         $('#disclaimerModal').addClass('active');

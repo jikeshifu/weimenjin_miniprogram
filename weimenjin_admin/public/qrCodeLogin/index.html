@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>扫码登录配置提示</title>
+    <style>
+        html,body{margin:0;min-height:100%;font-family:"Microsoft YaHei",Arial,sans-serif;background:#04131e;color:#ecfeff}
+        .page{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(120deg,rgba(2,14,25,.82),rgba(4,32,46,.62))}
+        .card{max-width:640px;padding:30px;border:1px solid rgba(125,211,252,.24);background:rgba(2,14,25,.88);box-shadow:0 28px 90px rgba(0,0,0,.36)}
+        h1{margin:0 0 14px;font-size:26px}
+        p{margin:0 0 12px;color:rgba(236,254,255,.76);line-height:1.8}
+        code{padding:2px 6px;color:#67e8f9;background:rgba(8,145,178,.16)}
+        a{color:#67e8f9}
+    </style>
+</head>
+<body>
+<main class="page">
+    <section class="card">
+        <h1>请配置普通二维码打开小程序规则</h1>
+        <p>当前地址用于微信普通二维码拉起小程序。请保持二维码规则路径为 <code>/qrCodeLogin</code>，并确认规则已发布。</p>
+        <p>如果是在浏览器中打开，请前往 <a id="tipLink" href="/admin/QrCodeLogin/index">扫码登录配置提示</a> 查看说明。</p>
+    </section>
+</main>
+<script>
+    (function () {
+        var target = '/admin/QrCodeLogin/index' + window.location.search;
+        document.getElementById('tipLink').href = target;
+        setTimeout(function () {
+            window.location.replace(target);
+        }, 800);
+    })();
+</script>
+</body>
+</html>
