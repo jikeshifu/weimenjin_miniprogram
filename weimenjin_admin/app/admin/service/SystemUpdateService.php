@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.15';
+    private const DEFAULT_VERSION = '2026.06.06.16';
 
     private static array $preserveFiles = [
         '.env',
@@ -515,6 +515,7 @@ class SystemUpdateService
         if ($manifestUrl !== '') {
             self::saveAppConfig('update', 'manifest_url', $manifestUrl);
         }
+        self::useUtf8mb4Connection();
         self::ensureCloudAppConfigs();
         self::ensureRuntimeAppConfigs();
         Cache::delete('db_configs');
@@ -555,7 +556,9 @@ class SystemUpdateService
 
     private static function insertAppConfigIfMissing(string $module, string $moduleTitle, string $name, string $value, string $description, int $sortOrder, int $groupSortOrder, string $type = 'string'): void
     {
-        if (Db::name('appconfig')->where(['module' => $module, 'name' => $name])->find()) {
+        $exists = Db::name('appconfig')->where(['module' => $module, 'name' => $name])->find();
+        if ($exists) {
+            self::updateAppConfigMeta((int) $exists['id'], $moduleTitle, $description, $sortOrder, $groupSortOrder, $type);
             return;
         }
 
@@ -595,6 +598,46 @@ class SystemUpdateService
         }
 
         Db::name('appconfig')->insert($data);
+    }
+
+    private static function updateAppConfigMeta(int $id, string $moduleTitle, string $description, int $sortOrder, int $groupSortOrder, string $type): void
+    {
+        $columns = self::appConfigColumns();
+        $data = [];
+        if (in_array('module_name', $columns, true)) {
+            $data['module_name'] = $moduleTitle;
+        } elseif (in_array('title', $columns, true)) {
+            $data['title'] = $moduleTitle;
+        }
+        if (in_array('description', $columns, true)) {
+            $data['description'] = $description;
+        } elseif (in_array('remark', $columns, true)) {
+            $data['remark'] = $description;
+        }
+        if (in_array('type', $columns, true)) {
+            $data['type'] = $type;
+        }
+        if (in_array('is_grouped', $columns, true)) {
+            $data['is_grouped'] = 1;
+        }
+        if (in_array('is_readonly', $columns, true)) {
+            $data['is_readonly'] = 0;
+        }
+        if (in_array('sort_order', $columns, true)) {
+            $data['sort_order'] = $sortOrder;
+        }
+        if (in_array('group_sort_order', $columns, true)) {
+            $data['group_sort_order'] = $groupSortOrder;
+        }
+        if (in_array('updated_at', $columns, true)) {
+            $data['updated_at'] = date('Y-m-d H:i:s');
+        }
+        if (in_array('update_time', $columns, true)) {
+            $data['update_time'] = time();
+        }
+        if ($data) {
+            Db::name('appconfig')->where('id', $id)->update($data);
+        }
     }
 
     private static function updateAppConfigSort(string $module, string $name, int $groupSortOrder): void
@@ -684,6 +727,15 @@ class SystemUpdateService
         $rows = Db::query('SHOW COLUMNS FROM `' . str_replace('`', '``', $table) . '`');
         $columns = array_map(static fn($row) => (string) ($row['Field'] ?? ''), $rows);
         return $columns;
+    }
+
+    private static function useUtf8mb4Connection(): void
+    {
+        try {
+            Db::execute('SET NAMES utf8mb4');
+        } catch (\Throwable $e) {
+            self::writeLog('数据库字符集设置跳过: ' . $e->getMessage());
+        }
     }
 
     private static function shouldPreserve(string $relative): bool

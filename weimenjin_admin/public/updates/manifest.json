@@ -1,13 +1,13 @@
 {
-    "version":  "2026.06.06.15",
-    "package_url":  "weimenjin_update_20260606_15.zip",
-    "sha256":  "19d4bf41f10d126715f44a44992e2a0bcf8c6860d2e16e6de7eea0121c8e78ea",
-    "notes":  "优化系统在线更新页面展示，检测结果、升级结果和更新日志改为中文摘要，避免普通管理员看到原始 JSON。",
+    "version":  "2026.06.06.16",
+    "package_url":  "weimenjin_update_20260606_16.zip",
+    "sha256":  "68861e64b0c865beb528132cf61943fcba6a1d3058eb1de36022820cd8fce856",
+    "notes":  "修复应用配置中硬件云地址中文显示为问号的问题，并在更新时自动补齐和修复微门禁V1/V2硬件云地址配置。",
     "force":  false,
     "delete_paths":  [
 
                      ],
     "sql_files":  [
-
+                      "weimenjin_admin/database/updates/20260606_16_fix_cloud_config.sql"
                   ]
 }
