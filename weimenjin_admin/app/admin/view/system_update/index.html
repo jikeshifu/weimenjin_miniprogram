@@ -99,7 +99,45 @@
                     .update-log-list li:last-child {
                         border-bottom: 0;
                     }
+                    .update-progress {
+                        display: none;
+                        margin-bottom: 16px;
+                        border: 1px solid #dce8f1;
+                        border-radius: 4px;
+                        background: #f7fbfe;
+                        padding: 16px 18px;
+                    }
+                    .update-progress-head {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        color: #2f4050;
+                        font-weight: 600;
+                    }
+                    .update-progress-tip {
+                        margin-top: 10px;
+                        color: #7a8699;
+                    }
+                    .update-step-list {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                        gap: 8px;
+                        margin-top: 12px;
+                    }
+                    .update-step {
+                        color: #9aa5b1;
+                        font-size: 12px;
+                    }
+                    .update-step.active {
+                        color: #1c84c6;
+                        font-weight: 600;
+                    }
+                    .update-step.done {
+                        color: #1ab394;
+                    }
                 </style>
+                <div id="update-progress" class="update-progress"></div>
                 <div id="update-result" class="update-result-panel"></div>
             </div>
         </div>
@@ -108,6 +146,18 @@
 <script>
     var Updater = {};
     Updater.latest = null;
+    Updater.progressTimer = null;
+    Updater.progressStartedAt = 0;
+    Updater.progressSteps = [
+        {percent: 8, text: '连接更新源'},
+        {percent: 18, text: '下载更新包'},
+        {percent: 30, text: '校验更新包'},
+        {percent: 45, text: '备份代码和数据库'},
+        {percent: 60, text: '解压并覆盖文件'},
+        {percent: 76, text: '执行数据库脚本'},
+        {percent: 88, text: '清理缓存'},
+        {percent: 96, text: '等待服务器返回结果'}
+    ];
     Updater.params = function () {
         return {
             manifest_url: $('#manifest_url').val(),
@@ -181,6 +231,53 @@
     Updater.showText = function (text) {
         $('#update-result').show().html('<h4 class="update-result-title">操作提示</h4><div class="alert alert-warning m-b-none">' + Updater.escape(text) + '</div>');
     };
+    Updater.renderProgress = function (percent, text) {
+        var elapsed = Updater.progressStartedAt ? Math.floor((Date.now() - Updater.progressStartedAt) / 1000) : 0;
+        var longWaitTip = elapsed >= 45 ? '更新仍在执行，可能正在备份数据库或覆盖文件，请继续等待，不要关闭页面。' : '升级过程中请不要刷新或关闭页面。';
+        var steps = Updater.progressSteps.map(function (step) {
+            var cls = percent > step.percent ? 'done' : (text === step.text ? 'active' : '');
+            var icon = percent > step.percent ? 'fa-check-circle' : (text === step.text ? 'fa-spinner fa-spin' : 'fa-circle-o');
+            return '<div class="update-step ' + cls + '"><i class="fa ' + icon + '"></i> ' + Updater.escape(step.text) + '</div>';
+        }).join('');
+        $('#update-progress').show().html(
+            '<div class="update-progress-head">'
+            + '<span><i class="fa fa-cloud-download"></i> 正在升级系统</span>'
+            + '<span>' + percent + '%</span>'
+            + '</div>'
+            + '<div class="progress progress-striped active m-b-xs">'
+            + '<div class="progress-bar progress-bar-info" style="width:' + percent + '%"></div>'
+            + '</div>'
+            + '<div class="update-progress-tip">当前步骤：' + Updater.escape(text) + '，已等待 ' + elapsed + ' 秒。' + longWaitTip + '</div>'
+            + '<div class="update-step-list">' + steps + '</div>'
+        );
+    };
+    Updater.startProgress = function () {
+        var index = 0;
+        Updater.stopProgress(false);
+        Updater.progressStartedAt = Date.now();
+        Updater.renderProgress(Updater.progressSteps[0].percent, Updater.progressSteps[0].text);
+        Updater.progressTimer = setInterval(function () {
+            if (index < Updater.progressSteps.length - 1) {
+                index++;
+            }
+            var step = Updater.progressSteps[index];
+            Updater.renderProgress(step.percent, step.text);
+        }, 4500);
+    };
+    Updater.stopProgress = function (completed) {
+        if (Updater.progressTimer) {
+            clearInterval(Updater.progressTimer);
+            Updater.progressTimer = null;
+        }
+        if (completed) {
+            Updater.renderProgress(100, '升级完成');
+            setTimeout(function () {
+                $('#update-progress').fadeOut(300);
+            }, 1200);
+        } else {
+            $('#update-progress').hide().empty();
+        }
+    };
     Updater.toggleAdvanced = function () {
         $('#advanced-update').toggle();
     };
@@ -209,20 +306,34 @@
     };
     Updater.install = function () {
         Feng.confirm('升级前会自动备份代码和数据库，执行期间请不要关闭页面。确认开始升级？', function () {
-            var loading = layer.load(1, {shade: [0.2, '#000']});
+            var loading = layer.msg('正在升级，请勿关闭页面...', {
+                icon: 16,
+                shade: [0.18, '#000'],
+                time: 0
+            });
+            $('#install-btn').prop('disabled', true);
+            Updater.startProgress();
             var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/install', function (data) {
                 layer.close(loading);
                 if (data.status === '00') {
+                    Updater.stopProgress(true);
                     Feng.success(data.msg);
-                    $('#install-btn').prop('disabled', true);
                     Updater.showHtml(Updater.renderInstall(data.data || {}));
                 } else {
+                    Updater.stopProgress(false);
                     Feng.error(data.msg);
                     Updater.showText(data.msg);
+                    if (Updater.latest && Updater.latest.has_update) {
+                        $('#install-btn').prop('disabled', false);
+                    }
                 }
             }, function () {
                 layer.close(loading);
+                Updater.stopProgress(false);
                 Feng.error('请求失败');
+                if (Updater.latest && Updater.latest.has_update) {
+                    $('#install-btn').prop('disabled', false);
+                }
             });
             ajax.setData(Updater.params());
             ajax.start();

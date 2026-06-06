@@ -1,8 +1,8 @@
 {
-    "version":  "2026.06.06.16",
-    "package_url":  "weimenjin_update_20260606_16.zip",
-    "sha256":  "68861e64b0c865beb528132cf61943fcba6a1d3058eb1de36022820cd8fce856",
-    "notes":  "修复应用配置中硬件云地址中文显示为问号的问题，并在更新时自动补齐和修复微门禁V1/V2硬件云地址配置。",
+    "version":  "2026.06.06.17",
+    "package_url":  "weimenjin_update_20260606_17.zip",
+    "sha256":  "8e166ad9bf86a28d6a3fb18bb86b8159def922b21d4ee122fef70a7f00c3f574",
+    "notes":  "优化在线升级交互，升级过程中显示进度条、阶段状态和等待提示，避免页面看起来卡死。",
     "force":  false,
     "delete_paths":  [
 
