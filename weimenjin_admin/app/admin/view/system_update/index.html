@@ -41,7 +41,66 @@
                         </div>
                     </div>
                 </div>
-                <div id="update-result" class="well" style="display:none;white-space:pre-wrap;max-height:420px;overflow:auto;"></div>
+                <style>
+                    .update-result-panel {
+                        display: none;
+                        max-height: 420px;
+                        overflow: auto;
+                        border: 1px solid #e5e6e7;
+                        border-radius: 4px;
+                        background: #fff;
+                        padding: 18px 20px;
+                    }
+                    .update-result-title {
+                        margin: 0 0 14px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #2f4050;
+                    }
+                    .update-summary {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                        gap: 12px;
+                        margin-bottom: 14px;
+                    }
+                    .update-summary-item {
+                        border: 1px solid #eef0f3;
+                        border-radius: 4px;
+                        padding: 12px 14px;
+                        background: #f9fbfc;
+                    }
+                    .update-summary-label {
+                        margin-bottom: 6px;
+                        color: #8a95a5;
+                        font-size: 12px;
+                    }
+                    .update-summary-value {
+                        color: #2f4050;
+                        word-break: break-all;
+                    }
+                    .update-status-ok {
+                        color: #1ab394;
+                        font-weight: 600;
+                    }
+                    .update-status-warn {
+                        color: #f8ac59;
+                        font-weight: 600;
+                    }
+                    .update-log-list {
+                        margin: 0;
+                        padding: 0;
+                        list-style: none;
+                    }
+                    .update-log-list li {
+                        padding: 10px 0;
+                        border-bottom: 1px solid #f0f0f0;
+                        line-height: 1.7;
+                    }
+                    .update-log-list li:last-child {
+                        border-bottom: 0;
+                    }
+                </style>
+                <div id="update-result" class="update-result-panel"></div>
             </div>
         </div>
     </div>
@@ -56,8 +115,71 @@
             sha256: $('#sha256').val()
         };
     };
-    Updater.show = function (data) {
-        $('#update-result').show().text(typeof data === 'string' ? data : JSON.stringify(data, null, 2));
+    Updater.escape = function (text) {
+        return $('<div>').text(text === undefined || text === null ? '' : String(text)).html();
+    };
+    Updater.summaryItem = function (label, value, extraClass) {
+        return '<div class="update-summary-item">'
+            + '<div class="update-summary-label">' + Updater.escape(label) + '</div>'
+            + '<div class="update-summary-value ' + (extraClass || '') + '">' + Updater.escape(value || '-') + '</div>'
+            + '</div>';
+    };
+    Updater.renderCheck = function (info) {
+        var statusText = info.has_update ? '发现可升级版本' : '当前已是最新版本';
+        var statusClass = info.has_update ? 'update-status-warn' : 'update-status-ok';
+        var html = '<h4 class="update-result-title">检测结果</h4><div class="update-summary">'
+            + Updater.summaryItem('当前版本', info.current_version)
+            + Updater.summaryItem('最新版本', info.latest_version)
+            + Updater.summaryItem('更新状态', statusText, statusClass)
+            + Updater.summaryItem('是否强制升级', info.force ? '是' : '否')
+            + Updater.summaryItem('更新包地址', info.package_url)
+            + Updater.summaryItem('更新源', info.manifest_url)
+            + '</div>';
+        if (info.notes) {
+            html += '<div class="alert alert-info m-b-none"><strong>更新说明：</strong>' + Updater.escape(info.notes) + '</div>';
+        }
+        return html;
+    };
+    Updater.renderInstall = function (result) {
+        var backup = result.backup || {};
+        var sql = result.sql || {};
+        return '<h4 class="update-result-title">升级结果</h4><div class="update-summary">'
+            + Updater.summaryItem('升级版本', result.version)
+            + Updater.summaryItem('完成时间', result.time)
+            + Updater.summaryItem('代码备份', backup.code)
+            + Updater.summaryItem('数据库备份', backup.database)
+            + Updater.summaryItem('数据库脚本', sql.file || '无需执行')
+            + Updater.summaryItem('执行语句数', sql.statements === undefined ? '0' : sql.statements)
+            + '</div><div class="alert alert-success m-b-none">升级已完成，系统缓存已清理。</div>';
+    };
+    Updater.renderLogs = function (logs) {
+        logs = $.trim(logs || '');
+        if (!logs) {
+            return '<h4 class="update-result-title">更新日志</h4><div class="alert alert-info m-b-none">暂无更新日志。</div>';
+        }
+        var items = logs.split(/\r?\n/).filter(function (line) {
+            return $.trim(line) !== '';
+        }).map(function (line) {
+            var text = line;
+            var match = line.match(/更新完成:\s*(\{.*\})$/);
+            if (match) {
+                try {
+                    var data = JSON.parse(match[1]);
+                    text = '更新完成，版本：' + (data.version || '-')
+                        + '，完成时间：' + (data.time || '-')
+                        + '，代码备份：' + ((data.backup || {}).code || '-')
+                        + '，数据库备份：' + ((data.backup || {}).database || '-');
+                } catch (e) {}
+            }
+            return '<li>' + Updater.escape(text) + '</li>';
+        }).join('');
+        return '<h4 class="update-result-title">更新日志</h4><ul class="update-log-list">' + items + '</ul>';
+    };
+    Updater.showHtml = function (html) {
+        $('#update-result').show().html(html);
+    };
+    Updater.showText = function (text) {
+        $('#update-result').show().html('<h4 class="update-result-title">操作提示</h4><div class="alert alert-warning m-b-none">' + Updater.escape(text) + '</div>');
     };
     Updater.toggleAdvanced = function () {
         $('#advanced-update').toggle();
@@ -76,10 +198,10 @@
                 } else {
                     Feng.success('当前已是最新版本');
                 }
-                Updater.show(Updater.latest);
+                Updater.showHtml(Updater.renderCheck(Updater.latest));
             } else {
                 Feng.error(data.msg);
-                Updater.show(data.msg);
+                Updater.showText(data.msg);
             }
         });
         ajax.setData(Updater.params());
@@ -93,10 +215,10 @@
                 if (data.status === '00') {
                     Feng.success(data.msg);
                     $('#install-btn').prop('disabled', true);
-                    Updater.show(data.data);
+                    Updater.showHtml(Updater.renderInstall(data.data || {}));
                 } else {
                     Feng.error(data.msg);
-                    Updater.show(data.msg);
+                    Updater.showText(data.msg);
                 }
             }, function () {
                 layer.close(loading);
@@ -109,7 +231,7 @@
     Updater.logs = function () {
         var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/logs', function (data) {
             if (data.status === '00') {
-                Updater.show(data.data || '暂无日志');
+                Updater.showHtml(Updater.renderLogs(data.data));
             } else {
                 Feng.error(data.msg);
             }

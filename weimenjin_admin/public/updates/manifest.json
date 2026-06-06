@@ -1,8 +1,8 @@
 {
-    "version":  "2026.06.06.14",
-    "package_url":  "weimenjin_update_20260606_14.zip",
-    "sha256":  "02b798b363acd849793bb034adf5d50ebe69e2ebb44a2003699bfb4ceb017bbc",
-    "notes":  "优化在线更新目录识别，支持后台单独部署到任意站点目录；更新包同时兼容标准源码目录和单独后台目录。",
+    "version":  "2026.06.06.15",
+    "package_url":  "weimenjin_update_20260606_15.zip",
+    "sha256":  "19d4bf41f10d126715f44a44992e2a0bcf8c6860d2e16e6de7eea0121c8e78ea",
+    "notes":  "优化系统在线更新页面展示，检测结果、升级结果和更新日志改为中文摘要，避免普通管理员看到原始 JSON。",
     "force":  false,
     "delete_paths":  [
 

@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.14';
+    private const DEFAULT_VERSION = '2026.06.06.15';
 
     private static array $preserveFiles = [
         '.env',
