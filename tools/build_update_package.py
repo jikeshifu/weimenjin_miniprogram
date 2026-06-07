@@ -34,6 +34,17 @@ EXCLUDED_FILES = {
     "config/my.php",
 }
 
+UPDATE_ARTIFACT_PREFIXES = (
+    "weimenjin_update_",
+    "weimenjin_delta_",
+    "baseline_",
+)
+
+UPDATE_ARTIFACT_SUFFIXES = (
+    ".zip",
+    ".json",
+)
+
 
 def normalize(path: Path) -> str:
     return path.as_posix().strip("/")
@@ -159,7 +170,33 @@ def deleted_paths(new_baseline: dict, old_baseline: dict) -> list[str]:
     return sorted(path for path in baseline_map(old_baseline) if path not in new_paths)
 
 
-def build(version: str, notes: str, force: bool = False, from_baseline: str = "") -> dict:
+def referenced_update_artifacts(manifest: dict) -> set[str]:
+    keep = {"manifest.json"}
+    candidates = [manifest, *manifest.get("packages", [])]
+    for item in candidates:
+        if not isinstance(item, dict):
+            continue
+        for key in ("package_url", "baseline_url", "from_baseline_url"):
+            value = str(item.get(key, "")).strip()
+            if value and not value.startswith(("http://", "https://", "/")):
+                keep.add(Path(value).name)
+    return keep
+
+
+def prune_update_artifacts(manifest: dict) -> list[str]:
+    keep = referenced_update_artifacts(manifest)
+    removed: list[str] = []
+    for path in UPDATES_DIR.iterdir():
+        if not path.is_file() or path.name in keep:
+            continue
+        if not path.name.startswith(UPDATE_ARTIFACT_PREFIXES) or not path.name.endswith(UPDATE_ARTIFACT_SUFFIXES):
+            continue
+        path.unlink()
+        removed.append(path.name)
+    return sorted(removed)
+
+
+def build(version: str, notes: str, force: bool = False, from_baseline: str = "", prune: bool = True) -> dict:
     UPDATES_DIR.mkdir(parents=True, exist_ok=True)
     safe_version = version.replace(".", "_")
     package_name = f"weimenjin_update_{safe_version}.zip"
@@ -238,6 +275,10 @@ def build(version: str, notes: str, force: bool = False, from_baseline: str = ""
         encoding="utf-8",
         newline="\n",
     )
+    if prune:
+        removed = prune_update_artifacts(manifest)
+        if removed:
+            manifest["pruned_artifacts"] = removed
     return manifest
 
 
@@ -247,9 +288,10 @@ def main() -> None:
     parser.add_argument("--notes", required=True, help="User-facing update notes")
     parser.add_argument("--force", action="store_true", help="Mark this update as forced")
     parser.add_argument("--from-baseline", default="", help="Previous baseline JSON for building a delta package")
+    parser.add_argument("--no-prune", action="store_true", help="Do not remove old unreferenced update artifacts")
     args = parser.parse_args()
 
-    manifest = build(args.version, args.notes, args.force, args.from_baseline)
+    manifest = build(args.version, args.notes, args.force, args.from_baseline, not args.no_prune)
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
 
 

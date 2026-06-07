@@ -1,5 +1,5 @@
 {
-  "version": "2026.06.06.33",
+  "version": "2026.06.06.40",
   "root": "weimenjin_admin",
   "file_count": 9446,
   "files": [
@@ -355,8 +355,8 @@
     },
     {
       "path": "weimenjin_admin/app/admin/service/SystemUpdateService.php",
-      "size": 60804,
-      "sha256": "e915d7ce07981a448ddcd2378e067a816ccb38f0e521795d550c08e401c20aef"
+      "size": 68644,
+      "sha256": "d6dd7a79a68add9c3adb42b81de89c22e9589f74be9158e6b62eb8d061624be6"
     },
     {
       "path": "weimenjin_admin/app/admin/view/action/api_index.html",
@@ -795,13 +795,13 @@
     },
     {
       "path": "weimenjin_admin/app/admin/view/login/index.html",
-      "size": 12515,
-      "sha256": "aaed27461c8ee3add390c485b1291cf9a9f2234f023b36552b5ef6266ddb69d9"
+      "size": 12537,
+      "sha256": "ab2f18e9118b1e5b28b97c860acc63af2f469467d950f18bb8234aa939f90ca6"
     },
     {
       "path": "weimenjin_admin/app/admin/view/login/indexQrCode.html",
-      "size": 9506,
-      "sha256": "4284731699315ae588d1dcb13f79674a71dd640ba404984cc11c2e7feee101a3"
+      "size": 9528,
+      "sha256": "5182a8823b4e98392e7b64ed3e8e7dc52e89f0405d4bdaf4798c20e9822b8733"
     },
     {
       "path": "weimenjin_admin/app/admin/view/login/index_old.html",
@@ -915,8 +915,8 @@
     },
     {
       "path": "weimenjin_admin/app/admin/view/system_update/index.html",
-      "size": 23230,
-      "sha256": "c662c65d378467167f792d0885484a0ac1431785a9f6c3f6597c4df916b85d99"
+      "size": 27194,
+      "sha256": "5c69ca2c0c46f21626a65aa3695357dae791a5f76ce8543a7df6b20ec17be9af"
     },
     {
       "path": "weimenjin_admin/app/admin/view/umember/add.html",
@@ -1645,8 +1645,8 @@
     },
     {
       "path": "weimenjin_admin/database/update_20260606_11.sql",
-      "size": 3150,
-      "sha256": "51483d8eac334280bfa487c799aefe7953cfc5766d77559605c76440c48952ff"
+      "size": 435,
+      "sha256": "7e91708490079fdf019a13ccbef174797146a0f20c635f35b94de45775fc5b5d"
     },
     {
       "path": "weimenjin_admin/database/update_20260606_12.sql",
@@ -47230,8 +47230,8 @@
     },
     {
       "path": "weimenjin_admin/weimenjin_open.sql",
-      "size": 105537,
-      "sha256": "4799591642fc5fb442ae7b203148eb30f2ace1e0218e2e9f0b960c1b4dc39cd0"
+      "size": 105539,
+      "sha256": "19a4e994e06f8e922c854902c6ff3954ec59a32f2608dee23a0eab890e973282"
     }
   ]
 }

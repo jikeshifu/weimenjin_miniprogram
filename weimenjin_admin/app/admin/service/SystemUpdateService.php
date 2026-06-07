@@ -11,8 +11,9 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.39';
+    private const DEFAULT_VERSION = '2026.06.06.40';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
+    private const BACKUP_KEEP_SETS = 3;
 
     private static array $preserveFiles = [
         '.env',
@@ -121,6 +122,7 @@ class SystemUpdateService
             ];
             self::writeLog('更新完成: ' . json_encode($result, JSON_UNESCAPED_UNICODE));
             self::cleanupUpdateArtifacts($archive, $extractDir);
+            self::cleanupOldUpdateBackups();
             return $result;
         } finally {
             self::unlock();
@@ -1489,6 +1491,22 @@ class SystemUpdateService
             }
             is_dir($path) ? self::removeDir($path) : @unlink($path);
         }
+    }
+
+    private static function cleanupOldUpdateBackups(): void
+    {
+        $backupDir = root_path() . 'backup/update';
+        if (!is_dir($backupDir)) {
+            return;
+        }
+        foreach (['code_*.zip', 'database_*.sql', 'my_*.php'] as $pattern) {
+            $files = glob($backupDir . '/' . $pattern) ?: [];
+            usort($files, static fn($a, $b) => filemtime($b) <=> filemtime($a));
+            foreach (array_slice($files, self::BACKUP_KEEP_SETS) as $file) {
+                @unlink($file);
+            }
+        }
+        self::writeLog('历史更新备份清理完成，保留最近 ' . self::BACKUP_KEEP_SETS . ' 组');
     }
 
     private static function writeLog(string $message): void
