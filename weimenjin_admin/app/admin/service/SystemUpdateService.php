@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.22';
+    private const DEFAULT_VERSION = '2026.06.06.24';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -401,14 +401,25 @@ class SystemUpdateService
     private static function runDatabaseUpgrade(string $packageRoot, array $manifest): array
     {
         $candidates = self::databaseUpgradeCandidates($packageRoot, $manifest);
+        $result = [
+            'files' => [],
+            'statements' => 0,
+        ];
         foreach ($candidates as $file) {
             if (is_file($file)) {
                 $count = self::executeSqlFile($file);
                 self::writeLog('数据库脚本执行完成: ' . $file);
-                return ['file' => $file, 'statements' => $count];
+                $result['files'][] = [
+                    'file' => $file,
+                    'statements' => $count,
+                ];
+                $result['statements'] += $count;
             }
         }
-        return ['file' => '', 'statements' => 0];
+        if (!$result['files']) {
+            $result['file'] = '';
+        }
+        return $result;
     }
 
     private static function databaseUpgradeCandidates(string $packageRoot, array $manifest): array

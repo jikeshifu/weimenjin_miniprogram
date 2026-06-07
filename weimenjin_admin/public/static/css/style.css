@@ -205,7 +205,9 @@ body.body-small .navbar-top-links li:last-child {
 
 .nav-header {
     padding: 33px 25px;
-    background: url("patterns/header-profile.png") no-repeat;
+    background: #1ab394 url("patterns/header-profile.png") no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
 }
 
 .pace-done .nav-header {
@@ -240,6 +242,27 @@ body.body-small .navbar-top-links li:last-child {
     max-width: 64px;
     max-height: 64px;
     object-fit: cover;
+}
+
+.nav-header .profile-element {
+    text-align: center;
+}
+
+.nav-header .profile-element .sidebar-logo-wrap {
+    display: inline-flex;
+    width: 72px;
+    height: 72px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+}
+
+.nav-header .profile-element img.sidebar-logo {
+    display: block;
+    padding: 6px;
+    background: #1ab394;
 }
 
 .minimalize-styl-2 {
