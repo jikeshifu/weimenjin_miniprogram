@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.40';
+    private const DEFAULT_VERSION = '2026.06.06.41';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -744,6 +744,7 @@ class SystemUpdateService
         }
         self::ensureAppConfigTable();
         self::saveAppConfig('update', 'current_version', $version);
+        $manifestUrl = self::stableManifestUrlForStorage($manifestUrl);
         if ($manifestUrl !== '') {
             self::saveAppConfig('update', 'manifest_url', $manifestUrl);
         }
@@ -751,6 +752,21 @@ class SystemUpdateService
         self::ensureCloudAppConfigs();
         self::ensureRuntimeAppConfigs();
         self::refreshRuntimeConfigFromDatabase();
+    }
+
+    private static function stableManifestUrlForStorage(string $manifestUrl): string
+    {
+        $manifestUrl = trim($manifestUrl);
+        if ($manifestUrl === '') {
+            return '';
+        }
+
+        $path = (string) (parse_url($manifestUrl, PHP_URL_PATH) ?: '');
+        if (basename($path) !== 'manifest.json') {
+            return self::DEFAULT_MANIFEST_URL;
+        }
+
+        return $manifestUrl;
     }
 
     private static function migrateRuntimeConfigToDatabase(array $runtimeConfig): array

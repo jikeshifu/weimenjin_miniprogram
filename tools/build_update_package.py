@@ -196,7 +196,7 @@ def prune_update_artifacts(manifest: dict) -> list[str]:
     return sorted(removed)
 
 
-def build(version: str, notes: str, force: bool = False, from_baseline: str = "", prune: bool = True) -> dict:
+def build(version: str, notes: str, force: bool = False, from_baselines: list[str] | None = None, prune: bool = True) -> dict:
     UPDATES_DIR.mkdir(parents=True, exist_ok=True)
     safe_version = version.replace(".", "_")
     package_name = f"weimenjin_update_{safe_version}.zip"
@@ -223,7 +223,7 @@ def build(version: str, notes: str, force: bool = False, from_baseline: str = ""
 
     packages = []
     top_package = full_package
-    if from_baseline:
+    for from_baseline in (from_baselines or []):
         old_baseline_path = Path(from_baseline)
         if not old_baseline_path.is_absolute():
             old_baseline_path = UPDATES_DIR / from_baseline
@@ -287,7 +287,12 @@ def main() -> None:
     parser.add_argument("--version", required=True, help="Release version, for example 2026.06.06.30")
     parser.add_argument("--notes", required=True, help="User-facing update notes")
     parser.add_argument("--force", action="store_true", help="Mark this update as forced")
-    parser.add_argument("--from-baseline", default="", help="Previous baseline JSON for building a delta package")
+    parser.add_argument(
+        "--from-baseline",
+        action="append",
+        default=[],
+        help="Previous baseline JSON for building a delta package. Can be passed multiple times.",
+    )
     parser.add_argument("--no-prune", action="store_true", help="Do not remove old unreferenced update artifacts")
     args = parser.parse_args()
 
