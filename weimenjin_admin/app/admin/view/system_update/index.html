@@ -351,30 +351,38 @@
             });
             $('#install-btn').prop('disabled', true);
             Updater.startProgress();
-            var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/install', function (data) {
-                layer.close(loading);
-                if (data.status === '00') {
-                    Updater.stopProgress(true);
-                    Feng.success(data.msg);
-                    Updater.showHtml(Updater.renderInstall(data.data || {}));
-                } else {
-                    Updater.stopProgress(false);
-                    Feng.error(data.msg);
-                    Updater.showText(data.msg);
-                    if (Updater.latest && Updater.latest.has_update) {
-                        $('#install-btn').prop('disabled', false);
+            setTimeout(function () {
+                $.ajax({
+                    type: 'post',
+                    url: Feng.ctxPath + '/SystemUpdate/install?jstime=' + new Date().getTime(),
+                    dataType: 'json',
+                    async: true,
+                    data: Updater.params(),
+                    success: function (data) {
+                        layer.close(loading);
+                        if (data.status === '00') {
+                            Updater.stopProgress(true);
+                            Feng.success(data.msg);
+                            Updater.showHtml(Updater.renderInstall(data.data || {}));
+                        } else {
+                            Updater.stopProgress(false);
+                            Feng.error(data.msg);
+                            Updater.showText(data.msg);
+                            if (Updater.latest && Updater.latest.has_update) {
+                                $('#install-btn').prop('disabled', false);
+                            }
+                        }
+                    },
+                    error: function () {
+                        layer.close(loading);
+                        Updater.stopProgress(false);
+                        Feng.error('请求失败');
+                        if (Updater.latest && Updater.latest.has_update) {
+                            $('#install-btn').prop('disabled', false);
+                        }
                     }
-                }
-            }, function () {
-                layer.close(loading);
-                Updater.stopProgress(false);
-                Feng.error('请求失败');
-                if (Updater.latest && Updater.latest.has_update) {
-                    $('#install-btn').prop('disabled', false);
-                }
-            });
-            ajax.setData(Updater.params());
-            ajax.start();
+                });
+            }, 120);
         });
     };
     Updater.databaseCheck = function () {
@@ -408,6 +416,7 @@
                 layer.close(loading);
                 Feng.error('请求失败');
             });
+            ajax.async = true;
             ajax.start();
         });
     };

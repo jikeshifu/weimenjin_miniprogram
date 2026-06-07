@@ -1,8 +1,8 @@
 {
-    "version": "2026.06.06.21",
-    "package_url": "weimenjin_update_20260606_21.zip",
-    "sha256": "51eef5f623ff7a77fc2bd063b7f774118f69a31f37b015b94deaf3fc1609b70b",
-    "notes": "修复在线更新 sha256 校验使用旧页面缓存值的问题，更新时优先使用最新 manifest 中的哈希；继续包含数据库结构修复和应用配置自动同步能力。",
+    "version": "2026.06.06.22",
+    "package_url": "weimenjin_update_20260606_22.zip",
+    "sha256": "df6b8ab0f2f8d2726fac9c22354492f79c4d6d45ba7071d493130f59d1285b58",
+    "notes": "修复系统在线更新确认后页面假死的问题，升级请求改为异步执行，确认后会先显示进度条再开始请求；继续包含数据库结构修复和应用配置自动同步能力。",
     "force": false,
     "delete_paths": [],
     "sql_files": [
