@@ -74,8 +74,26 @@ def iter_admin_files() -> list[Path]:
 
 def collect_sql_files() -> list[str]:
     sql_files: list[Path] = []
-    sql_files.extend(sorted((ADMIN_DIR / "database").glob("update_*.sql")))
-    sql_files.extend(sorted((ADMIN_DIR / "database" / "updates").glob("*.sql")))
+    # Legacy config SQL writes Chinese labels/content. Older updaters split SQL
+    # using a Unicode newline token that can corrupt UTF-8 bytes before the new
+    # updater code is loaded, so runtime/app configs are now reconciled in PHP.
+    safe_sql_names = {
+        "database/update_20260606_10.sql",
+        "database/updates/20260606_19_sync_schema.sql",
+        "database/updates/20260606_23_fix_sidebar_logo.sql",
+    }
+    sql_files.extend(
+        sorted(
+            item for item in (ADMIN_DIR / "database").glob("update_*.sql")
+            if normalize(item.relative_to(ADMIN_DIR)) in safe_sql_names
+        )
+    )
+    sql_files.extend(
+        sorted(
+            item for item in (ADMIN_DIR / "database" / "updates").glob("*.sql")
+            if normalize(item.relative_to(ADMIN_DIR)) in safe_sql_names
+        )
+    )
     return [normalize(Path("weimenjin_admin") / item.relative_to(ADMIN_DIR)) for item in sql_files]
 
 

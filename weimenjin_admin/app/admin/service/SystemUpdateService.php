@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.33';
+    private const DEFAULT_VERSION = '2026.06.06.37';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -444,6 +444,7 @@ class SystemUpdateService
 
     private static function runDatabaseUpgrade(string $packageRoot, array $manifest): array
     {
+        self::useUtf8mb4Connection();
         $candidates = self::databaseUpgradeCandidates($packageRoot, $manifest);
         $result = [
             'files' => [],
@@ -487,6 +488,7 @@ class SystemUpdateService
 
     private static function executeSqlFile(string $file): int
     {
+        self::useUtf8mb4Connection();
         $sql = file_get_contents($file);
         $sql = self::applyConfiguredTablePrefix($sql);
         $statements = self::splitSql($sql);
@@ -504,36 +506,52 @@ class SystemUpdateService
 
     private static function splitSql(string $sql): array
     {
-        $delimiter = ';';
+        $sql = preg_replace('/^\xEF\xBB\xBF/', '', $sql) ?? $sql;
         $buffer = '';
         $statements = [];
-        foreach (preg_split('/\R/', $sql) as $line) {
+        foreach (preg_split('/\r\n|\r|\n/', $sql) as $line) {
             $trim = trim($line);
-            if ($trim === '' || str_starts_with($trim, '--') || str_starts_with($trim, '#')) {
+            if ($trim === '' || str_starts_with($trim, '--') || str_starts_with($trim, '#') || stripos($trim, 'DELIMITER ') === 0) {
                 continue;
             }
-            if (stripos($trim, 'DELIMITER ') === 0) {
-                $delimiter = trim(substr($trim, 10));
-                continue;
-            }
-            if ($delimiter !== ';') {
-                if (str_ends_with($trim, $delimiter)) {
-                    $buffer .= "\n" . substr($line, 0, -strlen($delimiter));
-                    $statements[] = $buffer;
-                    $buffer = '';
-                } else {
-                    $buffer .= "\n" . $line;
+            $buffer .= $line . "\n";
+        }
+
+        $current = '';
+        $quote = null;
+        $length = strlen($buffer);
+        for ($i = 0; $i < $length; $i++) {
+            $char = $buffer[$i];
+            $current .= $char;
+            if ($quote !== null) {
+                if ($char === '\\') {
+                    if ($i + 1 < $length) {
+                        $current .= $buffer[++$i];
+                    }
+                    continue;
+                }
+                if ($char === $quote) {
+                    $quote = null;
                 }
                 continue;
             }
-            $buffer .= "\n" . $line;
-            if (str_ends_with($trim, ';')) {
-                $statements[] = substr($buffer, 0, -1);
-                $buffer = '';
+
+            if ($char === "'" || $char === '"' || $char === '`') {
+                $quote = $char;
+                continue;
+            }
+
+            if ($char === ';') {
+                $statement = trim(substr($current, 0, -1));
+                if ($statement !== '') {
+                    $statements[] = $statement;
+                }
+                $current = '';
             }
         }
-        if (trim($buffer) !== '') {
-            $statements[] = $buffer;
+
+        if (trim($current) !== '') {
+            $statements[] = $current;
         }
         return $statements;
     }
@@ -643,6 +661,7 @@ class SystemUpdateService
         if ($version === '') {
             return;
         }
+        self::ensureAppConfigTable();
         self::saveAppConfig('update', 'current_version', $version);
         if ($manifestUrl !== '') {
             self::saveAppConfig('update', 'manifest_url', $manifestUrl);
@@ -692,7 +711,8 @@ class SystemUpdateService
                 (int) $mapping['is_grouped'],
                 (int) $mapping['sort_order'],
                 (int) $mapping['group_sort_order'],
-                array_key_exists('default', $mapping) ? self::serializeAppConfigValue($mapping['default'], $mapping['type']) : null
+                array_key_exists('default', $mapping) ? self::serializeAppConfigValue($mapping['default'], $mapping['type']) : null,
+                !empty($mapping['runtime_wins'])
             );
             $result[$saved]++;
         }
@@ -704,22 +724,22 @@ class SystemUpdateService
     private static function runtimeConfigMappings(): array
     {
         return [
-            ['path' => ['wmjsms', 'wmjsms_appid'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_appid', 'type' => 'string', 'description' => '微门禁短信AppID', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 1, 'default' => ''],
-            ['path' => ['wmjsms', 'wmjsms_appsecret'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_appsecret', 'type' => 'string', 'description' => '微门禁短信AppSecret', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 2, 'default' => ''],
-            ['path' => ['wmjsms', 'wmjsms_lable'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_lable', 'type' => 'string', 'description' => '短信签名', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 3, 'default' => '【微门禁】'],
-            ['path' => ['wxmp', 'wxmp_appid'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appid', 'type' => 'string', 'description' => 'AppID(小程序ID)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 1, 'default' => ''],
-            ['path' => ['wxmp', 'wxmp_appsecret'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appsecret', 'type' => 'string', 'description' => 'AppSecret(小程序密钥)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 2, 'default' => ''],
-            ['path' => ['siteconfig', 'siteurl'], 'module' => 'siteconfig', 'module_name' => '站点链接', 'name' => 'siteurl', 'type' => 'string', 'description' => '站点链接', 'is_grouped' => 1, 'sort_order' => 0, 'group_sort_order' => 0, 'default' => 'https://demo.wmj.com.cn'],
-            ['path' => ['wmjv1', 'wmjv1_url'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_url', 'type' => 'string', 'description' => '微门禁V1硬件云地址', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 1, 'default' => 'https://www.wmj.com.cn'],
-            ['path' => ['wmjv1', 'wmjv1_appid'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appid', 'type' => 'string', 'description' => '微门禁V1硬件appid', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 2, 'default' => ''],
-            ['path' => ['wmjv1', 'wmjv1_appsecret'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appsecret', 'type' => 'string', 'description' => '微门禁V1硬件appsecret', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 3, 'default' => ''],
-            ['path' => ['wmjv2', 'wmjv2_url'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_url', 'type' => 'string', 'description' => '微门禁V2硬件云地址', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 1, 'default' => 'https://wdev.wmj.com.cn/deviceApi/'],
-            ['path' => ['wmjv2', 'wmjv2_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appid', 'type' => 'string', 'description' => '微门禁V2硬件appid', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 2, 'default' => ''],
-            ['path' => ['wmjv2', 'wmjv2_appsecret'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appsecret', 'type' => 'string', 'description' => '微门禁V2硬件appsecret', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 3, 'default' => ''],
-            ['path' => ['miniapp', 'site_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'site_url', 'type' => 'string', 'description' => '小程序站点地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => 'https://demo.wmj.com.cn'],
-            ['path' => ['miniapp', 'api_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'api_url', 'type' => 'string', 'description' => '小程序接口地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => 'https://demo.wmj.com.cn/api'],
-            ['path' => ['miniapp', 'asset_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'asset_url', 'type' => 'string', 'description' => '小程序资源地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => 'https://demo.wmj.com.cn'],
-            ['path' => ['miniapp', 'camweb_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'camweb_url', 'type' => 'string', 'description' => '摄像头 Web 地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 4, 'default' => 'https://demo.wmj.com.cn/camweb/'],
+            ['path' => ['wmjsms', 'wmjsms_appid'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_appid', 'type' => 'string', 'description' => '微门禁短信AppID', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 1, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wmjsms', 'wmjsms_appsecret'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_appsecret', 'type' => 'string', 'description' => '微门禁短信AppSecret', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wmjsms', 'wmjsms_lable'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_lable', 'type' => 'string', 'description' => '短信签名', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 3, 'default' => '【微门禁】', 'runtime_wins' => true],
+            ['path' => ['wxmp', 'wxmp_appid'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appid', 'type' => 'string', 'description' => 'AppID(小程序ID)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 1, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wxmp', 'wxmp_appsecret'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appsecret', 'type' => 'string', 'description' => 'AppSecret(小程序密钥)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['siteconfig', 'siteurl'], 'module' => 'siteconfig', 'module_name' => '站点链接', 'name' => 'siteurl', 'type' => 'string', 'description' => '站点链接', 'is_grouped' => 1, 'sort_order' => 0, 'group_sort_order' => 0, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
+            ['path' => ['wmjv1', 'wmjv1_url'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_url', 'type' => 'string', 'description' => '微门禁V1硬件云地址', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 1, 'default' => 'https://www.wmj.com.cn', 'runtime_wins' => true],
+            ['path' => ['wmjv1', 'wmjv1_appid'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appid', 'type' => 'string', 'description' => '微门禁V1硬件appid', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wmjv1', 'wmjv1_appsecret'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appsecret', 'type' => 'string', 'description' => '微门禁V1硬件appsecret', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wmjv2', 'wmjv2_url'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_url', 'type' => 'string', 'description' => '微门禁V2硬件云地址', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 1, 'default' => 'https://wdev.wmj.com.cn/deviceApi/', 'runtime_wins' => true],
+            ['path' => ['wmjv2', 'wmjv2_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appid', 'type' => 'string', 'description' => '微门禁V2硬件appid', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wmjv2', 'wmjv2_appsecret'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appsecret', 'type' => 'string', 'description' => '微门禁V2硬件appsecret', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['miniapp', 'site_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'site_url', 'type' => 'string', 'description' => '小程序站点地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
+            ['path' => ['miniapp', 'api_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'api_url', 'type' => 'string', 'description' => '小程序接口地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => 'https://demo.wmj.com.cn/api', 'runtime_wins' => true],
+            ['path' => ['miniapp', 'asset_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'asset_url', 'type' => 'string', 'description' => '小程序资源地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
+            ['path' => ['miniapp', 'camweb_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'camweb_url', 'type' => 'string', 'description' => '摄像头 Web 地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 4, 'default' => 'https://demo.wmj.com.cn/camweb/', 'runtime_wins' => true],
             ['path' => ['live_talk', 'enabled'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'enabled', 'type' => 'boolean', 'description' => '是否启用实时对讲', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 1, 'default' => false],
             ['path' => ['live_talk', 'public_wss_base'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'public_wss_base', 'type' => 'string', 'description' => '公开 WebSocket 基础地址', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 2, 'default' => ''],
             ['path' => ['live_talk', 'app_ws_protocol'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'app_ws_protocol', 'type' => 'string', 'description' => 'WebSocket 协议', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 3, 'default' => 'wss'],
@@ -772,13 +792,16 @@ class SystemUpdateService
         return (string) $value;
     }
 
-    private static function saveAppConfigFromRuntime(string $module, string $moduleTitle, string $name, string $value, string $type, string $description, int $isGrouped, int $sortOrder, int $groupSortOrder, ?string $defaultValue): string
+    private static function saveAppConfigFromRuntime(string $module, string $moduleTitle, string $name, string $value, string $type, string $description, int $isGrouped, int $sortOrder, int $groupSortOrder, ?string $defaultValue, bool $runtimeWins = false): string
     {
         $exists = Db::name('appconfig')->where(['module' => $module, 'name' => $name])->find();
         if ($exists) {
             self::updateAppConfigMeta((int) $exists['id'], $moduleTitle, $description, $sortOrder, $groupSortOrder, $type);
             $current = (string) ($exists['value'] ?? '');
             $shouldUpdate = $current === '' || ($defaultValue !== null && $current === $defaultValue && $value !== $defaultValue);
+            if ($runtimeWins && $value !== '' && $current !== $value) {
+                $shouldUpdate = true;
+            }
             if ($shouldUpdate) {
                 self::saveAppConfig($module, $name, $value);
                 return 'updated';
@@ -870,6 +893,7 @@ class SystemUpdateService
 
     private static function ensureCloudAppConfigs(): void
     {
+        self::ensureAppConfigTable();
         self::insertAppConfigIfMissing('wmjv1', '微门禁V1接口', 'wmjv1_url', 'https://www.wmj.com.cn', '微门禁V1硬件云地址', 96, 1);
         self::insertAppConfigIfMissing('wmjv2', '微门禁V2接口', 'wmjv2_url', 'https://wdev.wmj.com.cn/deviceApi/', '微门禁V2硬件云地址', 95, 1);
         self::updateAppConfigSort('wmjv1', 'wmjv1_appid', 2);
@@ -880,6 +904,7 @@ class SystemUpdateService
 
     private static function ensureRuntimeAppConfigs(): void
     {
+        self::ensureAppConfigTable();
         self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'site_url', 'https://demo.wmj.com.cn', '小程序站点地址', 90, 1);
         self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'api_url', 'https://demo.wmj.com.cn/api', '小程序接口地址', 90, 2);
         self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'asset_url', 'https://demo.wmj.com.cn', '小程序资源地址', 90, 3);
@@ -899,6 +924,7 @@ class SystemUpdateService
         self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'max_duration_sec', '90', '单次对讲最长秒数', 89, 12, 'integer');
         self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'app_upload_codec', 'mp3', '小程序上传音频编码', 89, 13);
         self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'default_audio_url', '/audio/wmj.mp3', '默认测试音频地址', 89, 14);
+        self::insertAppConfigIfMissing('login', '登录设置', 'disclaimer_content', '', '登录页免责声明', 90, 1);
     }
 
     private static function insertAppConfigIfMissing(string $module, string $moduleTitle, string $name, string $value, string $description, int $sortOrder, int $groupSortOrder, string $type = 'string'): void
@@ -1115,11 +1141,40 @@ class SystemUpdateService
         if ($columns !== null) {
             return $columns;
         }
+        self::ensureAppConfigTable();
         $prefix = (string) config('database.connections.mysql.prefix', '');
         $table = $prefix . 'appconfig';
         $rows = Db::query('SHOW COLUMNS FROM `' . str_replace('`', '``', $table) . '`');
         $columns = array_map(static fn($row) => (string) ($row['Field'] ?? ''), $rows);
         return $columns;
+    }
+
+    private static function ensureAppConfigTable(): void
+    {
+        static $checked = false;
+        if ($checked) {
+            return;
+        }
+        $prefix = (string) config('database.connections.mysql.prefix', 'cd_');
+        $table = str_replace('`', '``', $prefix . 'appconfig');
+        Db::execute("CREATE TABLE IF NOT EXISTS `{$table}` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `module` varchar(50) NOT NULL DEFAULT '',
+            `module_name` varchar(100) NOT NULL DEFAULT '',
+            `name` varchar(100) NOT NULL DEFAULT '',
+            `value` text,
+            `type` varchar(20) NOT NULL DEFAULT 'string',
+            `description` varchar(255) NOT NULL DEFAULT '',
+            `created_at` datetime DEFAULT NULL,
+            `is_grouped` tinyint(1) NOT NULL DEFAULT 0,
+            `is_readonly` tinyint(1) NOT NULL DEFAULT 0,
+            `sort_order` int(11) NOT NULL DEFAULT 0,
+            `group_sort_order` int(11) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `uk_module_name` (`module`,`name`),
+            KEY `idx_module` (`module`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+        $checked = true;
     }
 
     private static function useUtf8mb4Connection(): void
