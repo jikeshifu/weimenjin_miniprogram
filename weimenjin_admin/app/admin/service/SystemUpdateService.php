@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.20';
+    private const DEFAULT_VERSION = '2026.06.06.21';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -75,7 +75,7 @@ class SystemUpdateService
         self::lock();
         try {
             $manifest = self::resolveManifest($manifestUrl, $packageUrl);
-            if ($sha256 !== '') {
+            if ($sha256 !== '' && empty($manifest['sha256'])) {
                 $manifest['sha256'] = $sha256;
             }
 
@@ -240,7 +240,13 @@ class SystemUpdateService
         if (!empty($manifest['sha256'])) {
             $actual = hash_file('sha256', $file);
             if (!hash_equals(strtolower((string) $manifest['sha256']), strtolower($actual))) {
-                throw new \RuntimeException('更新包 sha256 校验失败');
+                self::writeLog('更新包 sha256 校验失败: ' . json_encode([
+                    'expected' => (string) $manifest['sha256'],
+                    'actual' => $actual,
+                    'url' => $url,
+                    'time' => date('Y-m-d H:i:s'),
+                ], JSON_UNESCAPED_UNICODE));
+                throw new \RuntimeException('更新包 sha256 校验失败，请重新检测更新后再升级');
             }
         }
         self::writeLog('更新包下载完成: ' . $url);

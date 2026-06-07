@@ -1,8 +1,8 @@
 {
-    "version": "2026.06.06.20",
-    "package_url": "weimenjin_update_20260606_20.zip",
-    "sha256": "12036509b1e123b803fd087942a50e4c4ec28c901fa6d53885bd396002c1c1dd",
-    "notes": "完善在线更新后的应用配置同步，升级成功和数据库修复后会自动从数据库重新生成 config/my.php，并刷新配置缓存；同时继续包含数据库结构修复脚本，用户无需再手动保存应用配置。",
+    "version": "2026.06.06.21",
+    "package_url": "weimenjin_update_20260606_21.zip",
+    "sha256": "51eef5f623ff7a77fc2bd063b7f774118f69a31f37b015b94deaf3fc1609b70b",
+    "notes": "修复在线更新 sha256 校验使用旧页面缓存值的问题，更新时优先使用最新 manifest 中的哈希；继续包含数据库结构修复和应用配置自动同步能力。",
     "force": false,
     "delete_paths": [],
     "sql_files": [
