@@ -176,32 +176,63 @@
             + '<div class="update-summary-value ' + (extraClass || '') + '">' + Updater.escape(value || '-') + '</div>'
             + '</div>';
     };
+    Updater.formatSize = function (size) {
+        size = Number(size || 0);
+        if (!size) {
+            return '-';
+        }
+        if (size >= 1024 * 1024) {
+            return (size / 1024 / 1024).toFixed(2) + ' MB';
+        }
+        if (size >= 1024) {
+            return (size / 1024).toFixed(2) + ' KB';
+        }
+        return size + ' B';
+    };
+    Updater.strategyName = function (strategy, packageType) {
+        if (strategy === 'full_admin_preserve_runtime' || packageType === 'full_admin') {
+            return '完整后台主版本包，保留用户配置和运行数据';
+        }
+        return strategy || packageType || '普通更新包';
+    };
     Updater.renderCheck = function (info) {
         var statusText = info.has_update ? '发现可升级版本' : '当前已是最新版本';
         var statusClass = info.has_update ? 'update-status-warn' : 'update-status-ok';
+        var sqlFiles = info.sql_files || [];
         var html = '<h4 class="update-result-title">检测结果</h4><div class="update-summary">'
             + Updater.summaryItem('当前版本', info.current_version)
             + Updater.summaryItem('最新版本', info.latest_version)
             + Updater.summaryItem('更新状态', statusText, statusClass)
             + Updater.summaryItem('是否强制升级', info.force ? '是' : '否')
+            + Updater.summaryItem('更新策略', Updater.strategyName(info.strategy, info.package_type))
+            + Updater.summaryItem('更新文件数', info.file_count ? info.file_count + ' 个文件' : '-')
+            + Updater.summaryItem('更新包大小', Updater.formatSize(info.package_size))
+            + Updater.summaryItem('数据库脚本', sqlFiles.length ? sqlFiles.length + ' 个' : '无')
             + Updater.summaryItem('更新包地址', info.package_url)
             + Updater.summaryItem('更新源', info.manifest_url)
+            + Updater.summaryItem('基线清单', info.baseline_url)
             + '</div>';
         if (info.notes) {
             html += '<div class="alert alert-info m-b-none"><strong>更新说明：</strong>' + Updater.escape(info.notes) + '</div>';
+        }
+        if (sqlFiles.length) {
+            html += '<div class="alert alert-warning m-t-sm m-b-none"><strong>数据库同步：</strong>升级时会按清单执行数据库脚本，并在完成后自动刷新应用配置。</div>';
         }
         return html;
     };
     Updater.renderInstall = function (result) {
         var backup = result.backup || {};
         var sql = result.sql || {};
+        var configMigration = result.config_migration || {};
         return '<h4 class="update-result-title">升级结果</h4><div class="update-summary">'
             + Updater.summaryItem('升级版本', result.version)
             + Updater.summaryItem('完成时间', result.time)
             + Updater.summaryItem('代码备份', backup.code)
             + Updater.summaryItem('数据库备份', backup.database)
+            + Updater.summaryItem('运行配置备份', backup.runtime_config)
             + Updater.summaryItem('数据库脚本', sql.file || '无需执行')
             + Updater.summaryItem('执行语句数', sql.statements === undefined ? '0' : sql.statements)
+            + Updater.summaryItem('配置迁移', '检查 ' + (configMigration.checked || 0) + ' 项，写入 ' + ((configMigration.inserted || 0) + (configMigration.updated || 0)) + ' 项')
             + '</div><div class="alert alert-success m-b-none">升级已完成，系统缓存已清理。</div>';
     };
     Updater.renderLogs = function (logs) {

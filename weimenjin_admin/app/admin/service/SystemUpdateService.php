@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.29';
+    private const DEFAULT_VERSION = '2026.06.06.33';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -20,7 +20,9 @@ class SystemUpdateService
         'weimenjin_admin/.env',
         'weimenjin_admin/env',
         'config/database.php',
+        'config/my.php',
         'weimenjin_admin/config/database.php',
+        'weimenjin_admin/config/my.php',
     ];
 
     private static array $preserveDirs = [
@@ -66,6 +68,13 @@ class SystemUpdateService
             'notes' => (string) ($manifest['notes'] ?? ''),
             'force' => !empty($manifest['force']),
             'manifest_url' => (string) ($manifest['_manifest_url'] ?? ''),
+            'package_type' => (string) ($manifest['package_type'] ?? ''),
+            'strategy' => (string) ($manifest['strategy'] ?? ''),
+            'baseline_url' => self::resolveUrl((string) ($manifest['baseline_url'] ?? ''), (string) ($manifest['_manifest_url'] ?? '')),
+            'baseline_sha256' => (string) ($manifest['baseline_sha256'] ?? ''),
+            'package_size' => (int) ($manifest['package_size'] ?? 0),
+            'file_count' => (int) ($manifest['file_count'] ?? 0),
+            'sql_files' => array_values((array) ($manifest['sql_files'] ?? [])),
         ];
     }
 
@@ -83,14 +92,17 @@ class SystemUpdateService
             $extractDir = self::extractPackage($archive);
             $packageRoot = self::locatePackageRoot($extractDir);
             $layout = self::installLayout();
+            $runtimeConfig = self::loadRuntimeConfigSnapshot();
 
             $backup = [
                 'code' => self::backupCode(),
                 'database' => self::backupDatabase(),
+                'runtime_config' => self::backupRuntimeConfig(),
             ];
 
             self::applyPackage($packageRoot, $layout['target'], $layout['strip_admin_prefix']);
             $sqlResult = self::runDatabaseUpgrade($packageRoot, $manifest);
+            $configMigration = self::migrateRuntimeConfigToDatabase($runtimeConfig);
             self::applyDeletePaths($manifest, $layout);
             self::markInstalled((string) ($manifest['version'] ?? ''), (string) ($manifest['_manifest_url'] ?? ''));
             self::clearRuntime();
@@ -99,6 +111,7 @@ class SystemUpdateService
                 'version' => (string) ($manifest['version'] ?? ''),
                 'backup' => $backup,
                 'sql' => $sqlResult,
+                'config_migration' => $configMigration,
                 'time' => date('Y-m-d H:i:s'),
             ];
             self::writeLog('更新完成: ' . json_encode($result, JSON_UNESCAPED_UNICODE));
@@ -339,6 +352,37 @@ class SystemUpdateService
         fclose($handle);
         self::writeLog('数据库备份完成: ' . $file);
         return $file;
+    }
+
+    private static function backupRuntimeConfig(): string
+    {
+        $source = root_path() . 'config/my.php';
+        if (!is_file($source)) {
+            return '';
+        }
+        $backupDir = root_path() . 'backup/update';
+        self::ensureWritableDir($backupDir, '运行配置备份目录');
+        $file = $backupDir . '/my_' . date('YmdHis') . '.php';
+        if (!copy($source, $file)) {
+            throw new \RuntimeException('运行配置备份失败: config/my.php');
+        }
+        self::writeLog('运行配置备份完成: ' . $file);
+        return $file;
+    }
+
+    private static function loadRuntimeConfigSnapshot(): array
+    {
+        $file = root_path() . 'config/my.php';
+        if (!is_file($file)) {
+            return [];
+        }
+        try {
+            $config = include $file;
+            return is_array($config) ? $config : [];
+        } catch (\Throwable $e) {
+            self::writeLog('旧运行配置读取失败，跳过配置迁移: ' . $e->getMessage());
+            return [];
+        }
     }
 
     private static function dumpTableRows($handle, string $table): void
@@ -609,9 +653,189 @@ class SystemUpdateService
         self::refreshRuntimeConfigFromDatabase();
     }
 
+    private static function migrateRuntimeConfigToDatabase(array $runtimeConfig): array
+    {
+        $result = [
+            'checked' => 0,
+            'inserted' => 0,
+            'updated' => 0,
+            'skipped' => 0,
+        ];
+        if (!$runtimeConfig) {
+            return $result;
+        }
+
+        self::useUtf8mb4Connection();
+        try {
+            self::ensureCloudAppConfigs();
+            self::ensureRuntimeAppConfigs();
+        } catch (\Throwable $e) {
+            self::writeLog('旧运行配置迁移跳过，应用配置表暂不可用: ' . $e->getMessage());
+            return $result;
+        }
+
+        foreach (self::runtimeConfigMappings() as $mapping) {
+            $result['checked']++;
+            $value = self::runtimeConfigValue($runtimeConfig, $mapping['path']);
+            if (!self::isMigratableConfigValue($value)) {
+                $result['skipped']++;
+                continue;
+            }
+
+            $saved = self::saveAppConfigFromRuntime(
+                $mapping['module'],
+                $mapping['module_name'],
+                $mapping['name'],
+                self::serializeAppConfigValue($value, $mapping['type']),
+                $mapping['type'],
+                $mapping['description'],
+                (int) $mapping['is_grouped'],
+                (int) $mapping['sort_order'],
+                (int) $mapping['group_sort_order'],
+                array_key_exists('default', $mapping) ? self::serializeAppConfigValue($mapping['default'], $mapping['type']) : null
+            );
+            $result[$saved]++;
+        }
+
+        self::writeLog('旧运行配置已迁移到数据库: ' . json_encode($result, JSON_UNESCAPED_UNICODE));
+        return $result;
+    }
+
+    private static function runtimeConfigMappings(): array
+    {
+        return [
+            ['path' => ['wmjsms', 'wmjsms_appid'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_appid', 'type' => 'string', 'description' => '微门禁短信AppID', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 1, 'default' => ''],
+            ['path' => ['wmjsms', 'wmjsms_appsecret'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_appsecret', 'type' => 'string', 'description' => '微门禁短信AppSecret', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 2, 'default' => ''],
+            ['path' => ['wmjsms', 'wmjsms_lable'], 'module' => 'wmjsms', 'module_name' => '短信接口', 'name' => 'wmjsms_lable', 'type' => 'string', 'description' => '短信签名', 'is_grouped' => 1, 'sort_order' => 93, 'group_sort_order' => 3, 'default' => '【微门禁】'],
+            ['path' => ['wxmp', 'wxmp_appid'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appid', 'type' => 'string', 'description' => 'AppID(小程序ID)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 1, 'default' => ''],
+            ['path' => ['wxmp', 'wxmp_appsecret'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appsecret', 'type' => 'string', 'description' => 'AppSecret(小程序密钥)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 2, 'default' => ''],
+            ['path' => ['siteconfig', 'siteurl'], 'module' => 'siteconfig', 'module_name' => '站点链接', 'name' => 'siteurl', 'type' => 'string', 'description' => '站点链接', 'is_grouped' => 1, 'sort_order' => 0, 'group_sort_order' => 0, 'default' => 'https://demo.wmj.com.cn'],
+            ['path' => ['wmjv1', 'wmjv1_url'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_url', 'type' => 'string', 'description' => '微门禁V1硬件云地址', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 1, 'default' => 'https://www.wmj.com.cn'],
+            ['path' => ['wmjv1', 'wmjv1_appid'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appid', 'type' => 'string', 'description' => '微门禁V1硬件appid', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 2, 'default' => ''],
+            ['path' => ['wmjv1', 'wmjv1_appsecret'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appsecret', 'type' => 'string', 'description' => '微门禁V1硬件appsecret', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 3, 'default' => ''],
+            ['path' => ['wmjv2', 'wmjv2_url'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_url', 'type' => 'string', 'description' => '微门禁V2硬件云地址', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 1, 'default' => 'https://wdev.wmj.com.cn/deviceApi/'],
+            ['path' => ['wmjv2', 'wmjv2_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appid', 'type' => 'string', 'description' => '微门禁V2硬件appid', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 2, 'default' => ''],
+            ['path' => ['wmjv2', 'wmjv2_appsecret'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appsecret', 'type' => 'string', 'description' => '微门禁V2硬件appsecret', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 3, 'default' => ''],
+            ['path' => ['miniapp', 'site_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'site_url', 'type' => 'string', 'description' => '小程序站点地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => 'https://demo.wmj.com.cn'],
+            ['path' => ['miniapp', 'api_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'api_url', 'type' => 'string', 'description' => '小程序接口地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => 'https://demo.wmj.com.cn/api'],
+            ['path' => ['miniapp', 'asset_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'asset_url', 'type' => 'string', 'description' => '小程序资源地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => 'https://demo.wmj.com.cn'],
+            ['path' => ['miniapp', 'camweb_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'camweb_url', 'type' => 'string', 'description' => '摄像头 Web 地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 4, 'default' => 'https://demo.wmj.com.cn/camweb/'],
+            ['path' => ['live_talk', 'enabled'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'enabled', 'type' => 'boolean', 'description' => '是否启用实时对讲', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 1, 'default' => false],
+            ['path' => ['live_talk', 'public_wss_base'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'public_wss_base', 'type' => 'string', 'description' => '公开 WebSocket 基础地址', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 2, 'default' => ''],
+            ['path' => ['live_talk', 'app_ws_protocol'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'app_ws_protocol', 'type' => 'string', 'description' => 'WebSocket 协议', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 3, 'default' => 'wss'],
+            ['path' => ['live_talk', 'app_ws_host'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'app_ws_host', 'type' => 'string', 'description' => 'WebSocket 主机', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 4, 'default' => ''],
+            ['path' => ['live_talk', 'app_ws_port'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'app_ws_port', 'type' => 'string', 'description' => 'WebSocket 端口', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 5, 'default' => ''],
+            ['path' => ['live_talk', 'app_ws_path_prefix'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'app_ws_path_prefix', 'type' => 'string', 'description' => 'WebSocket 路径前缀', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 6, 'default' => '/ws/horn/live/app'],
+            ['path' => ['live_talk', 'sample_rate'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'sample_rate', 'type' => 'integer', 'description' => '采样率', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 7, 'default' => 16000],
+            ['path' => ['live_talk', 'channels'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'channels', 'type' => 'integer', 'description' => '声道数', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 8, 'default' => 1],
+            ['path' => ['live_talk', 'encode_bitrate'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'encode_bitrate', 'type' => 'integer', 'description' => '编码码率', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 9, 'default' => 64000],
+            ['path' => ['live_talk', 'frame_size_kb'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'frame_size_kb', 'type' => 'integer', 'description' => '录音分片大小 KB', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 10, 'default' => 1],
+            ['path' => ['live_talk', 'chunk_delay_ms'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'chunk_delay_ms', 'type' => 'integer', 'description' => '音频分片发送间隔毫秒', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 11, 'default' => 40],
+            ['path' => ['live_talk', 'max_duration_sec'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'max_duration_sec', 'type' => 'integer', 'description' => '单次对讲最长秒数', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 12, 'default' => 90],
+            ['path' => ['live_talk', 'app_upload_codec'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'app_upload_codec', 'type' => 'string', 'description' => '小程序上传音频编码', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 13, 'default' => 'mp3'],
+            ['path' => ['live_talk', 'default_audio_url'], 'module' => 'live_talk', 'module_name' => '实时对讲配置', 'name' => 'default_audio_url', 'type' => 'string', 'description' => '默认测试音频地址', 'is_grouped' => 1, 'sort_order' => 89, 'group_sort_order' => 14, 'default' => '/audio/wmj.mp3'],
+            ['path' => ['login', 'disclaimer_content'], 'module' => 'login', 'module_name' => '登录设置', 'name' => 'disclaimer_content', 'type' => 'string', 'description' => '登录页免责声明', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => ''],
+        ];
+    }
+
+    private static function runtimeConfigValue(array $config, array $path): mixed
+    {
+        $value = $config;
+        foreach ($path as $segment) {
+            if (!is_array($value) || !array_key_exists($segment, $value)) {
+                return null;
+            }
+            $value = $value[$segment];
+        }
+        return $value;
+    }
+
+    private static function isMigratableConfigValue(mixed $value): bool
+    {
+        if ($value === null || is_array($value) || is_object($value)) {
+            return false;
+        }
+        return trim((string) self::serializeAppConfigValue($value, 'string')) !== '';
+    }
+
+    private static function serializeAppConfigValue(mixed $value, string $type): string
+    {
+        if ($type === 'boolean') {
+            return ($value === true || $value === 1 || $value === '1' || strtolower((string) $value) === 'true') ? '1' : '0';
+        }
+        if ($type === 'integer') {
+            return (string) (int) $value;
+        }
+        if ($type === 'array') {
+            return json_encode((array) $value, JSON_UNESCAPED_UNICODE);
+        }
+        return (string) $value;
+    }
+
+    private static function saveAppConfigFromRuntime(string $module, string $moduleTitle, string $name, string $value, string $type, string $description, int $isGrouped, int $sortOrder, int $groupSortOrder, ?string $defaultValue): string
+    {
+        $exists = Db::name('appconfig')->where(['module' => $module, 'name' => $name])->find();
+        if ($exists) {
+            self::updateAppConfigMeta((int) $exists['id'], $moduleTitle, $description, $sortOrder, $groupSortOrder, $type);
+            $current = (string) ($exists['value'] ?? '');
+            $shouldUpdate = $current === '' || ($defaultValue !== null && $current === $defaultValue && $value !== $defaultValue);
+            if ($shouldUpdate) {
+                self::saveAppConfig($module, $name, $value);
+                return 'updated';
+            }
+            return 'skipped';
+        }
+
+        $columns = self::appConfigColumns();
+        $data = [
+            'module' => $module,
+            'name' => $name,
+            'value' => $value,
+            'type' => $type,
+        ];
+        if (in_array('module_name', $columns, true)) {
+            $data['module_name'] = $moduleTitle;
+        } elseif (in_array('title', $columns, true)) {
+            $data['title'] = $moduleTitle;
+        }
+        if (in_array('description', $columns, true)) {
+            $data['description'] = $description;
+        } elseif (in_array('remark', $columns, true)) {
+            $data['remark'] = $description;
+        }
+        if (in_array('created_at', $columns, true)) {
+            $data['created_at'] = date('Y-m-d H:i:s');
+        } elseif (in_array('create_time', $columns, true)) {
+            $data['create_time'] = date('Y-m-d H:i:s');
+        }
+        if (in_array('is_grouped', $columns, true)) {
+            $data['is_grouped'] = $isGrouped;
+        }
+        if (in_array('is_readonly', $columns, true)) {
+            $data['is_readonly'] = 0;
+        }
+        if (in_array('sort_order', $columns, true)) {
+            $data['sort_order'] = $sortOrder;
+        }
+        if (in_array('group_sort_order', $columns, true)) {
+            $data['group_sort_order'] = $groupSortOrder;
+        }
+        Db::name('appconfig')->insert($data);
+        return 'inserted';
+    }
+
     public static function refreshRuntimeConfigFromDatabase(): bool
     {
+        static $migratingRuntimeConfig = false;
         self::useUtf8mb4Connection();
+        if (!$migratingRuntimeConfig) {
+            $migratingRuntimeConfig = true;
+            try {
+                self::migrateRuntimeConfigToDatabase(self::loadRuntimeConfigSnapshot());
+            } finally {
+                $migratingRuntimeConfig = false;
+            }
+        }
         $configs = Db::name('appconfig')->select()->toArray();
         $structuredConfig = [];
         foreach ($configs as $config) {

@@ -1,12 +1,22 @@
 {
-    "version": "2026.06.06.29",
-    "package_url": "weimenjin_update_20260606_29.zip",
-    "sha256": "40972dc92583a9f0031bdbf11adab12b007460cf296ea9453b8585a8a186f2f9",
-    "notes": "修复云喇叭定时播报接口缺少硬件云 SendData 兼容方法导致的 500 错误；优化在线升级确认后的进度条显示。",
+    "version": "2026.06.06.33",
+    "package_url": "weimenjin_update_2026_06_06_33.zip",
+    "sha256": "d6a9a4e3791c1a2529d78ed27388870e5637a806283826a015638de609055307",
+    "notes": "完善完整后台主版本更新策略：发布时生成文件基线清单；升级包排除 config/my.php；升级前备份并读取旧 config/my.php；升级过程保留用户数据库配置、运行配置、上传文件、二维码、证书、缓存和历史更新包；升级后执行数据库修复，将旧 my.php 中可识别业务配置迁移到应用配置表；每次从数据库刷新运行配置前也会先尝试迁移旧 my.php，避免旧版本没有 appconfig 数据导致业务中断。",
     "force": false,
+    "package_type": "full_admin",
+    "strategy": "full_admin_preserve_runtime",
+    "baseline_url": "baseline_2026_06_06_33.json",
+    "baseline_sha256": "c1d05c6ff9c51026bae14468d4821da02a79258783a8d177b8070d485776d9f4",
+    "package_size": 123329781,
+    "file_count": 9446,
     "delete_paths": [],
     "sql_files": [
-        "weimenjin_admin/database/updates/20260606_23_fix_sidebar_logo.sql",
-        "weimenjin_admin/database/updates/20260606_19_sync_schema.sql"
+        "weimenjin_admin/database/update_20260606_10.sql",
+        "weimenjin_admin/database/update_20260606_11.sql",
+        "weimenjin_admin/database/update_20260606_12.sql",
+        "weimenjin_admin/database/updates/20260606_16_fix_cloud_config.sql",
+        "weimenjin_admin/database/updates/20260606_19_sync_schema.sql",
+        "weimenjin_admin/database/updates/20260606_23_fix_sidebar_logo.sql"
     ]
 }
