@@ -1,8 +1,8 @@
 {
-    "version": "2026.06.06.19",
-    "package_url": "weimenjin_update_20260606_19.zip",
-    "sha256": "1fec67db9987e2aae362dcd29bf487306d2386411fa50113159b466985a718be",
-    "notes": "新增数据库结构检测与一键修复工具，自动补齐云喇叭历史、摄像头遥控、区域楼栋单元房号等缺失数据表，并修复云喇叭播报内容字段长度，避免旧库升级后结构不一致。",
+    "version": "2026.06.06.20",
+    "package_url": "weimenjin_update_20260606_20.zip",
+    "sha256": "12036509b1e123b803fd087942a50e4c4ec28c901fa6d53885bd396002c1c1dd",
+    "notes": "完善在线更新后的应用配置同步，升级成功和数据库修复后会自动从数据库重新生成 config/my.php，并刷新配置缓存；同时继续包含数据库结构修复脚本，用户无需再手动保存应用配置。",
     "force": false,
     "delete_paths": [],
     "sql_files": [

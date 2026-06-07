@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\service\SystemUpdateService;
 use app\module\model\AppConfig as AppConfigModel;
 use think\facade\Db;
 use think\Request;
@@ -45,7 +46,7 @@ class AppConfig extends Admin
                 $data['nocheck'] = json_encode($data['nocheck'], JSON_UNESCAPED_SLASHES);
             }
             AppConfigModel::saveConfigs($data);
-            if($this->generateMyPhpConfig())
+            if(SystemUpdateService::refreshRuntimeConfigFromDatabase())
             {return json(['status' => 'success', 'message' => '配置保存成功']);}
             else
             {return json(['status' => 'error', 'message' => '保存失败,请记得给目录www用户写入权限']);}

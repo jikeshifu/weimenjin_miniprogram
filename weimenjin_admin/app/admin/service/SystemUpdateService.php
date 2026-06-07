@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.19';
+    private const DEFAULT_VERSION = '2026.06.06.20';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -168,7 +168,7 @@ class SystemUpdateService
         $statements = self::executeSqlFile($file);
         self::ensureCloudAppConfigs();
         self::ensureRuntimeAppConfigs();
-        Cache::delete('db_configs');
+        self::refreshRuntimeConfigFromDatabase();
         $after = self::databaseStatus();
         self::writeLog('数据库结构检测修复完成: ' . json_encode([
             'before_missing' => $before['missing_count'],
@@ -587,7 +587,42 @@ class SystemUpdateService
         self::useUtf8mb4Connection();
         self::ensureCloudAppConfigs();
         self::ensureRuntimeAppConfigs();
+        self::refreshRuntimeConfigFromDatabase();
+    }
+
+    public static function refreshRuntimeConfigFromDatabase(): bool
+    {
+        self::useUtf8mb4Connection();
+        $configs = Db::name('appconfig')->select()->toArray();
+        $structuredConfig = [];
+        foreach ($configs as $config) {
+            $value = self::parseAppConfigValue((string) ($config['value'] ?? ''), (string) ($config['type'] ?? 'string'));
+            if (!empty($config['is_grouped'])) {
+                $structuredConfig[(string) $config['module']][(string) $config['name']] = $value;
+            } else {
+                $structuredConfig[(string) $config['name']] = $value;
+            }
+        }
+
+        $file = root_path() . 'config/my.php';
+        $dir = dirname($file);
+        if (!is_dir($dir) || !is_writable($dir)) {
+            throw new \RuntimeException('配置目录不可写，无法自动生成 config/my.php');
+        }
+
+        $content = "<?php\n\nreturn " . self::exportConfigArray($structuredConfig) . ";\n";
+        $tmp = $file . '.tmp.' . getmypid();
+        if (file_put_contents($tmp, $content, LOCK_EX) === false) {
+            throw new \RuntimeException('写入运行配置文件失败: config/my.php');
+        }
+        if (!rename($tmp, $file)) {
+            @unlink($tmp);
+            throw new \RuntimeException('替换运行配置文件失败: config/my.php');
+        }
+
         Cache::delete('db_configs');
+        self::writeLog('运行配置已从数据库自动刷新: config/my.php');
+        return true;
     }
 
     private static function ensureCloudAppConfigs(): void
@@ -783,6 +818,52 @@ class SystemUpdateService
             $data['config_type'] = 0;
         }
         Db::name('appconfig')->insert($data);
+    }
+
+    private static function parseAppConfigValue(string $value, string $type): mixed
+    {
+        switch ($type) {
+            case 'boolean':
+                return $value === '1' || strtolower($value) === 'true';
+            case 'integer':
+                return (int) $value;
+            case 'array':
+                $decoded = json_decode($value, true);
+                return is_array($decoded) ? $decoded : [];
+            case 'string':
+            default:
+                return $value;
+        }
+    }
+
+    private static function exportConfigArray(array $array, int $indent = 1, ?string $parentKey = null): string
+    {
+        $indentation = str_repeat('    ', $indent);
+        $code = "[\n";
+        foreach ($array as $key => $value) {
+            if ($parentKey === 'nocheck') {
+                $code .= $indentation . self::formatConfigValue($value, $indent + 1) . ",\n";
+                continue;
+            }
+            $formattedKey = is_int($key) ? (string) $key : var_export((string) $key, true);
+            $code .= $indentation . $formattedKey . ' => ' . self::formatConfigValue($value, $indent + 1, (string) $key) . ",\n";
+        }
+        $code .= str_repeat('    ', $indent - 1) . "]";
+        return $code;
+    }
+
+    private static function formatConfigValue(mixed $value, int $indent, ?string $parentKey = null): string
+    {
+        if (is_array($value)) {
+            return self::exportConfigArray($value, $indent, $parentKey);
+        }
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+        if (is_int($value)) {
+            return (string) $value;
+        }
+        return var_export((string) $value, true);
     }
 
     private static function appConfigColumns(): array
