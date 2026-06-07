@@ -213,6 +213,7 @@ class Lock extends Admin
                 $res = LockService::pageList(formatWhere($where), $limit, $field, $orderby);
                 $list = $res['list'];
                 foreach ($list as $key => &$value) {
+                    $value = \app\module\lockServer\Lock::ensureQrcode($value);
                     $value = \app\module\lockServer\Lock::Online($value, "lao");
                 }
             } catch (\Exception $e) {

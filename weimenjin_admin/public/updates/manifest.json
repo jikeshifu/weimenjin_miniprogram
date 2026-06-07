@@ -1,8 +1,8 @@
 {
-    "version": "2026.06.06.24",
-    "package_url": "weimenjin_update_20260606_24.zip",
-    "sha256": "bc06b37690b74589b6ec64dea78a0e0208ea68128748e826e4251d5c900d6dce",
-    "notes": "修复后台左侧栏 Logo 和顶部背景显示异常的问题，恢复微门禁后台默认图标与背景样式；同时优化在线更新，支持一次执行多个数据库脚本，确保配置修复随升级自动生效。",
+    "version": "2026.06.06.27",
+    "package_url": "weimenjin_update_20260606_27.zip",
+    "sha256": "713c85faa3bc6f1c2c2cbb0a935ca6fa54c174db38c1eee8efbb68af60190bdb",
+    "notes": "修复摄像头设备二维码生成，并自动补齐历史摄像头缺失的二维码；二维码文件名增加随机后缀；修复整仓部署时在线更新备份会把旧备份反复打包导致磁盘被占满的问题。",
     "force": false,
     "delete_paths": [],
     "sql_files": [

@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.24';
+    private const DEFAULT_VERSION = '2026.06.06.27';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -532,7 +532,9 @@ class SystemUpdateService
             if (
                 $relative === ''
                 || str_starts_with($relative, 'backup/update/')
+                || str_starts_with($relative, 'weimenjin_admin/backup/update/')
                 || str_starts_with($relative, self::WORK_DIR . '/')
+                || str_starts_with($relative, 'weimenjin_admin/' . self::WORK_DIR . '/')
                 || str_starts_with($relative, 'weimenjin_admin/public/updates/')
                 || str_starts_with($relative, 'public/updates/')
             ) {

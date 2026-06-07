@@ -498,6 +498,7 @@ class Lock
         try {
             $lock_id = LockService::add($data);
             $qrcodeurl = "https://" . $_SERVER['HTTP_HOST'] . "/minilock?" . "user_id=" . $data['user_id'] . "&lock_id=" . $lock_id;
+            $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
 
             if(!self::checkCamString($data["lock_sn"])){
                 $skip_apis = false;
@@ -512,9 +513,9 @@ class Lock
                         HardwareCloud::App()->QrCodeSet($data["lock_sn"], $qrcodeurl);
                     }
                 }
-                $data['lock_qrcode'] = self::createmarkqrcode($qrcodeurl, $data['lock_name']);
                 LockService::update(["lock_id" => $lock_id], $data);
             }else{
+                LockService::update(["lock_id" => $lock_id], ["lock_qrcode" => $data['lock_qrcode']]);
                 Db::name("cam_remote_control")->insert([
                     'device_sn' => $data["lock_sn"],
                     'title' => "遥控器",
@@ -555,6 +556,60 @@ class Lock
         return $target === '33' || $target === '34';
     }
 
+    public static function ensureQrcode(array $lock): array
+    {
+        if (empty($lock['lock_id'])) {
+            return $lock;
+        }
+        $qrcode = (string)($lock['lock_qrcode'] ?? '');
+        if ($qrcode !== '' && self::qrcodeFileExists($qrcode)) {
+            return $lock;
+        }
+        $url = self::buildQrcodeUrl($lock);
+        if ($url === '') {
+            return $lock;
+        }
+        $name = (string)($lock['lock_name'] ?? $lock['lock_sn'] ?? $lock['lock_id']);
+        $newQrcode = self::createmarkqrcode($url, $name);
+        if ($newQrcode) {
+            Db::name('lock')->where(['lock_id' => $lock['lock_id']])->update(['lock_qrcode' => $newQrcode]);
+            $lock['lock_qrcode'] = $newQrcode;
+        }
+        return $lock;
+    }
+
+    private static function buildQrcodeUrl(array $lock): string
+    {
+        if (empty($lock['user_id']) || empty($lock['lock_id'])) {
+            return '';
+        }
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if ($host === '') {
+            $siteUrl = (string)config('my.siteconfig.siteurl', '');
+            $host = (string)(parse_url($siteUrl, PHP_URL_HOST) ?: '');
+        }
+        if ($host === '') {
+            return '';
+        }
+        return 'https://' . $host . '/minilock?user_id=' . $lock['user_id'] . '&lock_id=' . $lock['lock_id'];
+    }
+
+    private static function qrcodeFileExists(string $qrcode): bool
+    {
+        $path = (string)(parse_url($qrcode, PHP_URL_PATH) ?: $qrcode);
+        if ($path === '') {
+            return false;
+        }
+        if (strpos($path, '/qrdata/qrcode/') === false) {
+            return true;
+        }
+        $filename = basename($path);
+        if ($filename === '') {
+            return false;
+        }
+        return is_file(app()->getRootPath() . 'public/qrdata/qrcode/' . $filename);
+    }
+
     /**
      * 生成带文字的二维码
      *
@@ -582,7 +637,7 @@ class Lock
         }
 
         // 生成唯一文件名
-        $file = time() . '.png';
+        $file = time() . '_' . mt_rand(1000, 9999) . '.png';
         $qrcode_file = $path . $file;
 
         // 直接生成二维码并保存到文件

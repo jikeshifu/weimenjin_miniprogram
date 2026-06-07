@@ -1008,6 +1008,7 @@ class Device extends Base
         $lockauth = $model->with("lock")->order("auth_sort desc")->page($page, $limit)->select()->toArray();
 
         foreach ($lockauth as &$vo) {
+            $vo["lock"] = \app\module\lockServer\Lock::ensureQrcode($vo["lock"] ?: []);
             $vo["lock"] = \app\module\lockServer\Lock::Online($vo["lock"]);
             $vo["lock"]["switch_state"] = 0;
             $vo["auth_endtime1"] = " ";
@@ -1063,6 +1064,7 @@ class Device extends Base
     {
         $lock_id = input("lock_id");
         $deviceinfo = Lock::Info($lock_id);
+        $deviceinfo = \app\module\lockServer\Lock::ensureQrcode($deviceinfo ?: []);
         return json(Code::CodeOk(["msg" => "获取成功", "deviceinfo" => $deviceinfo]));
     }
     function audioConfig()
