@@ -15,3 +15,4 @@ weimenjin_admin/public/.user.ini
 weimenjin_admin/extend/utils/wechart/zcerts/*.pem
 !weimenjin_admin/extend/utils/wechart/zcerts/README.md
 weimenjin_admin/public/updates/weimenjin_update_*.zip
+weimenjin_admin/public/updates/weimenjin_delta_*.zip

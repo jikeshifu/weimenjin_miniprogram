@@ -150,6 +150,7 @@
     Updater.latest = null;
     Updater.progressTimer = null;
     Updater.progressStartedAt = 0;
+    Updater.confirmTimer = null;
     Updater.progressSteps = [
         {percent: 8, text: '连接更新源'},
         {percent: 18, text: '下载更新包'},
@@ -190,6 +191,9 @@
         return size + ' B';
     };
     Updater.strategyName = function (strategy, packageType) {
+        if (strategy === 'baseline_delta' || packageType === 'delta_admin') {
+            return '增量后台更新包，仅覆盖变更文件';
+        }
         if (strategy === 'full_admin_preserve_runtime' || packageType === 'full_admin') {
             return '完整后台主版本包，保留用户配置和运行数据';
         }
@@ -203,6 +207,8 @@
             + Updater.summaryItem('当前版本', info.current_version)
             + Updater.summaryItem('最新版本', info.latest_version)
             + Updater.summaryItem('更新状态', statusText, statusClass)
+            + Updater.summaryItem('升级路径', info.upgrade_path)
+            + Updater.summaryItem('已选更新包', info.selected_package)
             + Updater.summaryItem('是否强制升级', info.force ? '是' : '否')
             + Updater.summaryItem('更新策略', Updater.strategyName(info.strategy, info.package_type))
             + Updater.summaryItem('更新文件数', info.file_count ? info.file_count + ' 个文件' : '-')
@@ -347,6 +353,83 @@
             $('#update-progress').hide().empty();
         }
     };
+    Updater.versionReached = function (current, latest) {
+        if (!current || !latest) {
+            return false;
+        }
+        var toParts = function (version) {
+            return String(version).split('.').map(function (part) {
+                return parseInt(part, 10) || 0;
+            });
+        };
+        var currentParts = toParts(current);
+        var latestParts = toParts(latest);
+        var length = Math.max(currentParts.length, latestParts.length);
+        for (var i = 0; i < length; i++) {
+            var a = currentParts[i] || 0;
+            var b = latestParts[i] || 0;
+            if (a > b) {
+                return true;
+            }
+            if (a < b) {
+                return false;
+            }
+        }
+        return true;
+    };
+    Updater.confirmInstallStatus = function () {
+        var latestVersion = Updater.latest ? Updater.latest.latest_version : '';
+        var attempts = 0;
+        if (Updater.confirmTimer) {
+            clearInterval(Updater.confirmTimer);
+        }
+        Updater.renderProgress(96, '等待服务器返回结果');
+        Updater.confirmTimer = setInterval(function () {
+            attempts++;
+            $.ajax({
+                type: 'post',
+                url: Feng.ctxPath + '/SystemUpdate/check?jstime=' + new Date().getTime(),
+                dataType: 'json',
+                data: Updater.params(),
+                success: function (data) {
+                    var info = data.data || {};
+                    if (data.status === '00' && Updater.versionReached(info.current_version, latestVersion)) {
+                        clearInterval(Updater.confirmTimer);
+                        Updater.confirmTimer = null;
+                        Updater.latest = info;
+                        Updater.stopProgress(true);
+                        Feng.success('升级已完成，页面即将刷新');
+                        Updater.showHtml(Updater.renderCheck(info) + '<div class="alert alert-success m-t-sm m-b-none">服务器已确认升级完成，页面将在 3 秒后刷新。</div>');
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
+                    } else if (attempts >= 36) {
+                        clearInterval(Updater.confirmTimer);
+                        Updater.confirmTimer = null;
+                        Updater.stopProgress(false);
+                        Feng.error('暂未确认升级完成，请查看日志或稍后刷新页面');
+                        Updater.showText('请求已中断，但服务器可能仍在后台执行。请稍后点击“检测更新”或“查看日志”确认结果。');
+                        if (Updater.latest && Updater.latest.has_update) {
+                            $('#install-btn').prop('disabled', false);
+                        }
+                    } else {
+                        Updater.renderProgress(96, '等待服务器返回结果');
+                    }
+                },
+                error: function () {
+                    if (attempts >= 36) {
+                        clearInterval(Updater.confirmTimer);
+                        Updater.confirmTimer = null;
+                        Updater.stopProgress(false);
+                        Feng.error('暂未确认升级完成，请稍后再试');
+                        if (Updater.latest && Updater.latest.has_update) {
+                            $('#install-btn').prop('disabled', false);
+                        }
+                    }
+                }
+            });
+        }, 5000);
+    };
     Updater.toggleAdvanced = function () {
         $('#advanced-update').toggle();
     };
@@ -398,6 +481,9 @@
                             Updater.stopProgress(true);
                             Feng.success(data.msg);
                             Updater.showHtml(Updater.renderInstall(data.data || {}));
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 3000);
                         } else {
                             Updater.stopProgress(false);
                             Feng.error(data.msg);
@@ -409,11 +495,8 @@
                     },
                     error: function () {
                         layer.close(loading);
-                        Updater.stopProgress(false);
-                        Feng.error('请求失败');
-                        if (Updater.latest && Updater.latest.has_update) {
-                            $('#install-btn').prop('disabled', false);
-                        }
+                        Feng.info('请求已中断，正在确认服务器升级结果...');
+                        Updater.confirmInstallStatus();
                     }
                 });
             }, 120);

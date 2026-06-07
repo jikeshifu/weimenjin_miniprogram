@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.37';
+    private const DEFAULT_VERSION = '2026.06.06.39';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
@@ -75,6 +75,9 @@ class SystemUpdateService
             'package_size' => (int) ($manifest['package_size'] ?? 0),
             'file_count' => (int) ($manifest['file_count'] ?? 0),
             'sql_files' => array_values((array) ($manifest['sql_files'] ?? [])),
+            'from_version' => (string) ($manifest['from_version'] ?? ''),
+            'upgrade_path' => (string) ($manifest['upgrade_path'] ?? ''),
+            'selected_package' => (string) ($manifest['selected_package'] ?? ''),
         ];
     }
 
@@ -82,6 +85,8 @@ class SystemUpdateService
     {
         self::prepareWorkDir();
         self::lock();
+        $archive = '';
+        $extractDir = '';
         try {
             $manifest = self::resolveManifest($manifestUrl, $packageUrl);
             if ($sha256 !== '' && empty($manifest['sha256'])) {
@@ -115,6 +120,7 @@ class SystemUpdateService
                 'time' => date('Y-m-d H:i:s'),
             ];
             self::writeLog('更新完成: ' . json_encode($result, JSON_UNESCAPED_UNICODE));
+            self::cleanupUpdateArtifacts($archive, $extractDir);
             return $result;
         } finally {
             self::unlock();
@@ -212,7 +218,9 @@ class SystemUpdateService
             $manifest = [];
         }
 
-        if ($packageUrl !== '') {
+        if ($packageUrl === '') {
+            $manifest = self::selectPackageForCurrentVersion($manifest, self::currentVersion(), $manifestUrl);
+        } else {
             $manifest['package_url'] = $packageUrl;
         }
         if (empty($manifest['package_url'])) {
@@ -223,6 +231,77 @@ class SystemUpdateService
         }
         $manifest['package_url'] = self::resolveUrl((string) $manifest['package_url'], $manifestUrl);
         return $manifest;
+    }
+
+    private static function selectPackageForCurrentVersion(array $manifest, string $currentVersion, string $manifestUrl): array
+    {
+        $packages = (array) ($manifest['packages'] ?? []);
+        if (!$packages) {
+            return $manifest;
+        }
+
+        $latestVersion = (string) ($manifest['version'] ?? '');
+        $matched = null;
+        foreach ($packages as $package) {
+            if (!is_array($package)) {
+                continue;
+            }
+            if (self::packageMatchesVersion($package, $currentVersion)) {
+                $matched = $package;
+                break;
+            }
+        }
+
+        if ($matched === null) {
+            foreach ($packages as $package) {
+                if (!is_array($package)) {
+                    continue;
+                }
+                $type = (string) ($package['package_type'] ?? '');
+                $strategy = (string) ($package['strategy'] ?? '');
+                if ($type === 'full_admin' || $strategy === 'full_admin_preserve_runtime') {
+                    $matched = $package;
+                    break;
+                }
+            }
+        }
+
+        if ($matched === null) {
+            throw new \RuntimeException('未找到适合当前版本的更新包，请先升级到可用基线版本');
+        }
+
+        $selected = array_merge($manifest, $matched);
+        $selected['version'] = (string) ($matched['version'] ?? $matched['to_version'] ?? $latestVersion);
+        $selected['package_url'] = self::resolveUrl((string) ($matched['package_url'] ?? ''), $manifestUrl);
+        $selected['baseline_url'] = self::resolveUrl((string) ($matched['baseline_url'] ?? $manifest['baseline_url'] ?? ''), $manifestUrl);
+        $selected['selected_package'] = (string) ($matched['name'] ?? $matched['package_url'] ?? '');
+        $selected['upgrade_path'] = $currentVersion . ' -> ' . $selected['version'];
+        $selected['packages'] = $packages;
+        return $selected;
+    }
+
+    private static function packageMatchesVersion(array $package, string $currentVersion): bool
+    {
+        $fromVersion = (string) ($package['from_version'] ?? '');
+        if ($fromVersion !== '' && version_compare($currentVersion, $fromVersion, '==')) {
+            return true;
+        }
+
+        foreach ((array) ($package['from_versions'] ?? []) as $version) {
+            if (version_compare($currentVersion, (string) $version, '==')) {
+                return true;
+            }
+        }
+
+        $min = (string) ($package['min_version'] ?? '');
+        $max = (string) ($package['max_version'] ?? '');
+        if ($min !== '' && version_compare($currentVersion, $min, '<')) {
+            return false;
+        }
+        if ($max !== '' && version_compare($currentVersion, $max, '>')) {
+            return false;
+        }
+        return $min !== '' || $max !== '';
     }
 
     private static function resolveUrl(string $url, string $baseUrl = ''): string
@@ -1338,8 +1417,13 @@ class SystemUpdateService
 
     private static function prepareWorkDir(): void
     {
+        static $prepared = false;
         $dir = root_path() . self::WORK_DIR;
         self::ensureWritableDir($dir, '更新临时目录');
+        if (!$prepared) {
+            $prepared = true;
+            self::cleanupStaleUpdateArtifacts($dir);
+        }
     }
 
     private static function ensureWritableDir(string $dir, string $label): void
@@ -1371,6 +1455,40 @@ class SystemUpdateService
     private static function unlock(): void
     {
         @unlink(self::workPath('update.lock'));
+    }
+
+    private static function cleanupUpdateArtifacts(string $archive, string $extractDir): void
+    {
+        if ($archive !== '' && is_file($archive)) {
+            @unlink($archive);
+        }
+        if ($extractDir !== '' && is_dir($extractDir)) {
+            self::removeDir($extractDir);
+        }
+        self::cleanupStaleUpdateArtifacts(root_path() . self::WORK_DIR);
+        self::writeLog('更新临时文件清理完成');
+    }
+
+    private static function cleanupStaleUpdateArtifacts(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        $keepSeconds = 86400;
+        foreach (glob(rtrim($dir, '/\\') . '/*') ?: [] as $path) {
+            $name = basename($path);
+            if ($name === 'update.log' || $name === 'update.lock') {
+                continue;
+            }
+            $isUpdateTemp = preg_match('/^(extract_|package_|manifest_)/', $name) === 1;
+            if (!$isUpdateTemp) {
+                continue;
+            }
+            if (time() - (int) @filemtime($path) < $keepSeconds) {
+                continue;
+            }
+            is_dir($path) ? self::removeDir($path) : @unlink($path);
+        }
     }
 
     private static function writeLog(string $message): void

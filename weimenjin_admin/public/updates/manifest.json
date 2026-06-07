@@ -1,19 +1,61 @@
 {
-    "version": "2026.06.06.37",
-    "package_url": "weimenjin_update_2026_06_06_37.zip",
-    "sha256": "dcc43f77cf98398d95bc1d9b86c026c51168e6b7c79bce41939f59defef30a89",
-    "notes": "修复在线更新 SQL 拆分在旧环境下可能破坏 UTF-8 中文的问题；升级清单仅保留安全结构修复脚本，接口、小程序、硬件云等运行配置以升级前 config/my.php 为准迁移到数据库，避免生产配置被旧值覆盖。",
+    "version": "2026.06.06.39",
+    "package_url": "weimenjin_update_2026_06_06_39.zip",
+    "sha256": "bfb06b0f6cee315592a63b888624e95d3a87a7d5e2151b42a2bc50cdcb1d8fd8",
+    "notes": "支持按当前版本自动选择合适升级包：基线对齐后优先使用增量包，跨版本无直接增量时自动兜底完整包；登录页品牌名称改为读取系统配置；升级请求超时后自动轮询确认结果并刷新页面。",
     "force": false,
     "package_type": "full_admin",
     "strategy": "full_admin_preserve_runtime",
-    "baseline_url": "baseline_2026_06_06_37.json",
-    "baseline_sha256": "6f7830c285b11d265b645e90fe9ec7f751f35ac5e1645d3d2432e244933a8b27",
-    "package_size": 123329328,
+    "baseline_url": "baseline_2026_06_06_39.json",
+    "baseline_sha256": "0eed09e5aa3a838ca47ea859be8a3b8fdf9479fc2ae90ea81a463fa70ff81244",
+    "package_size": 123330917,
     "file_count": 9446,
     "delete_paths": [],
     "sql_files": [
         "weimenjin_admin/database/update_20260606_10.sql",
         "weimenjin_admin/database/updates/20260606_19_sync_schema.sql",
         "weimenjin_admin/database/updates/20260606_23_fix_sidebar_logo.sql"
+    ],
+    "packages": [
+        {
+            "name": "weimenjin_delta_2026_06_06_38_to_2026_06_06_39.zip",
+            "version": "2026.06.06.39",
+            "from_version": "2026.06.06.38",
+            "from_baseline_url": "baseline_2026_06_06_38.json",
+            "to_version": "2026.06.06.39",
+            "package_url": "weimenjin_delta_2026_06_06_38_to_2026_06_06_39.zip",
+            "sha256": "31fff5b90a021c9d1cd44c98c07a0d0a2c4bad022f8629ebb248edf83c68b7a6",
+            "package_type": "delta_admin",
+            "strategy": "baseline_delta",
+            "baseline_url": "baseline_2026_06_06_39.json",
+            "baseline_sha256": "0eed09e5aa3a838ca47ea859be8a3b8fdf9479fc2ae90ea81a463fa70ff81244",
+            "package_size": 44447,
+            "file_count": 5,
+            "delete_paths": [],
+            "sql_files": [
+                "weimenjin_admin/database/update_20260606_10.sql",
+                "weimenjin_admin/database/updates/20260606_19_sync_schema.sql",
+                "weimenjin_admin/database/updates/20260606_23_fix_sidebar_logo.sql"
+            ]
+        },
+        {
+            "name": "weimenjin_update_2026_06_06_39.zip",
+            "version": "2026.06.06.39",
+            "to_version": "2026.06.06.39",
+            "package_url": "weimenjin_update_2026_06_06_39.zip",
+            "sha256": "bfb06b0f6cee315592a63b888624e95d3a87a7d5e2151b42a2bc50cdcb1d8fd8",
+            "package_type": "full_admin",
+            "strategy": "full_admin_preserve_runtime",
+            "baseline_url": "baseline_2026_06_06_39.json",
+            "baseline_sha256": "0eed09e5aa3a838ca47ea859be8a3b8fdf9479fc2ae90ea81a463fa70ff81244",
+            "package_size": 123330917,
+            "file_count": 9446,
+            "delete_paths": [],
+            "sql_files": [
+                "weimenjin_admin/database/update_20260606_10.sql",
+                "weimenjin_admin/database/updates/20260606_19_sync_schema.sql",
+                "weimenjin_admin/database/updates/20260606_23_fix_sidebar_logo.sql"
+            ]
+        }
     ]
 }
