@@ -343,7 +343,10 @@
         ajax.start();
     };
     Updater.install = function () {
-        Feng.confirm('升级前会自动备份代码和数据库，执行期间请不要关闭页面。确认开始升级？', function () {
+        layer.confirm('升级前会自动备份代码和数据库，执行期间请不要关闭页面。确认开始升级？', {
+            btn: ['确定', '取消']
+        }, function (index) {
+            layer.close(index);
             var loading = layer.msg('正在升级，请勿关闭页面...', {
                 icon: 16,
                 shade: [0.18, '#000'],
@@ -383,6 +386,8 @@
                     }
                 });
             }, 120);
+        }, function (index) {
+            layer.close(index);
         });
     };
     Updater.databaseCheck = function () {
@@ -397,7 +402,10 @@
         ajax.start();
     };
     Updater.databaseRepair = function () {
-        Feng.confirm('修复数据库会自动补齐缺失的数据表，不会删除已有数据。确认开始修复？', function () {
+        layer.confirm('修复数据库会自动补齐缺失的数据表，不会删除已有数据。确认开始修复？', {
+            btn: ['确定', '取消']
+        }, function (index) {
+            layer.close(index);
             var loading = layer.msg('正在检测并修复数据库结构...', {
                 icon: 16,
                 shade: [0.18, '#000'],
@@ -418,6 +426,8 @@
             });
             ajax.async = true;
             ajax.start();
+        }, function (index) {
+            layer.close(index);
         });
     };
     Updater.logs = function () {

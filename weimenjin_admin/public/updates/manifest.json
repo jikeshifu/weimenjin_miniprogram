@@ -1,8 +1,8 @@
 {
-    "version": "2026.06.06.27",
-    "package_url": "weimenjin_update_20260606_27.zip",
-    "sha256": "713c85faa3bc6f1c2c2cbb0a935ca6fa54c174db38c1eee8efbb68af60190bdb",
-    "notes": "修复摄像头设备二维码生成，并自动补齐历史摄像头缺失的二维码；二维码文件名增加随机后缀；修复整仓部署时在线更新备份会把旧备份反复打包导致磁盘被占满的问题。",
+    "version": "2026.06.06.29",
+    "package_url": "weimenjin_update_20260606_29.zip",
+    "sha256": "40972dc92583a9f0031bdbf11adab12b007460cf296ea9453b8585a8a186f2f9",
+    "notes": "修复云喇叭定时播报接口缺少硬件云 SendData 兼容方法导致的 500 错误；优化在线升级确认后的进度条显示。",
     "force": false,
     "delete_paths": [],
     "sql_files": [
