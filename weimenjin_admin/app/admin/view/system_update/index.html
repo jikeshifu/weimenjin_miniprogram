@@ -36,6 +36,8 @@
                         <div class="col-sm-offset-2 col-sm-8">
                             <button class="btn btn-primary" onclick="Updater.check()"><i class="fa fa-search"></i> 检测更新</button>
                             <button class="btn btn-danger" id="install-btn" onclick="Updater.install()" disabled><i class="fa fa-cloud-download"></i> 立即升级</button>
+                            <button class="btn btn-info" onclick="Updater.databaseCheck()"><i class="fa fa-database"></i> 检测数据库</button>
+                            <button class="btn btn-warning" onclick="Updater.databaseRepair()"><i class="fa fa-wrench"></i> 修复数据库</button>
                             <button class="btn btn-default" onclick="Updater.logs()"><i class="fa fa-list"></i> 查看日志</button>
                             <button class="btn btn-link" onclick="Updater.toggleAdvanced()">高级设置</button>
                         </div>
@@ -225,6 +227,42 @@
         }).join('');
         return '<h4 class="update-result-title">更新日志</h4><ul class="update-log-list">' + items + '</ul>';
     };
+    Updater.renderDatabaseStatus = function (status) {
+        var missing = status.missing || [];
+        var statusText = missing.length ? '发现异常项目，建议点击“修复数据库”' : '数据库结构正常';
+        var statusClass = missing.length ? 'update-status-warn' : 'update-status-ok';
+        var html = '<h4 class="update-result-title">数据库结构检测</h4><div class="update-summary">'
+            + Updater.summaryItem('检测时间', status.checked_at)
+            + Updater.summaryItem('检测项目', status.total)
+            + Updater.summaryItem('正常项目', status.ok_count)
+            + Updater.summaryItem('异常项目', status.missing_count)
+            + Updater.summaryItem('检测结果', statusText, statusClass)
+            + '</div>';
+        if (missing.length) {
+            html += '<ul class="update-log-list">';
+            $.each(missing, function (_, item) {
+                html += '<li><span class="update-status-warn">' + Updater.escape(item.status || '异常') + '</span>：'
+                    + Updater.escape(item.label) + '（' + Updater.escape(item.column ? item.table + '.' + item.column : item.table) + '）</li>';
+            });
+            html += '</ul>';
+        } else {
+            html += '<div class="alert alert-success m-b-none">关键数据库表已完整，无需修复。</div>';
+        }
+        return html;
+    };
+    Updater.renderDatabaseRepair = function (result) {
+        var before = result.before || {};
+        var after = result.after || {};
+        var html = '<h4 class="update-result-title">数据库结构修复结果</h4><div class="update-summary">'
+            + Updater.summaryItem('修复时间', result.time)
+            + Updater.summaryItem('执行语句数', result.statements)
+            + Updater.summaryItem('修复前异常', before.missing_count)
+            + Updater.summaryItem('修复后异常', after.missing_count)
+            + Updater.summaryItem('修复结果', after.missing_count > 0 ? '仍有项目需人工检查' : '已修复完成', after.missing_count > 0 ? 'update-status-warn' : 'update-status-ok')
+            + '</div>';
+        html += Updater.renderDatabaseStatus(after);
+        return html;
+    };
     Updater.showHtml = function (html) {
         $('#update-result').show().html(html);
     };
@@ -336,6 +374,40 @@
                 }
             });
             ajax.setData(Updater.params());
+            ajax.start();
+        });
+    };
+    Updater.databaseCheck = function () {
+        var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/databaseCheck', function (data) {
+            if (data.status === '00') {
+                Updater.showHtml(Updater.renderDatabaseStatus(data.data || {}));
+            } else {
+                Feng.error(data.msg);
+                Updater.showText(data.msg);
+            }
+        });
+        ajax.start();
+    };
+    Updater.databaseRepair = function () {
+        Feng.confirm('修复数据库会自动补齐缺失的数据表，不会删除已有数据。确认开始修复？', function () {
+            var loading = layer.msg('正在检测并修复数据库结构...', {
+                icon: 16,
+                shade: [0.18, '#000'],
+                time: 0
+            });
+            var ajax = new $ax(Feng.ctxPath + '/SystemUpdate/databaseRepair', function (data) {
+                layer.close(loading);
+                if (data.status === '00') {
+                    Feng.success(data.msg);
+                    Updater.showHtml(Updater.renderDatabaseRepair(data.data || {}));
+                } else {
+                    Feng.error(data.msg);
+                    Updater.showText(data.msg);
+                }
+            }, function () {
+                layer.close(loading);
+                Feng.error('请求失败');
+            });
             ajax.start();
         });
     };

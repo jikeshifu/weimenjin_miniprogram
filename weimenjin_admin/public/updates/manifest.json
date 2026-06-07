@@ -1,13 +1,11 @@
 {
-    "version":  "2026.06.06.18",
-    "package_url":  "weimenjin_update_20260606_18.zip",
-    "sha256":  "00ad73e51a7dfcca73d6ccaac068a35f1cf075089ee9dccc7c5dcf5cb05eecab",
-    "notes":  "修复后台左侧栏Logo/头像显示异常，恢复为固定64px头像并增加样式兜底，避免图片撑开侧栏。",
-    "force":  false,
-    "delete_paths":  [
-
-                     ],
-    "sql_files":  [
-                      "weimenjin_admin/database/updates/20260606_16_fix_cloud_config.sql"
-                  ]
+    "version": "2026.06.06.19",
+    "package_url": "weimenjin_update_20260606_19.zip",
+    "sha256": "1fec67db9987e2aae362dcd29bf487306d2386411fa50113159b466985a718be",
+    "notes": "新增数据库结构检测与一键修复工具，自动补齐云喇叭历史、摄像头遥控、区域楼栋单元房号等缺失数据表，并修复云喇叭播报内容字段长度，避免旧库升级后结构不一致。",
+    "force": false,
+    "delete_paths": [],
+    "sql_files": [
+        "weimenjin_admin/database/updates/20260606_19_sync_schema.sql"
+    ]
 }

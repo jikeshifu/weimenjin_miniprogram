@@ -11,7 +11,8 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.18';
+    private const DEFAULT_VERSION = '2026.06.06.19';
+    private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
 
     private static array $preserveFiles = [
         '.env',
@@ -114,6 +115,73 @@ class SystemUpdateService
             return '';
         }
         return (string) file_get_contents($file);
+    }
+
+    public static function databaseStatus(): array
+    {
+        self::useUtf8mb4Connection();
+        $required = self::requiredDatabaseTables();
+        $tables = array_keys($required);
+        $existing = self::existingTables($tables);
+        $items = [];
+        foreach ($required as $table => $label) {
+            $exists = in_array($table, $existing, true);
+            $items[] = [
+                'table' => $table,
+                'label' => $label,
+                'exists' => $exists,
+                'status' => $exists ? '正常' : '缺失',
+            ];
+        }
+        $columns = self::existingColumnDefinitions(self::requiredDatabaseColumns());
+        foreach (self::requiredDatabaseColumns() as $column) {
+            $key = $column['table'] . '.' . $column['column'];
+            $definition = $columns[$key] ?? null;
+            $ok = $definition && in_array(strtolower((string) ($definition['DATA_TYPE'] ?? '')), $column['allowed_types'], true);
+            $items[] = [
+                'table' => $column['table'],
+                'column' => $column['column'],
+                'label' => $column['label'],
+                'exists' => $ok,
+                'status' => $ok ? '正常' : '需修复',
+            ];
+        }
+        $missing = array_values(array_filter($items, static fn($item) => !$item['exists']));
+        return [
+            'total' => count($items),
+            'ok_count' => count($items) - count($missing),
+            'missing_count' => count($missing),
+            'items' => $items,
+            'missing' => $missing,
+            'checked_at' => date('Y-m-d H:i:s'),
+        ];
+    }
+
+    public static function repairDatabase(): array
+    {
+        self::useUtf8mb4Connection();
+        $before = self::databaseStatus();
+        $file = root_path() . self::SCHEMA_REPAIR_SQL;
+        if (!is_file($file)) {
+            throw new \RuntimeException('数据库结构修复脚本不存在: ' . self::SCHEMA_REPAIR_SQL);
+        }
+        $statements = self::executeSqlFile($file);
+        self::ensureCloudAppConfigs();
+        self::ensureRuntimeAppConfigs();
+        Cache::delete('db_configs');
+        $after = self::databaseStatus();
+        self::writeLog('数据库结构检测修复完成: ' . json_encode([
+            'before_missing' => $before['missing_count'],
+            'after_missing' => $after['missing_count'],
+            'statements' => $statements,
+            'time' => date('Y-m-d H:i:s'),
+        ], JSON_UNESCAPED_UNICODE));
+        return [
+            'before' => $before,
+            'after' => $after,
+            'statements' => $statements,
+            'time' => date('Y-m-d H:i:s'),
+        ];
     }
 
     private static function resolveManifest(string $manifestUrl, string $packageUrl): array
@@ -359,6 +427,7 @@ class SystemUpdateService
     private static function executeSqlFile(string $file): int
     {
         $sql = file_get_contents($file);
+        $sql = self::applyConfiguredTablePrefix($sql);
         $statements = self::splitSql($sql);
         $count = 0;
         foreach ($statements as $statement) {
@@ -736,6 +805,77 @@ class SystemUpdateService
         } catch (\Throwable $e) {
             self::writeLog('数据库字符集设置跳过: ' . $e->getMessage());
         }
+    }
+
+    private static function requiredDatabaseTables(): array
+    {
+        $prefix = (string) config('database.connections.mysql.prefix', 'cd_');
+        return [
+            $prefix . 'cam_remote_control' => '摄像头遥控器配置表',
+            $prefix . 'horn_broadcast_history' => '云喇叭播报历史表',
+            $prefix . 'areas' => '区域表',
+            $prefix . 'buildings' => '楼栋表',
+            $prefix . 'units' => '单元表',
+            $prefix . 'rooms' => '房号表',
+            $prefix . 'member_rooms' => '用户房号绑定表',
+            $prefix . 'member_room_applications' => '房号授权申请表',
+            $prefix . 'member_push_tokens' => '用户推送 Token 表',
+        ];
+    }
+
+    private static function existingTables(array $tables): array
+    {
+        if (!$tables) {
+            return [];
+        }
+        $quotedTables = implode(',', array_map([self::class, 'quoteSqlValue'], array_values($tables)));
+        $rows = Db::query(
+            'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN (' . $quotedTables . ')'
+        );
+        return array_map(static fn($row) => (string) ($row['TABLE_NAME'] ?? ''), $rows);
+    }
+
+    private static function requiredDatabaseColumns(): array
+    {
+        $prefix = (string) config('database.connections.mysql.prefix', 'cd_');
+        return [
+            [
+                'table' => $prefix . 'lock',
+                'column' => 'openttscontent',
+                'label' => '云喇叭播报内容字段',
+                'allowed_types' => ['text', 'mediumtext', 'longtext'],
+            ],
+        ];
+    }
+
+    private static function existingColumnDefinitions(array $columns): array
+    {
+        if (!$columns) {
+            return [];
+        }
+        $conditions = [];
+        foreach ($columns as $column) {
+            $conditions[] = '(TABLE_NAME = ' . self::quoteSqlValue($column['table']) . ' AND COLUMN_NAME = ' . self::quoteSqlValue($column['column']) . ')';
+        }
+        $rows = Db::query(
+            'SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND (' . implode(' OR ', $conditions) . ')'
+        );
+        $result = [];
+        foreach ($rows as $row) {
+            $result[(string) $row['TABLE_NAME'] . '.' . (string) $row['COLUMN_NAME']] = $row;
+        }
+        return $result;
+    }
+
+    private static function applyConfiguredTablePrefix(string $sql): string
+    {
+        $prefix = (string) config('database.connections.mysql.prefix', 'cd_');
+        if ($prefix === '' || $prefix === 'cd_') {
+            return $sql;
+        }
+        $backtickPrefix = str_replace('`', '``', $prefix);
+        $quotedPrefix = str_replace(["\\", "'"], ["\\\\", "\\'"], $prefix);
+        return str_replace(['`cd_', "'cd_"], ['`' . $backtickPrefix, "'" . $quotedPrefix], $sql);
     }
 
     private static function shouldPreserve(string $relative): bool

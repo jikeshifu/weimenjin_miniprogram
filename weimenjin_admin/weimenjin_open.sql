@@ -126,7 +126,7 @@ INSERT INTO `cd_appconfig` VALUES (4, 'base', '基本参数', 'drop_application_
 INSERT INTO `cd_appconfig` VALUES (5, 'base', '基本参数', 'max_dump_data', '50000', 'integer', 'excel最大导出数据量', '2024-10-13 23:11:54', 0, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (6, 'base', '基本参数', 'upload_dir', './uploads', 'string', '文件上传根目录', '2024-10-13 23:11:54', 0, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (7, 'base', '基本参数', 'upload_subdir', 'Ym', 'string', '文件上传二级目录（日期格式）', '2024-10-13 23:11:54', 0, 0, 0, 0);
-INSERT INTO `cd_appconfig` VALUES (8, 'base', '基本参数', 'nocheck', '["/admin/Login/Verify","/admin/Login/indexQrCode","/admin/Login/index","/admin/Index/index","/admin/Index/main","/admin/Login/out","/admin/Upload/editorUpload","/admin/Upload/uploadImages","/admin/Upload/uploadUeditor","/admin/Login/captcha","/admin/SystemUpdate/index","/admin/SystemUpdate/check","/admin/SystemUpdate/install","/admin/SystemUpdate/logs"]', 'array', '无需验证的权限URL', '2024-10-13 23:11:54', 0, 1, 0, 0);
+INSERT INTO `cd_appconfig` VALUES (8, 'base', '基本参数', 'nocheck', '["/admin/Login/Verify","/admin/Login/indexQrCode","/admin/Login/index","/admin/Index/index","/admin/Index/main","/admin/Login/out","/admin/Upload/editorUpload","/admin/Upload/uploadImages","/admin/Upload/uploadUeditor","/admin/Login/captcha","/admin/SystemUpdate/index","/admin/SystemUpdate/check","/admin/SystemUpdate/install","/admin/SystemUpdate/logs","/admin/SystemUpdate/databaseCheck","/admin/SystemUpdate/databaseRepair"]', 'array', '无需验证的权限URL', '2024-10-13 23:11:54', 0, 1, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (9, 'base', '基本参数', 'img_show_status', '1', 'boolean', '鼠标悬停时是否显示图片', '2024-10-13 23:11:54', 0, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (10, 'base', '基本参数', 'export_per_num', '50', 'integer', 'excel每次导入数据量', '2024-10-13 23:11:54', 0, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (11, 'base', '基本参数', 'import_type', 'csv', 'string', '导入文件类型', '2024-10-13 23:11:54', 0, 0, 0, 0);
@@ -173,7 +173,7 @@ INSERT INTO `cd_appconfig` VALUES (126, 'wmjv2', '微门禁V2接口', 'wmjv2_app
 INSERT INTO `cd_appconfig` VALUES (127, 'wmjv2', '微门禁V2接口', 'wmjv2_appsecret', '', 'string', '微门禁V2硬件appsecret', '2024-10-14 06:11:28', 1, 0, 95, 3);
 INSERT INTO `cd_appconfig` VALUES (128, 'wmjsms', '短信接口', 'wmjsms_lable', '【微门禁】', 'string', '短信签名', '2024-10-14 23:32:23', 1, 0, 93, 3);
 INSERT INTO `cd_appconfig` VALUES (130, 'siteconfig', '站点链接', 'siteurl', 'https://demo.wmj.com.cn', 'string', '站点链接', '2024-11-25 13:40:13', 1, 0, 0, 0);
-INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.18', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
+INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.06.19', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (132, 'update', '系统更新', 'manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json', 'string', '更新清单地址', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (133, 'login', '登录设置', 'disclaimer_content', '开源免责声明
 本开源版本仅用于学习、研究、演示和二次开发参考，不承诺适用于任何特定业务场景。使用者应自行评估系统功能、数据安全、网络安全、设备兼容性和合规要求。
@@ -500,7 +500,7 @@ CREATE TABLE `cd_lock`  (
   `hitshowminiad` tinyint(1) NULL DEFAULT NULL COMMENT '点击开门广告',
   `qrshowminiad` tinyint(1) NULL DEFAULT NULL COMMENT '扫码开门广告',
   `volume` int NULL DEFAULT NULL COMMENT '音量',
-  `openttscontent` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '语音内容',
+  `openttscontent` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '语音内容',
   `addcardmode` int NULL DEFAULT 2 COMMENT '进出发卡模式',
   `openadurl` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '开门成功外链',
   `adnum` smallint NULL DEFAULT NULL COMMENT '成功弹层方式',

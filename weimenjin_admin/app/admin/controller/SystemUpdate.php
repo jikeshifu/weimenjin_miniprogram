@@ -50,6 +50,26 @@ class SystemUpdate extends Admin
         }
     }
 
+    public function databaseCheck()
+    {
+        try {
+            $this->assertFounder();
+            return json(['status' => '00', 'msg' => '检测完成', 'data' => SystemUpdateService::databaseStatus()]);
+        } catch (\Throwable $e) {
+            return json(['status' => '01', 'msg' => $e->getMessage()]);
+        }
+    }
+
+    public function databaseRepair()
+    {
+        try {
+            $this->assertFounder();
+            return json(['status' => '00', 'msg' => '数据库结构修复完成', 'data' => SystemUpdateService::repairDatabase()]);
+        } catch (\Throwable $e) {
+            return json(['status' => '01', 'msg' => $e->getMessage()]);
+        }
+    }
+
     private function assertFounder()
     {
         if (session('admin.role') != 1) {
