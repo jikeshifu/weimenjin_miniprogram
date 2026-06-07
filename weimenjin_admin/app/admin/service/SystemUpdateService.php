@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.41';
+    private const DEFAULT_VERSION = '2026.06.06.42';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -90,7 +90,7 @@ class SystemUpdateService
         $extractDir = '';
         try {
             $manifest = self::resolveManifest($manifestUrl, $packageUrl);
-            if ($sha256 !== '' && empty($manifest['sha256'])) {
+            if ($sha256 !== '') {
                 $manifest['sha256'] = $sha256;
             }
 
