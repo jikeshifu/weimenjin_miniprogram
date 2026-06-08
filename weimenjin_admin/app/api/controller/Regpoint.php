@@ -268,7 +268,7 @@ class Regpoint extends Common {
         // 确保目录存在，如果不存在则尝试创建
         if (!is_dir($path)) {
             if (!mkdir($path, 0755, true)) {
-                error_log("二维码目录创建失败: " . $path);
+                false && error_log("二维码目录创建失败: " . $path);
                 return false;
             }
         }
@@ -293,7 +293,7 @@ class Regpoint extends Common {
                 // 生成二维码并保存到文件
                 $qrcode->render($url, $qrcode_file);
             } catch (\Exception $e) {
-                error_log("二维码生成失败: " . $e->getMessage());
+                false && error_log("二维码生成失败: " . $e->getMessage());
                 return false;
             }
         }
@@ -304,7 +304,7 @@ class Regpoint extends Common {
 
             // 验证字体文件是否存在
             if (!file_exists($font)) {
-                error_log("二维码生成失败: 字体文件不存在 - " . $font);
+                false && error_log("二维码生成失败: 字体文件不存在 - " . $font);
                 return false;
             }
 
@@ -313,7 +313,7 @@ class Regpoint extends Common {
             // 计算文字的宽度和高度
             $box = @imagettfbbox($size, 0, $font, $qrcodename);
             if (!$box) {
-                error_log("二维码生成失败: 无法计算文字尺寸 - " . $qrcodename);
+                false && error_log("二维码生成失败: 无法计算文字尺寸 - " . $qrcodename);
                 return false;
             }
             $fontw = abs($box[4] - $box[0]); // 文字宽度
@@ -322,7 +322,7 @@ class Regpoint extends Common {
             // 创建二维码图像资源
             $im = imagecreatefrompng($qrcode_file);
             if (!$im) {
-                error_log("二维码生成失败: 无法创建图像资源 - " . $qrcode_file);
+                false && error_log("二维码生成失败: 无法创建图像资源 - " . $qrcode_file);
                 return false;
             }
 
@@ -334,7 +334,7 @@ class Regpoint extends Common {
             // 创建新的空白图像（使用 imagecreatetruecolor 提供更好的图像质量）
             $img = imagecreatetruecolor($imgw, $imgh);
             if (!$img) {
-                error_log("二维码生成失败: 无法创建新的图像");
+                false && error_log("二维码生成失败: 无法创建新的图像");
                 imagedestroy($im);
                 return false;
             }
@@ -357,7 +357,7 @@ class Regpoint extends Common {
 
             // 合并二维码图像到新图像
             if (!imagecopymerge($img, $im, 0, 0, 0, 0, $imgw, $info[1], 100)) {
-                error_log("二维码生成失败: 无法合并图像");
+                false && error_log("二维码生成失败: 无法合并图像");
                 imagedestroy($im);
                 imagedestroy($img);
                 return false;
@@ -365,7 +365,7 @@ class Regpoint extends Common {
 
             // 保存最终的二维码图像
             if (!imagepng($img, $qrcode_file)) {
-                error_log("二维码生成失败: 无法保存最终的二维码图像 - " . $qrcode_file);
+                false && error_log("二维码生成失败: 无法保存最终的二维码图像 - " . $qrcode_file);
                 imagedestroy($im);
                 imagedestroy($img);
                 return false;

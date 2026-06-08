@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.06.42';
+    private const DEFAULT_VERSION = '2026.06.08.02';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -1378,6 +1378,7 @@ class SystemUpdateService
 
     private static function httpDownload(string $url, string $file): void
     {
+        self::assertSafeHttpUrl($url);
         if (!function_exists('curl_init')) {
             throw new \RuntimeException('服务器未安装 cURL 扩展，无法下载更新包');
         }
@@ -1394,6 +1395,8 @@ class SystemUpdateService
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_USERAGENT => 'WeimenjinUpdater/1.0',
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+            CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
         ]);
         curl_exec($ch);
         $error = curl_error($ch);
@@ -1404,6 +1407,80 @@ class SystemUpdateService
             @unlink($file);
             throw new \RuntimeException('下载失败: ' . ($error ?: 'HTTP ' . $status));
         }
+    }
+
+    private static function assertSafeHttpUrl(string $url): void
+    {
+        $parts = parse_url($url);
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $host = (string) ($parts['host'] ?? '');
+        if (!in_array($scheme, ['http', 'https'], true) || $host === '') {
+            throw new \RuntimeException('Only HTTP/HTTPS update URLs are allowed');
+        }
+
+        $ips = self::resolveHostIps($host);
+        if (!$ips) {
+            throw new \RuntimeException('Update URL host cannot be resolved');
+        }
+        foreach ($ips as $ip) {
+            if (self::isPrivateOrReservedIp($ip)) {
+                throw new \RuntimeException('Update URL cannot point to local, private, or reserved IP ranges');
+            }
+        }
+    }
+
+    private static function resolveHostIps(string $host): array
+    {
+        $host = trim($host, '[]');
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            return [$host];
+        }
+
+        $records = @dns_get_record($host, DNS_A + DNS_AAAA);
+        if (!is_array($records)) {
+            return [];
+        }
+
+        $ips = [];
+        foreach ($records as $record) {
+            foreach (['ip', 'ipv6'] as $key) {
+                if (!empty($record[$key]) && filter_var($record[$key], FILTER_VALIDATE_IP)) {
+                    $ips[] = (string) $record[$key];
+                }
+            }
+        }
+        return array_values(array_unique($ips));
+    }
+
+    private static function isPrivateOrReservedIp(string $ip): bool
+    {
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $long = ip2long($ip);
+            $ranges = [
+                ['0.0.0.0', '0.255.255.255'],
+                ['10.0.0.0', '10.255.255.255'],
+                ['100.64.0.0', '100.127.255.255'],
+                ['127.0.0.0', '127.255.255.255'],
+                ['169.254.0.0', '169.254.255.255'],
+                ['172.16.0.0', '172.31.255.255'],
+                ['192.0.0.0', '192.0.0.255'],
+                ['192.0.2.0', '192.0.2.255'],
+                ['192.168.0.0', '192.168.255.255'],
+                ['198.18.0.0', '198.19.255.255'],
+                ['198.51.100.0', '198.51.100.255'],
+                ['203.0.113.0', '203.0.113.255'],
+                ['224.0.0.0', '255.255.255.255'],
+            ];
+            foreach ($ranges as [$start, $end]) {
+                if ($long >= ip2long($start) && $long <= ip2long($end)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
+            && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
     }
 
     private static function isUnsafeArchivePath(string $path): bool
@@ -1527,7 +1604,6 @@ class SystemUpdateService
 
     private static function writeLog(string $message): void
     {
-        self::prepareWorkDir();
-        file_put_contents(root_path() . self::LOG_FILE, '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL, FILE_APPEND);
+        return;
     }
 }

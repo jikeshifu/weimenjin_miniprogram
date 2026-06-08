@@ -71,14 +71,6 @@ class LockLog extends Admin {
 				$start_ts = strtotime($create_time_start);
 				$end_ts = strtotime($create_time_end);
 				// 调试日志
-				if (function_exists('file_put_contents')) {
-					file_put_contents('/tmp/dumpdata.log', json_encode([
-						'start' => $create_time_start,
-						'end' => $create_time_end,
-						'start_ts' => $start_ts,
-						'end_ts' => $end_ts
-					]).PHP_EOL, FILE_APPEND);
-				}
 				if ($create_time_start && $create_time_end && $start_ts && $end_ts) {
 					$where['a.create_time'] = ['between', [$start_ts, $end_ts]];
 				}

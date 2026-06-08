@@ -416,9 +416,9 @@ if (!function_exists('db')) {
 }
 
 function mlog($txt,$filename='log.txt') {
-    $txt = date('Y/m/d H:i:s').": {$txt}\r\n";
-    file_put_contents('./log/'.date('Y-m-d').$filename, $txt, FILE_APPEND); //追加内容
+    return;
 }
+
 /**
      * curl请求指定url(POST请求)
      * $url请求的URL

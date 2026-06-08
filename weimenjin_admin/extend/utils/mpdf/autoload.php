@@ -15,7 +15,7 @@ spl_autoload_register(static function ($class) {
         if (is_file($fullpath)) {
             require_once $fullpath;
         } else {
-            error_log('File not found: ' . $fullpath); // To help debug issues with paths
+            false && error_log('File not found: ' . $fullpath); // To help debug issues with paths
         }
     }
 });
