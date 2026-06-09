@@ -300,6 +300,31 @@
         html += Updater.renderDatabaseStatus(after);
         return html;
     };
+    Updater.renderStatus = function (status) {
+        var lockedText = status.locked ? '有更新任务正在执行' : '当前没有正在执行的更新任务';
+        var retryText = status.can_retry ? '可以重新发起更新' : '请等待当前任务结束';
+        var statusClass = status.locked && !status.stale ? 'update-status-warn' : 'update-status-ok';
+        var html = '<h4 class="update-result-title">更新任务状态</h4><div class="update-summary">'
+            + Updater.summaryItem('任务状态', lockedText, statusClass)
+            + Updater.summaryItem('当前阶段', status.message || status.stage || '-')
+            + Updater.summaryItem('开始时间', status.started_at || '-')
+            + Updater.summaryItem('最后更新', status.updated_at || '-')
+            + Updater.summaryItem('已执行', (status.age_seconds || 0) + ' 秒')
+            + Updater.summaryItem('无进度变化', (status.idle_seconds || 0) + ' 秒')
+            + Updater.summaryItem('是否超时', status.stale ? '已超过 10 分钟，可重试' : '未超时')
+            + Updater.summaryItem('重试建议', retryText)
+            + Updater.summaryItem('目标版本', status.version || '-')
+            + Updater.summaryItem('已选更新包', status.selected_package || '-')
+            + Updater.summaryItem('更新包地址', status.package_url || '-')
+            + Updater.summaryItem('更新源', status.manifest_url || '-')
+            + '</div>';
+        if (status.locked) {
+            html += '<div class="alert alert-warning m-b-none">如果状态长期停留在同一个阶段，通常就是卡点位置。超过 10 分钟后再次点击升级会自动覆盖陈旧锁重新执行。</div>';
+        } else {
+            html += '<div class="alert alert-info m-b-none">当前没有更新锁，可以正常检测或发起升级。</div>';
+        }
+        return html;
+    };
     Updater.showHtml = function (html) {
         $('#update-result').show().html(html);
     };
@@ -488,6 +513,7 @@
                             Updater.stopProgress(false);
                             Feng.error(data.msg);
                             Updater.showText(data.msg);
+                            Updater.status();
                             if (Updater.latest && Updater.latest.has_update) {
                                 $('#install-btn').prop('disabled', false);
                             }
@@ -554,7 +580,26 @@
         });
         ajax.start();
     };
+    Updater.status = function () {
+        $.ajax({
+            type: 'post',
+            url: Feng.ctxPath + '/SystemUpdate/status?jstime=' + new Date().getTime(),
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === '00') {
+                    Updater.showHtml(Updater.renderStatus(data.data || {}));
+                } else {
+                    Feng.error(data.msg);
+                    Updater.showText(data.msg);
+                }
+            },
+            error: function () {
+                Feng.error('更新状态读取失败');
+            }
+        });
+    };
     $(function () {
+        $('[onclick="Updater.logs()"]').after(' <button class="btn btn-default" onclick="Updater.status()"><i class="fa fa-tasks"></i> 查看更新状态</button>');
         Updater.check();
     });
 </script>

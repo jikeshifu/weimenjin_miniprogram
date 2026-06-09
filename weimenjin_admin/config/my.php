@@ -25,6 +25,7 @@ return [
         '/admin/SystemUpdate/check',
         '/admin/SystemUpdate/install',
         '/admin/SystemUpdate/logs',
+        '/admin/SystemUpdate/status',
     ],
     'img_show_status' => true,
     'export_per_num' => 50,
@@ -139,7 +140,7 @@ return [
         'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
     ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.09.01'),
+        'current_version' => Env::get('update.current_version', '2026.06.09.02'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [

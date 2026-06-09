@@ -50,6 +50,16 @@ class SystemUpdate extends Admin
         }
     }
 
+    public function status()
+    {
+        try {
+            $this->assertFounder();
+            return json(['status' => '00', 'data' => SystemUpdateService::status()]);
+        } catch (\Throwable $e) {
+            return json(['status' => '01', 'msg' => $e->getMessage()]);
+        }
+    }
+
     public function databaseCheck()
     {
         try {

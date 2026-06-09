@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.09.01';
+    private const DEFAULT_VERSION = '2026.06.09.02';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -89,28 +89,39 @@ class SystemUpdateService
         $archive = '';
         $extractDir = '';
         try {
+            self::updateProgress('resolve_manifest', '正在读取更新清单');
             $manifest = self::resolveManifest($manifestUrl, $packageUrl);
             if ($sha256 !== '') {
                 $manifest['sha256'] = $sha256;
             }
+            self::updateProgress('download_package', '正在下载更新包', $manifest);
 
             $archive = self::downloadPackage($manifest);
+            self::updateProgress('extract_package', '正在解压更新包', $manifest);
             $extractDir = self::extractPackage($archive);
             $packageRoot = self::locatePackageRoot($extractDir);
             $layout = self::installLayout();
+            self::updateProgress('snapshot_config', '正在读取运行配置', $manifest);
             $runtimeConfig = self::loadRuntimeConfigSnapshot();
 
+            self::updateProgress('backup', '正在备份代码、数据库和运行配置', $manifest);
             $backup = [
                 'code' => self::backupCode(),
                 'database' => self::backupDatabase(),
                 'runtime_config' => self::backupRuntimeConfig(),
             ];
 
+            self::updateProgress('apply_files', '正在覆盖更新文件', $manifest);
             self::applyPackage($packageRoot, $layout['target'], $layout['strip_admin_prefix']);
+            self::updateProgress('run_sql', '正在执行数据库升级脚本', $manifest);
             $sqlResult = self::runDatabaseUpgrade($packageRoot, $manifest);
+            self::updateProgress('migrate_config', '正在迁移运行配置', $manifest);
             $configMigration = self::migrateRuntimeConfigToDatabase($runtimeConfig);
+            self::updateProgress('delete_paths', '正在处理清理项', $manifest);
             self::applyDeletePaths($manifest, $layout);
+            self::updateProgress('mark_installed', '正在写入新版本号', $manifest);
             self::markInstalled((string) ($manifest['version'] ?? ''), (string) ($manifest['_manifest_url'] ?? ''));
+            self::updateProgress('clear_runtime', '正在清理缓存', $manifest);
             self::clearRuntime();
 
             $result = [
@@ -121,12 +132,59 @@ class SystemUpdateService
                 'time' => date('Y-m-d H:i:s'),
             ];
             self::writeLog('更新完成: ' . json_encode($result, JSON_UNESCAPED_UNICODE));
+            self::updateProgress('completed', '更新完成', $manifest);
             self::cleanupUpdateArtifacts($archive, $extractDir);
             self::cleanupOldUpdateBackups();
             return $result;
+        } catch (\Throwable $e) {
+            self::updateProgress('failed', '更新失败: ' . $e->getMessage());
+            throw $e;
         } finally {
             self::unlock();
         }
+    }
+
+    public static function status(): array
+    {
+        self::prepareWorkDir();
+        $file = self::workPath('update.lock');
+        $now = time();
+        $data = [];
+        if (is_file($file)) {
+            $raw = (string) file_get_contents($file);
+            $decoded = json_decode($raw, true);
+            if (is_array($decoded)) {
+                $data = $decoded;
+            } elseif (trim($raw) !== '' && ctype_digit(trim($raw))) {
+                $data = [
+                    'started_at_ts' => (int) trim($raw),
+                    'stage' => 'running',
+                    'message' => '已有更新任务正在执行',
+                ];
+            }
+        }
+        $startedAt = (int) ($data['started_at_ts'] ?? (is_file($file) ? filemtime($file) : 0));
+        $updatedAt = (int) ($data['updated_at_ts'] ?? (is_file($file) ? filemtime($file) : 0));
+        $age = $startedAt > 0 ? max(0, $now - $startedAt) : 0;
+        $idle = $updatedAt > 0 ? max(0, $now - $updatedAt) : 0;
+        $locked = is_file($file);
+        $stale = $locked && $age >= 600;
+        return [
+            'locked' => $locked,
+            'stale' => $stale,
+            'can_retry' => !$locked || $stale,
+            'stage' => (string) ($data['stage'] ?? ($locked ? 'running' : 'idle')),
+            'message' => (string) ($data['message'] ?? ($locked ? '已有更新任务正在执行' : '当前没有正在执行的更新任务')),
+            'started_at' => $startedAt > 0 ? date('Y-m-d H:i:s', $startedAt) : '',
+            'updated_at' => $updatedAt > 0 ? date('Y-m-d H:i:s', $updatedAt) : '',
+            'age_seconds' => $age,
+            'idle_seconds' => $idle,
+            'version' => (string) ($data['version'] ?? ''),
+            'package_url' => (string) ($data['package_url'] ?? ''),
+            'manifest_url' => (string) ($data['manifest_url'] ?? ''),
+            'selected_package' => (string) ($data['selected_package'] ?? ''),
+            'pid' => (int) ($data['pid'] ?? 0),
+        ];
     }
 
     public static function logs(): string
@@ -1551,6 +1609,39 @@ class SystemUpdateService
             throw new \RuntimeException('已有更新任务正在执行，请稍后再试');
         }
         file_put_contents($file, (string) time());
+    }
+
+    private static function updateProgress(string $stage, string $message, array $manifest = []): void
+    {
+        $file = self::workPath('update.lock');
+        if (!is_file($file)) {
+            return;
+        }
+        $raw = (string) file_get_contents($file);
+        $data = json_decode($raw, true);
+        if (!is_array($data)) {
+            $startedAt = trim($raw) !== '' && ctype_digit(trim($raw)) ? (int) trim($raw) : (filemtime($file) ?: time());
+            $data = [
+                'started_at_ts' => $startedAt,
+                'pid' => function_exists('getmypid') ? (int) getmypid() : 0,
+            ];
+        }
+        $data['stage'] = $stage;
+        $data['message'] = $message;
+        $data['updated_at_ts'] = time();
+        if (isset($manifest['version'])) {
+            $data['version'] = (string) $manifest['version'];
+        }
+        if (isset($manifest['_manifest_url'])) {
+            $data['manifest_url'] = (string) $manifest['_manifest_url'];
+        }
+        if (isset($manifest['package_url'])) {
+            $data['package_url'] = (string) $manifest['package_url'];
+        }
+        if (isset($manifest['selected_package'])) {
+            $data['selected_package'] = (string) $manifest['selected_package'];
+        }
+        file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
     }
 
     private static function unlock(): void
