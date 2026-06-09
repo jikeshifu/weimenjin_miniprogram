@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.08.02';
+    private const DEFAULT_VERSION = '2026.06.09.01';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -827,6 +827,9 @@ class SystemUpdateService
             ['path' => ['wxmp', 'wxmp_appid'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appid', 'type' => 'string', 'description' => 'AppID(小程序ID)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 1, 'default' => '', 'runtime_wins' => true],
             ['path' => ['wxmp', 'wxmp_appsecret'], 'module' => 'wxmp', 'module_name' => '微信小程序配置', 'name' => 'wxmp_appsecret', 'type' => 'string', 'description' => 'AppSecret(小程序密钥)', 'is_grouped' => 1, 'sort_order' => 100, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
             ['path' => ['siteconfig', 'siteurl'], 'module' => 'siteconfig', 'module_name' => '站点链接', 'name' => 'siteurl', 'type' => 'string', 'description' => '站点链接', 'is_grouped' => 1, 'sort_order' => 0, 'group_sort_order' => 0, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
+            ['path' => ['siteconfig', 'icp_enabled'], 'module' => 'siteconfig', 'module_name' => '????', 'name' => 'icp_enabled', 'type' => 'boolean', 'description' => '?????????', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => true, 'runtime_wins' => true],
+            ['path' => ['siteconfig', 'icp_no'], 'module' => 'siteconfig', 'module_name' => '????', 'name' => 'icp_no', 'type' => 'string', 'description' => '??????', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['siteconfig', 'icp_url'], 'module' => 'siteconfig', 'module_name' => '????', 'name' => 'icp_url', 'type' => 'string', 'description' => '???????', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 4, 'default' => 'https://beian.miit.gov.cn/', 'runtime_wins' => true],
             ['path' => ['wmjv1', 'wmjv1_url'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_url', 'type' => 'string', 'description' => '微门禁V1硬件云地址', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 1, 'default' => 'https://www.wmj.com.cn', 'runtime_wins' => true],
             ['path' => ['wmjv1', 'wmjv1_appid'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appid', 'type' => 'string', 'description' => '微门禁V1硬件appid', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
             ['path' => ['wmjv1', 'wmjv1_appsecret'], 'module' => 'wmjv1', 'module_name' => '微门禁V1接口', 'name' => 'wmjv1_appsecret', 'type' => 'string', 'description' => '微门禁V1硬件appsecret', 'is_grouped' => 1, 'sort_order' => 96, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
@@ -1006,6 +1009,9 @@ class SystemUpdateService
         self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'api_url', 'https://demo.wmj.com.cn/api', '小程序接口地址', 90, 2);
         self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'asset_url', 'https://demo.wmj.com.cn', '小程序资源地址', 90, 3);
         self::insertAppConfigIfMissing('miniapp', '小程序运行配置', 'camweb_url', 'https://demo.wmj.com.cn/camweb/', '摄像头 Web 地址', 90, 4);
+        self::insertAppConfigIfMissing('siteconfig', '????', 'icp_enabled', '1', '?????????', 90, 2, 'boolean');
+        self::insertAppConfigIfMissing('siteconfig', '????', 'icp_no', '', '??????', 90, 3);
+        self::insertAppConfigIfMissing('siteconfig', '????', 'icp_url', 'https://beian.miit.gov.cn/', '???????', 90, 4);
 
         self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'enabled', '0', '是否启用实时对讲', 89, 1, 'boolean');
         self::insertAppConfigIfMissing('live_talk', '实时对讲配置', 'public_wss_base', '', '公开 WebSocket 基础地址', 89, 2);

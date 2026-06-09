@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use think\facade\Env;
 
@@ -39,7 +39,7 @@ return [
     'wmjsms' => [
         'wmjsms_appid' => Env::get('wmjsms.appid', ''),
         'wmjsms_appsecret' => Env::get('wmjsms.appsecret', ''),
-        'wmjsms_lable' => '【微门禁】',
+        'wmjsms_lable' => '銆愬井闂ㄧ銆?,
     ],
     'wifilock_key' => Env::get('wifilock.key', ''),
     'wifilock_devicecid' => Env::get('wifilock.devicecid', ''),
@@ -112,6 +112,9 @@ return [
     ],
     'siteconfig' => [
         'siteurl' => Env::get('site.url', 'https://demo.wmj.com.cn'),
+        'icp_enabled' => Env::get('site.icp_enabled', true),
+        'icp_no' => Env::get('site.icp_no', ''),
+        'icp_url' => Env::get('site.icp_url', 'https://beian.miit.gov.cn/'),
     ],
     'miniapp' => [
         'site_url' => Env::get('miniapp.site_url', 'https://demo.wmj.com.cn'),
@@ -136,10 +139,11 @@ return [
         'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
     ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.08.02'),
+        'current_version' => Env::get('update.current_version', '2026.06.09.01'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [
         'disclaimer_content' => Env::get('login.disclaimer_content', ''),
     ],
 ];
+

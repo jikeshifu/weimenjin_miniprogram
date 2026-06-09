@@ -55,7 +55,14 @@
         <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="{:url('admin/Index/main')}" frameborder="0" data-id="{:url('admin/Index/main')}" seamless></iframe>
     </div>
     <div class="footer">
-        <div class="pull-right">&copy; 2015-<span id="currentYear"></span> <a href="http://www.wmj.com.cn" target="_blank"></a>
+        <div class="pull-right">
+            {if condition="config('my.siteconfig.icp_enabled') && config('my.siteconfig.icp_no')"}
+            <a href="{:config('my.siteconfig.icp_url')}" target="_blank" rel="noopener noreferrer">
+                {:htmlspecialchars(config('my.siteconfig.icp_no'))}
+            </a>
+            &nbsp;|&nbsp;
+            {/if}
+            &copy; 2015-<span id="currentYear"></span> <a href="http://www.wmj.com.cn" target="_blank"></a>
         </div>
     </div>
     <script>

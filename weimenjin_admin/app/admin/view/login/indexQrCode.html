@@ -220,6 +220,9 @@
     <footer class="page-footer">
         &copy; <script>document.write(new Date().getFullYear())</script>
         <a href="javascript:void(0);">{:config('xhadmin.site_title')}</a>
+        {if condition="config('my.siteconfig.icp_enabled') && config('my.siteconfig.icp_no')"}
+        <a href="{:config('my.siteconfig.icp_url')}" target="_blank" rel="noopener noreferrer">{:htmlspecialchars(config('my.siteconfig.icp_no'))}</a>
+        {/if}
         <a class="disclaimer-link" href="javascript:void(0);" onclick="showDisclaimer()">免责声明</a>
     </footer>
 </main>
