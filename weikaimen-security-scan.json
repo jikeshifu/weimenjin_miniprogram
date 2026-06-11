@@ -1,0 +1,63 @@
+{
+  "target_ip": "198.18.0.45",
+  "generated_at": "2026-06-09T06:50:11Z",
+  "hosts": [
+    {
+      "host": "weikaimen.wmj.com.cn",
+      "schemes": {
+        "http": {
+          "home": {
+            "status": "HTTP/1.1 301 Moved Permanently",
+            "headers": {
+              "server": "nginx",
+              "content-type": "text/html",
+              "location": "https://weikaimen.wmj.com.cn/"
+            }
+          },
+          "findings": [],
+          "errors": []
+        },
+        "https": {
+          "home": {
+            "status": "HTTP/1.1 200 OK",
+            "headers": {
+              "server": "nginx",
+              "content-type": "text/html; charset=UTF-8"
+            }
+          },
+          "findings": [
+            {
+              "host": "weikaimen.wmj.com.cn",
+              "scheme": "https",
+              "severity": "info",
+              "type": "missing_x-frame-options",
+              "path": "/"
+            },
+            {
+              "host": "weikaimen.wmj.com.cn",
+              "scheme": "https",
+              "severity": "info",
+              "type": "missing_x-content-type-options",
+              "path": "/"
+            },
+            {
+              "host": "weikaimen.wmj.com.cn",
+              "scheme": "https",
+              "severity": "info",
+              "type": "missing_content-security-policy",
+              "path": "/"
+            }
+          ],
+          "errors": []
+        }
+      }
+    }
+  ],
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 3
+  }
+}
