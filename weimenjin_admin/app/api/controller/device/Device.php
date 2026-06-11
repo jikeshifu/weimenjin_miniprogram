@@ -28,7 +28,13 @@ class Device extends Base
     {
 
         $data["lock_name"] = trim(input("lock_name"));
+        if ($data["lock_name"] === '') {
+            $data["lock_name"] = trim((string)input("device_name"));
+        }
         $data["lock_sn"] = strtoupper(trim(input("lock_sn")));
+        if ($data["lock_name"] === '' && Lock::checkCamString($data["lock_sn"])) {
+            $data["lock_name"] = "摄像头";
+        }
         $device_group_id = input("device_group_id");
 
 
@@ -53,7 +59,7 @@ class Device extends Base
             } else {
                 //为了兼容过去设备在默认分组情况下id=0
                 $DeviceGroupInfo = \app\module\device\server\DeviceGroup::Info($device_group_id);
-                if ($DeviceGroupInfo["type"] == 1) {
+                if ($DeviceGroupInfo && $DeviceGroupInfo["type"] == 1) {
                     $device_group_id = 0;
                 }
 

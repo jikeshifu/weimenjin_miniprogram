@@ -6,7 +6,7 @@
         <text class="label">名称</text>
         <input
           class="input"
-          placeholder="请输入锁名称"
+          placeholder="请输入设备名称"
           placeholder-class="placeholder"
           v-model="formData.lock_name"
           @blur="autoSave"

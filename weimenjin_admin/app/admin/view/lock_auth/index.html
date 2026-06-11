@@ -15,9 +15,9 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">锁名称</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">设备名称</button>
 									</div>
-									<input type="text" class="form-control" id="lock_name" placeholder="锁名称" />
+									<input type="text" class="form-control" id="lock_name" placeholder="设备名称" />
 								</div>
 							</div>
 						<div class="col-sm-2">
@@ -93,7 +93,7 @@
 		return [
 			{field: 'selectItem', checkbox: true},
 			{title: '编号', field: 'lockauth_id', visible: true, align: 'center', valign: 'middle',sortable: true},
-			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
+			{title: '设备名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle',sortable: true},
 			{title: '是否是管理', field: 'auth_isadmin', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.auth_isadminFormatter},
 			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
 			{title: '备注', field: 'remark', visible: true, align: 'center', valign: 'middle',sortable: true},

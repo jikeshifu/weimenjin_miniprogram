@@ -71,6 +71,7 @@
 				uni.scanCode({
 					success: (res) => {
 						this.lock_sn = res.result
+						this.setLockName(this.lock_sn)
 					}
 				});
 			},
@@ -79,6 +80,11 @@
 				this.device_group_id = this.dataList[e.detail.value].device_group_id
 			},
 			async onSubmit() {
+				this.lock_sn = (this.lock_sn || '').trim().toUpperCase()
+				this.lock_name = (this.lock_name || '').trim()
+				if ((this.lock_sn.startsWith('W33') || this.lock_sn.startsWith('W34')) && !this.lock_name) {
+					this.lock_name = "摄像头"
+				}
 				if (!this.lock_sn) {
 					this.showToast('序列号不能是空！')
 					return
@@ -129,6 +135,16 @@
 			checkString(str) {
 			  const target = str.slice(-10, -8);
 			  return target === '33' || target === '34';
+			},
+			setLockName(sn){
+				sn = (sn || '').trim().toUpperCase()
+				if(sn.startsWith('W71') || sn.startsWith('W72')){
+					this.lock_name = "断路器"
+				}else if(sn.startsWith('W33') || sn.startsWith('W34') || sn.startsWith('KRT')){
+					this.lock_name = "摄像头"
+				}else if(sn.startsWith('K23')){
+					this.lock_name = "4G开关"
+				}
 			},
 			showToast(msg) {
 				uni.showToast({

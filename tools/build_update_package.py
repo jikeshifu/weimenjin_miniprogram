@@ -256,7 +256,7 @@ def build(version: str, notes: str, force: bool = False, from_baselines: list[st
     manifest = {
         "version": version,
         "package_url": top_package["package_url"],
-        "sha256": top_package["sha256"],
+        "sha256": "",
         "notes": notes,
         "force": force,
         "package_type": top_package["package_type"],

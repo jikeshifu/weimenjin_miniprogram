@@ -15,9 +15,9 @@
 							<div class="col-sm-2">
 								<div class="input-group">
 									<div class="input-group-btn">
-										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">锁名称</button>
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">设备名称</button>
 									</div>
-									<input type="text" class="form-control" id="lock_name" placeholder="锁名称" />
+									<input type="text" class="form-control" id="lock_name" placeholder="设备名称" />
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -102,7 +102,7 @@
 		return [
 			{field: 'selectItem', checkbox: true},
 			{title: '编号', field: 'locklog_id', visible: true, align: 'center', valign: 'middle',sortable: true},
-			{title: '锁名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle', sortable: true, formatter: CodeGoods.lockNameFormatter},
+			{title: '设备名称', field: 'lock_name', visible: true, align: 'center', valign: 'middle', sortable: true, formatter: CodeGoods.lockNameFormatter},
 			{title: '头像', field: 'headimgurl', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.headimgurlFormatter},
 			{title: '呢称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
 			{title: '姓名', field: 'realname', visible: true, align: 'center', valign: 'middle',sortable: true},
@@ -141,9 +141,9 @@
 		if (!value) {
 			return '';
 		}
-		// 限制锁名称显示8个字符，多余的用省略号
+		// 限制设备名称显示8个字符，多余的用省略号
 		var displayName = value.length > 8 ? value.substr(0, 8) + '...' : value;
-		// 鼠标悬停时显示完整的锁名称
+		// 鼠标悬停时显示完整的设备名称
 		return '<span title="' + value + '">' + displayName + '</span>';
 	};
 

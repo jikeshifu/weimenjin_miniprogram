@@ -457,10 +457,19 @@ class Lock extends Common {
 	* {"status":" 201","msg":"操作失败"}
 	*/
 	function add(){
-		$postField = 'member_id,user_id,lock_name,lock_sn,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,create_time';
+		$postField = 'member_id,user_id,lock_name,lock_sn,device_name,mobile_check,applyauth,applyauth_check,status,lock_type,location,location_check,create_time';
 		$data = $this->request->only(explode(',',$postField),'post',null);
 		if(empty($data['lock_sn'])) return json(['status'=>$this->errorCode,'msg'=>'序列号不能为空']);
-		if(empty($data['lock_name'])) return json(['status'=>$this->errorCode,'msg'=>'锁名称不能为空']);
+		$data['lock_sn'] = strtoupper(trim($data['lock_sn']));
+		$data['lock_name'] = trim((string)($data['lock_name'] ?? ''));
+		if($data['lock_name'] === '' && !empty($data['device_name'])) {
+			$data['lock_name'] = trim((string)$data['device_name']);
+		}
+		if($data['lock_name'] === '' && \app\module\lockServer\Lock::checkCamString($data['lock_sn'])) {
+			$data['lock_name'] = '摄像头';
+		}
+		unset($data['device_name']);
+		if(empty($data['lock_name'])) return json(['status'=>$this->errorCode,'msg'=>'设备名称不能为空']);
         if(!$data['member_id']){
             $data['member_id'] =$this->_data["uid"];
         }
@@ -953,4 +962,3 @@ class Lock extends Common {
 
 
 }
-

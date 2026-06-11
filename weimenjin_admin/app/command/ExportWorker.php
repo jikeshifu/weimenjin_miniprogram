@@ -76,7 +76,7 @@ class ExportWorker extends Command
         $files = [];
         $filenamePrefix = 'locklog_' . date('Ymd_His') . '_' . $task_id;
         $csvHeader = [
-            '编号','锁名称','头像','呢称','姓名','备注','手机号','状态','类型','开门时间'
+            '编号','设备名称','头像','呢称','姓名','备注','手机号','状态','类型','开门时间'
         ];
         for ($i = 0; $i < $batches; $i++) {
             $offset = $i * $batchSize;

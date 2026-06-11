@@ -8,7 +8,7 @@
                 <view class="cell-item">
                     <view class="label">设备名称</view>
                     <input
-                        placeholder="请输入锁名称"
+                        placeholder="请输入设备名称"
                         placeholder-class="placeholder"
                         style="color: #21CF3E;"
                         v-model="formData.lock_name"
@@ -169,7 +169,7 @@ export default {
     methods: {
         async autoSubmitBasic() {
             if (!this.formData.lock_name.trim()) {
-                this.showToast('请输入锁名称')
+                this.showToast('请输入设备名称')
                 return
             }
 
