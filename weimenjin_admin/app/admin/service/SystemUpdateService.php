@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.09.10';
+    private const DEFAULT_VERSION = '2026.06.09.11';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -234,6 +234,18 @@ class SystemUpdateService
             'missing' => $missing,
             'checked_at' => date('Y-m-d H:i:s'),
         ];
+    }
+
+    public static function ensureApplicationConfigReady(bool $refreshRuntimeConfig = false): void
+    {
+        self::useUtf8mb4Connection();
+        self::ensureCloudAppConfigs();
+        self::ensureRuntimeAppConfigs();
+        if ($refreshRuntimeConfig) {
+            self::refreshRuntimeConfigFromDatabase();
+        } else {
+            Cache::delete('db_configs');
+        }
     }
 
     public static function repairDatabase(): array
@@ -843,7 +855,6 @@ class SystemUpdateService
         try {
             self::ensureCloudAppConfigs();
             self::ensureRuntimeAppConfigs();
-            self::migrateLegacyHardwareRouteFromRuntime($runtimeConfig);
         } catch (\Throwable $e) {
             self::writeLog('旧运行配置迁移跳过，应用配置表暂不可用: ' . $e->getMessage());
             return $result;
@@ -945,30 +956,6 @@ class SystemUpdateService
             $value = $value[$segment];
         }
         return $value;
-    }
-
-    private static function migrateLegacyHardwareRouteFromRuntime(array $runtimeConfig): void
-    {
-        $routes = self::runtimeConfigValue($runtimeConfig, ['hardware_cloud_routes', 'routes']);
-        if (is_string($routes)) {
-            $routes = json_decode($routes, true);
-        }
-        if (!is_array($routes)) {
-            return;
-        }
-        $first = reset($routes);
-        if (!is_array($first)) {
-            return;
-        }
-
-        $enabled = !array_key_exists('enabled', $first) || !empty($first['enabled']);
-        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', $enabled ? '1' : '0', 'boolean', '路由1启用', 1, 97, 1, '1', true);
-        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_name', (string) ($first['name'] ?? '摄像头官方硬件云'), 'string', '路由1名称', 1, 97, 2, '摄像头官方硬件云', true);
-        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', self::normalizeLegacyRoutePrefixes($first['prefixes'] ?? 'W33,W34'), 'string', '路由1设备前缀', 1, 97, 3, 'W33,W34', true);
-        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_url', (string) ($first['url'] ?? 'https://wdev.wmj.com.cn/deviceApi/'), 'string', '路由1硬件云地址', 1, 97, 4, 'https://wdev.wmj.com.cn/deviceApi/', true);
-        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_appid', (string) ($first['appid'] ?? ''), 'string', '路由1硬件云appid', 1, 97, 5, '', true);
-        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', (string) ($first['appsecret'] ?? ''), 'string', '路由1硬件云appsecret', 1, 97, 6, '', true);
-        Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->delete();
     }
 
     private static function isMigratableConfigValue(mixed $value): bool
@@ -1101,14 +1088,13 @@ class SystemUpdateService
         self::updateAppConfigSort('wmjv1', 'wmjv1_appsecret', 3);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appid', 2);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appsecret', 3);
-        $legacyRoute = self::loadLegacyHardwareCloudRoute();
-        $legacyRouteEnabled = !array_key_exists('enabled', $legacyRoute) || !empty($legacyRoute['enabled']);
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', $legacyRouteEnabled ? '1' : '0', '路由1启用', 97, 1, 'boolean');
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_name', (string) ($legacyRoute['name'] ?? '摄像头官方硬件云'), '路由1名称', 97, 2);
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', self::normalizeLegacyRoutePrefixes($legacyRoute['prefixes'] ?? 'W33,W34'), '路由1设备前缀', 97, 3);
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_url', (string) ($legacyRoute['url'] ?? 'https://wdev.wmj.com.cn/deviceApi/'), '路由1硬件云地址', 97, 4);
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appid', (string) ($legacyRoute['appid'] ?? ''), '路由1硬件云appid', 97, 5);
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', (string) ($legacyRoute['appsecret'] ?? ''), '路由1硬件云appsecret', 97, 6);
+        Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->delete();
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', '1', '路由1启用', 97, 1, 'boolean');
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_name', '摄像头官方硬件云', '路由1名称', 97, 2);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', 'W33,W34', '路由1设备前缀', 97, 3);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_url', 'https://wdev.wmj.com.cn/deviceApi/', '路由1硬件云地址', 97, 4);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appid', '', '路由1硬件云appid', 97, 5);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', '', '路由1硬件云appsecret', 97, 6);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_enabled', '0', '路由2启用', 97, 7, 'boolean');
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_name', '', '路由2名称', 97, 8);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_prefixes', '', '路由2设备前缀', 97, 9);
@@ -1121,30 +1107,6 @@ class SystemUpdateService
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_url', '', '路由3硬件云地址', 97, 16);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_appid', '', '路由3硬件云appid', 97, 17);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_appsecret', '', '路由3硬件云appsecret', 97, 18);
-        Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->delete();
-    }
-
-    private static function loadLegacyHardwareCloudRoute(): array
-    {
-        $config = Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->find();
-        if (!$config || empty($config['value'])) {
-            return [];
-        }
-        $routes = json_decode((string) $config['value'], true);
-        if (!is_array($routes)) {
-            return [];
-        }
-        $first = reset($routes);
-        return is_array($first) ? $first : [];
-    }
-
-    private static function normalizeLegacyRoutePrefixes($prefixes): string
-    {
-        if (is_array($prefixes)) {
-            $prefixes = implode(',', array_filter(array_map('trim', array_map('strval', $prefixes))));
-        }
-        $prefixes = trim((string) $prefixes);
-        return $prefixes !== '' ? $prefixes : 'W33,W34';
     }
 
     private static function ensureRuntimeAppConfigs(): void

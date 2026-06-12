@@ -62,20 +62,7 @@ class serverConfig
 
     private static function ConfiguredRoutes(): array
     {
-        $fieldRoutes = self::ConfiguredFieldRoutes();
-        if ($fieldRoutes) {
-            return $fieldRoutes;
-        }
-
-        $routes = config("my.hardware_cloud_routes.routes", []);
-        if (is_string($routes)) {
-            $decoded = json_decode($routes, true);
-            $routes = is_array($decoded) ? $decoded : [];
-        }
-        if (!is_array($routes)) {
-            return [];
-        }
-        return array_values(array_filter($routes, 'is_array'));
+        return self::ConfiguredFieldRoutes();
     }
 
     private static function ConfiguredFieldRoutes(): array

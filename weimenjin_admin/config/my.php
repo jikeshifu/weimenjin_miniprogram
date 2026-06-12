@@ -160,7 +160,7 @@ return [
         'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
     ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.09.10'),
+        'current_version' => Env::get('update.current_version', '2026.06.09.11'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [

@@ -25,6 +25,9 @@ class AppConfig extends Model
         // 按 module 分组
         $grouped = [];
         foreach ($configs as $config) {
+            if ($config['module'] === 'hardware_cloud_routes' && $config['name'] === 'routes') {
+                continue;
+            }
             $module = $config['module'];
             if (!isset($grouped[$module])) {
                 $grouped[$module] = [

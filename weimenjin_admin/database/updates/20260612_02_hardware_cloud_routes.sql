@@ -1,40 +1,38 @@
 SET NAMES utf8mb4;
 
+DELETE FROM `cd_appconfig`
+WHERE `module` = 'hardware_cloud_routes'
+  AND `name` = 'routes';
+
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
 SELECT 'hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', '1', 'boolean', '路由1启用', NOW(), 1, 0, 97, 1
-WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'routes')
-  AND NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_enabled');
+WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_enabled');
 
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
 SELECT 'hardware_cloud_routes', '硬件云路由配置', 'route1_name', '摄像头官方硬件云', 'string', '路由1名称', NOW(), 1, 0, 97, 2
-WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'routes')
-  AND NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_name');
+WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_name');
 
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
 SELECT 'hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', 'W33,W34', 'string', '路由1设备前缀', NOW(), 1, 0, 97, 3
-WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'routes')
-  AND NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_prefixes');
+WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_prefixes');
 
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
 SELECT 'hardware_cloud_routes', '硬件云路由配置', 'route1_url', 'https://wdev.wmj.com.cn/deviceApi/', 'string', '路由1硬件云地址', NOW(), 1, 0, 97, 4
-WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'routes')
-  AND NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_url');
+WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_url');
 
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
 SELECT 'hardware_cloud_routes', '硬件云路由配置', 'route1_appid', '', 'string', '路由1硬件云appid', NOW(), 1, 0, 97, 5
-WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'routes')
-  AND NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_appid');
+WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_appid');
 
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
 SELECT 'hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', '', 'string', '路由1硬件云appsecret', NOW(), 1, 0, 97, 6
-WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'routes')
-  AND NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_appsecret');
+WHERE NOT EXISTS (SELECT 1 FROM `cd_appconfig` WHERE `module` = 'hardware_cloud_routes' AND `name` = 'route1_appsecret');
 
 INSERT INTO `cd_appconfig`
 (`module`, `module_name`, `name`, `value`, `type`, `description`, `created_at`, `is_grouped`, `is_readonly`, `sort_order`, `group_sort_order`)
@@ -54,11 +52,6 @@ FROM (
   UNION ALL SELECT 'route3_appsecret', '', 'string', '路由3硬件云appsecret', 18
 ) AS route_defaults
 WHERE NOT EXISTS (
-  SELECT 1 FROM `cd_appconfig`
-  WHERE `module` = 'hardware_cloud_routes'
-    AND `name` = 'routes'
-)
-AND NOT EXISTS (
   SELECT 1 FROM `cd_appconfig`
   WHERE `module` = 'hardware_cloud_routes'
     AND `name` = route_defaults.`name`

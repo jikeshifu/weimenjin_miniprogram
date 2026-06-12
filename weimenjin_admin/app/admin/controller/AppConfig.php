@@ -16,6 +16,11 @@ class AppConfig extends Admin
      */
     public function index()
     {
+        try {
+            SystemUpdateService::ensureApplicationConfigReady();
+        } catch (\Throwable $e) {
+        }
+
         // 获取所有配置项并按分组返回
         $configs = AppConfigModel::getAllConfigsGrouped();
 
