@@ -21,25 +21,7 @@ class kgCamera
     }
 
     public static function GetUserToken($device_sn,$user_id,$channel_name){
-        mlog(sprintf(
-            'GetUserToken调用 - device_sn: %s, user_id: %s(类型:%s), channel_name: %s | 检查: device_sn_empty=%s, user_id_null=%s, user_id_empty_str=%s, channel_name_empty=%s',
-            var_export($device_sn, true),
-            var_export($user_id, true),
-            gettype($user_id),
-            var_export($channel_name, true),
-            empty($device_sn) ? 'true' : 'false',
-            $user_id === null ? 'true' : 'false',
-            $user_id === '' ? 'true' : 'false',
-            empty($channel_name) ? 'true' : 'false'
-        ), 'camera.txt');
-
         if(empty($device_sn) || $user_id === null || $user_id === '' || empty($channel_name)){
-            mlog(sprintf(
-                'GetUserToken参数校验失败 - device_sn: %s, user_id: %s, channel_name: %s',
-                var_export($device_sn, true),
-                var_export($user_id, true),
-                var_export($channel_name, true)
-            ), 'camera.txt');
             return ["err" =>"device_sn和user_id和channel_name不能为空!"];
         }
         $res = server::Request("kgCameraApi/getUserToken", [

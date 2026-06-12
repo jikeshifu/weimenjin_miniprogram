@@ -114,6 +114,13 @@
                         适用于序列号前缀为W70、W71、W72、W76、W77、W89的设备。
                         回调地址已自动生成如下，请填写到获取appid处，用于获取设备主动上报信息。<input type="text" class="form-control" id="callbackUrl" readonly>
                         {/case}
+                        {case value="hardware_cloud_routes"}
+                        说明：按设备序列号前缀选择硬件云，未匹配时使用“微门禁V2接口”配置。配置格式为 JSON 数组，例如：
+                        <pre style="white-space: pre-wrap; margin-top: 8px;">[
+  {"name":"摄像头官方硬件云","prefixes":"W33,W34","url":"https://wdev.wmj.com.cn/deviceApi/","appid":"","appsecret":"","enabled":1}
+]</pre>
+                        prefixes 可填写多个前缀，用英文逗号分隔；appid 和 appsecret 填写该硬件云对应的接口凭证。
+                        {/case}
                         {case value="alipay"}
                         说明：登录<a href="https://open.alipay.com/" target="_blank">https://open.alipay.com/</a>获取。
                         {/case}

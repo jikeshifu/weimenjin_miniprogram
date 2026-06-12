@@ -283,9 +283,10 @@ class server
      */
     public static function Request($path, $data = [])
     {
-        $data["app_id"] = serverConfig::GetAppId();
-        $data["app_secret"] =  serverConfig::GetAppSecret();
-        $res = Curl::PostJson(serverConfig::GetUrl() . $path, $data);
+        $deviceSn = (string)($data['device_sn'] ?? '');
+        $data["app_id"] = serverConfig::GetAppId($deviceSn);
+        $data["app_secret"] = serverConfig::GetAppSecret($deviceSn);
+        $res = Curl::PostJson(serverConfig::GetUrl($deviceSn) . $path, $data);
 
         return $res;
     }

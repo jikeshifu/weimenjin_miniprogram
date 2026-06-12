@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.09.06';
+    private const DEFAULT_VERSION = '2026.06.09.09';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -894,6 +894,7 @@ class SystemUpdateService
             ['path' => ['wmjv2', 'wmjv2_url'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_url', 'type' => 'string', 'description' => '微门禁V2硬件云地址', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 1, 'default' => 'https://wdev.wmj.com.cn/deviceApi/', 'runtime_wins' => true],
             ['path' => ['wmjv2', 'wmjv2_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appid', 'type' => 'string', 'description' => '微门禁V2硬件appid', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
             ['path' => ['wmjv2', 'wmjv2_appsecret'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appsecret', 'type' => 'string', 'description' => '微门禁V2硬件appsecret', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'routes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'routes', 'type' => 'array', 'description' => '按设备前缀选择硬件云', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 1, 'default' => self::defaultHardwareCloudRoutes(), 'runtime_wins' => true],
             ['path' => ['miniapp', 'site_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'site_url', 'type' => 'string', 'description' => '小程序站点地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
             ['path' => ['miniapp', 'api_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'api_url', 'type' => 'string', 'description' => '小程序接口地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => 'https://demo.wmj.com.cn/api', 'runtime_wins' => true],
             ['path' => ['miniapp', 'asset_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'asset_url', 'type' => 'string', 'description' => '小程序资源地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
@@ -1058,6 +1059,26 @@ class SystemUpdateService
         self::updateAppConfigSort('wmjv1', 'wmjv1_appsecret', 3);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appid', 2);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appsecret', 3);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'routes', self::defaultHardwareCloudRoutesValue(), '按设备前缀选择硬件云', 97, 1, 'array');
+    }
+
+    private static function defaultHardwareCloudRoutes(): array
+    {
+        return [
+            [
+                'name' => '摄像头官方硬件云',
+                'prefixes' => 'W33,W34',
+                'url' => 'https://wdev.wmj.com.cn/deviceApi/',
+                'appid' => '',
+                'appsecret' => '',
+                'enabled' => 1,
+            ],
+        ];
+    }
+
+    private static function defaultHardwareCloudRoutesValue(): string
+    {
+        return json_encode(self::defaultHardwareCloudRoutes(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     private static function ensureRuntimeAppConfigs(): void

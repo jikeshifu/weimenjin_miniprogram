@@ -168,8 +168,6 @@ class face
             ]
         ]);
 
-        mlog("Edit接口调用: device_sn={$device_sn}, face_id={$face_id}, end_time={$end_time}, 结果=" . json_encode($res), "face_edit.txt");
-
         if ($res["code"] != 0) {
             return ["err" => $res["msg"], "res" => $res];
         }

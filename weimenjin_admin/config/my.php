@@ -111,6 +111,18 @@ return [
         'wmjv2_appid' => Env::get('wmjv2.appid', ''),
         'wmjv2_appsecret' => Env::get('wmjv2.appsecret', ''),
     ],
+    'hardware_cloud_routes' => [
+        'routes' => [
+            [
+                'name' => '摄像头官方硬件云',
+                'prefixes' => 'W33,W34',
+                'url' => 'https://wdev.wmj.com.cn/deviceApi/',
+                'appid' => '',
+                'appsecret' => '',
+                'enabled' => 1,
+            ],
+        ],
+    ],
     'siteconfig' => [
         'siteurl' => Env::get('site.url', 'https://demo.wmj.com.cn'),
         'icp_enabled' => Env::get('site.icp_enabled', true),
@@ -140,7 +152,7 @@ return [
         'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
     ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.09.06'),
+        'current_version' => Env::get('update.current_version', '2026.06.09.09'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [
