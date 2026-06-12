@@ -37,6 +37,12 @@ class Camera
         if ($result["err"]) {
             return json(Code::CodeErr(1000, ($result["err"])));
         }
+        if (!isset($result["data"]["app_id"]) && isset($result["data"]["appId"])) {
+            $result["data"]["app_id"] = $result["data"]["appId"];
+        }
+        if (!isset($result["data"]["app_id"]) && isset($result["data"]["appid"])) {
+            $result["data"]["app_id"] = $result["data"]["appid"];
+        }
 
         return json(Code::CodeOk($result));
     }
@@ -385,11 +391,10 @@ class Camera
         }catch (ValidateException $e){
             return json(Code::CodeErr(1000,$e->getError()));
         }
-        // //检查用户权限
-        // $authResult = self::checkUserAuth($param['device_sn'], $param['member_id'] ?? 0);
-        // if ($authResult !== true) {
-        //     return $authResult;
-        // }
+        $authResult = self::checkUserAuth($param['device_sn'], $param['member_id'] ?? 0);
+        if ($authResult !== true) {
+            return $authResult;
+        }
         $sandData = [
             "cmd_type" => "get_cfg",
             "info" =>[
