@@ -550,13 +550,13 @@ class Lock
     }
 
     static function checkCamString($str) {
-        if (!is_string($str) || strlen($str) < 10) {
+        if (!is_string($str)) {
             return false;
         }
 
-        $target = substr($str, -10, 2);
+        $str = strtoupper(trim($str));
 
-        return $target === '33' || $target === '34';
+        return str_starts_with($str, 'W33') || str_starts_with($str, 'W34');
     }
 
     public static function ensureQrcode(array $lock): array
