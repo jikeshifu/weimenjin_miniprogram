@@ -1,11 +1,12 @@
 <template>
 	<view>
-		<web-view v-if="showWebView" :src="url" @message="onMessage"></web-view>
+		<web-view v-if="showWebView && url" :src="url" @message="onMessage"></web-view>
 	</view>
 </template>
 
 <script>
 import { camWebUrl } from '@/config/domain.js';
+import { loadRuntimeConfig } from '@/config/runtime.js';
 
 export default {
 	data() {
@@ -17,13 +18,15 @@ export default {
 	},
 	onLoad(val) {
 		this.options = val
-		this.$nextTick(() => {
+		this.$nextTick(async () => {
 			const userInfo = uni.getStorageSync("USERINFO") || {};
+			const runtimeConfig = await loadRuntimeConfig();
+			const miniapp = runtimeConfig.miniapp || {};
 			this.url = camWebUrl('/playback', {
 				device_sn: this.options.device_sn,
 				member_id: this.options.member_id || userInfo.member_id || '',
 				t: +new Date()
-			});
+			}, miniapp.camweb_url || '');
 		})
 	},
 	onHide() {

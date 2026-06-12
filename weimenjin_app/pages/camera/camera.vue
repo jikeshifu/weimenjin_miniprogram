@@ -1,7 +1,7 @@
 <template>
 	<view class="camera-page">
 		<web-view
-			v-if="showWebView"
+			v-if="showWebView && url"
 			:src="url"
 			@message="onMessage"
 		></web-view>
@@ -10,6 +10,7 @@
 
 <script>
 import { camWebUrl } from '@/config/domain.js';
+import { loadRuntimeConfig } from '@/config/runtime.js';
 
 export default {
 	data() {
@@ -20,13 +21,13 @@ export default {
 			deviceName: '摄像头'
 		}
 	},
-	onLoad(val) {
+	async onLoad(val) {
 		this.options = val
 		this.deviceName = val.device_name ? decodeURIComponent(val.device_name) : (val.device_sn || '摄像头')
 		uni.setNavigationBarTitle({
 			title: this.deviceName
 		})
-		this.$nextTick(() => {
+		this.$nextTick(async () => {
 			const userInfo = uni.getStorageSync("USERINFO") || {};
 			const memberId = this.options.member_id || userInfo.member_id || '';
 			if (!memberId) {
@@ -37,11 +38,20 @@ export default {
 				this.showWebView = false;
 				return;
 			}
+			const runtimeConfig = await loadRuntimeConfig();
+			const miniapp = runtimeConfig.miniapp || {};
+			const camwebUrl = miniapp.camweb_url || '';
+			if (!camwebUrl) {
+				uni.showToast({
+					title: '摄像头页面地址未配置',
+					icon: 'none'
+				})
+			}
 			this.url = camWebUrl('/', {
 				device_sn: this.options.device_sn,
 				member_id: memberId,
 				t: +new Date()
-			});
+			}, camwebUrl);
 		})
 	},
 	onHide() {

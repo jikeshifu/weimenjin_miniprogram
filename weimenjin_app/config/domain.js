@@ -12,8 +12,13 @@ const apiUrl = `${domainUrl}/api`;
 
 export const softwareDomainUrl = domainUrl;
 export const softwareApiUrl = `${softwareDomainUrl}/api`;
+export const normalizeCamWebBase = (baseUrl = '') => {
+	const value = trimEndSlash(baseUrl || `${domainUrl}/camweb/`);
+	return value || `${domainUrl}/camweb`;
+};
 export const assetUrl = (path = '') => `${domainUrl}${normalizePath(path)}`;
-export const camWebUrl = (hashPath = '/', params = {}) => {
+export const camWebUrl = (hashPath = '/', params = {}, baseUrl = '') => {
+	const camWebBase = normalizeCamWebBase(baseUrl);
 	const cleanHashPath = String(hashPath || '/').startsWith('/') ? String(hashPath || '/') : `/${hashPath}`;
 	const cacheVersion = params.t || Date.now();
 	const query = Object.keys(params)
@@ -21,7 +26,7 @@ export const camWebUrl = (hashPath = '/', params = {}) => {
 		.map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
 		.join('&');
 
-	return `${domainUrl}/camweb/?v=${encodeURIComponent(cacheVersion)}#${cleanHashPath}${query ? `?${query}` : ''}`;
+	return `${camWebBase}/?v=${encodeURIComponent(cacheVersion)}#${cleanHashPath}${query ? `?${query}` : ''}`;
 };
 
 export { domainUrl, apiUrl };
