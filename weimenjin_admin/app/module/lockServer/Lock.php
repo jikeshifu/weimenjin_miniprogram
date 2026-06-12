@@ -515,7 +515,10 @@ class Lock
                 }
                 LockService::update(["lock_id" => $lock_id], $data);
             }else{
-                LockService::update(["lock_id" => $lock_id], ["lock_qrcode" => $data['lock_qrcode']]);
+                LockService::update(["lock_id" => $lock_id], [
+                    "lock_name" => $data['lock_name'],
+                    "lock_qrcode" => $data['lock_qrcode']
+                ]);
                 Db::name("cam_remote_control")->insert([
                     'device_sn' => $data["lock_sn"],
                     'title' => "遥控器",
