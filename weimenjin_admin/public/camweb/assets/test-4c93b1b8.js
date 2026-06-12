@@ -1,1 +1,0 @@
-import{a6 as t,o as e,c as o}from"./index-9603efaa.js";import{_ as s}from"./_plugin-vue_export-helper-c27b6911.js";const r={setup(){return()=>[t("div",1),t("div",2),t("div",3)]}},c={class:"body"};function a(n,_,d,i,p,f){return e(),o("div",c," f测试 ")}const l=s(r,[["render",a]]);export{l as default};
