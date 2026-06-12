@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.09.18';
+    private const DEFAULT_VERSION = '2026.06.09.20';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -906,24 +906,28 @@ class SystemUpdateService
             ['path' => ['wmjv2', 'wmjv2_url'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_url', 'type' => 'string', 'description' => '微门禁V2硬件云地址', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 1, 'default' => 'https://wdev.wmj.com.cn/deviceApi/', 'runtime_wins' => true],
             ['path' => ['wmjv2', 'wmjv2_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appid', 'type' => 'string', 'description' => '微门禁V2硬件appid', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
             ['path' => ['wmjv2', 'wmjv2_appsecret'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appsecret', 'type' => 'string', 'description' => '微门禁V2硬件appsecret', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['wmjv2', 'video_sdk_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'video_sdk_appid', 'type' => 'string', 'description' => '视频SDK AppID', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 4, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route1_enabled'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_enabled', 'type' => 'boolean', 'description' => '路由1启用', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 1, 'default' => true, 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route1_name'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_name', 'type' => 'string', 'description' => '路由1名称', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 2, 'default' => '摄像头官方硬件云', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route1_prefixes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_prefixes', 'type' => 'string', 'description' => '路由1设备前缀', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 3, 'default' => 'W33,W34', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route1_url'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_url', 'type' => 'string', 'description' => '路由1硬件云地址', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 4, 'default' => 'https://wdev.wmj.com.cn/deviceApi/', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route1_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_appid', 'type' => 'string', 'description' => '路由1硬件云appid', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 5, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route1_appsecret'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_appsecret', 'type' => 'string', 'description' => '路由1硬件云appsecret', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 6, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_video_sdk_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_video_sdk_appid', 'type' => 'string', 'description' => '路由1视频SDK AppID', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 7, 'default' => 'f268a2e5eff745cdba45ea00ec806f6c', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route2_enabled'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_enabled', 'type' => 'boolean', 'description' => '路由2启用', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 7, 'default' => false, 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route2_name'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_name', 'type' => 'string', 'description' => '路由2名称', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 8, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route2_prefixes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_prefixes', 'type' => 'string', 'description' => '路由2设备前缀', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 9, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route2_url'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_url', 'type' => 'string', 'description' => '路由2硬件云地址', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 10, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route2_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_appid', 'type' => 'string', 'description' => '路由2硬件云appid', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 11, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route2_appsecret'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_appsecret', 'type' => 'string', 'description' => '路由2硬件云appsecret', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 12, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_video_sdk_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_video_sdk_appid', 'type' => 'string', 'description' => '路由2视频SDK AppID', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 13, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route3_enabled'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_enabled', 'type' => 'boolean', 'description' => '路由3启用', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 13, 'default' => false, 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route3_name'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_name', 'type' => 'string', 'description' => '路由3名称', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 14, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route3_prefixes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_prefixes', 'type' => 'string', 'description' => '路由3设备前缀', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 15, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route3_url'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_url', 'type' => 'string', 'description' => '路由3硬件云地址', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 16, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route3_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_appid', 'type' => 'string', 'description' => '路由3硬件云appid', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 17, 'default' => '', 'runtime_wins' => true],
             ['path' => ['hardware_cloud_routes', 'route3_appsecret'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_appsecret', 'type' => 'string', 'description' => '路由3硬件云appsecret', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 18, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_video_sdk_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_video_sdk_appid', 'type' => 'string', 'description' => '路由3视频SDK AppID', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 19, 'default' => '', 'runtime_wins' => true],
             ['path' => ['miniapp', 'site_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'site_url', 'type' => 'string', 'description' => '小程序站点地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
             ['path' => ['miniapp', 'api_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'api_url', 'type' => 'string', 'description' => '小程序接口地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => 'https://demo.wmj.com.cn/api', 'runtime_wins' => true],
             ['path' => ['miniapp', 'asset_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'asset_url', 'type' => 'string', 'description' => '小程序资源地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
@@ -1088,6 +1092,7 @@ class SystemUpdateService
         self::updateAppConfigSort('wmjv1', 'wmjv1_appsecret', 3);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appid', 2);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appsecret', 3);
+        self::insertAppConfigIfMissing('wmjv2', '微门禁V2接口', 'video_sdk_appid', '', '视频SDK AppID', 95, 4);
         Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->delete();
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', '1', '路由1启用', 97, 1, 'boolean');
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_name', '摄像头官方硬件云', '路由1名称', 97, 2);
@@ -1095,18 +1100,22 @@ class SystemUpdateService
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_url', 'https://wdev.wmj.com.cn/deviceApi/', '路由1硬件云地址', 97, 4);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appid', '', '路由1硬件云appid', 97, 5);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', '', '路由1硬件云appsecret', 97, 6);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_video_sdk_appid', 'f268a2e5eff745cdba45ea00ec806f6c', '路由1视频SDK AppID', 97, 7);
+        Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'route1_video_sdk_appid'])->where('value', '')->update(['value' => 'f268a2e5eff745cdba45ea00ec806f6c']);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_enabled', '0', '路由2启用', 97, 7, 'boolean');
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_name', '', '路由2名称', 97, 8);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_prefixes', '', '路由2设备前缀', 97, 9);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_url', '', '路由2硬件云地址', 97, 10);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_appid', '', '路由2硬件云appid', 97, 11);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_appsecret', '', '路由2硬件云appsecret', 97, 12);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_video_sdk_appid', '', '路由2视频SDK AppID', 97, 13);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_enabled', '0', '路由3启用', 97, 13, 'boolean');
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_name', '', '路由3名称', 97, 14);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_prefixes', '', '路由3设备前缀', 97, 15);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_url', '', '路由3硬件云地址', 97, 16);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_appid', '', '路由3硬件云appid', 97, 17);
         self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_appsecret', '', '路由3硬件云appsecret', 97, 18);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_video_sdk_appid', '', '路由3视频SDK AppID', 97, 19);
     }
 
     private static function ensureRuntimeAppConfigs(): void

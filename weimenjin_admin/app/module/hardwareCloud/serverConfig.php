@@ -27,6 +27,11 @@ class serverConfig
         return (string)($route['appsecret'] ?? '');
     }
 
+    static function GetVideoSdkAppId($deviceSn = ''){
+        $route = self::ResolveRoute((string)$deviceSn);
+        return (string)($route['video_sdk_appid'] ?? '');
+    }
+
     static function ResolveRoute(string $deviceSn = ''): array
     {
         $default = [
@@ -34,6 +39,7 @@ class serverConfig
             'url' => (string) config("my.wmjv2.wmjv2_url", self::$WiFIUrl),
             'appid' => (string) config("my.wmjv2.wmjv2_appid", ""),
             'appsecret' => (string) config("my.wmjv2.wmjv2_appsecret", ""),
+            'video_sdk_appid' => (string) config("my.wmjv2.video_sdk_appid", ""),
         ];
 
         $deviceSn = strtoupper(trim($deviceSn));
@@ -52,6 +58,7 @@ class serverConfig
                         'url' => (string)($route['url'] ?? $default['url']),
                         'appid' => (string)(($route['appid'] ?? $route['app_id'] ?? $route['wmjv2_appid'] ?? '') ?: $default['appid']),
                         'appsecret' => (string)(($route['appsecret'] ?? $route['app_secret'] ?? $route['wmjv2_appsecret'] ?? '') ?: $default['appsecret']),
+                        'video_sdk_appid' => (string)(($route['video_sdk_appid'] ?? $route['videoSdkAppId'] ?? '') ?: $default['video_sdk_appid']),
                     ];
                 }
             }
@@ -73,7 +80,8 @@ class serverConfig
             $url = (string) config("my.hardware_cloud_routes.route{$index}_url", "");
             $appid = (string) config("my.hardware_cloud_routes.route{$index}_appid", "");
             $appsecret = (string) config("my.hardware_cloud_routes.route{$index}_appsecret", "");
-            if (trim($prefixes) === '' && trim($url) === '' && trim($appid) === '' && trim($appsecret) === '') {
+            $videoSdkAppId = (string) config("my.hardware_cloud_routes.route{$index}_video_sdk_appid", "");
+            if (trim($prefixes) === '' && trim($url) === '' && trim($appid) === '' && trim($appsecret) === '' && trim($videoSdkAppId) === '') {
                 continue;
             }
             $routes[] = [
@@ -82,6 +90,7 @@ class serverConfig
                 'url' => $url,
                 'appid' => $appid,
                 'appsecret' => $appsecret,
+                'video_sdk_appid' => $videoSdkAppId,
                 'enabled' => config("my.hardware_cloud_routes.route{$index}_enabled", $index === 1 ? 1 : 0),
             ];
         }

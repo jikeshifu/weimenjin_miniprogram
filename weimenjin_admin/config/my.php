@@ -110,6 +110,7 @@ return [
         'wmjv2_url' => Env::get('wmjv2.url', 'https://wdev.wmj.com.cn/deviceApi/'),
         'wmjv2_appid' => Env::get('wmjv2.appid', ''),
         'wmjv2_appsecret' => Env::get('wmjv2.appsecret', ''),
+        'video_sdk_appid' => Env::get('wmjv2.video_sdk_appid', ''),
     ],
     'hardware_cloud_routes' => [
         'route1_enabled' => 1,
@@ -118,18 +119,21 @@ return [
         'route1_url' => 'https://wdev.wmj.com.cn/deviceApi/',
         'route1_appid' => '',
         'route1_appsecret' => '',
+        'route1_video_sdk_appid' => 'f268a2e5eff745cdba45ea00ec806f6c',
         'route2_enabled' => 0,
         'route2_name' => '',
         'route2_prefixes' => '',
         'route2_url' => '',
         'route2_appid' => '',
         'route2_appsecret' => '',
+        'route2_video_sdk_appid' => '',
         'route3_enabled' => 0,
         'route3_name' => '',
         'route3_prefixes' => '',
         'route3_url' => '',
         'route3_appid' => '',
         'route3_appsecret' => '',
+        'route3_video_sdk_appid' => '',
     ],
     'siteconfig' => [
         'siteurl' => Env::get('site.url', 'https://demo.wmj.com.cn'),
@@ -160,7 +164,7 @@ return [
         'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
     ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.09.18'),
+        'current_version' => Env::get('update.current_version', '2026.06.09.20'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [

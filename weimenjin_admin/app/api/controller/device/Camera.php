@@ -4,6 +4,7 @@ namespace app\api\controller\device;
 
 use app\module\code\Code;
 use app\module\hardwareCloud\HardwareCloud;
+use app\module\hardwareCloud\serverConfig;
 use app\module\lockAuthServer\LockAuth as LockAuthServer;
 use app\module\lockServer\LockLog;
 use app\module\member\memberServer\MemberServer;
@@ -42,6 +43,12 @@ class Camera
         }
         if (!isset($result["data"]["app_id"]) && isset($result["data"]["appid"])) {
             $result["data"]["app_id"] = $result["data"]["appid"];
+        }
+        if (empty($result["data"]["app_id"])) {
+            $result["data"]["app_id"] = serverConfig::GetVideoSdkAppId($param["device_sn"]);
+        }
+        if (empty($result["data"]["app_id"]) && !empty($result["data"]["token"])) {
+            $result["data"]["app_id"] = self::extractAgoraAppIdFromToken((string) $result["data"]["token"]);
         }
 
         return json(Code::CodeOk($result));
@@ -1660,6 +1667,29 @@ class Camera
         }
 
         return json(Code::CodeErr(1000, $lastErr ?: "您没有权限操作该设备"));
+    }
+
+    private static function extractAgoraAppIdFromToken(string $token): string
+    {
+        if ($token === '' || strlen($token) <= 3) {
+            return '';
+        }
+
+        $payload = base64_decode(substr($token, 3), true);
+        if ($payload === false || $payload === '') {
+            return '';
+        }
+
+        $decoded = @zlib_decode($payload);
+        if ($decoded === false || $decoded === '') {
+            return '';
+        }
+
+        if (preg_match('/[0-9a-f]{32}/i', $decoded, $matches)) {
+            return strtolower($matches[0]);
+        }
+
+        return '';
     }
 
     //添加操作记录
