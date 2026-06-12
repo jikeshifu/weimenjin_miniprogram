@@ -2546,7 +2546,7 @@
 			//摄像头相关
 			onCamer(item){
 				const deviceName = item.lock?.lock_name || item.device_name || item.lock?.lock_sn || '摄像头'
-				const memberId = item.member_id || item.lock?.member_id || uni.getStorageSync("USERINFO")?.member_id || ''
+				const memberId = item.member_id || item.auth_member_id || item.lock?.member_id || uni.getStorageSync("USERINFO")?.member_id || ''
 				if (!memberId) {
 					uni.showToast({
 						title: '缺少用户授权信息，请重新登录后再试',

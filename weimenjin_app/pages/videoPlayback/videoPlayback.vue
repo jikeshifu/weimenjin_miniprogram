@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<web-view v-if="showWebView && url" :src="url" @message="onMessage"></web-view>
+		<web-view v-if="url" :src="url" @message="onMessage"></web-view>
 	</view>
 </template>
 
@@ -12,7 +12,6 @@ export default {
 	data() {
 		return {
 			url: "",
-			showWebView: true,
 			options:null
 		}
 	},
@@ -22,16 +21,11 @@ export default {
 		this.refreshPlaybackUrl()
 	},
 	onHide() {
-		this.showWebView = false;
 	},
 	onShow() {
-		// 如果需要每次显示都刷新，可在此重新设置 url
-		// this.url = `新的url&t=${+new Date()}`
-		this.showWebView = true;
 	},
 	onUnload() {
 		this.url = ""
-		this.showWebView = false;
 	},
 	onMessage(event) {
 	},
@@ -43,6 +37,7 @@ export default {
 				member_id: this.options.member_id || userInfo.member_id || '',
 				t: +new Date()
 			}, camwebUrl);
+			console.info('camera playback webview url', this.url);
 		},
 		async refreshPlaybackUrl() {
 			const runtimeConfig = await loadRuntimeConfig();

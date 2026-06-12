@@ -1,7 +1,7 @@
 <template>
 	<view class="camera-page">
 		<web-view
-			v-if="showWebView && url"
+			v-if="url"
 			:src="url"
 			@message="onMessage"
 		></web-view>
@@ -16,7 +16,6 @@ export default {
 	data() {
 		return {
 			url: "",
-			showWebView: true,
 			options: null,
 			deviceName: '摄像头'
 		}
@@ -31,30 +30,31 @@ export default {
 		this.refreshCameraUrl()
 	},
 	onHide() {
-		this.showWebView = false;
 	},
 	onShow() {
-		this.showWebView = true;
 	},
 	onUnload() {
 		this.url = ""
-		this.showWebView = false;
 	},
 	onMessage(event) {
 	},
 	methods: {
 		getMemberId() {
 			const userInfo = uni.getStorageSync("USERINFO") || {};
-			return this.options.member_id || userInfo.member_id || '';
+			const options = this.options || {};
+			return options.member_id || userInfo.member_id || '';
 		},
 		setCameraUrl(camwebUrl = '') {
 			const memberId = this.getMemberId();
 			if (!memberId) {
+				console.warn('camera webview blocked: missing member_id', {
+					options: this.options,
+					userInfo: uni.getStorageSync("USERINFO") || {}
+				});
 				uni.showToast({
 					title: '缺少用户授权信息，请重新登录后再试',
 					icon: 'none'
 				})
-				this.showWebView = false;
 				return false;
 			}
 			this.url = camWebUrl('/', {
@@ -62,7 +62,7 @@ export default {
 				member_id: memberId,
 				t: +new Date()
 			}, camwebUrl);
-			this.showWebView = true;
+			console.info('camera webview url', this.url);
 			return true;
 		},
 		async refreshCameraUrl() {
