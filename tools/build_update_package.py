@@ -87,6 +87,7 @@ def collect_sql_files() -> list[str]:
         "database/update_20260606_10.sql",
         "database/updates/20260606_19_sync_schema.sql",
         "database/updates/20260606_23_fix_sidebar_logo.sql",
+        "database/updates/20260612_01_fix_icp_config_meta.sql",
     }
     sql_files.extend(
         sorted(
