@@ -1,0 +1,1 @@
+import{u as e}from"./user-dccd590c.js";import{o as t,c as s,f as o}from"./index-76376113.js";const n=o("div",{class:"iconfont icon-up"},null,-1),c=o("div",{style:{"margin-top":"40px"}},null,-1),r=[n,c],u={__name:"login",setup(a){return e(),(_,i)=>(t(),s("div",null,r))}};export{u as default};

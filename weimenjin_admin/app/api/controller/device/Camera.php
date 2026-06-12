@@ -1619,7 +1619,7 @@ class Camera
     static function checkUserAuth($device_sn,$member_id){
         $lock = Lock::where(["lock_sn"=>$device_sn])->whereNull("deleted_at")->find();
         if (!$lock){
-            return json(Code::CodeErr(1000, "您没有权限操作该设备"));
+            return json(Code::CodeErr(1000, "设备不存在或未添加，请先在小程序中添加设备"));
         }
 
         $uidInfo = MemberServer::Uid();

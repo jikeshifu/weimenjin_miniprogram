@@ -286,6 +286,9 @@ class server
         $deviceSn = (string)($data['device_sn'] ?? '');
         $data["app_id"] = serverConfig::GetAppId($deviceSn);
         $data["app_secret"] = serverConfig::GetAppSecret($deviceSn);
+        if ($data["app_id"] === '' || $data["app_secret"] === '') {
+            return ["code" => 1000, "msg" => "硬件云接口凭证未配置，请在后台应用配置中填写硬件云 appid 和 appsecret", "data" => []];
+        }
         $res = Curl::PostJson(serverConfig::GetUrl($deviceSn) . $path, $data);
 
         return $res;

@@ -1,0 +1,1 @@
+import{u as s}from"./user-dccd590c.js";import{d as t,ag as o,o as a,c as r,M as c,f as n,t as u,u as _}from"./index-76376113.js";const d={class:"c"},h=t({__name:"header",setup(i){const e=s();return o(e),(p,f)=>(a(),r("div",null,[c("页头 "),n("div",d,u(_(e).count),1)]))}});export{h as default};

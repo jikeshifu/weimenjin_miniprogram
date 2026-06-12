@@ -50,8 +50,8 @@ class serverConfig
                     return [
                         'name' => (string)($route['name'] ?? '设备前缀硬件云'),
                         'url' => (string)($route['url'] ?? $default['url']),
-                        'appid' => (string)($route['appid'] ?? $route['app_id'] ?? $route['wmjv2_appid'] ?? ''),
-                        'appsecret' => (string)($route['appsecret'] ?? $route['app_secret'] ?? $route['wmjv2_appsecret'] ?? ''),
+                        'appid' => (string)(($route['appid'] ?? $route['app_id'] ?? $route['wmjv2_appid'] ?? '') ?: $default['appid']),
+                        'appsecret' => (string)(($route['appsecret'] ?? $route['app_secret'] ?? $route['wmjv2_appsecret'] ?? '') ?: $default['appsecret']),
                     ];
                 }
             }
