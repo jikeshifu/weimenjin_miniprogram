@@ -18,16 +18,8 @@ export default {
 	},
 	onLoad(val) {
 		this.options = val
-		this.$nextTick(async () => {
-			const userInfo = uni.getStorageSync("USERINFO") || {};
-			const runtimeConfig = await loadRuntimeConfig();
-			const miniapp = runtimeConfig.miniapp || {};
-			this.url = camWebUrl('/playback', {
-				device_sn: this.options.device_sn,
-				member_id: this.options.member_id || userInfo.member_id || '',
-				t: +new Date()
-			}, miniapp.camweb_url || '');
-		})
+		this.setPlaybackUrl()
+		this.refreshPlaybackUrl()
 	},
 	onHide() {
 		this.showWebView = false;
@@ -42,6 +34,23 @@ export default {
 		this.showWebView = false;
 	},
 	onMessage(event) {
+	},
+	methods: {
+		setPlaybackUrl(camwebUrl = '') {
+			const userInfo = uni.getStorageSync("USERINFO") || {};
+			this.url = camWebUrl('/playback', {
+				device_sn: this.options.device_sn,
+				member_id: this.options.member_id || userInfo.member_id || '',
+				t: +new Date()
+			}, camwebUrl);
+		},
+		async refreshPlaybackUrl() {
+			const runtimeConfig = await loadRuntimeConfig();
+			const miniapp = runtimeConfig.miniapp || {};
+			if (miniapp.camweb_url) {
+				this.setPlaybackUrl(miniapp.camweb_url);
+			}
+		}
 	}
 
 }
