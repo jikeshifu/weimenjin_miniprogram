@@ -112,16 +112,24 @@ return [
         'wmjv2_appsecret' => Env::get('wmjv2.appsecret', ''),
     ],
     'hardware_cloud_routes' => [
-        'routes' => [
-            [
-                'name' => '摄像头官方硬件云',
-                'prefixes' => 'W33,W34',
-                'url' => 'https://wdev.wmj.com.cn/deviceApi/',
-                'appid' => '',
-                'appsecret' => '',
-                'enabled' => 1,
-            ],
-        ],
+        'route1_enabled' => 1,
+        'route1_name' => '摄像头官方硬件云',
+        'route1_prefixes' => 'W33,W34',
+        'route1_url' => 'https://wdev.wmj.com.cn/deviceApi/',
+        'route1_appid' => '',
+        'route1_appsecret' => '',
+        'route2_enabled' => 0,
+        'route2_name' => '',
+        'route2_prefixes' => '',
+        'route2_url' => '',
+        'route2_appid' => '',
+        'route2_appsecret' => '',
+        'route3_enabled' => 0,
+        'route3_name' => '',
+        'route3_prefixes' => '',
+        'route3_url' => '',
+        'route3_appid' => '',
+        'route3_appsecret' => '',
     ],
     'siteconfig' => [
         'siteurl' => Env::get('site.url', 'https://demo.wmj.com.cn'),
@@ -152,7 +160,7 @@ return [
         'default_audio_url' => Env::get('live_talk.default_audio_url', '/audio/wmj.mp3'),
     ],
     'update' => [
-        'current_version' => Env::get('update.current_version', '2026.06.09.09'),
+        'current_version' => Env::get('update.current_version', '2026.06.09.10'),
         'manifest_url' => Env::get('update.manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json'),
     ],
     'login' => [

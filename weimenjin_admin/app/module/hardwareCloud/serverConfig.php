@@ -62,6 +62,11 @@ class serverConfig
 
     private static function ConfiguredRoutes(): array
     {
+        $fieldRoutes = self::ConfiguredFieldRoutes();
+        if ($fieldRoutes) {
+            return $fieldRoutes;
+        }
+
         $routes = config("my.hardware_cloud_routes.routes", []);
         if (is_string($routes)) {
             $decoded = json_decode($routes, true);
@@ -71,6 +76,29 @@ class serverConfig
             return [];
         }
         return array_values(array_filter($routes, 'is_array'));
+    }
+
+    private static function ConfiguredFieldRoutes(): array
+    {
+        $routes = [];
+        for ($index = 1; $index <= 3; $index++) {
+            $prefixes = (string) config("my.hardware_cloud_routes.route{$index}_prefixes", "");
+            $url = (string) config("my.hardware_cloud_routes.route{$index}_url", "");
+            $appid = (string) config("my.hardware_cloud_routes.route{$index}_appid", "");
+            $appsecret = (string) config("my.hardware_cloud_routes.route{$index}_appsecret", "");
+            if (trim($prefixes) === '' && trim($url) === '' && trim($appid) === '' && trim($appsecret) === '') {
+                continue;
+            }
+            $routes[] = [
+                'name' => (string) config("my.hardware_cloud_routes.route{$index}_name", "硬件云路由{$index}"),
+                'prefixes' => $prefixes,
+                'url' => $url,
+                'appid' => $appid,
+                'appsecret' => $appsecret,
+                'enabled' => config("my.hardware_cloud_routes.route{$index}_enabled", $index === 1 ? 1 : 0),
+            ];
+        }
+        return $routes;
     }
 
     private static function RouteEnabled(array $route): bool

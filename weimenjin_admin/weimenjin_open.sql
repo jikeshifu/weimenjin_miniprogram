@@ -171,13 +171,30 @@ INSERT INTO `cd_appconfig` VALUES (125, 'wmjv1', '微门禁V1接口', 'wmjv1_app
 INSERT INTO `cd_appconfig` VALUES (135, 'wmjv2', '微门禁V2接口', 'wmjv2_url', 'https://wdev.wmj.com.cn/deviceApi/', 'string', '微门禁V2硬件云地址', '2026-06-06 00:00:00', 1, 0, 95, 1);
 INSERT INTO `cd_appconfig` VALUES (126, 'wmjv2', '微门禁V2接口', 'wmjv2_appid', '', 'string', '微门禁V2硬件appid', '2024-10-14 06:10:26', 1, 0, 95, 2);
 INSERT INTO `cd_appconfig` VALUES (127, 'wmjv2', '微门禁V2接口', 'wmjv2_appsecret', '', 'string', '微门禁V2硬件appsecret', '2024-10-14 06:11:28', 1, 0, 95, 3);
-INSERT INTO `cd_appconfig` VALUES (157, 'hardware_cloud_routes', '硬件云路由配置', 'routes', '[{\"name\":\"摄像头官方硬件云\",\"prefixes\":\"W33,W34\",\"url\":\"https://wdev.wmj.com.cn/deviceApi/\",\"appid\":\"\",\"appsecret\":\"\",\"enabled\":1}]', 'array', '按设备前缀选择硬件云', '2026-06-12 00:00:00', 1, 0, 97, 1);
+INSERT INTO `cd_appconfig` VALUES (157, 'hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', '1', 'boolean', '路由1启用', '2026-06-12 00:00:00', 1, 0, 97, 1);
+INSERT INTO `cd_appconfig` VALUES (158, 'hardware_cloud_routes', '硬件云路由配置', 'route1_name', '摄像头官方硬件云', 'string', '路由1名称', '2026-06-12 00:00:00', 1, 0, 97, 2);
+INSERT INTO `cd_appconfig` VALUES (159, 'hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', 'W33,W34', 'string', '路由1设备前缀', '2026-06-12 00:00:00', 1, 0, 97, 3);
+INSERT INTO `cd_appconfig` VALUES (160, 'hardware_cloud_routes', '硬件云路由配置', 'route1_url', 'https://wdev.wmj.com.cn/deviceApi/', 'string', '路由1硬件云地址', '2026-06-12 00:00:00', 1, 0, 97, 4);
+INSERT INTO `cd_appconfig` VALUES (161, 'hardware_cloud_routes', '硬件云路由配置', 'route1_appid', '', 'string', '路由1硬件云appid', '2026-06-12 00:00:00', 1, 0, 97, 5);
+INSERT INTO `cd_appconfig` VALUES (162, 'hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', '', 'string', '路由1硬件云appsecret', '2026-06-12 00:00:00', 1, 0, 97, 6);
+INSERT INTO `cd_appconfig` VALUES (163, 'hardware_cloud_routes', '硬件云路由配置', 'route2_enabled', '0', 'boolean', '路由2启用', '2026-06-12 00:00:00', 1, 0, 97, 7);
+INSERT INTO `cd_appconfig` VALUES (164, 'hardware_cloud_routes', '硬件云路由配置', 'route2_name', '', 'string', '路由2名称', '2026-06-12 00:00:00', 1, 0, 97, 8);
+INSERT INTO `cd_appconfig` VALUES (165, 'hardware_cloud_routes', '硬件云路由配置', 'route2_prefixes', '', 'string', '路由2设备前缀', '2026-06-12 00:00:00', 1, 0, 97, 9);
+INSERT INTO `cd_appconfig` VALUES (166, 'hardware_cloud_routes', '硬件云路由配置', 'route2_url', '', 'string', '路由2硬件云地址', '2026-06-12 00:00:00', 1, 0, 97, 10);
+INSERT INTO `cd_appconfig` VALUES (167, 'hardware_cloud_routes', '硬件云路由配置', 'route2_appid', '', 'string', '路由2硬件云appid', '2026-06-12 00:00:00', 1, 0, 97, 11);
+INSERT INTO `cd_appconfig` VALUES (168, 'hardware_cloud_routes', '硬件云路由配置', 'route2_appsecret', '', 'string', '路由2硬件云appsecret', '2026-06-12 00:00:00', 1, 0, 97, 12);
+INSERT INTO `cd_appconfig` VALUES (169, 'hardware_cloud_routes', '硬件云路由配置', 'route3_enabled', '0', 'boolean', '路由3启用', '2026-06-12 00:00:00', 1, 0, 97, 13);
+INSERT INTO `cd_appconfig` VALUES (170, 'hardware_cloud_routes', '硬件云路由配置', 'route3_name', '', 'string', '路由3名称', '2026-06-12 00:00:00', 1, 0, 97, 14);
+INSERT INTO `cd_appconfig` VALUES (171, 'hardware_cloud_routes', '硬件云路由配置', 'route3_prefixes', '', 'string', '路由3设备前缀', '2026-06-12 00:00:00', 1, 0, 97, 15);
+INSERT INTO `cd_appconfig` VALUES (172, 'hardware_cloud_routes', '硬件云路由配置', 'route3_url', '', 'string', '路由3硬件云地址', '2026-06-12 00:00:00', 1, 0, 97, 16);
+INSERT INTO `cd_appconfig` VALUES (173, 'hardware_cloud_routes', '硬件云路由配置', 'route3_appid', '', 'string', '路由3硬件云appid', '2026-06-12 00:00:00', 1, 0, 97, 17);
+INSERT INTO `cd_appconfig` VALUES (174, 'hardware_cloud_routes', '硬件云路由配置', 'route3_appsecret', '', 'string', '路由3硬件云appsecret', '2026-06-12 00:00:00', 1, 0, 97, 18);
 INSERT INTO `cd_appconfig` VALUES (128, 'wmjsms', '短信接口', 'wmjsms_lable', '【微门禁】', 'string', '短信签名', '2024-10-14 23:32:23', 1, 0, 93, 3);
 INSERT INTO `cd_appconfig` VALUES (130, 'siteconfig', '站点链接', 'siteurl', 'https://demo.wmj.com.cn', 'string', '站点链接', '2024-11-25 13:40:13', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (154, 'siteconfig', '站点链接', 'icp_enabled', '1', 'boolean', '是否显示工信部备案', '2026-06-09 00:00:00', 1, 0, 90, 2);
 INSERT INTO `cd_appconfig` VALUES (155, 'siteconfig', '站点链接', 'icp_no', '', 'string', '工信部备案号', '2026-06-09 00:00:00', 1, 0, 90, 3);
 INSERT INTO `cd_appconfig` VALUES (156, 'siteconfig', '站点链接', 'icp_url', 'https://beian.miit.gov.cn/', 'string', '工信部备案链接', '2026-06-09 00:00:00', 1, 0, 90, 4);
-INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.09.09', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
+INSERT INTO `cd_appconfig` VALUES (131, 'update', '系统更新', 'current_version', '2026.06.09.10', 'string', '当前版本号', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (132, 'update', '系统更新', 'manifest_url', 'https://demo.wmj.com.cn/updates/manifest.json', 'string', '更新清单地址', '2026-06-06 00:00:00', 1, 0, 0, 0);
 INSERT INTO `cd_appconfig` VALUES (133, 'login', '登录设置', 'disclaimer_content', '开源免责声明
 本开源版本仅用于学习、研究、演示和二次开发参考，不承诺适用于任何特定业务场景。使用者应自行评估系统功能、数据安全、网络安全、设备兼容性和合规要求。

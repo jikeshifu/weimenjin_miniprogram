@@ -11,7 +11,7 @@ class SystemUpdateService
     private const WORK_DIR = 'runtime/update';
     private const LOG_FILE = 'runtime/update/update.log';
     private const DEFAULT_MANIFEST_URL = 'https://demo.wmj.com.cn/updates/manifest.json';
-    private const DEFAULT_VERSION = '2026.06.09.09';
+    private const DEFAULT_VERSION = '2026.06.09.10';
     private const SCHEMA_REPAIR_SQL = 'database/updates/20260606_19_sync_schema.sql';
     private const BACKUP_KEEP_SETS = 3;
 
@@ -843,6 +843,7 @@ class SystemUpdateService
         try {
             self::ensureCloudAppConfigs();
             self::ensureRuntimeAppConfigs();
+            self::migrateLegacyHardwareRouteFromRuntime($runtimeConfig);
         } catch (\Throwable $e) {
             self::writeLog('旧运行配置迁移跳过，应用配置表暂不可用: ' . $e->getMessage());
             return $result;
@@ -894,7 +895,24 @@ class SystemUpdateService
             ['path' => ['wmjv2', 'wmjv2_url'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_url', 'type' => 'string', 'description' => '微门禁V2硬件云地址', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 1, 'default' => 'https://wdev.wmj.com.cn/deviceApi/', 'runtime_wins' => true],
             ['path' => ['wmjv2', 'wmjv2_appid'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appid', 'type' => 'string', 'description' => '微门禁V2硬件appid', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 2, 'default' => '', 'runtime_wins' => true],
             ['path' => ['wmjv2', 'wmjv2_appsecret'], 'module' => 'wmjv2', 'module_name' => '微门禁V2接口', 'name' => 'wmjv2_appsecret', 'type' => 'string', 'description' => '微门禁V2硬件appsecret', 'is_grouped' => 1, 'sort_order' => 95, 'group_sort_order' => 3, 'default' => '', 'runtime_wins' => true],
-            ['path' => ['hardware_cloud_routes', 'routes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'routes', 'type' => 'array', 'description' => '按设备前缀选择硬件云', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 1, 'default' => self::defaultHardwareCloudRoutes(), 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_enabled'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_enabled', 'type' => 'boolean', 'description' => '路由1启用', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 1, 'default' => true, 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_name'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_name', 'type' => 'string', 'description' => '路由1名称', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 2, 'default' => '摄像头官方硬件云', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_prefixes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_prefixes', 'type' => 'string', 'description' => '路由1设备前缀', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 3, 'default' => 'W33,W34', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_url'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_url', 'type' => 'string', 'description' => '路由1硬件云地址', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 4, 'default' => 'https://wdev.wmj.com.cn/deviceApi/', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_appid', 'type' => 'string', 'description' => '路由1硬件云appid', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 5, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route1_appsecret'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route1_appsecret', 'type' => 'string', 'description' => '路由1硬件云appsecret', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 6, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_enabled'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_enabled', 'type' => 'boolean', 'description' => '路由2启用', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 7, 'default' => false, 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_name'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_name', 'type' => 'string', 'description' => '路由2名称', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 8, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_prefixes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_prefixes', 'type' => 'string', 'description' => '路由2设备前缀', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 9, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_url'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_url', 'type' => 'string', 'description' => '路由2硬件云地址', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 10, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_appid', 'type' => 'string', 'description' => '路由2硬件云appid', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 11, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route2_appsecret'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route2_appsecret', 'type' => 'string', 'description' => '路由2硬件云appsecret', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 12, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_enabled'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_enabled', 'type' => 'boolean', 'description' => '路由3启用', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 13, 'default' => false, 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_name'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_name', 'type' => 'string', 'description' => '路由3名称', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 14, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_prefixes'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_prefixes', 'type' => 'string', 'description' => '路由3设备前缀', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 15, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_url'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_url', 'type' => 'string', 'description' => '路由3硬件云地址', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 16, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_appid'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_appid', 'type' => 'string', 'description' => '路由3硬件云appid', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 17, 'default' => '', 'runtime_wins' => true],
+            ['path' => ['hardware_cloud_routes', 'route3_appsecret'], 'module' => 'hardware_cloud_routes', 'module_name' => '硬件云路由配置', 'name' => 'route3_appsecret', 'type' => 'string', 'description' => '路由3硬件云appsecret', 'is_grouped' => 1, 'sort_order' => 97, 'group_sort_order' => 18, 'default' => '', 'runtime_wins' => true],
             ['path' => ['miniapp', 'site_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'site_url', 'type' => 'string', 'description' => '小程序站点地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 1, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
             ['path' => ['miniapp', 'api_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'api_url', 'type' => 'string', 'description' => '小程序接口地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 2, 'default' => 'https://demo.wmj.com.cn/api', 'runtime_wins' => true],
             ['path' => ['miniapp', 'asset_url'], 'module' => 'miniapp', 'module_name' => '小程序运行配置', 'name' => 'asset_url', 'type' => 'string', 'description' => '小程序资源地址', 'is_grouped' => 1, 'sort_order' => 90, 'group_sort_order' => 3, 'default' => 'https://demo.wmj.com.cn', 'runtime_wins' => true],
@@ -927,6 +945,30 @@ class SystemUpdateService
             $value = $value[$segment];
         }
         return $value;
+    }
+
+    private static function migrateLegacyHardwareRouteFromRuntime(array $runtimeConfig): void
+    {
+        $routes = self::runtimeConfigValue($runtimeConfig, ['hardware_cloud_routes', 'routes']);
+        if (is_string($routes)) {
+            $routes = json_decode($routes, true);
+        }
+        if (!is_array($routes)) {
+            return;
+        }
+        $first = reset($routes);
+        if (!is_array($first)) {
+            return;
+        }
+
+        $enabled = !array_key_exists('enabled', $first) || !empty($first['enabled']);
+        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', $enabled ? '1' : '0', 'boolean', '路由1启用', 1, 97, 1, '1', true);
+        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_name', (string) ($first['name'] ?? '摄像头官方硬件云'), 'string', '路由1名称', 1, 97, 2, '摄像头官方硬件云', true);
+        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', self::normalizeLegacyRoutePrefixes($first['prefixes'] ?? 'W33,W34'), 'string', '路由1设备前缀', 1, 97, 3, 'W33,W34', true);
+        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_url', (string) ($first['url'] ?? 'https://wdev.wmj.com.cn/deviceApi/'), 'string', '路由1硬件云地址', 1, 97, 4, 'https://wdev.wmj.com.cn/deviceApi/', true);
+        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_appid', (string) ($first['appid'] ?? ''), 'string', '路由1硬件云appid', 1, 97, 5, '', true);
+        self::saveAppConfigFromRuntime('hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', (string) ($first['appsecret'] ?? ''), 'string', '路由1硬件云appsecret', 1, 97, 6, '', true);
+        Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->delete();
     }
 
     private static function isMigratableConfigValue(mixed $value): bool
@@ -1059,26 +1101,50 @@ class SystemUpdateService
         self::updateAppConfigSort('wmjv1', 'wmjv1_appsecret', 3);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appid', 2);
         self::updateAppConfigSort('wmjv2', 'wmjv2_appsecret', 3);
-        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'routes', self::defaultHardwareCloudRoutesValue(), '按设备前缀选择硬件云', 97, 1, 'array');
+        $legacyRoute = self::loadLegacyHardwareCloudRoute();
+        $legacyRouteEnabled = !array_key_exists('enabled', $legacyRoute) || !empty($legacyRoute['enabled']);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_enabled', $legacyRouteEnabled ? '1' : '0', '路由1启用', 97, 1, 'boolean');
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_name', (string) ($legacyRoute['name'] ?? '摄像头官方硬件云'), '路由1名称', 97, 2);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_prefixes', self::normalizeLegacyRoutePrefixes($legacyRoute['prefixes'] ?? 'W33,W34'), '路由1设备前缀', 97, 3);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_url', (string) ($legacyRoute['url'] ?? 'https://wdev.wmj.com.cn/deviceApi/'), '路由1硬件云地址', 97, 4);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appid', (string) ($legacyRoute['appid'] ?? ''), '路由1硬件云appid', 97, 5);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route1_appsecret', (string) ($legacyRoute['appsecret'] ?? ''), '路由1硬件云appsecret', 97, 6);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_enabled', '0', '路由2启用', 97, 7, 'boolean');
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_name', '', '路由2名称', 97, 8);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_prefixes', '', '路由2设备前缀', 97, 9);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_url', '', '路由2硬件云地址', 97, 10);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_appid', '', '路由2硬件云appid', 97, 11);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route2_appsecret', '', '路由2硬件云appsecret', 97, 12);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_enabled', '0', '路由3启用', 97, 13, 'boolean');
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_name', '', '路由3名称', 97, 14);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_prefixes', '', '路由3设备前缀', 97, 15);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_url', '', '路由3硬件云地址', 97, 16);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_appid', '', '路由3硬件云appid', 97, 17);
+        self::insertAppConfigIfMissing('hardware_cloud_routes', '硬件云路由配置', 'route3_appsecret', '', '路由3硬件云appsecret', 97, 18);
+        Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->delete();
     }
 
-    private static function defaultHardwareCloudRoutes(): array
+    private static function loadLegacyHardwareCloudRoute(): array
     {
-        return [
-            [
-                'name' => '摄像头官方硬件云',
-                'prefixes' => 'W33,W34',
-                'url' => 'https://wdev.wmj.com.cn/deviceApi/',
-                'appid' => '',
-                'appsecret' => '',
-                'enabled' => 1,
-            ],
-        ];
+        $config = Db::name('appconfig')->where(['module' => 'hardware_cloud_routes', 'name' => 'routes'])->find();
+        if (!$config || empty($config['value'])) {
+            return [];
+        }
+        $routes = json_decode((string) $config['value'], true);
+        if (!is_array($routes)) {
+            return [];
+        }
+        $first = reset($routes);
+        return is_array($first) ? $first : [];
     }
 
-    private static function defaultHardwareCloudRoutesValue(): string
+    private static function normalizeLegacyRoutePrefixes($prefixes): string
     {
-        return json_encode(self::defaultHardwareCloudRoutes(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (is_array($prefixes)) {
+            $prefixes = implode(',', array_filter(array_map('trim', array_map('strval', $prefixes))));
+        }
+        $prefixes = trim((string) $prefixes);
+        return $prefixes !== '' ? $prefixes : 'W33,W34';
     }
 
     private static function ensureRuntimeAppConfigs(): void
